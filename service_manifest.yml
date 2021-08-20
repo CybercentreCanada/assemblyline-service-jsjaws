@@ -10,7 +10,7 @@ stage: CORE
 category: Dynamic
 
 file_required: true
-timeout: 60
+timeout: 120
 disable_cache: false
 
 enabled: false
@@ -18,7 +18,10 @@ is_external: false
 licence_count: 0
 
 config:
-  allow_download: false
+  # Note that the Docker container must be allowed Internet access as well
+  allow_download_from_internet: false
+  # Maximum payload files extracted if deep scan is turned off
+  max_payloads_extracted: 50
 
 submission_params:
   - default: "IE8"
@@ -32,6 +35,26 @@ submission_params:
     type: bool
     value: false
 
+  - default: false
+    name: throw_http_exc
+    type: bool
+    value: false
+
+  - default: false
+    name: download_payload
+    type: bool
+    value: false
+
+  - default: false
+    name: extract_function_calls
+    type: bool
+    value: false
+
+  - default: false
+    name: extract_eval_calls
+    type: bool
+    value: false
+
 heuristics:
   - heur_id: 1
     name: Network Traffic Detected
@@ -40,12 +63,18 @@ heuristics:
     description: Malware Jail detected network traffic.
 
   - heur_id: 2
-    name: IOC Extracted
+    name: IOC(s) Extracted
     score: 250
     filetype: '*'
-    description: An IOC has been extracted from a text blob.
+    description: At least one IOC has been extracted from a text blob.
+
+  - heur_id: 3
+    name: Suspicious Activity Detected
+    score: 250
+    filetype: '*'
+    description: Suspicious activity was detected during execution.
 
 docker_config:
-  allow_internet_access: true
+  allow_internet_access: false
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
   cpu_cores: 0.25
