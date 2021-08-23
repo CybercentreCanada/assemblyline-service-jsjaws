@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir --user tld && rm -rf ~/.cache/pip
 
 # Copy JsJaws service code
 WORKDIR /opt/al_service
-COPY ../assemblyline-service-jsjaws .
+COPY . .
 
 # Insall Malware Jail
 WORKDIR ./assemblyline-service-jsjaws/malware-jail
