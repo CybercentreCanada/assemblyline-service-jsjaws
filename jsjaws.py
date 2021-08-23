@@ -211,7 +211,7 @@ class JsJaws(ServiceBase):
         unique_shas = {sample_sha256}
         max_payloads_extracted = self.config.get("max_payloads_extracted", MAX_PAYLOAD_FILES_EXTRACTED)
         extracted_count = 0
-        for file in listdir(PAYLOAD_EXTRACTION_DIR):
+        for file in sorted(listdir(PAYLOAD_EXTRACTION_DIR)):
             extracted = path.join(PAYLOAD_EXTRACTION_DIR, file)
             # No empty files
             if path.getsize(extracted) == 0:
