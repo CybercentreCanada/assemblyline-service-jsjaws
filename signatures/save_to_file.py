@@ -1,3 +1,6 @@
+"""
+These are all of the signatures related to saving a file
+"""
 from signatures.abstracts import Signature
 
 

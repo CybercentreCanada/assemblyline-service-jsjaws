@@ -1,3 +1,6 @@
+"""
+These are all of the signatures related to running a shell command
+"""
 from signatures.abstracts import Signature
 
 

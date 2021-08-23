@@ -1,3 +1,6 @@
+"""
+These are all of the signatures related to loading a file into memory
+"""
 from signatures.abstracts import Signature
 
 

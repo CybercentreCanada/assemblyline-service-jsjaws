@@ -1,3 +1,6 @@
+"""
+These are all of the signatures related to using MSScriptControl
+"""
 from signatures.abstracts import Signature
 
 

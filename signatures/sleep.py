@@ -1,3 +1,6 @@
+"""
+These are all of the signatures related to causing execution to delay
+"""
 from signatures.abstracts import Signature
 
 
