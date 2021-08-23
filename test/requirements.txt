@@ -1,5 +1,4 @@
 pytest
-requests-mock
 pytest-mock
 pytest-cov
 codecov
