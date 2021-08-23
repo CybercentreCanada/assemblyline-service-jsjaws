@@ -285,30 +285,29 @@ class JsJaws(ServiceBase):
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :return: None
         """
-        # Get the sandbox env json that is dumped. This should always exist.
-        sandbox_env_dump = {
-            "name": SANDBOX_ENV_DUMP,
-            "path": SANDBOX_ENV_DUMP_PATH,
-            "description": "Sandbox Environment Details",
-            "to_be_extracted": False
-        }
-        self.log.debug(f"Adding supplementary file: {SANDBOX_ENV_DUMP}")
-        self.artifact_list.append(sandbox_env_dump)
+        if path.exists(SANDBOX_ENV_DUMP_PATH):
+            # Get the sandbox env json that is dumped. This should always exist.
+            sandbox_env_dump = {
+                "name": SANDBOX_ENV_DUMP,
+                "path": SANDBOX_ENV_DUMP_PATH,
+                "description": "Sandbox Environment Details",
+                "to_be_extracted": False
+            }
+            self.log.debug(f"Adding supplementary file: {SANDBOX_ENV_DUMP}")
+            self.artifact_list.append(sandbox_env_dump)
 
-        if not output:
-            return
-
-        with open(MALWARE_JAIL_OUTPUT_PATH, "w") as f:
-            for line in output:
-                f.write(line + "\n")
-        mlwr_jail_out = {
-            "name": MALWARE_JAIL_OUTPUT,
-            "path": MALWARE_JAIL_OUTPUT_PATH,
-            "description": "Malware Jail Output",
-            "to_be_extracted": False
-        }
-        self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_OUTPUT}")
-        self.artifact_list.append(mlwr_jail_out)
+        if output:
+            with open(MALWARE_JAIL_OUTPUT_PATH, "w") as f:
+                for line in output:
+                    f.write(line + "\n")
+            mlwr_jail_out = {
+                "name": MALWARE_JAIL_OUTPUT,
+                "path": MALWARE_JAIL_OUTPUT_PATH,
+                "description": "Malware Jail Output",
+                "to_be_extracted": False
+            }
+            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_OUTPUT}")
+            self.artifact_list.append(mlwr_jail_out)
 
     def _extract_iocs_from_text_blob(self, blob: str, result_section: ResultSection, file_ext: str = "") -> None:
         """

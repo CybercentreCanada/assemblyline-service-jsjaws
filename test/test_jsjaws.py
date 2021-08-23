@@ -334,12 +334,15 @@ class TestJsJaws:
                                         })
         correct_res_sec.set_heuristic(1)
         assert check_section_equality(result.sections[0], correct_res_sec)
+        jsjaws_class_instance._cleanup_previous_exec()
 
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
         from jsjaws import SANDBOX_ENV_DUMP, SANDBOX_ENV_DUMP_PATH, MALWARE_JAIL_OUTPUT, MALWARE_JAIL_OUTPUT_PATH
         jsjaws_class_instance.artifact_list = []
         output = ["blah"]
+        with open(SANDBOX_ENV_DUMP_PATH, "w") as f:
+            f.write("blah")
         jsjaws_class_instance._extract_supplementary(output)
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": SANDBOX_ENV_DUMP,
@@ -353,6 +356,7 @@ class TestJsJaws:
             "description": "Malware Jail Output",
             "to_be_extracted": False
         }
+        jsjaws_class_instance._cleanup_previous_exec()
 
     @staticmethod
     @pytest.mark.parametrize(
