@@ -288,22 +288,22 @@ class TestJsJaws:
             f.write("blah")
 
         # valid file 1
-        valid_file_name = "blah2.txt"
-        valid_file_path = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name}"
-        with open(valid_file_path, "w") as f:
+        valid_file_name1 = "blah2.txt"
+        valid_file_path1 = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name1}"
+        with open(valid_file_path1, "w") as f:
             f.write("blah")
 
         # valid file 2
-        valid_file_name = "blah3.txt"
-        valid_file_path = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name}"
-        with open(valid_file_path, "w") as f:
+        valid_file_name2 = "blah3.txt"
+        valid_file_path2 = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name2}"
+        with open(valid_file_path2, "w") as f:
             f.write("blah")
 
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_payloads("blah", False)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": valid_file_name,
-            "path": valid_file_path,
+            "name": valid_file_name1,
+            "path": valid_file_path1,
             "description": "Extracted Payload",
             "to_be_extracted": True
         }
