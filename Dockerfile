@@ -17,9 +17,11 @@ WORKDIR /opt/al_service
 COPY . .
 
 # Insall Malware Jail
+USER root
 WORKDIR ./assemblyline-service-jsjaws/malware-jail
 RUN npm install
 
+USER assemblyline
 WORKDIR /opt/al_service
 
 # Patch version in manifest
