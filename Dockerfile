@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists
 
 # Switch to assemblyline user
 USER assemblyline
+# Install pip packages
+RUN pip install --no-cache-dir --user tld && rm -rf ~/.cache/pip
 
 # Copy JsJaws service code
 WORKDIR /opt/al_service
