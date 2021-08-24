@@ -41,6 +41,27 @@ class JsJaws(ServiceBase):
         super(JsJaws, self).__init__(config)
         self.artifact_list: Optional[List[Dict[str, str]]] = None
         self.patterns = PatternMatch()
+        self.payload_extraction_dir: Optional[str] = None
+        self.sandbox_env_dump: Optional[str] = None
+        self.sandbox_env_dir: Optional[str] = None
+        self.sandbox_env_dump_path: Optional[str] = None
+        self.path_to_jailme_js: Optional[str] = None
+        self.urls_json_path: Optional[str] = None
+        self.wscript_only_config: Optional[str] = None
+        self.extracted_wscript: Optional[str] = None
+        self.extracted_wscript_path: Optional[str] = None
+        self.malware_jail_output: Optional[str] = None
+        self.malware_jail_output_path: Optional[str] = None
+        self.log.debug('JsJaws service initialized')
+
+    def start(self) -> None:
+        self.log.debug('JsJaws service started')
+
+    def stop(self) -> None:
+        self.log.debug('JsJaws service ended')
+
+    def execute(self, request: ServiceRequest) -> None:
+        self.artifact_list = []
 
         # File constants
         self.payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -55,11 +76,6 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path = path.join(self.payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
-        self.log.debug('JsJaws service initialized')
-
-    def start(self) -> None:
-        self.log.debug('JsJaws service started')
-        self.artifact_list = []
 
         # Setup directory structure
         if not path.exists(self.payload_extraction_dir):
@@ -68,10 +84,6 @@ class JsJaws(ServiceBase):
         if not path.exists(self.sandbox_env_dir):
             mkdir(self.sandbox_env_dir)
 
-    def stop(self) -> None:
-        self.log.debug('JsJaws service ended')
-
-    def execute(self, request: ServiceRequest) -> None:
         request.result = Result()
 
         # Grabbing service level configuration variables and submission variables

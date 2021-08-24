@@ -136,15 +136,23 @@ class TestJsJaws:
     def test_init(jsjaws_class_instance):
         from assemblyline_v4_service.common.balbuzard.patterns import PatternMatch
         assert jsjaws_class_instance.artifact_list is None
+        assert jsjaws_class_instance.payload_extraction_dir is None
+        assert jsjaws_class_instance.sandbox_env_dump is None
+        assert jsjaws_class_instance.sandbox_env_dir is None
+        assert jsjaws_class_instance.sandbox_env_dump_path is None
+        assert jsjaws_class_instance.path_to_jailme_js is None
+        assert jsjaws_class_instance.urls_json_path is None
+        assert jsjaws_class_instance.wscript_only_config is None
+        assert jsjaws_class_instance.extracted_wscript is None
+        assert jsjaws_class_instance.extracted_wscript_path is None
+        assert jsjaws_class_instance.malware_jail_output is None
+        assert jsjaws_class_instance.malware_jail_output_path is None
         assert isinstance(jsjaws_class_instance.patterns, PatternMatch)
 
     @staticmethod
     def test_start(jsjaws_class_instance):
-        from os.path import exists
         jsjaws_class_instance.start()
-        assert jsjaws_class_instance.artifact_list == []
-        assert exists(jsjaws_class_instance.payload_extraction_dir)
-        assert exists(jsjaws_class_instance.sandbox_env_dir)
+        assert True
 
     @staticmethod
     def test_stop(jsjaws_class_instance):
@@ -160,6 +168,7 @@ class TestJsJaws:
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
         from json import loads
+        from os import path
 
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
@@ -184,6 +193,23 @@ class TestJsJaws:
 
         # Actually executing the sample
         jsjaws_class_instance.execute(service_request)
+
+        assert jsjaws_class_instance.artifact_list == []
+        assert jsjaws_class_instance.payload_extraction_dir == path.join(jsjaws_class_instance.working_directory, "payload/")
+        assert jsjaws_class_instance.sandbox_env_dump == "sandbox_dump.json"
+        assert jsjaws_class_instance.sandbox_env_dir == path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        assert jsjaws_class_instance.sandbox_env_dump_path == path.join(jsjaws_class_instance.sandbox_env_dir, jsjaws_class_instance.sandbox_env_dump)
+        root_dir = path.dirname(path.dirname(path.abspath(__file__)))
+        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "malware-jail/jailme.js")
+        assert jsjaws_class_instance.urls_json_path == path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
+        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "malware-jail/config_wscript_only.json")
+        assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
+        assert jsjaws_class_instance.extracted_wscript_path == path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        assert jsjaws_class_instance.malware_jail_output == "output.txt"
+        assert jsjaws_class_instance.malware_jail_output_path == path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+
+        assert path.exists(jsjaws_class_instance.payload_extraction_dir)
+        assert path.exists(jsjaws_class_instance.sandbox_env_dir)
 
         # Get the result of execute() from the test method
         test_result = task.get_service_result()
@@ -234,9 +260,12 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_wscript(jsjaws_class_instance, mocker):
-        from os.path import exists
+        from os.path import exists, join
         from os import mkdir
         from assemblyline_v4_service.common.result import Result
+        jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
+        jsjaws_class_instance.extracted_wscript_path = join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         mocker.patch.object(jsjaws_class_instance, "_extract_iocs_from_text_blob")
         output = ["WScript.Shell[4].Run(super evil script, 0, undefined)"]
@@ -253,7 +282,11 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
-        from os import mkdir
+        from os import mkdir, path
+        jsjaws_class_instance.payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.urls_json_path = path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
+        jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
+        jsjaws_class_instance.extracted_wscript_path = path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         jsjaws_class_instance.config["max_payloads_extracted"] = 2
 
@@ -294,7 +327,9 @@ class TestJsJaws:
     def test_extract_urls(jsjaws_class_instance):
         from json import dumps
         from assemblyline_v4_service.common.result import ResultSection, BODY_FORMAT
-        from os import mkdir
+        from os import mkdir, path
+        jsjaws_class_instance.payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.urls_json_path = path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         body = [
                 {"url": "http://blah.ca/blah.exe"},
@@ -319,7 +354,14 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
-        from os import mkdir
+        from os import mkdir, path
+        jsjaws_class_instance.sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.sandbox_env_dump = "sandbox_dump.json"
+        jsjaws_class_instance.sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.sandbox_env_dump_path = path.join(jsjaws_class_instance.sandbox_env_dir, jsjaws_class_instance.sandbox_env_dump)
+        jsjaws_class_instance.malware_jail_output = "output.txt"
+        jsjaws_class_instance.malware_jail_output_path = path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+
         mkdir(jsjaws_class_instance.sandbox_env_dir)
         jsjaws_class_instance.artifact_list = []
         output = ["blah"]
