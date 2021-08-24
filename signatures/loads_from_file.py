@@ -10,22 +10,8 @@ class LoadsLocalFile(Signature):
             heuristic_id=3,
             name="loads_local_file",
             description="JavaScript loads a local file from disk",
-            indicators=[".LoadFromFile"],
+            indicators=[".LoadFromFile", ".OpenTextFile", ".open("],
             severity=0
-        )
-
-    def process_output(self, output):
-        self.check_indicators_in_list(output)
-
-
-class DriveObject(Signature):
-    def __init__(self):
-        super().__init__(
-            heuristic_id=3,
-            name="drive_object",
-            description="JavaScript creates an object representing a hard drive",
-            indicators=["DriveObject"],
-            severity=1
         )
 
     def process_output(self, output):

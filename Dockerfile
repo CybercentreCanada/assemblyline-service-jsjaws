@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --user tld && rm -rf ~/.cache/pip
 WORKDIR /opt/al_service
 COPY . .
 
-# Insall Malware Jail
+# Install Malware Jail
 USER root
 WORKDIR ./malware-jail
 RUN npm install

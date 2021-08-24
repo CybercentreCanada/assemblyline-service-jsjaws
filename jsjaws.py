@@ -22,21 +22,6 @@ from assemblyline_v4_service.common.result import Result, ResultSection, BODY_FO
 import signatures
 from signatures.abstracts import Signature
 
-# File constants
-SERVICE_DIR = "/tmp/jsjaws"
-PAYLOAD_EXTRACTION_DIR = path.join(SERVICE_DIR, "payload/")
-SANDBOX_ENV_DUMP = "sandbox_dump.json"
-SANDBOX_ENV_DIR = path.join(SERVICE_DIR, "sandbox_env")
-SANDBOX_ENV_DUMP_PATH = path.join(SERVICE_DIR, SANDBOX_ENV_DIR, SANDBOX_ENV_DUMP)
-ROOT_DIR = path.dirname(path.abspath(__file__))
-PATH_TO_JAILME_JS = path.join(ROOT_DIR, "malware-jail/jailme.js")
-URLS_JSON_PATH = path.join(SERVICE_DIR, PAYLOAD_EXTRACTION_DIR, "urls.json")
-WSCRIPT_ONLY_CONFIG = path.join(ROOT_DIR, "malware-jail/config_wscript_only.json")
-EXTRACTED_WSCRIPT = "extracted_wscript.bat"
-EXTRACTED_WSCRIPT_PATH = path.join(PAYLOAD_EXTRACTION_DIR, EXTRACTED_WSCRIPT)
-MALWARE_JAIL_OUTPUT = "output.txt"
-MALWARE_JAIL_OUTPUT_PATH = path.join(SERVICE_DIR, MALWARE_JAIL_OUTPUT)
-
 # Execution constants
 WSCRIPT_SHELL = "wscript.shell"
 WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d\]\.Run\()(.*)(?:\))"
@@ -56,6 +41,20 @@ class JsJaws(ServiceBase):
         super(JsJaws, self).__init__(config)
         self.artifact_list: Optional[List[Dict[str, str]]] = None
         self.patterns = PatternMatch()
+
+        # File constants
+        self.payload_extraction_dir = path.join(self.working_directory, "payload/")
+        self.sandbox_env_dump = "sandbox_dump.json"
+        self.sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
+        self.sandbox_env_dump_path = path.join(self.sandbox_env_dir, self.sandbox_env_dump)
+        root_dir = path.dirname(path.abspath(__file__))
+        self.path_to_jailme_js = path.join(root_dir, "malware-jail/jailme.js")
+        self.urls_json_path = path.join(self.payload_extraction_dir, "urls.json")
+        self.wscript_only_config = path.join(root_dir, "malware-jail/config_wscript_only.json")
+        self.extracted_wscript = "extracted_wscript.bat"
+        self.extracted_wscript_path = path.join(self.payload_extraction_dir, self.extracted_wscript)
+        self.malware_jail_output = "output.txt"
+        self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
         self.log.debug('JsJaws service initialized')
 
     def start(self) -> None:
@@ -63,21 +62,16 @@ class JsJaws(ServiceBase):
         self.artifact_list = []
 
         # Setup directory structure
-        if not path.exists(SERVICE_DIR):
-            mkdir(SERVICE_DIR)
+        if not path.exists(self.payload_extraction_dir):
+            mkdir(self.payload_extraction_dir)
 
-        if not path.exists(PAYLOAD_EXTRACTION_DIR):
-            mkdir(PAYLOAD_EXTRACTION_DIR)
-
-        if not path.exists(SANDBOX_ENV_DIR):
-            mkdir(SANDBOX_ENV_DIR)
+        if not path.exists(self.sandbox_env_dir):
+            mkdir(self.sandbox_env_dir)
 
     def stop(self) -> None:
         self.log.debug('JsJaws service ended')
 
     def execute(self, request: ServiceRequest) -> None:
-        # Cleanup on aisle JsJaws!
-        self._cleanup_previous_exec()
         request.result = Result()
 
         # Grabbing service level configuration variables and submission variables
@@ -90,7 +84,7 @@ class JsJaws(ServiceBase):
         allow_download_from_internet = self.config.get("allow_download_from_internet", False)
 
         args = [
-            "node", PATH_TO_JAILME_JS, "-s", PAYLOAD_EXTRACTION_DIR, "-o", SANDBOX_ENV_DUMP_PATH,
+            "node", self.path_to_jailme_js, "-s", self.payload_extraction_dir, "-o", self.sandbox_env_dump_path,
             "-b", browser_selected
         ]
 
@@ -128,7 +122,7 @@ class JsJaws(ServiceBase):
         # By default, detonation takes place within a sandboxed browser. This option allows
         # for the sample to be run in WScript only
         if wscript_only:
-            args.extend(["-c", WSCRIPT_ONLY_CONFIG])
+            args.extend(["-c", self.wscript_only_config])
 
         # Don't forget the sample!
         args.append(request.file_path)
@@ -150,19 +144,6 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
 
-    @staticmethod
-    def _cleanup_previous_exec() -> None:
-        """
-        This method cleans up leftover files from previous service executions
-        :return: None
-        """
-        for file in listdir(PAYLOAD_EXTRACTION_DIR):
-            remove(path.join(PAYLOAD_EXTRACTION_DIR, file))
-        if path.exists(SANDBOX_ENV_DUMP_PATH):
-            remove(SANDBOX_ENV_DUMP_PATH)
-        if path.exists(EXTRACTED_WSCRIPT_PATH):
-            remove(EXTRACTED_WSCRIPT_PATH)
-
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
         This method does a couple of things:
@@ -172,7 +153,7 @@ class JsJaws(ServiceBase):
         :param result: A Result object containing the service results
         :return: None
         """
-        wscript_extraction = open(EXTRACTED_WSCRIPT_PATH, "a+")
+        wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultSection("IOCs extracted from WScript")
         for line in output:
             wscript_shell_run = search(compile(WSCRIPT_SHELL_REGEX), line)
@@ -189,14 +170,14 @@ class JsJaws(ServiceBase):
                 self._extract_iocs_from_text_blob(line, wscript_res_sec, ".js")
         wscript_extraction.close()
 
-        if path.getsize(EXTRACTED_WSCRIPT_PATH) > 0:
+        if path.getsize(self.extracted_wscript_path) > 0:
             artifact = {
-                "name": EXTRACTED_WSCRIPT,
-                "path": EXTRACTED_WSCRIPT_PATH,
+                "name": self.extracted_wscript,
+                "path": self.extracted_wscript_path,
                 "description": "Extracted WScript",
                 "to_be_extracted": True
             }
-            self.log.debug(f"Adding extracted file: {EXTRACTED_WSCRIPT}")
+            self.log.debug(f"Adding extracted file: {self.extracted_wscript}")
             self.artifact_list.append(artifact)
             if wscript_res_sec.tags != {}:
                 result.add_section(wscript_res_sec)
@@ -211,13 +192,13 @@ class JsJaws(ServiceBase):
         unique_shas = {sample_sha256}
         max_payloads_extracted = self.config.get("max_payloads_extracted", MAX_PAYLOAD_FILES_EXTRACTED)
         extracted_count = 0
-        for file in sorted(listdir(PAYLOAD_EXTRACTION_DIR)):
-            extracted = path.join(PAYLOAD_EXTRACTION_DIR, file)
+        for file in sorted(listdir(self.payload_extraction_dir)):
+            extracted = path.join(self.payload_extraction_dir, file)
             # No empty files
             if path.getsize(extracted) == 0:
                 continue
             # No files that we added ourselves or will parse later
-            if extracted in [URLS_JSON_PATH, EXTRACTED_WSCRIPT_PATH]:
+            if extracted in [self.urls_json_path, self.extracted_wscript_path]:
                 continue
             extracted_sha = get_id_from_data(extracted)
             if extracted_sha not in unique_shas:
@@ -235,18 +216,17 @@ class JsJaws(ServiceBase):
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
 
-    @staticmethod
-    def _extract_urls(result: Result) -> None:
+    def _extract_urls(self, result: Result) -> None:
         """
         This method turns the urls.json that is dumped by MalwareJail into a ResultSection
         :param result: A Result object containing the service results
         :return: None
         """
-        if not path.exists(URLS_JSON_PATH):
+        if not path.exists(self.urls_json_path):
             return
 
         urls_result_section = ResultSection("URLs", body_format=BODY_FORMAT.TABLE)
-        with open(URLS_JSON_PATH, "r") as f:
+        with open(self.urls_json_path, "r") as f:
             file_contents = f.read()
             urls_json = loads(file_contents)
             for url in urls_json:
@@ -285,28 +265,28 @@ class JsJaws(ServiceBase):
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :return: None
         """
-        if path.exists(SANDBOX_ENV_DUMP_PATH):
+        if path.exists(self.sandbox_env_dump_path):
             # Get the sandbox env json that is dumped. This should always exist.
             sandbox_env_dump = {
-                "name": SANDBOX_ENV_DUMP,
-                "path": SANDBOX_ENV_DUMP_PATH,
+                "name": self.sandbox_env_dump,
+                "path": self.sandbox_env_dump_path,
                 "description": "Sandbox Environment Details",
                 "to_be_extracted": False
             }
-            self.log.debug(f"Adding supplementary file: {SANDBOX_ENV_DUMP}")
+            self.log.debug(f"Adding supplementary file: {self.sandbox_env_dump}")
             self.artifact_list.append(sandbox_env_dump)
 
         if output:
-            with open(MALWARE_JAIL_OUTPUT_PATH, "w") as f:
+            with open(self.malware_jail_output_path, "w") as f:
                 for line in output:
                     f.write(line + "\n")
             mlwr_jail_out = {
-                "name": MALWARE_JAIL_OUTPUT,
-                "path": MALWARE_JAIL_OUTPUT_PATH,
+                "name": self.malware_jail_output,
+                "path": self.malware_jail_output_path,
                 "description": "Malware Jail Output",
                 "to_be_extracted": False
             }
-            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_OUTPUT}")
+            self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
             self.artifact_list.append(mlwr_jail_out)
 
     def _extract_iocs_from_text_blob(self, blob: str, result_section: ResultSection, file_ext: str = "") -> None:

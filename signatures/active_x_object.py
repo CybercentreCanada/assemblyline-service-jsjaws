@@ -30,17 +30,3 @@ class XMLHTTP(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output, match_all=True)
-
-
-class FileSystemObject(Signature):
-    def __init__(self):
-        super().__init__(
-            heuristic_id=3,
-            name="file_system_object",
-            description="JavaScript creates an ActiveXObject to gain access to the computer's file system",
-            indicators=["ActiveXObject", "Scripting.FileSystemObject"],
-            severity=2
-        )
-
-    def process_output(self, output):
-        self.check_indicators_in_list(output, match_all=True)
