@@ -16,3 +16,17 @@ class LoadsLocalFile(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class DriveObject(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="drive_object",
+            description="JavaScript creates an object representing a hard drive",
+            indicators=["DriveObject"],
+            severity=1
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
