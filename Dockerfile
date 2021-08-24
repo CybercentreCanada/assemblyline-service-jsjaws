@@ -18,7 +18,7 @@ COPY . .
 
 # Insall Malware Jail
 USER root
-WORKDIR ./assemblyline-service-jsjaws/malware-jail
+WORKDIR ./malware-jail
 RUN npm install
 
 USER assemblyline
