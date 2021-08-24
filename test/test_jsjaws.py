@@ -141,12 +141,10 @@ class TestJsJaws:
     @staticmethod
     def test_start(jsjaws_class_instance):
         from os.path import exists
-        from jsjaws import SERVICE_DIR, PAYLOAD_EXTRACTION_DIR, SANDBOX_ENV_DIR
         jsjaws_class_instance.start()
         assert jsjaws_class_instance.artifact_list == []
-        assert exists(SERVICE_DIR)
-        assert exists(PAYLOAD_EXTRACTION_DIR)
-        assert exists(SANDBOX_ENV_DIR)
+        assert exists(jsjaws_class_instance.payload_extraction_dir)
+        assert exists(jsjaws_class_instance.sandbox_env_dir)
 
     @staticmethod
     def test_stop(jsjaws_class_instance):
@@ -163,7 +161,6 @@ class TestJsJaws:
         from assemblyline_v4_service.common.result import ResultSection
         from json import loads
 
-        mocker.patch.object(jsjaws_class_instance, "_cleanup_previous_exec")
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
         mocker.patch.object(jsjaws_class_instance, "_extract_payloads")
@@ -236,66 +233,51 @@ class TestJsJaws:
         jsjaws_class_instance.execute(service_request)
 
     @staticmethod
-    def test_cleanup_previous_exec(jsjaws_class_instance):
-        from os.path import exists
-        from jsjaws import PAYLOAD_EXTRACTION_DIR, SANDBOX_ENV_DUMP_PATH, EXTRACTED_WSCRIPT_PATH
-        # Setting the stage
-        payload_path = f"{PAYLOAD_EXTRACTION_DIR}/blah.txt"
-        with open(payload_path, "w") as f:
-            f.write("blah")
-        with open(SANDBOX_ENV_DUMP_PATH, "w") as f:
-            f.write("blah")
-        with open(EXTRACTED_WSCRIPT_PATH, "w") as f:
-            f.write("blah")
-        jsjaws_class_instance._cleanup_previous_exec()
-        assert not exists(payload_path)
-        assert not exists(SANDBOX_ENV_DUMP_PATH)
-        assert not exists(EXTRACTED_WSCRIPT_PATH)
-
-    @staticmethod
     def test_extract_wscript(jsjaws_class_instance, mocker):
-        from jsjaws import EXTRACTED_WSCRIPT_PATH, EXTRACTED_WSCRIPT
         from os.path import exists
+        from os import mkdir
         from assemblyline_v4_service.common.result import Result
+        mkdir(jsjaws_class_instance.payload_extraction_dir)
         mocker.patch.object(jsjaws_class_instance, "_extract_iocs_from_text_blob")
         output = ["WScript.Shell[4].Run(super evil script, 0, undefined)"]
         res = Result()
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_wscript(output, res)
-        assert exists(EXTRACTED_WSCRIPT_PATH)
+        assert exists(jsjaws_class_instance.extracted_wscript_path)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": EXTRACTED_WSCRIPT,
-            "path": EXTRACTED_WSCRIPT_PATH,
+            "name": jsjaws_class_instance.extracted_wscript,
+            "path": jsjaws_class_instance.extracted_wscript_path,
             "description": "Extracted WScript",
             "to_be_extracted": True
         }
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
-        from jsjaws import PAYLOAD_EXTRACTION_DIR, URLS_JSON_PATH, EXTRACTED_WSCRIPT_PATH
+        from os import mkdir
+        mkdir(jsjaws_class_instance.payload_extraction_dir)
         jsjaws_class_instance.config["max_payloads_extracted"] = 2
 
         # Zero bytes file
-        with open(f"{PAYLOAD_EXTRACTION_DIR}/blah1.txt", "a+") as f:
+        with open(f"{jsjaws_class_instance.payload_extraction_dir}/blah1.txt", "a+") as f:
             pass
 
-        # URLS_JSON_PATH file
-        with open(URLS_JSON_PATH, "a+") as f:
+        # urls_json_path file
+        with open(jsjaws_class_instance.urls_json_path, "a+") as f:
             f.write("blah")
 
-        # EXTRACTED_WSCRIPT_PATH file
-        with open(EXTRACTED_WSCRIPT_PATH, "a+") as f:
+        # extracted_wscript_path file
+        with open(jsjaws_class_instance.extracted_wscript_path, "a+") as f:
             f.write("blah")
 
         # valid file 1
         valid_file_name1 = "blah2.txt"
-        valid_file_path1 = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name1}"
+        valid_file_path1 = f"{jsjaws_class_instance.payload_extraction_dir}{valid_file_name1}"
         with open(valid_file_path1, "w") as f:
             f.write("blah")
 
         # valid file 2
         valid_file_name2 = "blah3.txt"
-        valid_file_path2 = f"{PAYLOAD_EXTRACTION_DIR}{valid_file_name2}"
+        valid_file_path2 = f"{jsjaws_class_instance.payload_extraction_dir}{valid_file_name2}"
         with open(valid_file_path2, "w") as f:
             f.write("blah")
 
@@ -307,19 +289,19 @@ class TestJsJaws:
             "description": "Extracted Payload",
             "to_be_extracted": True
         }
-        jsjaws_class_instance._cleanup_previous_exec()
 
     @staticmethod
     def test_extract_urls(jsjaws_class_instance):
-        from jsjaws import URLS_JSON_PATH
         from json import dumps
         from assemblyline_v4_service.common.result import ResultSection, BODY_FORMAT
+        from os import mkdir
+        mkdir(jsjaws_class_instance.payload_extraction_dir)
         body = [
                 {"url": "http://blah.ca/blah.exe"},
                 {"url": "http://1.1.1.1/blah.exe"},
                 {"url": "blahblahblah"},
             ]
-        with open(URLS_JSON_PATH, "w") as f:
+        with open(jsjaws_class_instance.urls_json_path, "w") as f:
             f.write(dumps(body))
         from assemblyline_v4_service.common.result import Result
         result = Result()
@@ -334,29 +316,28 @@ class TestJsJaws:
                                         })
         correct_res_sec.set_heuristic(1)
         assert check_section_equality(result.sections[0], correct_res_sec)
-        jsjaws_class_instance._cleanup_previous_exec()
 
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
-        from jsjaws import SANDBOX_ENV_DUMP, SANDBOX_ENV_DUMP_PATH, MALWARE_JAIL_OUTPUT, MALWARE_JAIL_OUTPUT_PATH
+        from os import mkdir
+        mkdir(jsjaws_class_instance.sandbox_env_dir)
         jsjaws_class_instance.artifact_list = []
         output = ["blah"]
-        with open(SANDBOX_ENV_DUMP_PATH, "w") as f:
+        with open(jsjaws_class_instance.sandbox_env_dump_path, "w") as f:
             f.write("blah")
         jsjaws_class_instance._extract_supplementary(output)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": SANDBOX_ENV_DUMP,
-            "path": SANDBOX_ENV_DUMP_PATH,
+            "name": jsjaws_class_instance.sandbox_env_dump,
+            "path": jsjaws_class_instance.sandbox_env_dump_path,
             "description": "Sandbox Environment Details",
             "to_be_extracted": False
         }
         assert jsjaws_class_instance.artifact_list[1] == {
-            "name": MALWARE_JAIL_OUTPUT,
-            "path": MALWARE_JAIL_OUTPUT_PATH,
+            "name": jsjaws_class_instance.malware_jail_output,
+            "path": jsjaws_class_instance.malware_jail_output_path,
             "description": "Malware Jail Output",
             "to_be_extracted": False
         }
-        jsjaws_class_instance._cleanup_previous_exec()
 
     @staticmethod
     @pytest.mark.parametrize(
