@@ -147,6 +147,8 @@ class TestJsJaws:
         assert jsjaws_class_instance.extracted_wscript_path is None
         assert jsjaws_class_instance.malware_jail_output is None
         assert jsjaws_class_instance.malware_jail_output_path is None
+        assert jsjaws_class_instance.extracted_doc_writes is None
+        assert jsjaws_class_instance.extracted_doc_writes_path is None
         assert isinstance(jsjaws_class_instance.patterns, PatternMatch)
 
     @staticmethod
@@ -172,6 +174,7 @@ class TestJsJaws:
 
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
+        mocker.patch.object(jsjaws_class_instance, "_extract_doc_writes")
         mocker.patch.object(jsjaws_class_instance, "_extract_payloads")
         mocker.patch.object(jsjaws_class_instance, "_extract_urls")
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
@@ -207,6 +210,8 @@ class TestJsJaws:
         assert jsjaws_class_instance.extracted_wscript_path == path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         assert jsjaws_class_instance.malware_jail_output == "output.txt"
         assert jsjaws_class_instance.malware_jail_output_path == path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+        assert jsjaws_class_instance.extracted_doc_writes == "document_writes.html"
+        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
 
         assert path.exists(jsjaws_class_instance.payload_extraction_dir)
         assert path.exists(jsjaws_class_instance.sandbox_env_dir)
@@ -277,6 +282,28 @@ class TestJsJaws:
             "name": jsjaws_class_instance.extracted_wscript,
             "path": jsjaws_class_instance.extracted_wscript_path,
             "description": "Extracted WScript",
+            "to_be_extracted": True
+        }
+
+    @staticmethod
+    def test_extract_doc_writes(jsjaws_class_instance):
+        from os.path import exists, join
+        from os import mkdir
+        jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.extracted_doc_writes = "document_writes.html"
+        jsjaws_class_instance.extracted_doc_writes_path = join(jsjaws_class_instance.payload_extraction_dir,
+                                                            jsjaws_class_instance.extracted_doc_writes)
+        mkdir(jsjaws_class_instance.payload_extraction_dir)
+        output = ["document[15].write(content)", "date time - => 'write me!'", "blah", "document[15].write(content)", "write me too!"]
+        jsjaws_class_instance.artifact_list = []
+        jsjaws_class_instance._extract_doc_writes(output)
+        assert exists(jsjaws_class_instance.extracted_doc_writes_path)
+        with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
+            assert f.read() == "write me!\nwrite me too!\n"
+        assert jsjaws_class_instance.artifact_list[0] == {
+            "name": jsjaws_class_instance.extracted_doc_writes,
+            "path": jsjaws_class_instance.extracted_doc_writes_path,
+            "description": "DOM Writes",
             "to_be_extracted": True
         }
 
