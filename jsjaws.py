@@ -52,6 +52,8 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path: Optional[str] = None
         self.malware_jail_output: Optional[str] = None
         self.malware_jail_output_path: Optional[str] = None
+        self.extracted_doc_writes: Optional[str] = None
+        self.extracted_doc_writes_path: Optional[str] = None
         self.log.debug('JsJaws service initialized')
 
     def start(self) -> None:
@@ -76,6 +78,8 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path = path.join(self.payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
+        self.extracted_doc_writes = "document_writes.html"
+        self.extracted_doc_writes_path = path.join(self.payload_extraction_dir, self.extracted_doc_writes)
 
         # Setup directory structure
         if not path.exists(self.payload_extraction_dir):
@@ -149,6 +153,7 @@ class JsJaws(ServiceBase):
         # Time for the magic!
         self._run_signatures(output, request.result)
         self._extract_wscript(output, request.result)
+        self._extract_doc_writes(output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
         self._extract_supplementary(output)
@@ -227,6 +232,37 @@ class JsJaws(ServiceBase):
                 }
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
+
+    def _extract_doc_writes(self, output: List[str]) -> None:
+        """
+        This method writes all document writes to a file and adds that in an extracted file
+        :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
+        :param result: A Result object containing the service results
+        """
+        extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
+        doc_write = False
+        for line in output:
+            if doc_write:
+                if " - => '" in line:
+                    line = line.split(" - => '")[1]
+                    if line.endswith("'"):
+                        line = line[:-1]
+                extracted_doc_writes.write(line + "\n")
+
+            if all(item in line for item in ["document", "write(content)"]):
+                doc_write = True
+            else:
+                doc_write = False
+        extracted_doc_writes.close()
+
+        if path.getsize(self.extracted_doc_writes_path) > 0:
+            self.artifact_list.append({
+                "name": self.extracted_doc_writes,
+                "path": self.extracted_doc_writes_path,
+                "description": "DOM Writes",
+                "to_be_extracted": True
+            })
+            self.log.debug(f"Adding extracted file: {self.extracted_doc_writes}")
 
     def _extract_urls(self, result: Result) -> None:
         """
