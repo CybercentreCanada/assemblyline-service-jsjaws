@@ -16,9 +16,9 @@ RUN pip install --no-cache-dir --user tld && rm -rf ~/.cache/pip
 WORKDIR /opt/al_service
 COPY . .
 
-# Install Malware Jail
+# Install Tools
 USER root
-WORKDIR ./malware-jail
+WORKDIR ./tools
 RUN npm install
 
 USER assemblyline

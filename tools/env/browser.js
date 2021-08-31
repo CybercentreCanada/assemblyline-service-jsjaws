@@ -314,6 +314,10 @@ Document = _proxy(function() {
         util_log("attachEvent(" + n + ")");
     }
     this.URL = location;
+    this.evaluate = function(n) {
+        util_log(this._name + ".evaluate(" + n + ")");
+    }
+
 })
 Document.prototype = Object.create(Node.prototype);
 Document.prototype.constructor = Document;

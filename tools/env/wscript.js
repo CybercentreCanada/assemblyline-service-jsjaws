@@ -2015,3 +2015,7 @@ _WidgetInfo = function(n) {
 ga = function() {
     util_log("ga(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
 }
+
+XPathResult = function() {
+    return XPathResult;
+}
