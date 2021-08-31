@@ -10,7 +10,7 @@ stage: CORE
 category: Dynamic Analysis
 
 file_required: true
-timeout: 120
+timeout: 300
 disable_cache: false
 
 enabled: false
@@ -24,6 +24,29 @@ config:
   max_payloads_extracted: 50
 
 submission_params:
+  # Service-wide parameters
+  - default: 60
+    name: tool_timeout
+    type: int
+    value: 60
+
+  - default: false
+    name: add_supplementary
+    type: bool
+    value: false
+
+  - default: true
+    name: static_signatures
+    type: bool
+    value: true
+
+  # Box.js parameters
+  - default: false
+    name: no_shell_error
+    type: bool
+    value: false
+
+  # MalwareJail parameters
   - default: "IE8"
     name: browser
     type: list
@@ -60,13 +83,13 @@ heuristics:
     name: Network Traffic Detected
     score: 500
     filetype: '*'
-    description: Malware Jail detected network traffic.
+    description: Malware Sandbox Tool(s) detected network traffic.
 
   - heur_id: 2
     name: IOC(s) Extracted
     score: 250
     filetype: '*'
-    description: At least one IOC has been extracted from a text blob.
+    description: At least one IOC has been extracted.
 
   - heur_id: 3
     name: Suspicious Activity Detected

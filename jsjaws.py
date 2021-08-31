@@ -1,10 +1,10 @@
 from hashlib import sha256
 from inspect import getmembers, isclass
-from json import loads
-from os import mkdir, listdir, remove, path
+from json import loads, dumps
+from os import mkdir, listdir, path
 from pkgutil import iter_modules
 from re import match, search, findall, compile
-from subprocess import run
+from subprocess import run, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import time
@@ -26,6 +26,7 @@ from signatures.abstracts import Signature
 WSCRIPT_SHELL = "wscript.shell"
 WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d\]\.Run\()(.*)(?:\))"
 MAX_PAYLOAD_FILES_EXTRACTED = 50
+RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -41,12 +42,14 @@ class JsJaws(ServiceBase):
         super(JsJaws, self).__init__(config)
         self.artifact_list: Optional[List[Dict[str, str]]] = None
         self.patterns = PatternMatch()
-        self.payload_extraction_dir: Optional[str] = None
-        self.sandbox_env_dump: Optional[str] = None
-        self.sandbox_env_dir: Optional[str] = None
-        self.sandbox_env_dump_path: Optional[str] = None
+        self.malware_jail_payload_extraction_dir: Optional[str] = None
+        self.malware_jail_sandbox_env_dump: Optional[str] = None
+        self.malware_jail_sandbox_env_dir: Optional[str] = None
+        self.malware_jail_sandbox_env_dump_path: Optional[str] = None
         self.path_to_jailme_js: Optional[str] = None
-        self.urls_json_path: Optional[str] = None
+        self.path_to_boxjs: Optional[str] = None
+        self.boxjs_urls_json_path: Optional[str] = None
+        self.malware_jail_urls_json_path: Optional[str] = None
         self.wscript_only_config: Optional[str] = None
         self.extracted_wscript: Optional[str] = None
         self.extracted_wscript_path: Optional[str] = None
@@ -54,6 +57,11 @@ class JsJaws(ServiceBase):
         self.malware_jail_output_path: Optional[str] = None
         self.extracted_doc_writes: Optional[str] = None
         self.extracted_doc_writes_path: Optional[str] = None
+        self.boxjs_output_dir: Optional[str] = None
+        self.boxjs_iocs: Optional[str] = None
+        self.boxjs_resources: Optional[str] = None
+        self.boxjs_analysis_log: Optional[str] = None
+        self.boxjs_snippets: Optional[str] = None
         self.log.debug('JsJaws service initialized')
 
     def start(self) -> None:
@@ -66,41 +74,62 @@ class JsJaws(ServiceBase):
         self.artifact_list = []
 
         # File constants
-        self.payload_extraction_dir = path.join(self.working_directory, "payload/")
-        self.sandbox_env_dump = "sandbox_dump.json"
-        self.sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
-        self.sandbox_env_dump_path = path.join(self.sandbox_env_dir, self.sandbox_env_dump)
+        self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
+        self.malware_jail_sandbox_env_dump = "sandbox_dump.json"
+        self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
+        self.malware_jail_sandbox_env_dump_path = path.join(self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump)
         root_dir = path.dirname(path.abspath(__file__))
-        self.path_to_jailme_js = path.join(root_dir, "malware-jail/jailme.js")
-        self.urls_json_path = path.join(self.payload_extraction_dir, "urls.json")
-        self.wscript_only_config = path.join(root_dir, "malware-jail/config_wscript_only.json")
+        self.path_to_jailme_js = path.join(root_dir, "tools/jailme.js")
+        self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
+        self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
+        self.wscript_only_config = path.join(root_dir, "tools/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
-        self.extracted_wscript_path = path.join(self.payload_extraction_dir, self.extracted_wscript)
+        self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
         self.extracted_doc_writes = "document_writes.html"
-        self.extracted_doc_writes_path = path.join(self.payload_extraction_dir, self.extracted_doc_writes)
+        self.extracted_doc_writes_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_doc_writes)
+        self.boxjs_output_dir = path.join(self.working_directory, f"{request.sha256}.results")
+        self.boxjs_urls_json_path = path.join(self.boxjs_output_dir, "urls.json")
+        self.boxjs_iocs = path.join(self.boxjs_output_dir, "IOC.json")
+        self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
+        self.boxjs_analysis_log = path.join(self.boxjs_output_dir, "analysis.log")
+        self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
 
         # Setup directory structure
-        if not path.exists(self.payload_extraction_dir):
-            mkdir(self.payload_extraction_dir)
+        if not path.exists(self.malware_jail_payload_extraction_dir):
+            mkdir(self.malware_jail_payload_extraction_dir)
 
-        if not path.exists(self.sandbox_env_dir):
-            mkdir(self.sandbox_env_dir)
+        if not path.exists(self.malware_jail_sandbox_env_dir):
+            mkdir(self.malware_jail_sandbox_env_dir)
 
         request.result = Result()
 
         # Grabbing service level configuration variables and submission variables
+        download_payload = request.get_param("download_payload")
+        allow_download_from_internet = self.config.get("allow_download_from_internet", False)
+        tool_timeout = request.get_param("tool_timeout")
         browser_selected = request.get_param("browser")
         wscript_only = request.get_param("wscript_only")
-        download_payload = request.get_param("download_payload")
         throw_http_exc = request.get_param("throw_http_exc")
         extract_function_calls = request.get_param("extract_function_calls")
         extract_eval_calls = request.get_param("extract_eval_calls")
-        allow_download_from_internet = self.config.get("allow_download_from_internet", False)
+        add_supplementary = request.get_param("add_supplementary")
+        static_signatures = request.get_param("static_signatures")
+        no_shell_error = request.get_param("no_shell_error")
 
-        args = [
-            "node", self.path_to_jailme_js, "-s", self.payload_extraction_dir, "-o", self.sandbox_env_dump_path,
+        # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
+        # --no-kill              Do not kill the application when runtime errors occur
+        # --output-dir           The location on disk to write the results files and folders to (defaults to the
+        #                        current directory)
+        boxjs_args = [self.path_to_boxjs, "--loglevel", "debug", "--no-kill", "--output-dir", self.working_directory]
+
+        # -s odir  ... output directory for generated files (malware payload)
+        # -o ofile ... name of the file where sandbox shall be dumped at the end
+        # -b id    ... browser type, use -b list for possible values (Possible -b values:
+        # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
+        malware_jail_args = [
+            "node", self.path_to_jailme_js, "-s", self.malware_jail_payload_extraction_dir, "-o", self.malware_jail_sandbox_env_dump_path,
             "-b", browser_selected
         ]
 
@@ -110,53 +139,105 @@ class JsJaws(ServiceBase):
         # If the user has requested the sample to download any payload from the Internet, and
         # the service is allowed to reach the Internet, then add the following flag
         if allow_download_from_internet and download_payload:
-            args.append("--down=y")
+            # --down   ... allow downloading malware payloads from remote servers
+            malware_jail_args.append("--down=y")
+            # --download             Actually download the payloads
+            boxjs_args.append("--download")
         # If the user has requested the sample to download any payload from the Internet, and
         # the service is NOT allowed to reach the Internet, then add a ResultSection letting
         # them know and simulate all network call responses with a 404 Not Found
         elif not allow_download_from_internet and download_payload:
             request.result.add_section(ResultSection("Internet Access is disabled."))
-            args.append("--h404")
+            # --h404   ... on download return always HTTP/404
+            malware_jail_args.append("--h404")
         # By selecting the throw_http_exc flag, the sandbox will throw an error in every
         # network call. This is useful for attempting different code execution paths.
         elif throw_http_exc:
-            args.append("--t404")
+            malware_jail_args.append("--t404")
         # As a default, the sandbox will simulate all network call responses with a 404 Not Found
         else:
-            args.append("--h404")
+            # --h404   ... on download return always HTTP/404
+            malware_jail_args.append("--h404")
+
+        # ==================================================================
+        # BoxJs Section
+        # ==================================================================
+
+        # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
+        #                        error by default to pretend that the distribution sites are down, so that the
+        #                        script will attempt to poll every site)
+        if no_shell_error:
+            boxjs_args.append("--no-shell-error")
+
+        self.log.debug("Running Box.js...")
+        start_time = time()
+        boxjs_args.append(request.file_path)
+        boxjs_output: List[str] = []
+        try:
+            _ = run(args=boxjs_args, capture_output=True, timeout=tool_timeout)
+        except TimeoutExpired:
+            pass
+        if path.exists(self.boxjs_analysis_log):
+            with open(self.boxjs_analysis_log, "r") as f:
+                boxjs_output = f.readlines()
+        self.log.debug(f"Completed running Box.js! Time elapsed: {round(time() - start_time)}s")
+
+        # ==================================================================
+        # MalwareJail Section
+        # ==================================================================
 
         # Files that each represent a Function Call can be noisy and not particularly useful
         # This flag turns on this extraction
         if request.deep_scan or extract_function_calls:
-            args.append("--extractfns")
+            malware_jail_args.append("--extractfns")
 
         # Files that each represent a Eval Call can be noisy and not particularly useful
         # This flag turns on this extraction
         if request.deep_scan or extract_eval_calls:
-            args.append("--extractevals")
+            malware_jail_args.append("--extractevals")
 
         # By default, detonation takes place within a sandboxed browser. This option allows
         # for the sample to be run in WScript only
         if wscript_only:
-            args.extend(["-c", self.wscript_only_config])
+            malware_jail_args.extend(["-c", self.wscript_only_config])
 
         # Don't forget the sample!
-        args.append(request.file_path)
+        malware_jail_args.append(request.file_path)
 
         self.log.debug("Running MalwareJail...")
         start_time = time()
-        completed_process = run(args=args, capture_output=True)
+        try:
+            completed_malware_jail_process = run(args=malware_jail_args, capture_output=True, timeout=tool_timeout)
+            malware_jail_output = completed_malware_jail_process.stdout.decode().split("\n")
+        except TimeoutExpired:
+            malware_jail_output = []
         self.log.debug(f"Completed running MalwareJail! Time elapsed: {round(time() - start_time)}s")
 
-        output = completed_process.stdout.decode().split("\n")
+        # ==================================================================
+        # Magic Section
+        # ==================================================================
 
-        # Time for the magic!
-        self._run_signatures(output, request.result)
-        self._extract_wscript(output, request.result)
-        self._extract_doc_writes(output)
+        # We are running signatures based on the output observed from dynamic execution (boxjs_output and malware_jail_output)
+        # as well as the file contents themselves (static analysis)
+        if static_signatures:
+            static_file_lines = []
+            for line in safe_str(request.file_contents).split("\n"):
+                if ";" in line:
+                    static_file_lines.extend(line.split(";"))
+                else:
+                    static_file_lines.append(line)
+            total_output = boxjs_output + malware_jail_output + static_file_lines
+        else:
+            total_output = boxjs_output + malware_jail_output
+        self._run_signatures(total_output, request.result)
+
+        self._extract_boxjs_iocs(request.result)
+        self._extract_wscript(malware_jail_output, request.result)
+        self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
-        self._extract_supplementary(output)
+        if add_supplementary:
+            self._extract_supplementary(malware_jail_output)
 
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
@@ -209,18 +290,36 @@ class JsJaws(ServiceBase):
         unique_shas = {sample_sha256}
         max_payloads_extracted = self.config.get("max_payloads_extracted", MAX_PAYLOAD_FILES_EXTRACTED)
         extracted_count = 0
-        for file in sorted(listdir(self.payload_extraction_dir)):
-            extracted = path.join(self.payload_extraction_dir, file)
+
+        malware_jail_payloads = [(file, path.join(self.malware_jail_payload_extraction_dir, file))
+                                 for file in sorted(listdir(self.malware_jail_payload_extraction_dir))]
+
+        # These are dumped files from Box.js of js that was run successfully
+        files_to_not_extract = set()
+        if path.exists(self.boxjs_snippets):
+            with open(self.boxjs_snippets, "r") as f:
+                snippets = loads(f.read())
+                for snippet in snippets:
+                    files_to_not_extract.add(snippet)
+
+        box_js_payloads = [(file, path.join(self.boxjs_output_dir, file))
+                           for file in sorted(listdir(self.boxjs_output_dir)) if file not in files_to_not_extract]
+
+        all_payloads = malware_jail_payloads + box_js_payloads
+
+        for file, extracted in all_payloads:
             # No empty files
             if path.getsize(extracted) == 0:
                 continue
-            # No files that we added ourselves or will parse later
-            if extracted in [self.urls_json_path, self.extracted_wscript_path]:
+            # These are not payloads
+            if extracted in [self.malware_jail_urls_json_path, self.extracted_wscript_path,
+                             self.extracted_doc_writes_path, self.boxjs_iocs, self.boxjs_resources, self.boxjs_snippets,
+                             self.boxjs_analysis_log, self.boxjs_urls_json_path]:
                 continue
             extracted_sha = get_id_from_data(extracted)
-            if extracted_sha not in unique_shas:
+            if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256]:
                 extracted_count += 1
-                if not deep_scan and extracted_count >= max_payloads_extracted:
+                if not deep_scan and extracted_count > max_payloads_extracted:
                     self.log.debug(f"The maximum number of payloads {max_payloads_extracted} were extracted.")
                     return
                 unique_shas.add(extracted_sha)
@@ -266,63 +365,58 @@ class JsJaws(ServiceBase):
 
     def _extract_urls(self, result: Result) -> None:
         """
-        This method turns the urls.json that is dumped by MalwareJail into a ResultSection
+        This method extracts the URL interactions from urls.json that is dumped by MalwareJail
+        This method also extracts the URL interactions from the IOC.json that is dumped by Box.js
         :param result: A Result object containing the service results
         :return: None
         """
-        if not path.exists(self.urls_json_path):
+        if not path.exists(self.malware_jail_urls_json_path) and not path.exists(self.boxjs_iocs):
             return
 
         urls_result_section = ResultSection("URLs", body_format=BODY_FORMAT.TABLE)
-        with open(self.urls_json_path, "r") as f:
-            file_contents = f.read()
-            urls_json = loads(file_contents)
-            for url in urls_json:
-                safe_url = safe_str(url["url"])
-                # Extract URI
-                uri_match = match(FULL_URI, safe_url)
-                if uri_match:
-                    urls_result_section.add_tag("network.dynamic.uri", safe_url)
-                    # Extract domain
-                    domain_match = search(DOMAIN_REGEX, safe_url)
-                    if domain_match:
-                        domain = domain_match.group(0)
-                        urls_result_section.add_tag("network.dynamic.domain", domain)
-                    # Extract IP
-                    ip_match = search(IP_REGEX, safe_url)
-                    if ip_match:
-                        ip = ip_match.group(0)
-                        urls_result_section.add_tag("network.dynamic.ip", ip)
-                    # Extract URI path
-                    if "//" in safe_url:
-                        safe_url = safe_url.split("//")[1]
-                    uri_path_match = search(URI_PATH, safe_url)
-                    if uri_path_match:
-                        uri_path = uri_path_match.group(0)
-                        urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
-                else:
-                    # Might as well tag this while we're here
-                    urls_result_section.add_tag("file.string.extracted", safe_url)
-            urls_result_section.body = file_contents
-        urls_result_section.set_heuristic(1)
-        result.add_section(urls_result_section)
+
+        urls_json = []
+        if path.exists(self.malware_jail_urls_json_path):
+            with open(self.malware_jail_urls_json_path, "r") as f:
+                file_contents = f.read()
+                urls_json = loads(file_contents)
+                for url in urls_json:
+                    self._tag_uri(url["url"], urls_result_section)
+
+        if path.exists(self.boxjs_iocs):
+            with open(self.boxjs_iocs, "r") as f:
+                file_contents = f.read()
+                ioc_json = loads(file_contents)
+                for ioc in ioc_json:
+                    value = ioc["value"]
+                    if ioc["type"] == "UrlFetch":
+                        if any(value["url"] == url["url"] for url in urls_json):
+                            continue
+                        urls_json.append({"url": value["url"], "method": value["method"], "request_headers": value["headers"]})
+                        self._tag_uri(value["url"], urls_result_section)
+
+        if urls_json:
+            urls_result_section.body = dumps(urls_json)
+            urls_result_section.set_heuristic(1)
+            result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
         """
-        This method adds the sandbox environment dump and the MalwareJail stdout as supplementary files
+        This method adds the sandbox environment dump and the MalwareJail stdout as supplementary files, as well as
+        the dumps from Box.js
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :return: None
         """
-        if path.exists(self.sandbox_env_dump_path):
+        if path.exists(self.malware_jail_sandbox_env_dump_path):
             # Get the sandbox env json that is dumped. This should always exist.
-            sandbox_env_dump = {
-                "name": self.sandbox_env_dump,
-                "path": self.sandbox_env_dump_path,
+            malware_jail_sandbox_env_dump = {
+                "name": self.malware_jail_sandbox_env_dump,
+                "path": self.malware_jail_sandbox_env_dump_path,
                 "description": "Sandbox Environment Details",
                 "to_be_extracted": False
             }
-            self.log.debug(f"Adding supplementary file: {self.sandbox_env_dump}")
-            self.artifact_list.append(sandbox_env_dump)
+            self.log.debug(f"Adding supplementary file: {self.malware_jail_sandbox_env_dump}")
+            self.artifact_list.append(malware_jail_sandbox_env_dump)
 
         if output:
             with open(self.malware_jail_output_path, "w") as f:
@@ -336,6 +430,16 @@ class JsJaws(ServiceBase):
             }
             self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
             self.artifact_list.append(mlwr_jail_out)
+
+        if path.exists(self.boxjs_analysis_log):
+            boxjs_analysis_log = {
+                "name": "boxjs_analysis_log.log",
+                "path": self.boxjs_analysis_log,
+                "description": "Box.js Output",
+                "to_be_extracted": False
+            }
+            self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
+            self.artifact_list.append(boxjs_analysis_log)
 
     def _extract_iocs_from_text_blob(self, blob: str, result_section: ResultSection, file_ext: str = "") -> None:
         """
@@ -456,6 +560,77 @@ class JsJaws(ServiceBase):
         signature.process_output(output)
         if len(signature.marks) > 0:
             signatures_that_hit.append(signature)
+
+    def _extract_boxjs_iocs(self, result: Result) -> None:
+        """
+        This method extracts IOCs that Box.js has reported
+        :param result: A Result object containing the service results
+        :return: None
+        """
+        if path.exists(self.boxjs_iocs):
+            ioc_result_section = ResultSection("IOCs extracted by Box.js")
+            with open(self.boxjs_iocs, "r") as f:
+                file_contents = f.read()
+                ioc_json = loads(file_contents)
+            commands = set()
+            file_writes = set()
+            file_reads = set()
+            for ioc in ioc_json:
+                type = ioc["type"]
+                value = ioc["value"]
+                if type == "Run" and "command" in value:
+                    commands.add(value["command"])
+                elif type == "FileWrite" and "file" in value:
+                    file_writes.add(value["file"])
+                elif type == "FileRead" and "file" in value:
+                    file_writes.add(value["file"])
+            if commands:
+                cmd_result_section = ResultSection("The script ran the following commands", parent=ioc_result_section)
+                cmd_result_section.add_lines(list(commands))
+                [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
+                self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_result_section, ".js")
+            if file_writes:
+                file_writes_result_section = ResultSection("The script wrote the following files", parent=ioc_result_section)
+                file_writes_result_section.add_lines(list(file_writes))
+                [file_writes_result_section.add_tag("dynamic.process.file_name", file_write) for file_write in list(file_writes)]
+            if file_reads:
+                file_reads_result_section = ResultSection("The script read the following files", parent=ioc_result_section)
+                file_reads_result_section.add_lines(list(file_reads))
+                [file_reads_result_section.add_tag("dynamic.process.file_name", file_read) for file_read in list(file_reads)]
+
+            if ioc_result_section.subsections:
+                ioc_result_section.set_heuristic(2)
+                result.add_section(ioc_result_section)
+
+    def _tag_uri(self, url: str, urls_result_section: ResultSection) -> None:
+        """
+
+        """
+        safe_url = safe_str(url)
+        # Extract URI
+        uri_match = match(FULL_URI, safe_url)
+        if uri_match:
+            urls_result_section.add_tag("network.dynamic.uri", safe_url)
+            # Extract domain
+            domain_match = search(DOMAIN_REGEX, safe_url)
+            if domain_match:
+                domain = domain_match.group(0)
+                urls_result_section.add_tag("network.dynamic.domain", domain)
+            # Extract IP
+            ip_match = search(IP_REGEX, safe_url)
+            if ip_match:
+                ip = ip_match.group(0)
+                urls_result_section.add_tag("network.dynamic.ip", ip)
+            # Extract URI path
+            if "//" in safe_url:
+                safe_url = safe_url.split("//")[1]
+            uri_path_match = search(URI_PATH, safe_url)
+            if uri_path_match:
+                uri_path = uri_path_match.group(0)
+                urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
+        else:
+            # Might as well tag this while we're here
+            urls_result_section.add_tag("file.string.extracted", safe_url)
 
 
 def get_id_from_data(file_path: str) -> str:

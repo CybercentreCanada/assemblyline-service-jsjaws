@@ -1,0 +1,10 @@
+{
+    "sandbox_sequence1": [ "tools/env/eval.js", "tools/env/wscript.js" ],
+    "sandbox_sequence": [ "tools/env/utils.js", "tools/env/eval.js",
+        "tools/env/function.js", "tools/env/wscript.js", "tools/env/browser.js",
+        "tools/env/agents.js","tools/env/other.js", "tools/env/console.js" ],
+    "browser_type" : "IE8",
+    "malware_files": [],
+    "context_dump_after": "sandbox_dump.json",
+    "save_files": "output/"
+}

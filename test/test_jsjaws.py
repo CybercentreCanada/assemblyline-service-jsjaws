@@ -136,12 +136,15 @@ class TestJsJaws:
     def test_init(jsjaws_class_instance):
         from assemblyline_v4_service.common.balbuzard.patterns import PatternMatch
         assert jsjaws_class_instance.artifact_list is None
-        assert jsjaws_class_instance.payload_extraction_dir is None
-        assert jsjaws_class_instance.sandbox_env_dump is None
-        assert jsjaws_class_instance.sandbox_env_dir is None
-        assert jsjaws_class_instance.sandbox_env_dump_path is None
+        assert isinstance(jsjaws_class_instance.patterns, PatternMatch)
+        assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dump is None
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dir is None
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path is None
         assert jsjaws_class_instance.path_to_jailme_js is None
-        assert jsjaws_class_instance.urls_json_path is None
+        assert jsjaws_class_instance.path_to_boxjs is None
+        assert jsjaws_class_instance.boxjs_urls_json_path is None
+        assert jsjaws_class_instance.malware_jail_urls_json_path is None
         assert jsjaws_class_instance.wscript_only_config is None
         assert jsjaws_class_instance.extracted_wscript is None
         assert jsjaws_class_instance.extracted_wscript_path is None
@@ -149,7 +152,11 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_output_path is None
         assert jsjaws_class_instance.extracted_doc_writes is None
         assert jsjaws_class_instance.extracted_doc_writes_path is None
-        assert isinstance(jsjaws_class_instance.patterns, PatternMatch)
+        assert jsjaws_class_instance.boxjs_output_dir is None
+        assert jsjaws_class_instance.boxjs_iocs is None
+        assert jsjaws_class_instance.boxjs_resources is None
+        assert jsjaws_class_instance.boxjs_analysis_log is None
+        assert jsjaws_class_instance.boxjs_snippets is None
 
     @staticmethod
     def test_start(jsjaws_class_instance):
@@ -170,7 +177,8 @@ class TestJsJaws:
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
         from json import loads
-        from os import path
+        from os import path, mkdir
+        from subprocess import TimeoutExpired
 
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
@@ -181,6 +189,8 @@ class TestJsJaws:
         mocker.patch.object(SandboxOntology, "handle_artifacts")
         mocker.patch("jsjaws.run", return_value=dummy_completed_process_instance)
 
+
+
         service_task = ServiceTask(sample)
         task = Task(service_task)
         task.service_config = {
@@ -190,31 +200,41 @@ class TestJsJaws:
             "download_payload": False,
             "extract_function_calls": False,
             "extract_eval_calls": False,
+            "tool_timeout": 60,
+            "add_supplementary": False,
+            "static_signatures": True,
+            "no_shell_error": False
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
+
+        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"{service_request.sha256}.results")
+        jsjaws_class_instance.boxjs_analysis_log = path.join(jsjaws_class_instance.boxjs_output_dir, "analysis.log")
+        mkdir(jsjaws_class_instance.boxjs_output_dir)
+        with open(jsjaws_class_instance.boxjs_analysis_log, "w") as f:
+            f.write("blah\nblah\nblah")
 
         # Actually executing the sample
         jsjaws_class_instance.execute(service_request)
 
         assert jsjaws_class_instance.artifact_list == []
-        assert jsjaws_class_instance.payload_extraction_dir == path.join(jsjaws_class_instance.working_directory, "payload/")
-        assert jsjaws_class_instance.sandbox_env_dump == "sandbox_dump.json"
-        assert jsjaws_class_instance.sandbox_env_dir == path.join(jsjaws_class_instance.working_directory, "sandbox_env")
-        assert jsjaws_class_instance.sandbox_env_dump_path == path.join(jsjaws_class_instance.sandbox_env_dir, jsjaws_class_instance.sandbox_env_dump)
+        assert jsjaws_class_instance.malware_jail_payload_extraction_dir == path.join(jsjaws_class_instance.working_directory, "payload/")
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dump == "sandbox_dump.json"
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dir == path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path == path.join(jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
         root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "malware-jail/jailme.js")
-        assert jsjaws_class_instance.urls_json_path == path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
-        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "malware-jail/config_wscript_only.json")
+        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/jailme.js")
+        assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
+        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/config_wscript_only.json")
         assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
-        assert jsjaws_class_instance.extracted_wscript_path == path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        assert jsjaws_class_instance.extracted_wscript_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         assert jsjaws_class_instance.malware_jail_output == "output.txt"
         assert jsjaws_class_instance.malware_jail_output_path == path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
         assert jsjaws_class_instance.extracted_doc_writes == "document_writes.html"
-        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
+        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
 
-        assert path.exists(jsjaws_class_instance.payload_extraction_dir)
-        assert path.exists(jsjaws_class_instance.sandbox_env_dir)
+        assert path.exists(jsjaws_class_instance.malware_jail_payload_extraction_dir)
+        assert path.exists(jsjaws_class_instance.malware_jail_sandbox_env_dir)
 
         # Get the result of execute() from the test method
         test_result = task.get_service_result()
@@ -260,7 +280,12 @@ class TestJsJaws:
         service_request.task.deep_scan = False
         service_request.task.service_config["extract_function_calls"] = True
         service_request.task.service_config["extract_eval_calls"] = True
-        service_request.task.service_config["wscipt_only"] = True
+        service_request.task.service_config["wscript_only"] = True
+        service_request.task.service_config["throw_http_exc"] = True
+        service_request.task.service_config["no_shell_error"] = True
+        service_request.task.service_config["static_signatures"] = False
+        service_request.task.service_config["add_supplementary"] = True
+        mocker.patch("jsjaws.run", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 
     @staticmethod
@@ -289,11 +314,11 @@ class TestJsJaws:
     def test_extract_doc_writes(jsjaws_class_instance):
         from os.path import exists, join
         from os import mkdir
-        jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
         jsjaws_class_instance.extracted_doc_writes = "document_writes.html"
-        jsjaws_class_instance.extracted_doc_writes_path = join(jsjaws_class_instance.payload_extraction_dir,
+        jsjaws_class_instance.extracted_doc_writes_path = join(jsjaws_class_instance.malware_jail_payload_extraction_dir,
                                                             jsjaws_class_instance.extracted_doc_writes)
-        mkdir(jsjaws_class_instance.payload_extraction_dir)
+        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         output = ["document[15].write(content)", "date time - => 'write me!'", "blah", "document[15].write(content)", "write me too!"]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)
@@ -310,19 +335,22 @@ class TestJsJaws:
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
         from os import mkdir, path
-        jsjaws_class_instance.payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.urls_json_path = path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_urls_json_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
         jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_path = path.join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
-        mkdir(jsjaws_class_instance.payload_extraction_dir)
-        jsjaws_class_instance.config["max_payloads_extracted"] = 2
+        jsjaws_class_instance.extracted_wscript_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"blah.results")
+        jsjaws_class_instance.boxjs_snippets = path.join(jsjaws_class_instance.boxjs_output_dir, "snippets.json")
+        mkdir(jsjaws_class_instance.boxjs_output_dir)
+        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
+        jsjaws_class_instance.config["max_payloads_extracted"] = 1
 
         # Zero bytes file
-        with open(f"{jsjaws_class_instance.payload_extraction_dir}/blah1.txt", "a+") as f:
+        with open(f"{jsjaws_class_instance.malware_jail_payload_extraction_dir}/blah1.txt", "a+") as f:
             pass
 
         # urls_json_path file
-        with open(jsjaws_class_instance.urls_json_path, "a+") as f:
+        with open(jsjaws_class_instance.malware_jail_urls_json_path, "a+") as f:
             f.write("blah")
 
         # extracted_wscript_path file
@@ -330,16 +358,20 @@ class TestJsJaws:
             f.write("blah")
 
         # valid file 1
-        valid_file_name1 = "blah2.txt"
-        valid_file_path1 = f"{jsjaws_class_instance.payload_extraction_dir}{valid_file_name1}"
+        valid_file_name1 = "zlah2.txt"
+        valid_file_path1 = f"{jsjaws_class_instance.malware_jail_payload_extraction_dir}{valid_file_name1}"
         with open(valid_file_path1, "w") as f:
-            f.write("blah")
+            f.write("blah2")
 
         # valid file 2
-        valid_file_name2 = "blah3.txt"
-        valid_file_path2 = f"{jsjaws_class_instance.payload_extraction_dir}{valid_file_name2}"
+        valid_file_name2 = "zlah3.txt"
+        valid_file_path2 = f"{jsjaws_class_instance.malware_jail_payload_extraction_dir}{valid_file_name2}"
         with open(valid_file_path2, "w") as f:
-            f.write("blah")
+            f.write("blah3")
+
+        # Box.js Snippets
+        with open(jsjaws_class_instance.boxjs_snippets, "w") as f:
+            f.write('{"yaba": []}')
 
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_payloads("blah", False)
@@ -353,25 +385,33 @@ class TestJsJaws:
     @staticmethod
     def test_extract_urls(jsjaws_class_instance):
         from json import dumps
-        from assemblyline_v4_service.common.result import ResultSection, BODY_FORMAT
-        from os import mkdir, path
-        jsjaws_class_instance.payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.urls_json_path = path.join(jsjaws_class_instance.payload_extraction_dir, "urls.json")
-        mkdir(jsjaws_class_instance.payload_extraction_dir)
+        from assemblyline_v4_service.common.result import Result, ResultSection, BODY_FORMAT
+        from os import mkdir, path, remove
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_urls_json_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
+        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
+        jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
+        mkdir(jsjaws_class_instance.boxjs_output_dir)
+        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         body = [
                 {"url": "http://blah.ca/blah.exe"},
                 {"url": "http://1.1.1.1/blah.exe"},
                 {"url": "blahblahblah"},
             ]
-        with open(jsjaws_class_instance.urls_json_path, "w") as f:
+        with open(jsjaws_class_instance.malware_jail_urls_json_path, "w") as f:
             f.write(dumps(body))
-        from assemblyline_v4_service.common.result import Result
+        with open(jsjaws_class_instance.boxjs_iocs, "w") as f:
+            val = [{"type": "UrlFetch", "value": {"url": url["url"]}} for url in body]
+            val.append({"type": "UrlFetch", "value": {"url": "http://definitely-a-url.ca", "method": "blah", "headers": "blah"}})
+            contents = dumps(val)
+            f.write(contents)
         result = Result()
         jsjaws_class_instance._extract_urls(result)
+        body.append({"url": "http://definitely-a-url.ca", "method": "blah", "request_headers": "blah"})
         correct_res_sec = ResultSection("URLs", body_format=BODY_FORMAT.TABLE, body=dumps(body),
                                         tags={
-                                            "network.dynamic.uri": ["http://blah.ca/blah.exe", "http://1.1.1.1/blah.exe"],
-                                            "network.dynamic.domain": ["blah.ca", "blah.exe"],
+                                            "network.dynamic.uri": ["http://blah.ca/blah.exe", "http://1.1.1.1/blah.exe", "http://definitely-a-url.ca"],
+                                            "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
                                             "network.dynamic.ip": ["1.1.1.1"],
                                             "network.dynamic.uri_path": ["/blah.exe"],
                                             "file.string.extracted": ["blahblahblah"]
@@ -379,25 +419,35 @@ class TestJsJaws:
         correct_res_sec.set_heuristic(1)
         assert check_section_equality(result.sections[0], correct_res_sec)
 
+        # Code Coverage
+        remove(jsjaws_class_instance.malware_jail_urls_json_path)
+        remove(jsjaws_class_instance.boxjs_iocs)
+        jsjaws_class_instance._extract_urls(result)
+
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
         from os import mkdir, path
-        jsjaws_class_instance.sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
-        jsjaws_class_instance.sandbox_env_dump = "sandbox_dump.json"
-        jsjaws_class_instance.sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
-        jsjaws_class_instance.sandbox_env_dump_path = path.join(jsjaws_class_instance.sandbox_env_dir, jsjaws_class_instance.sandbox_env_dump)
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump_path = path.join(jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
         jsjaws_class_instance.malware_jail_output = "output.txt"
         jsjaws_class_instance.malware_jail_output_path = path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
+        jsjaws_class_instance.boxjs_analysis_log = path.join(jsjaws_class_instance.boxjs_output_dir, "analysis.log")
 
-        mkdir(jsjaws_class_instance.sandbox_env_dir)
+        mkdir(jsjaws_class_instance.boxjs_output_dir)
+        mkdir(jsjaws_class_instance.malware_jail_sandbox_env_dir)
         jsjaws_class_instance.artifact_list = []
         output = ["blah"]
-        with open(jsjaws_class_instance.sandbox_env_dump_path, "w") as f:
+        with open(jsjaws_class_instance.malware_jail_sandbox_env_dump_path, "w") as f:
+            f.write("blah")
+        with open(jsjaws_class_instance.boxjs_analysis_log, "w") as f:
             f.write("blah")
         jsjaws_class_instance._extract_supplementary(output)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.sandbox_env_dump,
-            "path": jsjaws_class_instance.sandbox_env_dump_path,
+            "name": jsjaws_class_instance.malware_jail_sandbox_env_dump,
+            "path": jsjaws_class_instance.malware_jail_sandbox_env_dump_path,
             "description": "Sandbox Environment Details",
             "to_be_extracted": False
         }
@@ -405,6 +455,12 @@ class TestJsJaws:
             "name": jsjaws_class_instance.malware_jail_output,
             "path": jsjaws_class_instance.malware_jail_output_path,
             "description": "Malware Jail Output",
+            "to_be_extracted": False
+        }
+        assert jsjaws_class_instance.artifact_list[2] == {
+            "name": "boxjs_analysis_log.log",
+            "path": jsjaws_class_instance.boxjs_analysis_log,
+            "description": "Box.js Output",
             "to_be_extracted": False
         }
 
@@ -422,6 +478,8 @@ class TestJsJaws:
             ("DRIVE:\\\\PATH TO\\\\PYTHON27.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.py", ".py", {}),
             ("POST /some/thing/bad.exe HTTP/1.0\nUser-Agent: Mozilla\nHost: evil.ca\nAccept: */*\nContent-Type: application/octet-stream\nContent-Encoding: binary\n\nConnection: close", "", {"network.dynamic.domain": ["evil.ca"]}),
             ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"], "network.dynamic.uri": ["evil.ca/some/thing/bad.exe"], "network.dynamic.uri_path": ["/some/thing/bad.exe"]}),
+            ("wscript.shell", "", {}),
+            ("blah.ca", ".ca", {}),
         ]
     )
     def test_extract_iocs_from_text_blob(blob, file_ext, correct_tags, jsjaws_class_instance):
@@ -450,6 +508,38 @@ class TestJsJaws:
     def test_process_signature():
         # NOTE that this method is tested in test_run_signatures
         assert True
+
+    @staticmethod
+    def test_extract_boxjs_iocs(jsjaws_class_instance):
+        from os import path, mkdir
+        from json import dumps
+        from assemblyline_v4_service.common.result import Result, ResultSection
+        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"blah.result")
+        jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
+        mkdir(jsjaws_class_instance.boxjs_output_dir)
+        cmd = "blah http://blah.ca"
+        file = "blah.txt"
+        body = [
+            {"type": "Run", "value": {"command": cmd}},
+            {"type": "FileWrite", "value": {"file": file}},
+            {"type": "FileRead", "value": {"file": file}},
+        ]
+        with open(jsjaws_class_instance.boxjs_iocs, "w") as f:
+            f.write(dumps(body))
+        correct_res_sec = ResultSection("IOCs extracted by Box.js")
+        correct_res_sec.set_heuristic(2)
+        cmd_res_sec = ResultSection("The script ran the following commands", parent=correct_res_sec)
+        cmd_res_sec.add_lines([cmd])
+        cmd_res_sec.add_tag("dynamic.process.command_line", cmd)
+        write_res_sec = ResultSection("The script wrote the following files", parent=correct_res_sec)
+        write_res_sec.add_lines(["blah.txt"])
+        write_res_sec.add_tag("dynamic.process.file_name", file)
+        read_res_sec = ResultSection("The script read the following files", parent=correct_res_sec)
+        read_res_sec.add_lines(["blah.txt"])
+        read_res_sec.add_tag("dynamic.process.file_name", file)
+        res = Result()
+        jsjaws_class_instance._extract_boxjs_iocs(res)
+        check_section_equality(res.sections[0], correct_res_sec)
 
     @staticmethod
     @pytest.mark.parametrize("data, expected_result", [
