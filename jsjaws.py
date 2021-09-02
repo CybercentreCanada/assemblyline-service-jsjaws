@@ -608,11 +608,24 @@ class JsJaws(ServiceBase):
             commands = set()
             file_writes = set()
             file_reads = set()
+            cmd_count = 0
             for ioc in ioc_json:
                 type = ioc["type"]
                 value = ioc["value"]
                 if type == "Run" and "command" in value:
                     commands.add(value["command"])
+                    cmd_file_name = f"cmd_{cmd_count}.txt"
+                    cmd_file_path = path.join(self.working_directory, cmd_file_name)
+                    with open(cmd_file_path, "w") as f:
+                        f.write(value["command"])
+                    self.artifact_list.append({
+                        "name": cmd_file_name,
+                        "path": cmd_file_path,
+                        "description": "Command Extracted",
+                        "to_be_extracted": True
+                    })
+                    self.log.debug(f"Adding extracted file: {cmd_file_name}")
+                    cmd_count += 1
                 elif type == "FileWrite" and "file" in value:
                     file_writes.add(value["file"])
                 elif type == "FileRead" and "file" in value:
