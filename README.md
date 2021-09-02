@@ -2,9 +2,10 @@
 This Assemblyline service integrates components from two open-source projects:
 * [Malware Jail](https://github.com/HynekPetrak/malware-jail), which provides a sandbox for semi-automatic Javascript 
   malware analysis, deobfuscation and payload extraction.
-* [Box.js](https://github.com/CapacitorSet/box-js), which is a tool for studying JavaScript malware.
+* [Box.js](https://github.com/CapacitorSet/box-js), which is a sandbox tool for studying JavaScript malware.
+* [JS-X-Ray](https://github.com/NodeSecure/js-x-ray), which is a tool for static analysis via SAST scanning.
 
-Both use [Node VM](https://nodejs.org/api/vm.html) under the hood for malware sandboxing, although Box.js prefers a 
+Both sandboxes use [Node VM](https://nodejs.org/api/vm.html) under the hood for malware sandboxing, although Box.js prefers a 
 modified version of Node VM called [vm2](https://github.com/patriksimek/vm2). 
 
 ## Signatures
@@ -21,6 +22,8 @@ Service-wide parameters:
 * `add_supplementary`: If you want supplementary files to be added to the result, select this.
 * `static_signatures`:  If you want the signatures to be run against the file contents as well rather than just the 
   dynamic excecution output.
+* `display_sig_marks`: If you want the lines of code that caused the signatures to be raised to be displayed in the 
+  ResultSections.
 
 Box.js parameters:
 * `no_shell_error`: For Box.js, select this flag if you want to.

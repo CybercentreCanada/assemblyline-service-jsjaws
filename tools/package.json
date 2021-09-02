@@ -18,7 +18,8 @@
     "iconv-lite": "^0.4.13",
     "minimist": "^1.2.0",
     "sync-request": "^3.0.1",
-    "box-js": "^1.9.15"
+    "box-js": "^1.9.15",
+    "js-x-ray": "^3.2.0"
   },
   "license": "MIT",
   "repository": {
