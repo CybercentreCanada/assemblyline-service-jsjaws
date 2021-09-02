@@ -181,15 +181,15 @@ class TestJsJaws:
         from subprocess import TimeoutExpired
 
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
+        mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
         mocker.patch.object(jsjaws_class_instance, "_extract_doc_writes")
         mocker.patch.object(jsjaws_class_instance, "_extract_payloads")
         mocker.patch.object(jsjaws_class_instance, "_extract_urls")
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
+        mocker.patch.object(jsjaws_class_instance, "_flag_jsxray_iocs")
         mocker.patch.object(SandboxOntology, "handle_artifacts")
         mocker.patch("jsjaws.run", return_value=dummy_completed_process_instance)
-
-
 
         service_task = ServiceTask(sample)
         task = Task(service_task)
@@ -203,7 +203,8 @@ class TestJsJaws:
             "tool_timeout": 60,
             "add_supplementary": False,
             "static_signatures": True,
-            "no_shell_error": False
+            "no_shell_error": False,
+            "display_sig_marks": False
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
@@ -500,9 +501,11 @@ class TestJsJaws:
         correct_subsection = ResultSection("Signature: SaveToFile", body="JavaScript writes data to disk", parent=correct_section)
         correct_subsection.set_heuristic(3)
         correct_subsection.heuristic.add_signature_id("save_to_file", score=10)
-        correct_subsection.add_line("\t\tSaveToFile")
         jsjaws_class_instance._run_signatures(output, result)
+        jsjaws_class_instance._run_signatures(output, result, display_sig_marks=True)
         assert check_section_equality(result.sections[0], correct_section)
+        correct_subsection.add_line("\t\tSaveToFile")
+        assert check_section_equality(result.sections[1], correct_section)
 
     @staticmethod
     def test_process_signature():
@@ -531,6 +534,9 @@ class TestJsJaws:
         cmd_res_sec = ResultSection("The script ran the following commands", parent=correct_res_sec)
         cmd_res_sec.add_lines([cmd])
         cmd_res_sec.add_tag("dynamic.process.command_line", cmd)
+        cmd_res_sec.add_tag("network.dynamic.domain", "blah.ca")
+        cmd_res_sec.add_tag("network.dynamic.uri", "http://blah.ca")
+        cmd_res_sec.set_heuristic(2)
         write_res_sec = ResultSection("The script wrote the following files", parent=correct_res_sec)
         write_res_sec.add_lines(["blah.txt"])
         write_res_sec.add_tag("dynamic.process.file_name", file)
@@ -539,7 +545,39 @@ class TestJsJaws:
         read_res_sec.add_tag("dynamic.process.file_name", file)
         res = Result()
         jsjaws_class_instance._extract_boxjs_iocs(res)
-        check_section_equality(res.sections[0], correct_res_sec)
+        assert check_section_equality(res.sections[0], correct_res_sec)
+
+    @staticmethod
+    def test_flag_jsxray_iocs(jsjaws_class_instance):
+        from assemblyline_v4_service.common.result import Result, ResultSection
+        output = {"warnings": [
+            {"kind": "blah", "value": "blah"},
+            {"kind": "unsafe-stmt", "value": "blah"},
+            {"kind": "encoded-literal", "value": "blah"},
+            {"kind": "obfuscated-code", "value": "blah"},
+        ]}
+        res = Result()
+        correct_res_sec = ResultSection("JS-X-Ray IOCs Detected",
+                                        body="\t\tAn unsafe statement was found: blah\n\t\tAn encoded literal was "
+                                             "found: blah\n\t\tObfuscated code was found that was obfuscated by: "
+                                             "blah",
+                                        tags={"file.string.extracted": ["blah"]})
+        correct_res_sec.set_heuristic(2)
+        jsjaws_class_instance._flag_jsxray_iocs(output, res)
+        assert check_section_equality(res.sections[0], correct_res_sec)
+
+    @staticmethod
+    @pytest.mark.parametrize("data, length, res", [
+        (b"blah", None, "blah"),
+        (b"blah", 10, "blah"),
+        (b"blahblahblahblah", 10, "blahblahbl..."),
+    ])
+    def test_truncate(data, length, res):
+        from jsjaws import truncate
+        if length:
+            assert truncate(data, length) == res
+        else:
+            assert truncate(data) == res
 
     @staticmethod
     @pytest.mark.parametrize("data, expected_result", [

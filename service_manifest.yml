@@ -40,6 +40,11 @@ submission_params:
     type: bool
     value: true
 
+  - default: false
+    name: display_sig_marks
+    type: bool
+    value: false
+
   # Box.js parameters
   - default: false
     name: no_shell_error

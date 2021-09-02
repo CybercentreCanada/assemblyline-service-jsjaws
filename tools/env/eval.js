@@ -1,14 +1,14 @@
 util_log("Preparing sandbox to intercept eval() calls.");
 eval = function() {
-    var _eval_calls = [];
+    let _eval_calls = [];
     _data["eval_calls"] = _eval_calls;
-    var _orig_eval;
+    let _orig_eval;
     if (typeof _orig_eval === 'undefined')
         _orig_eval = eval;
-    var _ = function(s) {
-        var _t = {};
+    let _ = function(s) {
+        let _t = {};
         _t["orig"] = s;
-        var ns;
+        let ns;
         //if (s.indexOf("continue") > -1) {
         //    util_log("Potentially contains continue within a catch");
         //    ns = s.replace(/try/g, '').replace(/catch/g, '\r\nwhile');
@@ -37,7 +37,9 @@ eval = function() {
         ns1 = ns1.replace(/\} *var\b/g, "}; var");
 
         //util_log("Strict mode:", _isStrict);
-        util_log("Calling eval[" + _eval_calls.length + "]('" + _truncateOutput(ns1) +"')");
+        if (ns1 !== "") {
+            util_log("Calling eval('" + _truncateOutput(ns1) +"')");
+        }
         return _orig_eval(ns1);
     }
     return function eval(s) { /* [native code ] */ return _(s)}

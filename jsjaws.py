@@ -1,6 +1,6 @@
 from hashlib import sha256
 from inspect import getmembers, isclass
-from json import loads, dumps
+from json import loads, dumps, JSONDecodeError
 from os import mkdir, listdir, path
 from pkgutil import iter_modules
 from re import match, search, findall, compile
@@ -9,7 +9,7 @@ from sys import modules
 from threading import Thread
 from time import time
 from tld import get_tld
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any, Union
 
 from assemblyline.common.str_utils import safe_str
 from assemblyline.odm.base import FULL_URI, DOMAIN_REGEX, URI_PATH, IP_REGEX
@@ -37,6 +37,35 @@ TRANSLATED_SCORE = {
 }
 
 
+def truncate(data: Union[bytes, str], length: int = 100) -> str:
+    """
+    This method is a helper used to avoid cluttering output
+    :param data: The buffer that will be determined if it needs to be sliced
+    :param length: The limit of characters to the buffer
+    :return str: The potentially truncated buffer
+    """
+    string = safe_str(data)
+    if len(string) > length:
+        return string[:length] + '...'
+    return string
+
+
+def get_id_from_data(file_path: str) -> str:
+    """
+    This method generates a sha256 hash for the file contents of a file
+    :param file_path: The file path
+    :return hash: The sha256 hash of the file
+    """
+    sha256_hash = sha256()
+    # stream it in so we don't load the whole file in memory
+    with open(file_path, 'rb') as f:
+        data = f.read(4096)
+        while data:
+            sha256_hash.update(data)
+            data = f.read(4096)
+    return sha256_hash.hexdigest()
+
+
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
         super(JsJaws, self).__init__(config)
@@ -48,6 +77,7 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump_path: Optional[str] = None
         self.path_to_jailme_js: Optional[str] = None
         self.path_to_boxjs: Optional[str] = None
+        self.path_to_jsxray: Optional[str] = None
         self.boxjs_urls_json_path: Optional[str] = None
         self.malware_jail_urls_json_path: Optional[str] = None
         self.wscript_only_config: Optional[str] = None
@@ -81,6 +111,7 @@ class JsJaws(ServiceBase):
         root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
+        self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
         self.wscript_only_config = path.join(root_dir, "tools/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
@@ -117,6 +148,7 @@ class JsJaws(ServiceBase):
         add_supplementary = request.get_param("add_supplementary")
         static_signatures = request.get_param("static_signatures")
         no_shell_error = request.get_param("no_shell_error")
+        display_sig_marks = request.get_param("display_sig_marks")
 
         # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --no-kill              Do not kill the application when runtime errors occur
@@ -159,32 +191,11 @@ class JsJaws(ServiceBase):
             # --h404   ... on download return always HTTP/404
             malware_jail_args.append("--h404")
 
-        # ==================================================================
-        # BoxJs Section
-        # ==================================================================
-
         # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
         #                        error by default to pretend that the distribution sites are down, so that the
         #                        script will attempt to poll every site)
         if no_shell_error:
             boxjs_args.append("--no-shell-error")
-
-        self.log.debug("Running Box.js...")
-        start_time = time()
-        boxjs_args.append(request.file_path)
-        boxjs_output: List[str] = []
-        try:
-            _ = run(args=boxjs_args, capture_output=True, timeout=tool_timeout)
-        except TimeoutExpired:
-            pass
-        if path.exists(self.boxjs_analysis_log):
-            with open(self.boxjs_analysis_log, "r") as f:
-                boxjs_output = f.readlines()
-        self.log.debug(f"Completed running Box.js! Time elapsed: {round(time() - start_time)}s")
-
-        # ==================================================================
-        # MalwareJail Section
-        # ==================================================================
 
         # Files that each represent a Function Call can be noisy and not particularly useful
         # This flag turns on this extraction
@@ -201,17 +212,35 @@ class JsJaws(ServiceBase):
         if wscript_only:
             malware_jail_args.extend(["-c", self.wscript_only_config])
 
-        # Don't forget the sample!
-        malware_jail_args.append(request.file_path)
+        jsxray_args = ["node", self.path_to_jsxray]
 
-        self.log.debug("Running MalwareJail...")
-        start_time = time()
+        # Don't forget the sample!
+        boxjs_args.append(request.file_path)
+        malware_jail_args.append(request.file_path)
+        jsxray_args.append(request.file_path)
+
+        tool_threads: List[Thread] = []
+        responses: Dict[str, List[str]] = {}
+        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, tool_timeout, responses)))
+        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, tool_timeout, responses, True, True)))
+        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, tool_timeout, responses, True)))
+
+        for thr in tool_threads:
+            thr.start()
+
+        for thr in tool_threads:
+            thr.join()
+
+        boxjs_output: List[str] = []
+        if path.exists(self.boxjs_analysis_log):
+            with open(self.boxjs_analysis_log, "r") as f:
+                boxjs_output = f.readlines()
+
+        malware_jail_output = responses.get("MalwareJail", [])
         try:
-            completed_malware_jail_process = run(args=malware_jail_args, capture_output=True, timeout=tool_timeout)
-            malware_jail_output = completed_malware_jail_process.stdout.decode().split("\n")
-        except TimeoutExpired:
-            malware_jail_output = []
-        self.log.debug(f"Completed running MalwareJail! Time elapsed: {round(time() - start_time)}s")
+            jsxray_output = loads(responses.get("JS-X-Ray", ""))
+        except JSONDecodeError:
+            jsxray_output: Dict[Any] = {}
 
         # ==================================================================
         # Magic Section
@@ -229,15 +258,16 @@ class JsJaws(ServiceBase):
             total_output = boxjs_output + malware_jail_output + static_file_lines
         else:
             total_output = boxjs_output + malware_jail_output
-        self._run_signatures(total_output, request.result)
+        self._run_signatures(total_output, request.result, display_sig_marks)
 
         self._extract_boxjs_iocs(request.result)
-        self._extract_wscript(malware_jail_output, request.result)
+        self._extract_wscript(total_output, request.result)
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
+        self._flag_jsxray_iocs(jsxray_output, request.result)
 
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
@@ -494,12 +524,14 @@ class JsJaws(ServiceBase):
         if ioc_extracted and result_section.heuristic is None:
             result_section.set_heuristic(2)
 
-    def _run_signatures(self, output: List[str], result: Result) -> None:
+    def _run_signatures(self, output: List[str], result: Result, display_sig_marks: bool = False) -> None:
         """
         This method sets up the parallelized signature engine and runs each signature against the
         stdout from MalwareJail
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :param result: A Result object containing the service results
+        :param display_sig_marks: A boolean indicating if we are going to include the signature marks in the
+        ResultSection
         :return: None
         """
         # Loading signatures
@@ -543,8 +575,9 @@ class JsJaws(ServiceBase):
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
                 translated_score = TRANSLATED_SCORE[sig_that_hit.severity]
                 sig_res_sec.heuristic.add_signature_id(sig_that_hit.name, score=translated_score)
-                for mark in sig_that_hit.marks:
-                    sig_res_sec.add_line(f"\t\t{mark}")
+                if display_sig_marks:
+                    for mark in sig_that_hit.marks:
+                        sig_res_sec.add_line(f"\t\t{truncate(mark)}")
 
             result.add_section(sigs_res_sec)
 
@@ -583,7 +616,7 @@ class JsJaws(ServiceBase):
                 elif type == "FileWrite" and "file" in value:
                     file_writes.add(value["file"])
                 elif type == "FileRead" and "file" in value:
-                    file_writes.add(value["file"])
+                    file_reads.add(value["file"])
             if commands:
                 cmd_result_section = ResultSection("The script ran the following commands", parent=ioc_result_section)
                 cmd_result_section.add_lines(list(commands))
@@ -604,7 +637,10 @@ class JsJaws(ServiceBase):
 
     def _tag_uri(self, url: str, urls_result_section: ResultSection) -> None:
         """
-
+        This method tags components of a URI
+        :param url: The url to be analyzed
+        :param urls_result_section: The result section which will have the tags of the uri components added to it
+        :return: None
         """
         safe_url = safe_str(url)
         # Extract URI
@@ -632,18 +668,42 @@ class JsJaws(ServiceBase):
             # Might as well tag this while we're here
             urls_result_section.add_tag("file.string.extracted", safe_url)
 
+    @staticmethod
+    def _flag_jsxray_iocs(output: Dict[str, Any], result: Result) -> None:
+        """
+        This method flags anything noteworthy from the Js-X-Ray output
+        :param output: The output from JS-X-Ray
+        :param result: A Result object containing the service results
+        :return: None
+        """
+        jsxray_iocs_result_section = ResultSection("JS-X-Ray IOCs Detected")
+        warnings: List[Dict[str, Any]] = output["warnings"]
+        for warning in warnings:
+            kind = warning["kind"]
+            val = warning.get("value")
+            if kind == "unsafe-stmt":
+                jsxray_iocs_result_section.add_line(f"\t\tAn unsafe statement was found: {truncate(safe_str(val))}")
+            elif kind == "encoded-literal":
+                jsxray_iocs_result_section.add_line(f"\t\tAn encoded literal was found: {truncate(safe_str(val))}")
+                jsxray_iocs_result_section.add_tag("file.string.extracted", safe_str(val))
+            elif kind == "obfuscated-code":
+                jsxray_iocs_result_section.add_line(f"\t\tObfuscated code was found that was obfuscated by: "
+                                                    f"{safe_str(val)}")
+        if jsxray_iocs_result_section.body and len(jsxray_iocs_result_section.body) > 0:
+            jsxray_iocs_result_section.set_heuristic(2)
+            result.add_section(jsxray_iocs_result_section)
 
-def get_id_from_data(file_path: str) -> str:
-    """
-    This method generates a sha256 hash for the file contents of a file
-    :param file_path: The file path
-    :return hash: The sha256 hash of the file
-    """
-    sha256_hash = sha256()
-    # stream it in so we don't load the whole file in memory
-    with open(file_path, 'rb') as f:
-        data = f.read(4096)
-        while data:
-            sha256_hash.update(data)
-            data = f.read(4096)
-    return sha256_hash.hexdigest()
+    def _run_tool(self, tool_name: str, args: List[str], tool_timeout: int, resp: Dict[str, Any], get_stdout: bool = False, split: bool = False) -> None:
+        self.log.debug(f"Running {tool_name}...")
+        start_time = time()
+        try:
+            completed_process = run(args=args, capture_output=True, timeout=tool_timeout)
+        except TimeoutExpired:
+            completed_process = None
+        self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
+
+        if completed_process and get_stdout:
+            if split:
+                resp[tool_name] = completed_process.stdout.decode().split("\n")
+            else:
+                resp[tool_name] = completed_process.stdout.decode()

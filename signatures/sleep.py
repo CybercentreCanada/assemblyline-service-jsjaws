@@ -17,7 +17,7 @@ class Sleep(Signature):
     def process_output(self, output):
         self.check_indicators_in_list(output)
         if len(self.marks) > 10:
-            self.marks = self.marks[:10]
+            self.marks = set(list(self.marks)[:10])
 
 
 class AntiSandboxTimeout(Signature):
