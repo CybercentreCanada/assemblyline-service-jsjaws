@@ -519,6 +519,7 @@ class TestJsJaws:
         from assemblyline_v4_service.common.result import Result, ResultSection
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"blah.result")
         jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
+        jsjaws_class_instance.artifact_list = []
         mkdir(jsjaws_class_instance.boxjs_output_dir)
         cmd = "blah http://blah.ca"
         file = "blah.txt"
@@ -546,6 +547,12 @@ class TestJsJaws:
         res = Result()
         jsjaws_class_instance._extract_boxjs_iocs(res)
         assert check_section_equality(res.sections[0], correct_res_sec)
+        assert jsjaws_class_instance.artifact_list[0] == {
+            "name": "cmd_0.txt",
+            "path": path.join(jsjaws_class_instance.working_directory, "cmd_0.txt"),
+            "description": "Command Extracted",
+            "to_be_extracted": True
+        }
 
     @staticmethod
     def test_flag_jsxray_iocs(jsjaws_class_instance):
