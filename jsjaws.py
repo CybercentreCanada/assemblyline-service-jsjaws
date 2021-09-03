@@ -690,7 +690,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         jsxray_iocs_result_section = ResultSection("JS-X-Ray IOCs Detected")
-        warnings: List[Dict[str, Any]] = output["warnings"]
+        warnings: List[Dict[str, Any]] = output.get("warnings", [])
         for warning in warnings:
             kind = warning["kind"]
             val = warning.get("value")
