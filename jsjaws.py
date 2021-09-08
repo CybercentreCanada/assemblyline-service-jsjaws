@@ -261,6 +261,7 @@ class JsJaws(ServiceBase):
         self._run_signatures(total_output, request.result, display_sig_marks)
 
         self._extract_boxjs_iocs(request.result)
+        self._extract_malware_jail_iocs(malware_jail_output, request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
@@ -705,6 +706,13 @@ class JsJaws(ServiceBase):
         if jsxray_iocs_result_section.body and len(jsxray_iocs_result_section.body) > 0:
             jsxray_iocs_result_section.set_heuristic(2)
             result.add_section(jsxray_iocs_result_section)
+
+    def _extract_malware_jail_iocs(self, output: List[str], result: Result) -> None:
+        malware_jail_res_sec = ResultSection("MalwareJail extracted the following IOCs")
+        for line in output:
+            self._extract_iocs_from_text_blob(line, malware_jail_res_sec, ".js")
+        if len(malware_jail_res_sec.tags) > 0:
+            result.add_section(malware_jail_res_sec)
 
     def _run_tool(self, tool_name: str, args: List[str], tool_timeout: int, resp: Dict[str, Any], get_stdout: bool = False, split: bool = False) -> None:
         self.log.debug(f"Running {tool_name}...")
