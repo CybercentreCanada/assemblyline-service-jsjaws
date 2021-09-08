@@ -598,3 +598,18 @@ class TestJsJaws:
             f.write(b"blah")
         assert get_id_from_data(some_file) == expected_result
         remove(some_file)
+
+    @staticmethod
+    def test_extract_malware_jail_iocs(jsjaws_class_instance):
+        from assemblyline_v4_service.common.result import Result, ResultSection
+        correct_res_sec = ResultSection("MalwareJail extracted the following IOCs")
+        correct_res_sec.set_heuristic(2)
+        correct_res_sec.tags = {
+            "network.dynamic.domain": ["blah.com"],
+            "network.dynamic.uri": ["https://blah.com/blah.exe"],
+            "network.dynamic.uri_path": ["/blah.exe"],
+        }
+        res = Result()
+        output = ["https://blah.com/blah.exe"]
+        jsjaws_class_instance._extract_malware_jail_iocs(output, res)
+        assert check_section_equality(res.sections[0], correct_res_sec)
