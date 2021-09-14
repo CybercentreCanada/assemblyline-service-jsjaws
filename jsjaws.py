@@ -505,15 +505,17 @@ class JsJaws(ServiceBase):
             ioc_extracted = True
             result_section.add_tag("network.dynamic.domain", safe_domain)
         for uri in uris:
-            try:
-                if not any(protocol in uri for protocol in ["http", "ftp", "icmp", "ssh"]):
-                    tld = get_tld(f"http://{uri}", fail_silently=True)
-                else:
-                    tld = get_tld(uri, fail_silently=True)
-            except ValueError:
-                continue
-            if tld is None or f".{tld}" == file_ext:
-                continue
+            # If there is a domain in the uri, then do
+            if not any(ip in uri for ip in ips):
+                try:
+                    if not any(protocol in uri for protocol in ["http", "ftp", "icmp", "ssh"]):
+                        tld = get_tld(f"http://{uri}", fail_silently=True)
+                    else:
+                        tld = get_tld(uri, fail_silently=True)
+                except ValueError:
+                    continue
+                if tld is None or f".{tld}" == file_ext:
+                    continue
             safe_uri = safe_str(uri)
             ioc_extracted = True
             result_section.add_tag("network.dynamic.uri", safe_uri)

@@ -481,6 +481,7 @@ class TestJsJaws:
             ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"], "network.dynamic.uri": ["evil.ca/some/thing/bad.exe"], "network.dynamic.uri_path": ["/some/thing/bad.exe"]}),
             ("wscript.shell", "", {}),
             ("blah.ca", ".ca", {}),
+            ("http://1.1.1.1/blah.exe", "", {'network.dynamic.ip': ['1.1.1.1'], 'network.dynamic.uri': ['http://1.1.1.1/blah.exe'], 'network.dynamic.uri_path': ['/blah.exe']}),
         ]
     )
     def test_extract_iocs_from_text_blob(blob, file_ext, correct_tags, jsjaws_class_instance):
