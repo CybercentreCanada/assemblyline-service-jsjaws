@@ -11,7 +11,7 @@ class PrepareNetworkRequest(Signature):
             name="prepare_network_request",
             description="JavaScript prepares a network request",
             indicators=[".setRequestHeader(", "User-Agent", "XMLHttpRequest("],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class NetworkRequest(Signature):
             name="network_request",
             description="JavaScript sends a network request",
             indicators=[".send()"],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):

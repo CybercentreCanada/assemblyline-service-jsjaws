@@ -11,7 +11,7 @@ class ScriptControl(Signature):
             name="script_control",
             description="JavaScript uses MSScriptControl to run a script",
             indicators=["WScript.CreateObject", "MSScriptControl.ScriptControl"],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class ScriptControlVBS(Signature):
             name="script_control_vbs",
             description="JavaScript uses MSScriptControl to write and run a VBScript",
             indicators=["MSScriptControl.ScriptControl", ".Language", "VBScript"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):
