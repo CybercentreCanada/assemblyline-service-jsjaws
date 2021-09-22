@@ -11,7 +11,7 @@ class RunsShell(Signature):
             name="runs_shell",
             description="JavaScript runs code via shell",
             indicators=["WScript.Shell", ".Run"],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class RunsExecutable(Signature):
             name="runs_executable",
             description="JavaScript runs dropped executable",
             indicators=["WScript.Shell", ".Run", ".exe"],
-            severity=2,
+            severity=0,
             safelist=["cmd.exe"]
         )
 
@@ -40,7 +40,7 @@ class RunsCommandPrompt(Signature):
             name="runs_cmd_prompt",
             description="JavaScript runs Command Prompt via cmd.exe",
             indicators=["WScript.Shell", ".Run", "cmd.exe"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):
@@ -54,7 +54,7 @@ class RunsPowerShell(Signature):
             name="runs_ps1",
             description="JavaScript runs PowerShell via powershell.exe",
             indicators=["WScript.Shell", ".Run", "powershell.exe"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):
@@ -68,7 +68,7 @@ class RunsElevatedPowerShell(Signature):
             name="runs_elevated_ps1",
             description="JavaScript runs elevated PowerShell via powershell.exe",
             indicators=["powershell.exe", "-ExecutionPolicy", "bypass"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):
@@ -82,7 +82,7 @@ class RunsHiddenPowerShell(Signature):
             name="runs_hidden_ps1",
             description="JavaScript runs PowerShell via powershell.exe in a hidden window",
             indicators=["powershell.exe", "-windowstype", "hidden"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):
@@ -96,7 +96,7 @@ class RunsNoProfilePowerShell(Signature):
             name="runs_ps1_no_profile",
             description="JavaScript runs PowerShell via powershell.exe with no profile",
             indicators=["powershell.exe", "-noprofile"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):

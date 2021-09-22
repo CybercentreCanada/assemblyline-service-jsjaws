@@ -25,7 +25,7 @@ class WritesExecutable(Signature):
             name="writes_executable",
             description="JavaScript writes executable file to disk",
             indicators=["SaveToFile", ".exe"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):

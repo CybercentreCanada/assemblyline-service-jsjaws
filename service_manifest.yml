@@ -40,10 +40,10 @@ submission_params:
     type: bool
     value: true
 
-  - default: false
-    name: display_sig_marks
+  - default: true
+    name: display_iocs
     type: bool
-    value: false
+    value: true
 
   # Box.js parameters
   - default: false
@@ -86,19 +86,19 @@ submission_params:
 heuristics:
   - heur_id: 1
     name: Network Traffic Detected
-    score: 500
+    score: 1
     filetype: '*'
     description: Malware Sandbox Tool(s) detected network traffic.
 
   - heur_id: 2
     name: IOC(s) Extracted
-    score: 250
+    score: 1
     filetype: '*'
     description: At least one IOC has been extracted.
 
   - heur_id: 3
     name: Suspicious Activity Detected
-    score: 250
+    score: 1
     filetype: '*'
     description: Suspicious activity was detected during execution.
 

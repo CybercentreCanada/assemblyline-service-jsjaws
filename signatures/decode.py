@@ -11,7 +11,7 @@ class Unescape(Signature):
             name="unescape",
             description="JavaScript uses unescape() to decode an encoded string",
             indicators=["unescape"],
-            severity=2
+            severity=0
         )
 
     def process_output(self, output):

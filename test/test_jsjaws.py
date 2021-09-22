@@ -204,7 +204,7 @@ class TestJsJaws:
             "add_supplementary": False,
             "static_signatures": True,
             "no_shell_error": False,
-            "display_sig_marks": False
+            "display_iocs": False
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
@@ -503,7 +503,7 @@ class TestJsJaws:
         correct_subsection.set_heuristic(3)
         correct_subsection.heuristic.add_signature_id("save_to_file", score=10)
         jsjaws_class_instance._run_signatures(output, result)
-        jsjaws_class_instance._run_signatures(output, result, display_sig_marks=True)
+        jsjaws_class_instance._run_signatures(output, result, display_iocs=True)
         assert check_section_equality(result.sections[0], correct_section)
         correct_subsection.add_line("\t\tSaveToFile")
         assert check_section_equality(result.sections[1], correct_section)

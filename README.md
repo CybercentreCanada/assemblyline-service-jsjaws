@@ -1,4 +1,6 @@
 # JsJaws Service
+**[NOTE: THIS SERVICE IS UNDER HEAVY DEVELOPMENT]**
+
 This Assemblyline service integrates components from two open-source projects:
 * [Malware Jail](https://github.com/HynekPetrak/malware-jail), which provides a sandbox for semi-automatic Javascript 
   malware analysis, deobfuscation and payload extraction.

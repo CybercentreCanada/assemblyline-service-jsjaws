@@ -148,7 +148,7 @@ class JsJaws(ServiceBase):
         add_supplementary = request.get_param("add_supplementary")
         static_signatures = request.get_param("static_signatures")
         no_shell_error = request.get_param("no_shell_error")
-        display_sig_marks = request.get_param("display_sig_marks")
+        display_iocs = request.get_param("display_iocs")
 
         # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --no-kill              Do not kill the application when runtime errors occur
@@ -258,7 +258,7 @@ class JsJaws(ServiceBase):
             total_output = boxjs_output + malware_jail_output + static_file_lines
         else:
             total_output = boxjs_output + malware_jail_output
-        self._run_signatures(total_output, request.result, display_sig_marks)
+        self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
         self._extract_malware_jail_iocs(malware_jail_output, request.result)
@@ -527,13 +527,13 @@ class JsJaws(ServiceBase):
         if ioc_extracted and result_section.heuristic is None:
             result_section.set_heuristic(2)
 
-    def _run_signatures(self, output: List[str], result: Result, display_sig_marks: bool = False) -> None:
+    def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
         """
         This method sets up the parallelized signature engine and runs each signature against the
         stdout from MalwareJail
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :param result: A Result object containing the service results
-        :param display_sig_marks: A boolean indicating if we are going to include the signature marks in the
+        :param display_iocs: A boolean indicating if we are going to include the signature marks in the
         ResultSection
         :return: None
         """
@@ -578,7 +578,7 @@ class JsJaws(ServiceBase):
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
                 translated_score = TRANSLATED_SCORE[sig_that_hit.severity]
                 sig_res_sec.heuristic.add_signature_id(sig_that_hit.name, score=translated_score)
-                if display_sig_marks:
+                if display_iocs:
                     for mark in sig_that_hit.marks:
                         sig_res_sec.add_line(f"\t\t{truncate(mark)}")
 
