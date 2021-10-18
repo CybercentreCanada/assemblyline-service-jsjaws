@@ -518,7 +518,8 @@ class JsJaws(ServiceBase):
                     continue
             safe_uri = safe_str(uri)
             ioc_extracted = True
-            result_section.add_tag("network.dynamic.uri", safe_uri)
+            if match(FULL_URI, safe_uri):
+                result_section.add_tag("network.dynamic.uri", safe_uri)
             if "//" in safe_uri:
                 safe_uri = safe_uri.split("//")[1]
             for uri_path in findall(URI_PATH, safe_uri):
