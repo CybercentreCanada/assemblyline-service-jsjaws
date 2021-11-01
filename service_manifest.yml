@@ -102,7 +102,13 @@ heuristics:
     filetype: '*'
     description: Suspicious activity was detected during execution.
 
+  - heur_id: 4
+    name: Embedded Code in jQuery Library
+    score: 1
+    filetype: '*'
+    description: Embedded code was discovered in a file posing as a jQuery library
+
 docker_config:
-  allow_internet_access: false
+  allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
   cpu_cores: 0.25

