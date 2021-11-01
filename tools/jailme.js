@@ -449,14 +449,14 @@ var dump_sandbox = function() {
         }
 
         p = sandbox._wscript_urls;
-        if (p.length > 0) {
+        if (p !== undefined && p.length > 0) {
             out = JSON.stringify(p, null, 4);
             fname = config.save_files + "urls.json";
             util_log("Saving: " + fname);
             writeFile(fname, out);
         }
         p = sandbox._wscript_wmis;
-        if (p.length > 0) {
+        if (p !== undefined && p.length > 0) {
             out = JSON.stringify(p, null, 4);
             fname = config.save_files + "wmis.json";
             util_log("Saving: " + fname);

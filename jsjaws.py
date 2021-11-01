@@ -4,6 +4,7 @@ from json import loads, dumps, JSONDecodeError
 from os import mkdir, listdir, path
 from pkgutil import iter_modules
 from re import match, search, findall, compile
+from requests import get
 from subprocess import run, TimeoutExpired
 from sys import modules
 from threading import Thread
@@ -92,6 +93,8 @@ class JsJaws(ServiceBase):
         self.boxjs_resources: Optional[str] = None
         self.boxjs_analysis_log: Optional[str] = None
         self.boxjs_snippets: Optional[str] = None
+        self.filtered_jquery: Optional[str] = None
+        self.filtered_jquery_path: Optional[str] = None
         self.log.debug('JsJaws service initialized')
 
     def start(self) -> None:
@@ -126,6 +129,8 @@ class JsJaws(ServiceBase):
         self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
         self.boxjs_analysis_log = path.join(self.boxjs_output_dir, "analysis.log")
         self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
+        self.filtered_jquery = "filtered_jquery.js"
+        self.filtered_jquery_path = path.join(self.working_directory, self.filtered_jquery)
 
         # Setup directory structure
         if not path.exists(self.malware_jail_payload_extraction_dir):
@@ -160,9 +165,10 @@ class JsJaws(ServiceBase):
         # -o ofile ... name of the file where sandbox shall be dumped at the end
         # -b id    ... browser type, use -b list for possible values (Possible -b values:
         # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
+        # -t msecs - limits execution time by "msecs" milliseconds, by default 60 seconds.
         malware_jail_args = [
             "node", self.path_to_jailme_js, "-s", self.malware_jail_payload_extraction_dir, "-o", self.malware_jail_sandbox_env_dump_path,
-            "-b", browser_selected
+            "-b", browser_selected, "-t", f"{tool_timeout * 1000}"
         ]
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
@@ -266,6 +272,7 @@ class JsJaws(ServiceBase):
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
+        self._extract_filtered_jquery(request.result, request.file_contents.decode())
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
         self._flag_jsxray_iocs(jsxray_output, request.result)
@@ -313,7 +320,7 @@ class JsJaws(ServiceBase):
 
     def _extract_payloads(self, sample_sha256: str, deep_scan: bool) -> None:
         """
-        This method extracts unique payloads that were written to disk by MalwareJail
+        This method extracts unique payloads that were written to disk by MalwareJail and Box.js
         :param sample_sha256: The SHA256 of the submitted file
         :param deep_scan: A boolean representing if the user has requested a deep scan
         :return: None
@@ -333,8 +340,10 @@ class JsJaws(ServiceBase):
                 for snippet in snippets:
                     files_to_not_extract.add(snippet)
 
-        box_js_payloads = [(file, path.join(self.boxjs_output_dir, file))
-                           for file in sorted(listdir(self.boxjs_output_dir)) if file not in files_to_not_extract]
+        box_js_payloads = []
+        if path.exists(self.boxjs_output_dir):
+            box_js_payloads = [(file, path.join(self.boxjs_output_dir, file))
+                               for file in sorted(listdir(self.boxjs_output_dir)) if file not in files_to_not_extract]
 
         all_payloads = malware_jail_payloads + box_js_payloads
 
@@ -720,10 +729,13 @@ class JsJaws(ServiceBase):
     def _run_tool(self, tool_name: str, args: List[str], tool_timeout: int, resp: Dict[str, Any], get_stdout: bool = False, split: bool = False) -> None:
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
+        completed_process = None
         try:
             completed_process = run(args=args, capture_output=True, timeout=tool_timeout)
         except TimeoutExpired:
-            completed_process = None
+            pass
+        except Exception as e:
+            self.log.warning(f"{tool_name} crashed due to {repr(e)}")
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
         if completed_process and get_stdout:
@@ -731,3 +743,32 @@ class JsJaws(ServiceBase):
                 resp[tool_name] = completed_process.stdout.decode().split("\n")
             else:
                 resp[tool_name] = completed_process.stdout.decode()
+
+    def _extract_filtered_jquery(self, result: Result, file_contents: str):
+        file_contents = file_contents.replace("\r", "")
+        jquery_version_regex = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
+        regex_match = match(jquery_version_regex, file_contents)
+        if not regex_match:
+            return
+        version = regex_match.group(1)
+        resp = get(f"https://code.jquery.com/jquery-{version}.js", timeout=15)
+        jquery_contents = resp.text
+        same = set(file_contents.split("\n")).difference(jquery_contents.split("\n"))
+        same.discard('\n')
+
+        if len(same) > 0:
+            embedded_jquery_res_sec = ResultSection("Embedded code was found in jQuery library",
+                                                    body=f"View extracted file {self.filtered_jquery} for details.")
+            embedded_jquery_res_sec.set_heuristic(4)
+            result.add_section(embedded_jquery_res_sec)
+            with open(self.filtered_jquery_path, "w") as f:
+                for line in same:
+                    f.write(line)
+            artifact = {
+                "name": self.filtered_jquery,
+                "path": self.filtered_jquery_path,
+                "description": "JavaScript embedded within jQuery library",
+                "to_be_extracted": True
+            }
+            self.log.debug(f"Adding extracted file: {self.filtered_jquery}")
+            self.artifact_list.append(artifact)
