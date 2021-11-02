@@ -651,3 +651,79 @@ class TestJsJaws:
         }
         assert check_section_equality(res.sections[0], correct_res_sec)
         remove(jsjaws_class_instance.filtered_jquery_path)
+
+
+class TestSignature:
+    @staticmethod
+    def test_init():
+        from signatures.abstracts import Signature
+
+        default_sig = Signature()
+        assert default_sig.heuristic_id is None
+        assert default_sig.name is None
+        assert default_sig.description is None
+        assert default_sig.ttp == []
+        assert default_sig.families == []
+        assert default_sig.indicators == []
+        assert default_sig.severity == 0
+        assert default_sig.safelist == []
+        assert default_sig.marks == set()
+
+        loaded_sig = Signature(
+            heuristic_id=1,
+            name="blah",
+            description="blah",
+            ttp=["blah"],
+            families=["blah"],
+            indicators=["blah"],
+            severity=1,
+            safelist=["yabadabadoo"]
+        )
+        assert loaded_sig.heuristic_id == 1
+        assert loaded_sig.name == "blah"
+        assert loaded_sig.description == "blah"
+        assert loaded_sig.ttp == ["blah"]
+        assert loaded_sig.families == ["blah"]
+        assert loaded_sig.indicators == ["blah"]
+        assert loaded_sig.severity == 1
+        assert loaded_sig.safelist == ["yabadabadoo"]
+        assert loaded_sig.marks == set()
+
+    @staticmethod
+    @pytest.mark.parametrize("indicators, safelist, output, match_all, expected_marks",
+        [
+            (None, [], [], False, set()),
+            (None, [], ["blah"], False, set()),
+            (None, [], ["blah - blah"], False, set()),
+            (["yabadabadoo"], [], ["blah"], False, set()),
+            (["blah"], [], ["blah"], False, {"blah"}),
+            (["blah"], [], ["blah"], True, {"blah"}),
+            (["blah"], ["yabadabadoo"], ["blah"], True, {"blah"}),
+            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, set()),
+            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, set()),
+        ]
+    )
+    def test_check_indicators_in_list(indicators, safelist, output, match_all, expected_marks):
+        from signatures.abstracts import Signature
+        sig = Signature(indicators=indicators, safelist=safelist)
+        sig.check_indicators_in_list(output, match_all)
+        assert sig.marks == expected_marks
+
+    @staticmethod
+    @pytest.mark.parametrize("regex, string, expected_output",
+        [
+            (r"", "", ['']),
+            (r"nope", "yup", []),
+            (r"daba", "yabadabadoo", ["daba"]),
+        ]
+    )
+    def test_check_regex(regex, string, expected_output):
+        from signatures.abstracts import Signature
+        assert Signature.check_regex(regex, string) == expected_output
+
+    @staticmethod
+    def test_process_output():
+        from signatures.abstracts import Signature
+        sig = Signature()
+        with pytest.raises(NotImplementedError):
+            sig.process_output([])

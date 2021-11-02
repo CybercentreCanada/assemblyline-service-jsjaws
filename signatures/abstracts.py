@@ -74,19 +74,19 @@ class Signature:
                         continue
 
     @staticmethod
-    def check_regex(regex: str, string: str) -> Tuple[bool, List[str]]:
+    def check_regex(regex: str, string: str) -> List[str]:
         """
         This method takes a string and looks for if the regex is able to find captures
         :param regex: A regular expression to be applied to the string
-        :param string: A line of output from the MalwareJail tool
-               """
+        :param string: A line of output
+        """
         result = findall(regex, string)
         if len(result) > 0:
-            return True, result
+            return result
         else:
-            return False, []
+            return []
 
-    def process_output(self, output):
+    def process_output(self, output: List[str]):
         """
         Each signature must override this method
         """
