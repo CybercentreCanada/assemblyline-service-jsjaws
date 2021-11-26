@@ -272,7 +272,8 @@ class JsJaws(ServiceBase):
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
-        self._extract_filtered_jquery(request.result, request.file_contents.decode())
+        if self.service_attributes.docker_config.allow_internet_access:
+            self._extract_filtered_jquery(request.result, request.file_contents.decode())
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
         self._flag_jsxray_iocs(jsxray_output, request.result)

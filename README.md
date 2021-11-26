@@ -41,3 +41,11 @@ MalwareJail parameters:
   flag turns on this extraction.
 * `extract_eval_calls`: Files that each represent a Eval Call can be noisy and not particularly useful. This flag turns 
   on this extraction.
+  
+## Features included with Internet connectivity
+### jQuery Fetching
+There have been samples that embed malicious code within standard jQuery libraries. If the service Docker container has 
+access to the Internet, then we can fetch the actual jQuery library and compare the two files, determining the 
+difference between them and then extracting the difference (aka malicious code). If the service Docker container 
+does not have Internet access, then please set the `docker_config` value of `allow_internet_access` to `False` in the 
+`service_manifest.yml`.
