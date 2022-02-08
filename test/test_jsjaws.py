@@ -39,24 +39,24 @@ def check_section_equality(this, that) -> bool:
     # Heuristics also need their own equality checks
     if this.heuristic and that.heuristic:
         heuristic_equality = this.heuristic.definition.attack_id == that.heuristic.definition.attack_id and \
-                             this.heuristic.definition.classification == that.heuristic.definition.classification and \
-                             this.heuristic.definition.description == that.heuristic.definition.description and \
-                             this.heuristic.definition.filetype == that.heuristic.definition.filetype and \
-                             this.heuristic.definition.heur_id == that.heuristic.definition.heur_id and \
-                             this.heuristic.definition.id == that.heuristic.definition.id and \
-                             this.heuristic.definition.max_score == that.heuristic.definition.max_score and \
-                             this.heuristic.definition.name == that.heuristic.definition.name and \
-                             this.heuristic.definition.score == that.heuristic.definition.score and \
-                             this.heuristic.definition.signature_score_map == \
-                             that.heuristic.definition.signature_score_map
+            this.heuristic.definition.classification == that.heuristic.definition.classification and \
+            this.heuristic.definition.description == that.heuristic.definition.description and \
+            this.heuristic.definition.filetype == that.heuristic.definition.filetype and \
+            this.heuristic.definition.heur_id == that.heuristic.definition.heur_id and \
+            this.heuristic.definition.id == that.heuristic.definition.id and \
+            this.heuristic.definition.max_score == that.heuristic.definition.max_score and \
+            this.heuristic.definition.name == that.heuristic.definition.name and \
+            this.heuristic.definition.score == that.heuristic.definition.score and \
+            this.heuristic.definition.signature_score_map == \
+            that.heuristic.definition.signature_score_map
 
         result_heuristic_equality = heuristic_equality and \
-                                    this.heuristic.attack_ids == that.heuristic.attack_ids and \
-                                    this.heuristic.frequency == that.heuristic.frequency and \
-                                    this.heuristic.heur_id == that.heuristic.heur_id and \
-                                    this.heuristic.score == that.heuristic.score and \
-                                    this.heuristic.score_map == that.heuristic.score_map and \
-                                    this.heuristic.signatures == that.heuristic.signatures
+            this.heuristic.attack_ids == that.heuristic.attack_ids and \
+            this.heuristic.frequency == that.heuristic.frequency and \
+            this.heuristic.heur_id == that.heuristic.heur_id and \
+            this.heuristic.score == that.heuristic.score and \
+            this.heuristic.score_map == that.heuristic.score_map and \
+            this.heuristic.signatures == that.heuristic.signatures
 
     elif not this.heuristic and not that.heuristic:
         result_heuristic_equality = True
@@ -65,13 +65,13 @@ def check_section_equality(this, that) -> bool:
 
     # Assuming we are given the "root section" at all times, it is safe to say that we don't need to confirm parent
     current_section_equality = result_heuristic_equality and \
-                               this.body == that.body and \
-                               this.body_format == that.body_format and \
-                               this.classification == that.classification and \
-                               this.depth == that.depth and \
-                               len(this.subsections) == len(that.subsections) and \
-                               this.title_text == that.title_text and \
-                               this.tags == that.tags
+        this.body == that.body and \
+        this.body_format == that.body_format and \
+        this.classification == that.classification and \
+        this.depth == that.depth and \
+        len(this.subsections) == len(that.subsections) and \
+        this.title_text == that.title_text and \
+        this.tags == that.tags
 
     if not current_section_equality:
         return False
@@ -217,7 +217,8 @@ class TestJsJaws:
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
 
-        jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"{service_request.sha256}.results")
+        jsjaws_class_instance.boxjs_output_dir = path.join(
+            jsjaws_class_instance.working_directory, f"{service_request.sha256}.results")
         jsjaws_class_instance.boxjs_analysis_log = path.join(jsjaws_class_instance.boxjs_output_dir, "analysis.log")
         mkdir(jsjaws_class_instance.boxjs_output_dir)
         with open(jsjaws_class_instance.boxjs_analysis_log, "w") as f:
@@ -227,20 +228,27 @@ class TestJsJaws:
         jsjaws_class_instance.execute(service_request)
 
         assert jsjaws_class_instance.artifact_list == []
-        assert jsjaws_class_instance.malware_jail_payload_extraction_dir == path.join(jsjaws_class_instance.working_directory, "payload/")
+        assert jsjaws_class_instance.malware_jail_payload_extraction_dir == path.join(
+            jsjaws_class_instance.working_directory, "payload/")
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump == "sandbox_dump.json"
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dir == path.join(jsjaws_class_instance.working_directory, "sandbox_env")
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path == path.join(jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dir == path.join(
+            jsjaws_class_instance.working_directory, "sandbox_env")
+        assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path == path.join(
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
         root_dir = path.dirname(path.dirname(path.abspath(__file__)))
         assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/jailme.js")
-        assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
+        assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
         assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/config_wscript_only.json")
         assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
-        assert jsjaws_class_instance.extracted_wscript_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        assert jsjaws_class_instance.extracted_wscript_path == path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         assert jsjaws_class_instance.malware_jail_output == "output.txt"
-        assert jsjaws_class_instance.malware_jail_output_path == path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+        assert jsjaws_class_instance.malware_jail_output_path == path.join(
+            jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
         assert jsjaws_class_instance.extracted_doc_writes == "document_writes.html"
-        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
+        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
 
         assert path.exists(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         assert path.exists(jsjaws_class_instance.malware_jail_sandbox_env_dir)
@@ -304,7 +312,8 @@ class TestJsJaws:
         from assemblyline_v4_service.common.result import Result
         jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
         jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_path = join(jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        jsjaws_class_instance.extracted_wscript_path = join(
+            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         mocker.patch.object(jsjaws_class_instance, "_extract_iocs_from_text_blob")
         output = ["WScript.Shell[4].Run(super evil script, 0, undefined)"]
@@ -323,12 +332,14 @@ class TestJsJaws:
     def test_extract_doc_writes(jsjaws_class_instance):
         from os.path import exists, join
         from os import mkdir
-        jsjaws_class_instance.malware_jail_payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = join(
+            jsjaws_class_instance.working_directory, "payload/")
         jsjaws_class_instance.extracted_doc_writes = "document_writes.html"
-        jsjaws_class_instance.extracted_doc_writes_path = join(jsjaws_class_instance.malware_jail_payload_extraction_dir,
-                                                            jsjaws_class_instance.extracted_doc_writes)
+        jsjaws_class_instance.extracted_doc_writes_path = join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes)
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
-        output = ["document[15].write(content)", "date time - => 'write me!'", "blah", "document[15].write(content)", "write me too!"]
+        output = ["document[15].write(content)", "date time - => 'write me!'", "blah",
+                  "document[15].write(content)", "write me too!"]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)
         assert exists(jsjaws_class_instance.extracted_doc_writes_path)
@@ -344,10 +355,13 @@ class TestJsJaws:
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
         from os import mkdir, path
-        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.malware_jail_urls_json_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
+            jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_urls_json_path = path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
         jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
+        jsjaws_class_instance.extracted_wscript_path = path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript)
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, f"blah.results")
         jsjaws_class_instance.boxjs_snippets = path.join(jsjaws_class_instance.boxjs_output_dir, "snippets.json")
         mkdir(jsjaws_class_instance.boxjs_output_dir)
@@ -396,17 +410,19 @@ class TestJsJaws:
         from json import dumps
         from assemblyline_v4_service.common.result import Result, ResultSection, BODY_FORMAT
         from os import mkdir, path, remove
-        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.malware_jail_urls_json_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
+            jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_urls_json_path = path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json")
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
         jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
         mkdir(jsjaws_class_instance.boxjs_output_dir)
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         body = [
-                {"url": "http://blah.ca/blah.exe"},
-                {"url": "http://1.1.1.1/blah.exe"},
-                {"url": "blahblahblah"},
-            ]
+            {"url": "http://blah.ca/blah.exe"},
+            {"url": "http://1.1.1.1/blah.exe"},
+            {"url": "blahblahblah"},
+        ]
         with open(jsjaws_class_instance.malware_jail_urls_json_path, "w") as f:
             f.write(dumps(body))
         with open(jsjaws_class_instance.boxjs_iocs, "w") as f:
@@ -417,14 +433,15 @@ class TestJsJaws:
         result = Result()
         jsjaws_class_instance._extract_urls(result)
         body.append({"url": "http://definitely-a-url.ca", "method": "blah", "request_headers": "blah"})
-        correct_res_sec = ResultSection("URLs", body_format=BODY_FORMAT.TABLE, body=dumps(body),
-                                        tags={
-                                            "network.dynamic.uri": ["http://blah.ca/blah.exe", "http://1.1.1.1/blah.exe", "http://definitely-a-url.ca"],
-                                            "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
-                                            "network.dynamic.ip": ["1.1.1.1"],
-                                            "network.dynamic.uri_path": ["/blah.exe"],
-                                            "file.string.extracted": ["blahblahblah"]
-                                        })
+        correct_res_sec = ResultSection(
+            "URLs", body_format=BODY_FORMAT.TABLE, body=dumps(body),
+            tags={
+                "network.dynamic.uri":
+                ["http://blah.ca/blah.exe", "http://1.1.1.1/blah.exe", "http://definitely-a-url.ca"],
+                "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
+                "network.dynamic.ip": ["1.1.1.1"],
+                "network.dynamic.uri_path": ["/blah.exe"],
+                "file.string.extracted": ["blahblahblah"]})
         correct_res_sec.set_heuristic(1)
         assert check_section_equality(result.sections[0], correct_res_sec)
 
@@ -436,12 +453,16 @@ class TestJsJaws:
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
         from os import mkdir, path
-        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(
+            jsjaws_class_instance.working_directory, "sandbox_env")
         jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
-        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(jsjaws_class_instance.working_directory, "sandbox_env")
-        jsjaws_class_instance.malware_jail_sandbox_env_dump_path = path.join(jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(
+            jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump_path = path.join(
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump)
         jsjaws_class_instance.malware_jail_output = "output.txt"
-        jsjaws_class_instance.malware_jail_output_path = path.join(jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
+        jsjaws_class_instance.malware_jail_output_path = path.join(
+            jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output)
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
         jsjaws_class_instance.boxjs_analysis_log = path.join(jsjaws_class_instance.boxjs_output_dir, "analysis.log")
 
@@ -486,7 +507,7 @@ class TestJsJaws:
             ("DRIVE:\\\\PATH TO\\\\MICROSOFT OFFICE\\\\OFFICEVERION\\\\WINWORD.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.DOC", ".exe", {}),
             ("DRIVE:\\\\PATH TO\\\\PYTHON27.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.py", ".py", {}),
             ("POST /some/thing/bad.exe HTTP/1.0\nUser-Agent: Mozilla\nHost: evil.ca\nAccept: */*\nContent-Type: application/octet-stream\nContent-Encoding: binary\n\nConnection: close", "", {"network.dynamic.domain": ["evil.ca"]}),
-            ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"], "network.dynamic.uri": ["evil.ca/some/thing/bad.exe"], "network.dynamic.uri_path": ["/some/thing/bad.exe"]}),
+            ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"]}),
             ("wscript.shell", "", {}),
             ("blah.ca", ".ca", {}),
             ("http://1.1.1.1/blah.exe", "", {'network.dynamic.ip': ['1.1.1.1'], 'network.dynamic.uri': ['http://1.1.1.1/blah.exe'], 'network.dynamic.uri_path': ['/blah.exe']}),
@@ -507,7 +528,8 @@ class TestJsJaws:
         output = ["blah", "SaveToFile"]
         result = Result()
         correct_section = ResultSection("Signatures")
-        correct_subsection = ResultSection("Signature: SaveToFile", body="JavaScript writes data to disk", parent=correct_section)
+        correct_subsection = ResultSection(
+            "Signature: SaveToFile", body="JavaScript writes data to disk", parent=correct_section)
         correct_subsection.set_heuristic(3)
         correct_subsection.heuristic.add_signature_id("save_to_file", score=10)
         jsjaws_class_instance._run_signatures(output, result)
@@ -613,11 +635,9 @@ class TestJsJaws:
         from assemblyline_v4_service.common.result import Result, ResultSection
         correct_res_sec = ResultSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)
-        correct_res_sec.tags = {
-            "network.dynamic.domain": ["blah.com"],
-            "network.dynamic.uri": ["https://blah.com/blah.exe"],
-            "network.dynamic.uri_path": ["/blah.exe"],
-        }
+        correct_res_sec.add_tag("network.dynamic.domain", "blah.com")
+        correct_res_sec.add_tag("network.dynamic.uri", "https://blah.com/blah.exe")
+        correct_res_sec.add_tag("network.dynamic.uri_path", "/blah.exe")
         res = Result()
         output = ["https://blah.com/blah.exe"]
         jsjaws_class_instance._extract_malware_jail_iocs(output, res)
@@ -635,8 +655,9 @@ class TestJsJaws:
         jsjaws_class_instance.filtered_jquery_path = path.join("/tmp", jsjaws_class_instance.filtered_jquery)
         jsjaws_class_instance.artifact_list = []
         res = Result()
-        correct_res_sec = ResultSection("Embedded code was found in jQuery library",
-                                        body=f"View extracted file {jsjaws_class_instance.filtered_jquery} for details.")
+        correct_res_sec = ResultSection(
+            "Embedded code was found in jQuery library",
+            body=f"View extracted file {jsjaws_class_instance.filtered_jquery} for details.")
         correct_res_sec.set_heuristic(4)
         jsjaws_class_instance._extract_filtered_jquery(res, file_contents)
 
@@ -644,10 +665,10 @@ class TestJsJaws:
         with open(jsjaws_class_instance.filtered_jquery_path, "r") as f:
             assert f.read() == evil_string.rstrip("\n")
         assert jsjaws_class_instance.artifact_list[0] == {
-                "name": jsjaws_class_instance.filtered_jquery,
-                "path": jsjaws_class_instance.filtered_jquery_path,
-                "description": "JavaScript embedded within jQuery library",
-                "to_be_extracted": True
+            "name": jsjaws_class_instance.filtered_jquery,
+            "path": jsjaws_class_instance.filtered_jquery_path,
+            "description": "JavaScript embedded within jQuery library",
+            "to_be_extracted": True
         }
         assert check_section_equality(res.sections[0], correct_res_sec)
         remove(jsjaws_class_instance.filtered_jquery_path)
@@ -691,18 +712,18 @@ class TestSignature:
 
     @staticmethod
     @pytest.mark.parametrize("indicators, safelist, output, match_all, expected_marks",
-        [
-            (None, [], [], False, set()),
-            (None, [], ["blah"], False, set()),
-            (None, [], ["blah - blah"], False, set()),
-            (["yabadabadoo"], [], ["blah"], False, set()),
-            (["blah"], [], ["blah"], False, {"blah"}),
-            (["blah"], [], ["blah"], True, {"blah"}),
-            (["blah"], ["yabadabadoo"], ["blah"], True, {"blah"}),
-            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, set()),
-            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, set()),
-        ]
-    )
+                             [
+                                 (None, [], [], False, set()),
+                                 (None, [], ["blah"], False, set()),
+                                 (None, [], ["blah - blah"], False, set()),
+                                 (["yabadabadoo"], [], ["blah"], False, set()),
+                                 (["blah"], [], ["blah"], False, {"blah"}),
+                                 (["blah"], [], ["blah"], True, {"blah"}),
+                                 (["blah"], ["yabadabadoo"], ["blah"], True, {"blah"}),
+                                 (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, set()),
+                                 (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, set()),
+                             ]
+                             )
     def test_check_indicators_in_list(indicators, safelist, output, match_all, expected_marks):
         from signatures.abstracts import Signature
         sig = Signature(indicators=indicators, safelist=safelist)
@@ -711,12 +732,12 @@ class TestSignature:
 
     @staticmethod
     @pytest.mark.parametrize("regex, string, expected_output",
-        [
-            (r"", "", ['']),
-            (r"nope", "yup", []),
-            (r"daba", "yabadabadoo", ["daba"]),
-        ]
-    )
+                             [
+                                 (r"", "", ['']),
+                                 (r"nope", "yup", []),
+                                 (r"daba", "yabadabadoo", ["daba"]),
+                             ]
+                             )
     def test_check_regex(regex, string, expected_output):
         from signatures.abstracts import Signature
         assert Signature.check_regex(regex, string) == expected_output

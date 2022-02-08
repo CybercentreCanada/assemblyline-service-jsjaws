@@ -110,7 +110,8 @@ class JsJaws(ServiceBase):
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
         self.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
-        self.malware_jail_sandbox_env_dump_path = path.join(self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump)
+        self.malware_jail_sandbox_env_dump_path = path.join(
+            self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump)
         root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
@@ -166,10 +167,8 @@ class JsJaws(ServiceBase):
         # -b id    ... browser type, use -b list for possible values (Possible -b values:
         # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
         # -t msecs - limits execution time by "msecs" milliseconds, by default 60 seconds.
-        malware_jail_args = [
-            "node", self.path_to_jailme_js, "-s", self.malware_jail_payload_extraction_dir, "-o", self.malware_jail_sandbox_env_dump_path,
-            "-b", browser_selected, "-t", f"{tool_timeout * 1000}"
-        ]
+        malware_jail_args = ["node", self.path_to_jailme_js, "-s", self.malware_jail_payload_extraction_dir,
+                             "-o", self.malware_jail_sandbox_env_dump_path, "-b", browser_selected, "-t", f"{tool_timeout * 1000}"]
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
         # then allow_download_from_internet service variable needs to be set to true
@@ -228,8 +227,10 @@ class JsJaws(ServiceBase):
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, tool_timeout, responses)))
-        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, tool_timeout, responses, True, True)))
-        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, tool_timeout, responses, True)))
+        tool_threads.append(Thread(target=self._run_tool, args=(
+            "MalwareJail", malware_jail_args, tool_timeout, responses, True, True)))
+        tool_threads.append(Thread(target=self._run_tool, args=(
+            "JS-X-Ray", jsxray_args, tool_timeout, responses, True)))
 
         for thr in tool_threads:
             thr.start()
@@ -414,7 +415,7 @@ class JsJaws(ServiceBase):
         if not path.exists(self.malware_jail_urls_json_path) and not path.exists(self.boxjs_iocs):
             return
 
-        urls_result_section = ResultSection("URLs", body_format=BODY_FORMAT.TABLE)
+        urls_result_section = ResultSection("URLs")
 
         urls_json = []
         if path.exists(self.malware_jail_urls_json_path):
@@ -433,11 +434,14 @@ class JsJaws(ServiceBase):
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_json):
                             continue
-                        urls_json.append({"url": value["url"], "method": value["method"], "request_headers": value["headers"]})
+                        urls_json.append(
+                            {"url": value["url"],
+                             "method": value["method"],
+                             "request_headers": value["headers"]})
                         self._tag_uri(value["url"], urls_result_section)
 
         if urls_json:
-            urls_result_section.body = dumps(urls_json)
+            urls_result_section.set_body(dumps(urls_json), BODY_FORMAT.TABLE)
             urls_result_section.set_heuristic(1)
             result.add_section(urls_result_section)
 
@@ -585,7 +589,8 @@ class JsJaws(ServiceBase):
         if len(signatures_that_hit) > 0:
             sigs_res_sec = ResultSection("Signatures")
             for sig_that_hit in signatures_that_hit:
-                sig_res_sec = ResultSection(f"Signature: {type(sig_that_hit).__name__}", body=sig_that_hit.description, parent=sigs_res_sec)
+                sig_res_sec = ResultSection(f"Signature: {type(sig_that_hit).__name__}",
+                                            body=sig_that_hit.description, parent=sigs_res_sec)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
                 translated_score = TRANSLATED_SCORE[sig_that_hit.severity]
                 sig_res_sec.heuristic.add_signature_id(sig_that_hit.name, score=translated_score)
@@ -650,13 +655,17 @@ class JsJaws(ServiceBase):
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
                 self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_result_section, ".js")
             if file_writes:
-                file_writes_result_section = ResultSection("The script wrote the following files", parent=ioc_result_section)
+                file_writes_result_section = ResultSection(
+                    "The script wrote the following files", parent=ioc_result_section)
                 file_writes_result_section.add_lines(list(file_writes))
-                [file_writes_result_section.add_tag("dynamic.process.file_name", file_write) for file_write in list(file_writes)]
+                [file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
+                 for file_write in list(file_writes)]
             if file_reads:
-                file_reads_result_section = ResultSection("The script read the following files", parent=ioc_result_section)
+                file_reads_result_section = ResultSection(
+                    "The script read the following files", parent=ioc_result_section)
                 file_reads_result_section.add_lines(list(file_reads))
-                [file_reads_result_section.add_tag("dynamic.process.file_name", file_read) for file_read in list(file_reads)]
+                [file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
+                 for file_read in list(file_reads)]
 
             if ioc_result_section.subsections:
                 ioc_result_section.set_heuristic(2)
@@ -727,7 +736,9 @@ class JsJaws(ServiceBase):
         if len(malware_jail_res_sec.tags) > 0:
             result.add_section(malware_jail_res_sec)
 
-    def _run_tool(self, tool_name: str, args: List[str], tool_timeout: int, resp: Dict[str, Any], get_stdout: bool = False, split: bool = False) -> None:
+    def _run_tool(self, tool_name: str, args: List[str],
+                  tool_timeout: int, resp: Dict[str, Any],
+                  get_stdout: bool = False, split: bool = False) -> None:
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
         completed_process = None
