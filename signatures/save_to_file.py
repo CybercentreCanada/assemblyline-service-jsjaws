@@ -10,7 +10,7 @@ class SaveToFile(Signature):
             heuristic_id=3,
             name="save_to_file",
             description="JavaScript writes data to disk",
-            indicators=["SaveToFile"],
+            indicators=["SaveToFile", "navigator.msSaveOrOpenBlob("],
             severity=0
         )
 
