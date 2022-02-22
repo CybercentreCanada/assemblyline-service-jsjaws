@@ -14,7 +14,8 @@ class SuspiciousFunctionCall(Signature):
         )
 
     def process_output(self, output):
-        suspicious_pattern_regex = r"\w+\[[^\]]+\]\([^)]+\)\([^)]+\)"
+        # Example of this is word1[word2](word1[word3])(word4)
+        suspicious_pattern_regex = r"(?P<word1>\w{1,20})\[[^\]]{1,20}\]\((?P=word1)\[[^\]]{1,20}\]\)\([^)]{1,20}\)"
         results = []
         for line in output:
             results.extend(self.check_regex(suspicious_pattern_regex, line))

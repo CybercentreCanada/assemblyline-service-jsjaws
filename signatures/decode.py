@@ -16,3 +16,17 @@ class Unescape(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class SuspiciousUseOfCharCodes(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="suspicious_char_codes",
+            description="JavaScript uses charCodeAt() obfuscate/de-obfuscate characters",
+            indicators=[".charCodeAt("],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
