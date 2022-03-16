@@ -484,29 +484,58 @@ class TestJsJaws:
 
     @staticmethod
     @pytest.mark.parametrize(
-        "blob, file_ext, correct_tags",
-        [
-            ("", "", {}),
-            ("192.168.100.1", "", {'network.dynamic.ip': ['192.168.100.1']}),
-            ("blah.ca", ".exe", {'network.dynamic.domain': ['blah.ca']}),
-            ("https://blah.ca", ".exe", {'network.dynamic.domain': ['blah.ca'], 'network.dynamic.uri': ['https://blah.ca']}),
-            ("https://blah.ca/blah", ".exe", {'network.dynamic.domain': ['blah.ca'], 'network.dynamic.uri': ['https://blah.ca/blah'], "network.dynamic.uri_path": ["/blah"]}),
-            ("drive:\\\\path to\\\\microsoft office\\\\officeverion\\\\winword.exe", ".exe", {}),
-            ("DRIVE:\\\\PATH TO\\\\MICROSOFT OFFICE\\\\OFFICEVERION\\\\WINWORD.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.DOC", ".exe", {}),
-            ("DRIVE:\\\\PATH TO\\\\PYTHON27.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.py", ".py", {}),
-            ("POST /some/thing/bad.exe HTTP/1.0\nUser-Agent: Mozilla\nHost: evil.ca\nAccept: */*\nContent-Type: application/octet-stream\nContent-Encoding: binary\n\nConnection: close", "", {"network.dynamic.domain": ["evil.ca"]}),
-            ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"]}),
-            ("wscript.shell", "", {}),
-            ("blah.ca", ".ca", {}),
-            ("http://1.1.1.1/blah.exe", "", {'network.dynamic.ip': ['1.1.1.1'], 'network.dynamic.uri': ['http://1.1.1.1/blah.exe'], 'network.dynamic.uri_path': ['/blah.exe']}),
-        ]
-    )
-    def test_extract_iocs_from_text_blob(blob, file_ext, correct_tags, jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import ResultSection
-        test_result_section = ResultSection("blah")
-        correct_result_section = ResultSection("blah", tags=correct_tags)
+        "blob, file_ext, correct_tags, correct_body",
+        [("", "", {},
+          []),
+         ("192.168.100.1", "", {'network.dynamic.ip': ['192.168.100.1']},
+          [{"ioc_type": "ip", "ioc": "192.168.100.1"}]),
+         ("blah.ca", ".exe", {'network.dynamic.domain': ['blah.ca']},
+          [{"ioc_type": "domain", "ioc": "blah.ca"}]),
+         ("https://blah.ca", ".exe",
+          {'network.dynamic.domain': ['blah.ca'],
+           'network.dynamic.uri': ['https://blah.ca']},
+          [{"ioc_type": "domain", "ioc": "blah.ca"},
+           {"ioc_type": "uri", "ioc": "https://blah.ca"}]),
+         ("https://blah.ca/blah", ".exe",
+          {'network.dynamic.domain': ['blah.ca'],
+           'network.dynamic.uri': ['https://blah.ca/blah'],
+           "network.dynamic.uri_path": ["/blah"]},
+          [{"ioc_type": "domain", "ioc": "blah.ca"},
+           {"ioc_type": "uri", "ioc": "https://blah.ca/blah"},
+           {"ioc_type": "uri_path", "ioc": "/blah"}]),
+         ("drive:\\\\path to\\\\microsoft office\\\\officeverion\\\\winword.exe", ".exe", {},
+          []),
+         (
+            "DRIVE:\\\\PATH TO\\\\MICROSOFT OFFICE\\\\OFFICEVERION\\\\WINWORD.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.DOC",
+            ".exe", {},
+            []),
+         ("DRIVE:\\\\PATH TO\\\\PYTHON27.EXE C:\\\\USERS\\\\BUDDY\\\\APPDATA\\\\LOCAL\\\\TEMP\\\\BLAH.py", ".py", {},
+          []),
+         (
+            "POST /some/thing/bad.exe HTTP/1.0\nUser-Agent: Mozilla\nHost: evil.ca\nAccept: */*\nContent-Type: application/octet-stream\nContent-Encoding: binary\n\nConnection: close",
+            "", {"network.dynamic.domain": ["evil.ca"]},
+            [{"ioc_type": "domain", "ioc": "evil.ca"}]),
+         ("evil.ca/some/thing/bad.exe", "", {"network.dynamic.domain": ["evil.ca"]},
+          [{"ioc_type": "domain", "ioc": "evil.ca"}]),
+         ("wscript.shell", "", {},
+          []),
+         ("blah.ca", ".ca", {},
+          []),
+         ("http://1.1.1.1/blah.exe", "",
+          {'network.dynamic.ip': ['1.1.1.1'],
+           'network.dynamic.uri': ['http://1.1.1.1/blah.exe'],
+           'network.dynamic.uri_path': ['/blah.exe']},
+          [{"ioc_type": "ip", "ioc": "1.1.1.1"},
+           {"ioc_type": "uri", "ioc": "http://1.1.1.1/blah.exe"},
+           {"ioc_type": "uri_path", "ioc": "/blah.exe"}]), ])
+    def test_extract_iocs_from_text_blob(blob, file_ext, correct_tags, correct_body, jsjaws_class_instance):
+        from assemblyline_v4_service.common.result import ResultTableSection, TableRow
+        test_result_section = ResultTableSection("blah")
+        correct_result_section = ResultTableSection("blah", tags=correct_tags)
         if correct_tags:
             correct_result_section.set_heuristic(2)
+        for item in correct_body:
+            correct_result_section.add_row(TableRow(**item))
         jsjaws_class_instance._extract_iocs_from_text_blob(blob, test_result_section, file_ext)
         assert check_section_equality(test_result_section, correct_result_section)
 
@@ -535,7 +564,7 @@ class TestJsJaws:
     def test_extract_boxjs_iocs(jsjaws_class_instance):
         from os import path, mkdir
         from json import dumps
-        from assemblyline_v4_service.common.result import Result, ResultSection
+        from assemblyline_v4_service.common.result import Result, ResultSection, ResultTableSection, TableRow
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.result")
         jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
         jsjaws_class_instance.artifact_list = []
@@ -554,9 +583,12 @@ class TestJsJaws:
         cmd_res_sec = ResultSection("The script ran the following commands", parent=correct_res_sec)
         cmd_res_sec.add_lines([cmd])
         cmd_res_sec.add_tag("dynamic.process.command_line", cmd)
-        cmd_res_sec.add_tag("network.dynamic.domain", "blah.ca")
-        cmd_res_sec.add_tag("network.dynamic.uri", "http://blah.ca")
-        cmd_res_sec.set_heuristic(2)
+        cmd_table = ResultTableSection("IOCs found in command lines", parent=cmd_res_sec)
+        table_data = [{"ioc_type": "domain", "ioc": "blah.ca"}, {"ioc_type": "uri", "ioc": "http://blah.ca"}]
+        [cmd_table.add_row(TableRow(**item)) for item in table_data]
+        cmd_table.add_tag("network.dynamic.domain", "blah.ca")
+        cmd_table.add_tag("network.dynamic.uri", "http://blah.ca")
+        cmd_table.set_heuristic(2)
         write_res_sec = ResultSection("The script wrote the following files", parent=correct_res_sec)
         write_res_sec.add_lines(["blah.txt"])
         write_res_sec.add_tag("dynamic.process.file_name", file)
@@ -620,12 +652,16 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import Result, ResultSection
-        correct_res_sec = ResultSection("MalwareJail extracted the following IOCs")
+        from assemblyline_v4_service.common.result import Result, ResultTableSection, TableRow
+        correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)
         correct_res_sec.add_tag("network.dynamic.domain", "blah.com")
         correct_res_sec.add_tag("network.dynamic.uri", "https://blah.com/blah.exe")
         correct_res_sec.add_tag("network.dynamic.uri_path", "/blah.exe")
+        table_data = [{"ioc_type": "domain", "ioc": "blah.com"},
+                      {"ioc_type": "uri", "ioc": "https://blah.com/blah.exe"},
+                      {"ioc_type": "uri_path", "ioc": "/blah.exe"}]
+        [correct_res_sec.add_row(TableRow(**item)) for item in table_data]
         res = Result()
         output = ["https://blah.com/blah.exe"]
         jsjaws_class_instance._extract_malware_jail_iocs(output, res)
