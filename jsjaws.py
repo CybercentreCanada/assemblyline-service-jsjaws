@@ -292,7 +292,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         wscript_extraction = open(self.extracted_wscript_path, "a+")
-        wscript_res_sec = ResultSection("IOCs extracted from WScript")
+        wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
             wscript_shell_run = search(compile(WSCRIPT_SHELL_REGEX), line)
             # Script was run
@@ -487,7 +487,9 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
             self.artifact_list.append(boxjs_analysis_log)
 
-    def _extract_iocs_from_text_blob(self, blob: str, result_section: ResultSection, file_ext: str = "") -> None:
+    def _extract_iocs_from_text_blob(
+            self, blob: str, result_section: ResultTableSection,
+            file_ext: str = "") -> None:
         """
         This method searches for domains, IPs and URIs used in blobs of text and tags them
         :param blob: The blob of text that we will be searching through
@@ -508,6 +510,7 @@ class JsJaws(ServiceBase):
             safe_ip = safe_str(ip)
             ioc_extracted = True
             result_section.add_tag("network.dynamic.ip", safe_ip)
+            result_section.add_row(TableRow(ioc_type="ip", ioc=safe_ip))
         for domain in domains:
             if domain.lower() in [WSCRIPT_SHELL.lower()]:
                 continue
@@ -519,6 +522,7 @@ class JsJaws(ServiceBase):
             safe_domain = safe_str(domain)
             ioc_extracted = True
             result_section.add_tag("network.dynamic.domain", safe_domain)
+            result_section.add_row(TableRow(ioc_type="domain", ioc=safe_domain))
         for uri in uris:
             # If there is a domain in the uri, then do
             if not any(ip in uri for ip in ips):
@@ -535,11 +539,13 @@ class JsJaws(ServiceBase):
             ioc_extracted = True
             if match(FULL_URI, safe_uri):
                 result_section.add_tag("network.dynamic.uri", safe_uri)
+                result_section.add_row(TableRow(ioc_type="uri", ioc=safe_uri))
             if "//" in safe_uri:
                 safe_uri = safe_uri.split("//")[1]
             for uri_path in findall(URI_PATH, safe_uri):
                 ioc_extracted = True
                 result_section.add_tag("network.dynamic.uri_path", uri_path)
+                result_section.add_row(TableRow(ioc_type="uri_path", ioc=uri_path))
         if ioc_extracted and result_section.heuristic is None:
             result_section.set_heuristic(2)
 
@@ -655,7 +661,8 @@ class JsJaws(ServiceBase):
                     "The script ran the following commands", parent=ioc_result_section)
                 cmd_result_section.add_lines(list(commands))
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
-                self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_result_section, ".js")
+                cmd_iocs_result_section = ResultTableSection("IOCs found in command lines", parent=cmd_result_section)
+                self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, ".js")
             if file_writes:
                 file_writes_result_section = ResultTextSection(
                     "The script wrote the following files", parent=ioc_result_section)
@@ -732,7 +739,7 @@ class JsJaws(ServiceBase):
             result.add_section(jsxray_iocs_result_section)
 
     def _extract_malware_jail_iocs(self, output: List[str], result: Result) -> None:
-        malware_jail_res_sec = ResultSection("MalwareJail extracted the following IOCs")
+        malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         for line in output:
             self._extract_iocs_from_text_blob(line, malware_jail_res_sec, ".js")
         if len(malware_jail_res_sec.tags) > 0:
