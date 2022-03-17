@@ -317,7 +317,7 @@ class JsJaws(ServiceBase):
             }
             self.log.debug(f"Adding extracted file: {self.extracted_wscript}")
             self.artifact_list.append(artifact)
-            if wscript_res_sec.tags != {}:
+            if wscript_res_sec.body:
                 result.add_section(wscript_res_sec)
 
     def _extract_payloads(self, sample_sha256: str, deep_scan: bool) -> None:
@@ -661,8 +661,10 @@ class JsJaws(ServiceBase):
                     "The script ran the following commands", parent=ioc_result_section)
                 cmd_result_section.add_lines(list(commands))
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
-                cmd_iocs_result_section = ResultTableSection("IOCs found in command lines", parent=cmd_result_section)
+                cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
                 self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, ".js")
+                if cmd_iocs_result_section.body:
+                    cmd_result_section.add_subsection(cmd_iocs_result_section)
             if file_writes:
                 file_writes_result_section = ResultTextSection(
                     "The script wrote the following files", parent=ioc_result_section)
@@ -742,7 +744,7 @@ class JsJaws(ServiceBase):
         malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         for line in output:
             self._extract_iocs_from_text_blob(line, malware_jail_res_sec, ".js")
-        if len(malware_jail_res_sec.tags) > 0:
+        if malware_jail_res_sec.body:
             result.add_section(malware_jail_res_sec)
 
     def _run_tool(self, tool_name: str, args: List[str],
