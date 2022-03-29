@@ -644,9 +644,9 @@ class TestJsJaws:
     def test_get_id_from_data(data, expected_result):
         from os import remove
         from jsjaws import get_id_from_data
-        some_file = "some_file.txt"
+        some_file = "/tmp/some_file.txt"
         with open(some_file, "wb") as f:
-            f.write(b"blah")
+            f.write(data)
         assert get_id_from_data(some_file) == expected_result
         remove(some_file)
 
