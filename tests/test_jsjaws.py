@@ -630,32 +630,6 @@ class TestJsJaws:
         assert check_section_equality(res.sections[0], correct_res_sec)
 
     @staticmethod
-    @pytest.mark.parametrize("data, length, res", [
-        (b"blah", None, "blah"),
-        (b"blah", 10, "blah"),
-        (b"blahblahblahblah", 10, "blahblahbl..."),
-    ])
-    def test_truncate(data, length, res):
-        from jsjaws import truncate
-        if length:
-            assert truncate(data, length) == res
-        else:
-            assert truncate(data) == res
-
-    @staticmethod
-    @pytest.mark.parametrize("data, expected_result", [
-        (b"blah", '8b7df143d91c716ecfa5fc1730022f6b421b05cedee8fd52b1fc65a96030ad52')
-    ])
-    def test_get_id_from_data(data, expected_result):
-        from os import remove
-        from jsjaws import get_id_from_data
-        some_file = "/tmp/some_file.txt"
-        with open(some_file, "wb") as f:
-            f.write(data)
-        assert get_id_from_data(some_file) == expected_result
-        remove(some_file)
-
-    @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
         from assemblyline_v4_service.common.result import Result, ResultTableSection, TableRow
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")

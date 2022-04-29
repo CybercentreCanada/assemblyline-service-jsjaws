@@ -1,6 +1,5 @@
-from hashlib import sha256
 from inspect import getmembers, isclass
-from json import loads, dumps, JSONDecodeError
+from json import loads, JSONDecodeError
 from os import mkdir, listdir, path
 from pkgutil import iter_modules
 from re import match, search, findall, compile
@@ -10,9 +9,10 @@ from sys import modules
 from threading import Thread
 from time import time
 from tld import get_tld
-from typing import Optional, Dict, List, Any, Union
+from typing import Optional, Dict, List, Any
 
-from assemblyline.common.str_utils import safe_str
+from assemblyline.common.digests import get_sha256_for_file
+from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.odm.base import FULL_URI, DOMAIN_REGEX, URI_PATH, IP_REGEX
 from assemblyline_v4_service.common.balbuzard.patterns import PatternMatch
 from assemblyline_v4_service.common.base import ServiceBase
@@ -36,35 +36,6 @@ TRANSLATED_SCORE = {
     2: 750,  # Highly Suspicious
     3: 1000,  # Malware
 }
-
-
-def truncate(data: Union[bytes, str], length: int = 100) -> str:
-    """
-    This method is a helper used to avoid cluttering output
-    :param data: The buffer that will be determined if it needs to be sliced
-    :param length: The limit of characters to the buffer
-    :return str: The potentially truncated buffer
-    """
-    string = safe_str(data)
-    if len(string) > length:
-        return string[:length] + '...'
-    return string
-
-
-def get_id_from_data(file_path: str) -> str:
-    """
-    This method generates a sha256 hash for the file contents of a file
-    :param file_path: The file path
-    :return hash: The sha256 hash of the file
-    """
-    sha256_hash = sha256()
-    # stream it in so we don't load the whole file in memory
-    with open(file_path, 'rb') as f:
-        data = f.read(4096)
-        while data:
-            sha256_hash.update(data)
-            data = f.read(4096)
-    return sha256_hash.hexdigest()
 
 
 class JsJaws(ServiceBase):
@@ -361,7 +332,7 @@ class JsJaws(ServiceBase):
                              self.extracted_doc_writes_path, self.boxjs_iocs, self.boxjs_resources, self.boxjs_snippets,
                              self.boxjs_analysis_log, self.boxjs_urls_json_path]:
                 continue
-            extracted_sha = get_id_from_data(extracted)
+            extracted_sha = get_sha256_for_file(extracted)
             if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256]:
                 extracted_count += 1
                 if not deep_scan and extracted_count > max_payloads_extracted:
