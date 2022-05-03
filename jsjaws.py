@@ -1,6 +1,5 @@
-from hashlib import sha256
 from inspect import getmembers, isclass
-from json import loads, dumps, JSONDecodeError
+from json import loads, JSONDecodeError
 from os import mkdir, listdir, path
 from pkgutil import iter_modules
 from re import match, search, findall, compile
@@ -10,13 +9,13 @@ from sys import modules
 from threading import Thread
 from time import time
 from tld import get_tld
-from typing import Optional, Dict, List, Any, Union
+from typing import Optional, Dict, List, Any
 
-from assemblyline.common.str_utils import safe_str
+from assemblyline.common.digests import get_sha256_for_file
+from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.odm.base import FULL_URI, DOMAIN_REGEX, URI_PATH, IP_REGEX
-from assemblyline_v4_service.common.balbuzard.patterns import PatternMatch
 from assemblyline_v4_service.common.base import ServiceBase
-from assemblyline_v4_service.common.dynamic_service_helper import SandboxOntology
+from assemblyline_v4_service.common.dynamic_service_helper import extract_iocs_from_text_blob, SandboxOntology
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import Result, ResultTextSection, ResultTableSection, TableRow, ResultSection
 
@@ -38,40 +37,10 @@ TRANSLATED_SCORE = {
 }
 
 
-def truncate(data: Union[bytes, str], length: int = 100) -> str:
-    """
-    This method is a helper used to avoid cluttering output
-    :param data: The buffer that will be determined if it needs to be sliced
-    :param length: The limit of characters to the buffer
-    :return str: The potentially truncated buffer
-    """
-    string = safe_str(data)
-    if len(string) > length:
-        return string[:length] + '...'
-    return string
-
-
-def get_id_from_data(file_path: str) -> str:
-    """
-    This method generates a sha256 hash for the file contents of a file
-    :param file_path: The file path
-    :return hash: The sha256 hash of the file
-    """
-    sha256_hash = sha256()
-    # stream it in so we don't load the whole file in memory
-    with open(file_path, 'rb') as f:
-        data = f.read(4096)
-        while data:
-            sha256_hash.update(data)
-            data = f.read(4096)
-    return sha256_hash.hexdigest()
-
-
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
         super(JsJaws, self).__init__(config)
         self.artifact_list: Optional[List[Dict[str, str]]] = None
-        self.patterns = PatternMatch()
         self.malware_jail_payload_extraction_dir: Optional[str] = None
         self.malware_jail_sandbox_env_dump: Optional[str] = None
         self.malware_jail_sandbox_env_dir: Optional[str] = None
@@ -308,7 +277,7 @@ class JsJaws(ServiceBase):
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
                 # Let's try to extract IOCs from it
-                self._extract_iocs_from_text_blob(line, wscript_res_sec, ".js")
+                extract_iocs_from_text_blob(line, wscript_res_sec)
         wscript_extraction.close()
 
         if path.getsize(self.extracted_wscript_path) > 0:
@@ -361,7 +330,7 @@ class JsJaws(ServiceBase):
                              self.extracted_doc_writes_path, self.boxjs_iocs, self.boxjs_resources, self.boxjs_snippets,
                              self.boxjs_analysis_log, self.boxjs_urls_json_path]:
                 continue
-            extracted_sha = get_id_from_data(extracted)
+            extracted_sha = get_sha256_for_file(extracted)
             if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256]:
                 extracted_count += 1
                 if not deep_scan and extracted_count > max_payloads_extracted:
@@ -490,68 +459,6 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
             self.artifact_list.append(boxjs_analysis_log)
 
-    def _extract_iocs_from_text_blob(
-            self, blob: str, result_section: ResultTableSection,
-            file_ext: str = "") -> None:
-        """
-        This method searches for domains, IPs and URIs used in blobs of text and tags them
-        :param blob: The blob of text that we will be searching through
-        :param result_section: The result section that that tags will be added to
-        :param file_ext: The file extension of the file to be submitted
-        :return: None
-        """
-        blob = blob.lower()
-        ips = set(findall(IP_REGEX, blob))
-        # There is overlap here between regular expressions, so we want to isolate domains that are not ips
-        domains = set(findall(DOMAIN_REGEX, blob)) - ips
-        # There is overlap here between regular expressions, so we want to isolate uris that are not domains
-        uris = set(findall(self.patterns.PAT_URI_NO_PROTOCOL, blob.encode()))
-        uris = {uri.decode() for uri in uris} - domains - ips
-        ioc_extracted = False
-
-        for ip in ips:
-            safe_ip = safe_str(ip)
-            ioc_extracted = True
-            result_section.add_tag("network.dynamic.ip", safe_ip)
-            result_section.add_row(TableRow(ioc_type="ip", ioc=safe_ip))
-        for domain in domains:
-            if domain.lower() in [WSCRIPT_SHELL.lower()]:
-                continue
-            # File names match the domain and URI regexes, so we need to avoid tagging them
-            # Note that get_tld only takes URLs so we will prepend http:// to the domain to work around this
-            tld = get_tld(f"http://{domain}", fail_silently=True)
-            if tld is None or f".{tld}" == file_ext:
-                continue
-            safe_domain = safe_str(domain)
-            ioc_extracted = True
-            result_section.add_tag("network.dynamic.domain", safe_domain)
-            result_section.add_row(TableRow(ioc_type="domain", ioc=safe_domain))
-        for uri in uris:
-            # If there is a domain in the uri, then do
-            if not any(ip in uri for ip in ips):
-                try:
-                    if not any(protocol in uri for protocol in ["http", "ftp", "icmp", "ssh"]):
-                        tld = get_tld(f"http://{uri}", fail_silently=True)
-                    else:
-                        tld = get_tld(uri, fail_silently=True)
-                except ValueError:
-                    continue
-                if tld is None or f".{tld}" == file_ext:
-                    continue
-            safe_uri = safe_str(uri)
-            ioc_extracted = True
-            if match(FULL_URI, safe_uri):
-                result_section.add_tag("network.dynamic.uri", safe_uri)
-                result_section.add_row(TableRow(ioc_type="uri", ioc=safe_uri))
-            if "//" in safe_uri:
-                safe_uri = safe_uri.split("//")[1]
-            for uri_path in findall(URI_PATH, safe_uri):
-                ioc_extracted = True
-                result_section.add_tag("network.dynamic.uri_path", uri_path)
-                result_section.add_row(TableRow(ioc_type="uri_path", ioc=uri_path))
-        if ioc_extracted and result_section.heuristic is None:
-            result_section.set_heuristic(2)
-
     def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
         """
         This method sets up the parallelized signature engine and runs each signature against the
@@ -665,8 +572,9 @@ class JsJaws(ServiceBase):
                 cmd_result_section.add_lines(list(commands))
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
                 cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
-                self._extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, ".js")
+                extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section)
                 if cmd_iocs_result_section.body:
+                    cmd_iocs_result_section.set_heuristic(2)
                     cmd_result_section.add_subsection(cmd_iocs_result_section)
             if file_writes:
                 file_writes_result_section = ResultTextSection(
@@ -746,8 +654,9 @@ class JsJaws(ServiceBase):
     def _extract_malware_jail_iocs(self, output: List[str], result: Result) -> None:
         malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         for line in output:
-            self._extract_iocs_from_text_blob(line, malware_jail_res_sec, ".js")
+            extract_iocs_from_text_blob(line, malware_jail_res_sec)
         if malware_jail_res_sec.body:
+            malware_jail_res_sec.set_heuristic(2)
             result.add_section(malware_jail_res_sec)
 
     def _run_tool(self, tool_name: str, args: List[str],
