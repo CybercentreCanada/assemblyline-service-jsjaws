@@ -316,31 +316,6 @@ class TestJsJaws:
         assert path.exists(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         assert path.exists(jsjaws_class_instance.malware_jail_sandbox_env_dir)
 
-        # Get the result of execute() from the test method
-        test_result = task.get_service_result()
-
-        # Get the assumed "correct" result of the sample
-        correct_result_path = os.path.join(TEST_DIR, "results", task.file_name + ".json")
-        with open(correct_result_path, "r") as f:
-            correct_result = loads(f.read())
-        f.close()
-
-        # Assert that the appropriate sections of the dict are equal
-
-        # Avoiding unique items in the response
-        test_result_response = test_result.pop("response")
-        correct_result_response = correct_result.pop("response")
-        assert test_result == correct_result
-
-        # Comparing everything in the response except for the service_completed and the output.json supplementary
-        test_result_response["milestones"].pop("service_completed")
-        correct_result_response["milestones"].pop("service_completed")
-        correct_result_response.pop("supplementary")
-        test_result_response.pop("supplementary")
-        correct_result_response.pop("service_context")
-        test_result_response.pop("service_context")
-        assert test_result_response == correct_result_response
-
         # Code coverage
         jsjaws_class_instance.config = {"allow_download_from_internet": True}
         service_request.task.service_config["download_payload"] = True

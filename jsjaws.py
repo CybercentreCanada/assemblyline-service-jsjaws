@@ -2,13 +2,12 @@ from inspect import getmembers, isclass
 from json import loads, JSONDecodeError
 from os import mkdir, listdir, path
 from pkgutil import iter_modules
-from re import match, search, findall, compile
+from re import match, search, compile
 from requests import get
 from subprocess import run, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import time
-from tld import get_tld
 from typing import Optional, Dict, List, Any
 
 from assemblyline.common.digests import get_sha256_for_file
