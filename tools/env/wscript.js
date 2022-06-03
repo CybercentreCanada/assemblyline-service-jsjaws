@@ -2,6 +2,8 @@
     wscript.js - simulates WScript (Windows scripting host) environment
 */
 
+const Blob = require('node-blob');
+
 util_log("Preparing sandbox to emulate WScript environment.");
 _wscript_saved_files = {};
 _wscript_urls = [];
@@ -163,6 +165,14 @@ let Base64 = {
         return string;
     }
 };
+
+saveAs = function(content, filename) {
+    util_log("saveAs(" + content + ", " + filename + ")")
+    if (content.constructor.name == "Blob") {
+        content = content.buffer;
+    }
+    _wscript_saved_files[filename] = content;
+}
 
 TextStream = function(filename) {
     this.id = _object_id++;
