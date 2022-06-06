@@ -247,7 +247,6 @@ class TestJsJaws:
         from assemblyline.odm.messages.task import Task as ServiceTask
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
-        from json import loads
         from os import path, mkdir
         from subprocess import TimeoutExpired
 
@@ -740,3 +739,61 @@ class TestSignature:
         sig = Signature()
         with pytest.raises(NotImplementedError):
             sig.process_output([])
+
+    @staticmethod
+    def test_add_mark():
+        from signatures.abstracts import Signature
+        sig = Signature()
+        sig.add_mark("")
+        sig.add_mark(None)
+        sig.add_mark(0)
+        assert sig.marks == set()
+
+        sig.add_mark("blah")
+        assert sig.marks == {"blah"}
+
+    @staticmethod
+    @pytest.mark.parametrize("indicators, safelist, output, expected_marks",
+        [
+            (None, [], [], set()),
+            (None, [], ["blah"], set()),
+            (None, [], ["blah - blah"], set()),
+            # 1 any indicator that will match
+            ([{"method": "any", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            # 1 all indicator that will match
+            ([{"method": "all", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            # 1 any indicator that will match, safelisted item
+            ([{"method": "any", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            # 1 all indicator that will match, safelisted item
+            ([{"method": "all", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            # 1 any indicator that will not match
+            ([{"method": "any", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            # 1 all indicator that will not match
+            ([{"method": "all", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            # 2 any indicators, only one matches, therefore no marks
+            ([{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}], [], ["blah"], set()),
+            # 2 all indicators, only one matches, therefore no marks
+            ([{"method": "all", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}], [], ["blah"], set()),
+            # 2 any indicators, both match, one mark
+            ([{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}], [], ["blah blahblah"], {"blah blahblah"}),
+            # 2 all indicators, both match, one mark
+            ([{"method": "all", "indicators": ["blah"]}, {"method": "all", "indicators": ["blahblah"]}], [], ["blah blahblah"], {"blah blahblah"}),
+            # 1 any indicator with multiple indicators, which matches on multiple lines, therefore multiple marks
+            ([{"method": "any", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], {"blah", "yabadabadoo"}),
+            # 1 all indicator with multiple indicators, which doesn't match on multiple lines, therefore no marks
+            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], set()),
+            # 1 all indicator with multiple indicators, which match on single line, therefore one mark
+            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah yabadabadoo", "yabadabadoo", "abc123"], {"blah yabadabadoo"}),
+            # 2 all indicators with multiple indicators, which match on single line, therefore one mark
+            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}, {"method": "all", "indicators": ["halb", "oodabadabay"]}], [], ["blah yabadabadoo oodabadabay halb", "abc123"], {"blah yabadabadoo oodabadabay halb"}),
+            # 1 any indicator with multiple indicators, 1 all indicator with multiple indicators, which match on single line, therefore one mark
+            ([{"method": "any", "indicators": ["abc", "def"]}, {"method": "all", "indicators": ["ghi", "jkl"]}], [], ["abcdef", "abcghi", "abcghijkl"], {"abcghijkl"}),
+            # 2 any indicator with multiple indicators, 2 all indicator with multiple indicators, which match on single line, therefore one mark
+            ([{"method": "any", "indicators": ["abc", "def"]}, {"method": "all", "indicators": ["ghi", "jkl"]}, {"method": "any", "indicators": ["mno", "pqr"]}, {"method": "all", "indicators": ["stu", "vwx"]}], [], ["abcdef", "abcghi", "abcghijkl", "abcghijklpqrstuvwx"], {"abcghijklpqrstuvwx"}),
+        ]
+    )
+    def test_check_multiple_indicators_in_list(indicators, safelist, output, expected_marks):
+        from signatures.abstracts import Signature
+        sig = Signature(safelist=safelist)
+        sig.check_multiple_indicators_in_list(output, indicators)
+        assert sig.marks == expected_marks
