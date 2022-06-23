@@ -354,17 +354,19 @@ class JsJaws(ServiceBase):
         extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
         doc_write = False
         for line in output:
+            if line.strip() == '"':
+                doc_write = False
+                continue
             if doc_write:
                 if " - => '" in line:
                     line = line.split(" - => '")[1]
                     if line.endswith("'"):
                         line = line[:-1]
+                        doc_write = False
                 extracted_doc_writes.write(line + "\n")
 
             if all(item in line for item in ["document", "write(content)"]):
                 doc_write = True
-            else:
-                doc_write = False
         extracted_doc_writes.close()
 
         if path.getsize(self.extracted_doc_writes_path) > 0:
