@@ -244,7 +244,8 @@ class JsJaws(ServiceBase):
         # Magic Section
         # ==================================================================
 
-        # We are running signatures based on the output observed from dynamic execution (boxjs_output and malware_jail_output)
+        # We are running signatures based on the output observed from dynamic execution
+        # (boxjs_output and malware_jail_output)
         # as well as the file contents themselves (static analysis)
         if static_signatures:
             static_file_lines = []
