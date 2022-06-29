@@ -386,6 +386,9 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_doc_writes_one_liners(jsjaws_class_instance):
+        # Single line example : 697b0e897a7d57e600a1020886f837469ffb87acc65f04c2ae424af50a311c7e
+        # Multiple calls to document.write() (with multiline) example :
+        # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
         from os import mkdir
         from os.path import exists, join
 
@@ -418,6 +421,8 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_doc_writes_multiliner(jsjaws_class_instance):
+        # Multiple calls to document.write() (with multiline) example :
+        # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
         from os import mkdir
         from os.path import exists, join
 
