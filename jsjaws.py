@@ -1,22 +1,32 @@
 from inspect import getmembers, isclass
-from json import loads, JSONDecodeError
-from os import mkdir, listdir, path
+from json import JSONDecodeError, loads
+from os import listdir, mkdir, path
 from pkgutil import iter_modules
-from re import match, search, compile
-from requests import get
-from subprocess import run, TimeoutExpired
+from re import compile, match, search
+from subprocess import TimeoutExpired, run
 from sys import modules
 from threading import Thread
 from time import time
-from typing import Optional, Dict, List, Any
+from typing import Any, Dict, List, Optional
 
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.str_utils import safe_str, truncate
-from assemblyline.odm.base import FULL_URI, DOMAIN_REGEX, URI_PATH, IP_REGEX
+from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.base import ServiceBase
-from assemblyline_v4_service.common.dynamic_service_helper import extract_iocs_from_text_blob, SandboxOntology
+from assemblyline_v4_service.common.dynamic_service_helper import (
+    SandboxOntology,
+    extract_iocs_from_text_blob,
+)
 from assemblyline_v4_service.common.request import ServiceRequest
-from assemblyline_v4_service.common.result import Result, ResultTextSection, ResultTableSection, TableRow, ResultSection
+from assemblyline_v4_service.common.result import (
+    Result,
+    ResultSection,
+    ResultTableSection,
+    ResultTextSection,
+    TableRow,
+)
+from dateutil.parser import parse as dtparse
+from requests import get
 
 import signatures
 from signatures.abstracts import Signature
@@ -63,13 +73,13 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets: Optional[str] = None
         self.filtered_jquery: Optional[str] = None
         self.filtered_jquery_path: Optional[str] = None
-        self.log.debug('JsJaws service initialized')
+        self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
-        self.log.debug('JsJaws service started')
+        self.log.debug("JsJaws service started")
 
     def stop(self) -> None:
-        self.log.debug('JsJaws service ended')
+        self.log.debug("JsJaws service ended")
 
     def execute(self, request: ServiceRequest) -> None:
         self.artifact_list = []
@@ -79,7 +89,8 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
         self.malware_jail_sandbox_env_dump_path = path.join(
-            self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump)
+            self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
+        )
         root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
@@ -135,8 +146,18 @@ class JsJaws(ServiceBase):
         # -b id    ... browser type, use -b list for possible values (Possible -b values:
         # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
         # -t msecs - limits execution time by "msecs" milliseconds, by default 60 seconds.
-        malware_jail_args = ["node", self.path_to_jailme_js, "-s", self.malware_jail_payload_extraction_dir,
-                             "-o", self.malware_jail_sandbox_env_dump_path, "-b", browser_selected, "-t", f"{tool_timeout * 1000}"]
+        malware_jail_args = [
+            "node",
+            self.path_to_jailme_js,
+            "-s",
+            self.malware_jail_payload_extraction_dir,
+            "-o",
+            self.malware_jail_sandbox_env_dump_path,
+            "-b",
+            browser_selected,
+            "-t",
+            f"{tool_timeout * 1000}",
+        ]
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
         # then allow_download_from_internet service variable needs to be set to true
@@ -195,10 +216,12 @@ class JsJaws(ServiceBase):
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, tool_timeout, responses)))
-        tool_threads.append(Thread(target=self._run_tool, args=(
-            "MalwareJail", malware_jail_args, tool_timeout, responses, True, True)))
-        tool_threads.append(Thread(target=self._run_tool, args=(
-            "JS-X-Ray", jsxray_args, tool_timeout, responses, True)))
+        tool_threads.append(
+            Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, tool_timeout, responses, True, True))
+        )
+        tool_threads.append(
+            Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, tool_timeout, responses, True))
+        )
 
         for thr in tool_threads:
             thr.start()
@@ -284,7 +307,7 @@ class JsJaws(ServiceBase):
                 "name": self.extracted_wscript,
                 "path": self.extracted_wscript_path,
                 "description": "Extracted WScript",
-                "to_be_extracted": True
+                "to_be_extracted": True,
             }
             self.log.debug(f"Adding extracted file: {self.extracted_wscript}")
             self.artifact_list.append(artifact)
@@ -302,8 +325,10 @@ class JsJaws(ServiceBase):
         max_payloads_extracted = self.config.get("max_payloads_extracted", MAX_PAYLOAD_FILES_EXTRACTED)
         extracted_count = 0
 
-        malware_jail_payloads = [(file, path.join(self.malware_jail_payload_extraction_dir, file))
-                                 for file in sorted(listdir(self.malware_jail_payload_extraction_dir))]
+        malware_jail_payloads = [
+            (file, path.join(self.malware_jail_payload_extraction_dir, file))
+            for file in sorted(listdir(self.malware_jail_payload_extraction_dir))
+        ]
 
         # These are dumped files from Box.js of js that was run successfully
         files_to_not_extract = set()
@@ -315,8 +340,11 @@ class JsJaws(ServiceBase):
 
         box_js_payloads = []
         if path.exists(self.boxjs_output_dir):
-            box_js_payloads = [(file, path.join(self.boxjs_output_dir, file))
-                               for file in sorted(listdir(self.boxjs_output_dir)) if file not in files_to_not_extract]
+            box_js_payloads = [
+                (file, path.join(self.boxjs_output_dir, file))
+                for file in sorted(listdir(self.boxjs_output_dir))
+                if file not in files_to_not_extract
+            ]
 
         all_payloads = malware_jail_payloads + box_js_payloads
 
@@ -325,9 +353,16 @@ class JsJaws(ServiceBase):
             if path.getsize(extracted) == 0:
                 continue
             # These are not payloads
-            if extracted in [self.malware_jail_urls_json_path, self.extracted_wscript_path,
-                             self.extracted_doc_writes_path, self.boxjs_iocs, self.boxjs_resources, self.boxjs_snippets,
-                             self.boxjs_analysis_log, self.boxjs_urls_json_path]:
+            if extracted in [
+                self.malware_jail_urls_json_path,
+                self.extracted_wscript_path,
+                self.extracted_doc_writes_path,
+                self.boxjs_iocs,
+                self.boxjs_resources,
+                self.boxjs_snippets,
+                self.boxjs_analysis_log,
+                self.boxjs_urls_json_path,
+            ]:
                 continue
             extracted_sha = get_sha256_for_file(extracted)
             if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256]:
@@ -340,10 +375,28 @@ class JsJaws(ServiceBase):
                     "name": safe_str(file),
                     "path": extracted,
                     "description": "Extracted Payload",
-                    "to_be_extracted": True
+                    "to_be_extracted": True,
                 }
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
+
+    def _parse_malwarejail_output(self, output: List[str]):
+
+        ret = None
+        for line in output:
+            if "-" in line:
+                try:
+                    dtparse(line.split("-")[0].strip())
+                    if ret is not None:
+                        yield ret
+                    ret = ""
+                except ValueError:
+                    pass
+            if ret:
+                ret = f"{ret}\n"
+            ret = f"{ret}{line}"
+        if ret is not None:
+            yield ret
 
     def _extract_doc_writes(self, output: List[str]) -> None:
         """
@@ -353,29 +406,24 @@ class JsJaws(ServiceBase):
         """
         extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
         doc_write = False
-        for line in output:
-            if line.strip() == '"':
-                doc_write = False
-                continue
+        for line in self._parse_malwarejail_output(output):
             if doc_write:
-                if " - => '" in line:
-                    line = line.split(" - => '")[1]
-                    if line.endswith("'"):
-                        line = line[:-1]
-                        doc_write = False
-                extracted_doc_writes.write(line + "\n")
-
-            if all(item in line for item in ["document", "write(content)"]):
+                extracted_doc_writes.write(line.split(" - => '", 1)[1][:-1] + "\n")
+                doc_write = False
+            if all(item in line.split("-", 1)[1][:40] for item in ["document", "write(content)"]):
                 doc_write = True
+
         extracted_doc_writes.close()
 
         if path.getsize(self.extracted_doc_writes_path) > 0:
-            self.artifact_list.append({
-                "name": self.extracted_doc_writes,
-                "path": self.extracted_doc_writes_path,
-                "description": "DOM Writes",
-                "to_be_extracted": True
-            })
+            self.artifact_list.append(
+                {
+                    "name": self.extracted_doc_writes,
+                    "path": self.extracted_doc_writes_path,
+                    "description": "DOM Writes",
+                    "to_be_extracted": True,
+                }
+            )
             self.log.debug(f"Adding extracted file: {self.extracted_doc_writes}")
 
     def _extract_urls(self, result: Result) -> None:
@@ -408,10 +456,11 @@ class JsJaws(ServiceBase):
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
-                        urls_rows.append(TableRow(**
-                                                  {"url": value["url"],
-                                                   "method": value["method"],
-                                                   "request_headers": value["headers"]}))
+                        urls_rows.append(
+                            TableRow(
+                                **{"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
+                            )
+                        )
                         self._tag_uri(value["url"], urls_result_section)
 
         if urls_rows:
@@ -432,7 +481,7 @@ class JsJaws(ServiceBase):
                 "name": self.malware_jail_sandbox_env_dump,
                 "path": self.malware_jail_sandbox_env_dump_path,
                 "description": "Sandbox Environment Details",
-                "to_be_extracted": False
+                "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.malware_jail_sandbox_env_dump}")
             self.artifact_list.append(malware_jail_sandbox_env_dump)
@@ -445,7 +494,7 @@ class JsJaws(ServiceBase):
                 "name": self.malware_jail_output,
                 "path": self.malware_jail_output_path,
                 "description": "Malware Jail Output",
-                "to_be_extracted": False
+                "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
             self.artifact_list.append(mlwr_jail_out)
@@ -455,7 +504,7 @@ class JsJaws(ServiceBase):
                 "name": "boxjs_analysis_log.log",
                 "path": self.boxjs_analysis_log,
                 "description": "Box.js Output",
-                "to_be_extracted": False
+                "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
             self.artifact_list.append(boxjs_analysis_log)
@@ -492,10 +541,7 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Running {len(sigs)} signatures...")
         start_time = time()
         for sig in sigs:
-            thr = Thread(
-                target=self._process_signature,
-                args=(sig, output, signatures_that_hit)
-            )
+            thr = Thread(target=self._process_signature, args=(sig, output, signatures_that_hit))
             sig_threads.append(thr)
             thr.start()
 
@@ -555,12 +601,14 @@ class JsJaws(ServiceBase):
                     cmd_file_path = path.join(self.working_directory, cmd_file_name)
                     with open(cmd_file_path, "w") as f:
                         f.write(value["command"])
-                    self.artifact_list.append({
-                        "name": cmd_file_name,
-                        "path": cmd_file_path,
-                        "description": "Command Extracted",
-                        "to_be_extracted": True
-                    })
+                    self.artifact_list.append(
+                        {
+                            "name": cmd_file_name,
+                            "path": cmd_file_path,
+                            "description": "Command Extracted",
+                            "to_be_extracted": True,
+                        }
+                    )
                     self.log.debug(f"Adding extracted file: {cmd_file_name}")
                     cmd_count += 1
                 elif type == "FileWrite" and "file" in value:
@@ -569,7 +617,8 @@ class JsJaws(ServiceBase):
                     file_reads.add(value["file"])
             if commands:
                 cmd_result_section = ResultTextSection(
-                    "The script ran the following commands", parent=ioc_result_section)
+                    "The script ran the following commands", parent=ioc_result_section
+                )
                 cmd_result_section.add_lines(list(commands))
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
                 cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
@@ -579,16 +628,22 @@ class JsJaws(ServiceBase):
                     cmd_result_section.add_subsection(cmd_iocs_result_section)
             if file_writes:
                 file_writes_result_section = ResultTextSection(
-                    "The script wrote the following files", parent=ioc_result_section)
+                    "The script wrote the following files", parent=ioc_result_section
+                )
                 file_writes_result_section.add_lines(list(file_writes))
-                [file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
-                 for file_write in list(file_writes)]
+                [
+                    file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
+                    for file_write in list(file_writes)
+                ]
             if file_reads:
                 file_reads_result_section = ResultTextSection(
-                    "The script read the following files", parent=ioc_result_section)
+                    "The script read the following files", parent=ioc_result_section
+                )
                 file_reads_result_section.add_lines(list(file_reads))
-                [file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
-                 for file_read in list(file_reads)]
+                [
+                    file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
+                    for file_read in list(file_reads)
+                ]
 
             if ioc_result_section.subsections:
                 ioc_result_section.set_heuristic(2)
@@ -646,8 +701,9 @@ class JsJaws(ServiceBase):
                 jsxray_iocs_result_section.add_line(f"\t\tAn encoded literal was found: {truncate(safe_str(val))}")
                 jsxray_iocs_result_section.add_tag("file.string.extracted", safe_str(val))
             elif kind == "obfuscated-code":
-                jsxray_iocs_result_section.add_line(f"\t\tObfuscated code was found that was obfuscated by: "
-                                                    f"{safe_str(val)}")
+                jsxray_iocs_result_section.add_line(
+                    f"\t\tObfuscated code was found that was obfuscated by: " f"{safe_str(val)}"
+                )
         if jsxray_iocs_result_section.body and len(jsxray_iocs_result_section.body) > 0:
             jsxray_iocs_result_section.set_heuristic(2)
             result.add_section(jsxray_iocs_result_section)
@@ -660,9 +716,15 @@ class JsJaws(ServiceBase):
             malware_jail_res_sec.set_heuristic(2)
             result.add_section(malware_jail_res_sec)
 
-    def _run_tool(self, tool_name: str, args: List[str],
-                  tool_timeout: int, resp: Dict[str, Any],
-                  get_stdout: bool = False, split: bool = False) -> None:
+    def _run_tool(
+        self,
+        tool_name: str,
+        args: List[str],
+        tool_timeout: int,
+        resp: Dict[str, Any],
+        get_stdout: bool = False,
+        split: bool = False,
+    ) -> None:
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
         completed_process = None
@@ -690,7 +752,7 @@ class JsJaws(ServiceBase):
         resp = get(f"https://code.jquery.com/jquery-{version}.js", timeout=15)
         jquery_contents = resp.text
         same = set(file_contents.split("\n")).difference(jquery_contents.split("\n"))
-        same.discard('\n')
+        same.discard("\n")
 
         if len(same) > 0:
             embedded_jquery_res_sec = ResultTextSection("Embedded code was found in jQuery library")
@@ -704,7 +766,7 @@ class JsJaws(ServiceBase):
                 "name": self.filtered_jquery,
                 "path": self.filtered_jquery_path,
                 "description": "JavaScript embedded within jQuery library",
-                "to_be_extracted": True
+                "to_be_extracted": True,
             }
             self.log.debug(f"Adding extracted file: {self.filtered_jquery}")
             self.artifact_list.append(artifact)
