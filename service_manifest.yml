@@ -7,7 +7,7 @@ accepts: code/javascript
 rejects: empty|metadata/.*
 
 stage: CORE
-category: Dynamic Analysis
+category: Static Analysis
 
 file_required: true
 timeout: 300
