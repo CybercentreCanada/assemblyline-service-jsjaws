@@ -108,6 +108,12 @@ heuristics:
     filetype: '*'
     description: Embedded code was discovered in a file posing as a jQuery library
 
+  - heur_id: 5
+    name: Microsoft Support Diagnostic Tool found in location redirection
+    score: 1
+    filetype: '*'
+    description: This technique was widely seen as part of the Follina exploit
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
