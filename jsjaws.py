@@ -1,5 +1,7 @@
+import hashlib
+import tempfile
 from inspect import getmembers, isclass
-from json import JSONDecodeError, loads
+from json import JSONDecodeError, load, loads
 from os import listdir, mkdir, path
 from pkgutil import iter_modules
 from re import compile, match, search
@@ -19,6 +21,7 @@ from assemblyline_v4_service.common.dynamic_service_helper import (
 )
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import (
+    Heuristic,
     Result,
     ResultSection,
     ResultTableSection,
@@ -260,7 +263,7 @@ class JsJaws(ServiceBase):
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
-        self._extract_malware_jail_iocs(malware_jail_output, request.result)
+        self._extract_malware_jail_iocs(malware_jail_output, request)
         self._extract_wscript(total_output, request.result)
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
@@ -709,13 +712,59 @@ class JsJaws(ServiceBase):
             jsxray_iocs_result_section.set_heuristic(2)
             result.add_section(jsxray_iocs_result_section)
 
-    def _extract_malware_jail_iocs(self, output: List[str], result: Result) -> None:
+    def parse_msdt_powershell(self, cmd):
+        import shlex
+
+        ori_parts = shlex.split(cmd)
+        parts = shlex.split(cmd.lower())
+
+        if "/param" in parts:
+            param = ori_parts[parts.index("/param") + 1]
+        elif "-param" in parts:
+            param = ori_parts[parts.index("-param") + 1]
+        else:
+            return cmd
+
+        for element in param.split():
+            if element.startswith("IT_BrowseForFile="):
+                return element[17:]
+        return cmd
+
+    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
         malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         for line in output:
             extract_iocs_from_text_blob(line, malware_jail_res_sec)
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
-            result.add_section(malware_jail_res_sec)
+            request.result.add_section(malware_jail_res_sec)
+
+        for line in self._parse_malwarejail_output(output):
+            log_line = line.split(" - ", 2)[1]
+            if log_line.startswith("location.href = "):
+                # We need to recover the non-truncated content from the sandbox_dump.json file
+                with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
+                    data = load(f)
+                    location_href = data["location"]["_props"]["href"]
+                    if location_href.lower().startswith("ms-msdt:"):
+                        heur = Heuristic(5)
+                        res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+                        # Try to only recover the msdt command's powershell for the extracted file
+                        # If we can't, write the whole command
+                        try:
+                            encoded_content = self.parse_msdt_powershell(location_href).encode()
+                        except ValueError:
+                            encoded_content = location_href.encode()
+
+                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                            out.write(encoded_content)
+                        request.add_extracted(
+                            out.name, hashlib.sha256(encoded_content).hexdigest(), "Redirection location"
+                        )
+                    else:
+                        res = ResultTextSection("Found location redirection", parent=request.result)
+                    res.add_line("Redirection to:")
+                    res.add_line(location_href)
 
     def _run_tool(
         self,
