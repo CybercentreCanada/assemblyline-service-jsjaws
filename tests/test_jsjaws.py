@@ -177,7 +177,7 @@ def jsjaws_class_instance():
 def dummy_completed_process_instance():
     class DummyCompletedProcess:
         def __init__(self):
-            self.stdout = b"blah\nblah"
+            self.stdout = b"29 Jun 08:24:36 - blah\n29 Jun 08:24:37 - blah"
 
     yield DummyCompletedProcess()
 
@@ -742,10 +742,11 @@ class TestJsJaws:
             {"ioc_type": "uri_path", "ioc": "/blah.exe"},
         ]
         [correct_res_sec.add_row(TableRow(**item)) for item in table_data]
-        res = Result()
-        output = ["https://blah.com/blah.exe"]
-        jsjaws_class_instance._extract_malware_jail_iocs(output, res)
-        assert check_section_equality(res.sections[0], correct_res_sec)
+        # Generate a fake Request object with a single attribute
+        request = type("Request", (object,), {"result": Result()})
+        output = ["29 Jun 08:24:36 - https://blah.com/blah.exe"]
+        jsjaws_class_instance._extract_malware_jail_iocs(output, request)
+        assert check_section_equality(request.result.sections[0], correct_res_sec)
 
     @staticmethod
     def test_extract_filtered_jquery(jsjaws_class_instance, dummy_get_response_class, mocker):
