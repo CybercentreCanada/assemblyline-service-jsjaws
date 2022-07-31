@@ -11,7 +11,8 @@ location = _proxy({
         "href": "http://example.com/?search",
         "hostname": "example.com",
         "search": "?search",
-        "host" : "example.com"
+        "host" : "example.com",
+        "pathname": "C:/script.js"
     },
     replace: function(n) {
         util_log(this._name + ".replace(" + n + ")");
