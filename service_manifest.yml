@@ -83,6 +83,11 @@ submission_params:
     type: bool
     value: false
 
+  - default: false
+    name: log_errors
+    type: bool
+    value: false
+
 heuristics:
   - heur_id: 1
     name: Network Traffic Detected
