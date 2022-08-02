@@ -283,6 +283,7 @@ class TestJsJaws:
             "static_signatures": True,
             "no_shell_error": False,
             "display_iocs": False,
+            "log_errors": False,
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
@@ -355,6 +356,7 @@ class TestJsJaws:
         service_request.task.service_config["no_shell_error"] = True
         service_request.task.service_config["static_signatures"] = False
         service_request.task.service_config["add_supplementary"] = True
+        service_request.task.service_config["log_errors"] = True
         mocker.patch("jsjaws.run", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 

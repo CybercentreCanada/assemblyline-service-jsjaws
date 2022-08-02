@@ -32,6 +32,7 @@ if (argv.h || argv.help) {
     util.log("\t--t404   ... on download return always HTTP/404 and throw exception");
     util.log("\t--extractfns   ... extract Function calls as files or 'payloads'");
     util.log("\t--extractevals   ... extract Eval calls as files or 'payloads'");
+    util.log("\t--logerrors   ... log errors that are caught");
     util.log("\tmalware  ... js with the malware code");
     util.log("If no arguments are specified the default values are taken from config.json");
     _exit = true;
@@ -89,6 +90,10 @@ if (argv.extractevals) {
     config.extractevals = true;
     util.log("Extract Eval Calls to output directory");
 }
+if (argv.logerrors) {
+    config.logerrors = true;
+    util.log("Log errors that are caught");
+}
 if (typeof argv.o === 'string')
     config.context_dump_after = argv.o
 util.log("Output file for sandbox dump: " + config.context_dump_after);
@@ -113,10 +118,10 @@ util.log("Output directory for generated files: " + config.save_files);
 //    process.exit();
 //});
 
-var _proxy = function(o, verbose = false, what = undefined) {
+var _proxy = function (o, verbose = false, what = undefined) {
     var util_log = mylog;
     ret = new Proxy(o, {
-        get: function(target, name, receiver) {
+        get: function (target, name, receiver) {
             if (verbose) {
                 if (typeof name === 'symbol')
                     vname = name.toString();
@@ -154,7 +159,7 @@ var _proxy = function(o, verbose = false, what = undefined) {
 
             return ret;
         },
-        set: function(target, name, value) {
+        set: function (target, name, value) {
             if (verbose) {
                 if (typeof name === 'symbol')
                     vname = name.toString();
@@ -171,13 +176,13 @@ var _proxy = function(o, verbose = false, what = undefined) {
             }
             return Reflect.set(target, name, value);
         },
-        construct: function(target, args, newTarget) {
+        construct: function (target, args, newTarget) {
             if (verbose) {
                 util_log("Proxy.construct: " + target + "(" + _truncateOutput(args.join(", "), 50) + ")");
             }
             return _proxy(Reflect.construct(target, args, newTarget));
         },
-        apply: function(target, that, args) {
+        apply: function (target, that, args) {
             if (verbose) {
                 util_log("Proxy.apply: " + target + "(" + _truncateOutput(args.join(", "), 50) + ")");
             }
@@ -281,20 +286,18 @@ let i;
 // The file contents of the sample
 let fc;
 
-function run_in_ctx(files, malware = true /*no_log = false, catch_catch = false*/) {
-    var no_log = !malware;
-    var catch_catch = malware;
+function run_in_ctx(files, log_catch = false) {
+    var log_catch = log_catch;
     try {
         for (i = 0; i < files.length; i++) {
-            util.log(" => Executing: " + files[i] + ((no_log) ? " quitely" : " verbosely") + ((catch_catch) ? ", reporting silent catches" : ""));
+            util.log(" => Executing: " + files[i] + ((log_catch) ? ", reporting silent catches" : ""));
             fc = fs.readFileSync(files[i], 'utf8');
-            _dont_log = no_log;
             sandbox._script_name = files[i];
             // log every exception caught by the script itself
-            if (catch_catch) {
+            if (log_catch) {
                 // Write two files, one with the unescaped file contents and another with the escaped file contents
                 // Time for the unescaped file contents
-                fc = fc.replace(/\bcatch\b\s*\((.*?)\)\s*{/g, 'catch($1) { util_log(_sc + _inspect($1));');
+                fc = fc.replace(/\bcatch\b\s*\((.*?)\)\s*{(?!\s*util_log\()/g, 'catch($1) { util_log(_sc + _inspect($1));');
                 let fname = files[i].replace(/\//g, "_");
                 let fname2 = config.save_files + "deobfuscated" + fname;
                 util.log("Saving: " + fname2);
@@ -326,20 +329,18 @@ function run_in_ctx(files, malware = true /*no_log = false, catch_catch = false*
                 // util.log("Saving: " + fname2);
                 // fs.writeFileSync(fname2, x);
             }
-            if (malware) {
-                fc = fc.replace(/\/\*@cc_on/gi, "");
-                fc = fc.replace(/@\*\//gi, "");
-                fc = fc.replace(/@if.*/gi, "");
-                fc = fc.replace(/@else.*/gi, "");
-                fc = fc.replace(/@elif.*/gi, "");
-                fc = fc.replace(/@end.*/gi, "");
+            fc = fc.replace(/\/\*@cc_on/gi, "");
+            fc = fc.replace(/@\*\//gi, "");
+            fc = fc.replace(/@if.*/gi, "");
+            fc = fc.replace(/@else.*/gi, "");
+            fc = fc.replace(/@elif.*/gi, "");
+            fc = fc.replace(/@end.*/gi, "");
 
-                fc = fc.replace(/\} *var\b/g, "}; var");
+            fc = fc.replace(/\} *var\b/g, "}; var");
 
-                if ("WScript" in sandbox) {
-                    sandbox.WScript.scriptfullname = files[i];
-                    sandbox.WScript.arguments = [files[i], "xyz"];
-                }
+            if ("WScript" in sandbox) {
+                sandbox.WScript.scriptfullname = files[i];
+                sandbox.WScript.arguments = [files[i], "xyz"];
             }
             vm.runInContext(fc, ctx, {
                 filename: files[i],
@@ -376,12 +377,12 @@ sandbox.require = undefined;
 
 // Run the malware
 util.log("==> Executing malware file(s). =========================================");
-process.exitCode = run_in_ctx(config.malware_files, true) ? 0 : 1;
+process.exitCode = run_in_ctx(config.malware_files, log_catch = config.logerrors) ? 0 : 1;
 sandbox._config = config;
 sandbox._arguments = process.argv.slice(2).join(" ");
 exiting = false;
 
-var dump_sandbox = function() {
+var dump_sandbox = function () {
     var s2 = {};
     var ctx2 = vm.createContext(s2);
     var i, fc;

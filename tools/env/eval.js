@@ -1,11 +1,11 @@
-util_log("Preparing sandbox to intercept eval() calls.");
-eval = function() {
+util_log("Preparing sandbox to intercept eval calls.");
+eval = function () {
     let _eval_calls = [];
     _data["eval_calls"] = _eval_calls;
     let _orig_eval;
     if (typeof _orig_eval === 'undefined')
         _orig_eval = eval;
-    let _ = function(s) {
+    let _ = function (s) {
         let _t = {};
         _t["orig"] = s;
         let ns;
@@ -23,24 +23,15 @@ eval = function() {
         //ns1 = ns;
         _t["safe_funcs"] = ns;
         _eval_calls[_eval_calls.length] = _t;
-        var _isStrict = (function() {
+        var _isStrict = (function () {
             return !this;
         })();
 
-        ns1 = ns1.replace(/\/\*@cc_on/gi, "");
-        ns1 = ns1.replace(/@\*\//gi, "");
-        ns1 = ns1.replace(/@if.*/gi, "");
-        ns1 = ns1.replace(/@else.*/gi, "");
-        ns1 = ns1.replace(/@elif.*/gi, "");
-        ns1 = ns1.replace(/@end.*/gi, "");
-
-        ns1 = ns1.replace(/\} *var\b/g, "}; var");
-
         //util_log("Strict mode:", _isStrict);
         if (ns1 !== "") {
-            util_log("Calling eval('" + _truncateOutput(ns1) +"')");
+            util_log("Calling eval('" + _truncateOutput(ns1) + "')");
         }
         return _orig_eval(ns1);
     }
-    return function eval(s) { /* [native code ] */ return _(s)}
+    return function eval(s) { /* [native code ] */ return _(s) }
 }();

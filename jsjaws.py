@@ -129,6 +129,7 @@ class JsJaws(ServiceBase):
         allow_download_from_internet = self.config.get("allow_download_from_internet", False)
         tool_timeout = request.get_param("tool_timeout")
         browser_selected = request.get_param("browser")
+        log_errors = request.get_param("log_errors")
         wscript_only = request.get_param("wscript_only")
         throw_http_exc = request.get_param("throw_http_exc")
         extract_function_calls = request.get_param("extract_function_calls")
@@ -208,6 +209,11 @@ class JsJaws(ServiceBase):
         # for the sample to be run in WScript only
         if wscript_only:
             malware_jail_args.extend(["-c", self.wscript_only_config])
+
+        # By default, we don't want to replace exception catching in a script with a log of the exception,
+        # but it is useful for debugging
+        if log_errors:
+            malware_jail_args.append("--logerrors")
 
         jsxray_args = ["node", self.path_to_jsxray]
 
