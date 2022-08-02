@@ -297,7 +297,7 @@ function run_in_ctx(files, log_catch = false) {
             if (log_catch) {
                 // Write two files, one with the unescaped file contents and another with the escaped file contents
                 // Time for the unescaped file contents
-                fc = fc.replace(/\bcatch\b\s*\((.*?)\)\s*{/g, 'catch($1) { util_log(_sc + _inspect($1));');
+                fc = fc.replace(/\bcatch\b\s*\((.*?)\)\s*{(?!\s*util_log\()/g, 'catch($1) { util_log(_sc + _inspect($1));');
                 let fname = files[i].replace(/\//g, "_");
                 let fname2 = config.save_files + "deobfuscated" + fname;
                 util.log("Saving: " + fname2);
