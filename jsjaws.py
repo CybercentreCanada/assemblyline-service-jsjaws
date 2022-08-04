@@ -42,10 +42,12 @@ RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf0
 
 # Signature Constants
 TRANSLATED_SCORE = {
-    0: 10,  # Informational
-    1: 500,  # Suspicious
-    2: 750,  # Highly Suspicious
-    3: 1000,  # Malware
+    0: 10,  # Informational (0-24% hit rate)
+    1: 100, # On the road to being suspicious (25-34% hit rate)
+    2: 250, # Wow this file could be suspicious (35-44% hit rate)
+    3: 500,  # Definitely Suspicious (45-50% hit rate)
+    4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
+    5: 1000,  # Malware (95-100% hit rate)
 }
 
 

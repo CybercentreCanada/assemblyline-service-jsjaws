@@ -11,7 +11,7 @@ class ExpandEnvStrings(Signature):
             name="env_str_recon",
             description="JavaScript looks at the environment strings",
             indicators=[".ExpandEnvironmentStrings"],
-            severity=0
+            severity=3
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class FileSystemObject(Signature):
             name="file_system_object",
             description="JavaScript creates an ActiveXObject to gain access to the computer's file system",
             indicators=["Scripting.FileSystemObject"],
-            severity=0
+            severity=1
         )
 
     def process_output(self, output):
