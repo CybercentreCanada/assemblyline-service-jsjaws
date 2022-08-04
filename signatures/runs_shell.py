@@ -25,7 +25,7 @@ class RunsExecutable(Signature):
             name="runs_executable",
             description="JavaScript runs dropped executable",
             indicators=["WScript.Shell", ".Run", ".exe"],
-            severity=0,
+            severity=3,
             safelist=["cmd.exe"]
         )
 
