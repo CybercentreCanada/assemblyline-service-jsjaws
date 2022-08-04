@@ -115,7 +115,7 @@ heuristics:
 
   - heur_id: 5
     name: Microsoft Support Diagnostic Tool found in location redirection
-    score: 1
+    score: 500
     filetype: '*'
     description: This technique was widely seen as part of the Follina exploit
 
