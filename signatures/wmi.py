@@ -11,7 +11,7 @@ class WMI(Signature):
             name="wmi",
             description="JavaScript use Window Management Instrumentation",
             indicators=[".ExecQuery"],
-            severity=0
+            severity=2
         )
 
     def process_output(self, output):
