@@ -11,7 +11,7 @@ class ExpandEnvStrings(Signature):
             name="env_str_recon",
             description="JavaScript looks at the environment strings",
             indicators=[".ExpandEnvironmentStrings"],
-            severity=3
+            severity=2
         )
 
     def process_output(self, output):
