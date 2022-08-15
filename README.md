@@ -1,7 +1,5 @@
 # JsJaws Service
-**[NOTE: THIS SERVICE IS UNDER HEAVY DEVELOPMENT]**
-
-This Assemblyline service integrates components from two open-source projects:
+This Assemblyline service integrates components from three open-source projects:
 * [Malware Jail](https://github.com/HynekPetrak/malware-jail), which provides a sandbox for semi-automatic Javascript 
   malware analysis, deobfuscation and payload extraction.
 * [Box.js](https://github.com/CapacitorSet/box-js), which is a sandbox tool for studying JavaScript malware.
