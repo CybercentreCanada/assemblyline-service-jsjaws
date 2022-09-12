@@ -165,7 +165,13 @@ for (let k in _browser_api) {
 window.Element = Element;
 window.HTMLElement = HTMLElement;
 window.Node = Node;
-
+window.msSaveOrOpenBlob = function(content, filename) {
+    util_log("msSaveOrOpenBlob(" + content + ", " + filename + ")")
+    if (content.constructor.name == "Blob") {
+        content = content.buffer;
+    }
+    _wscript_saved_files[filename] = content;
+}
 setTimeout = window.setTimeout.bind(window);
 setInterval = window.setInterval.bind(window);
 clearInterval = window.clearInterval.bind(window);
