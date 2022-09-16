@@ -11,14 +11,14 @@ location = _proxy({
         "href": "http://example.com/?search",
         "hostname": "example.com",
         "search": "?search",
-        "host" : "example.com",
+        "host": "example.com",
         "pathname": "C:/script.js"
     },
-    replace: function(n) {
+    replace: function (n) {
         util_log(this._name + ".replace(" + n + ")");
         this._props["href"] = n;
     },
-    protocol: function(n) {
+    protocol: function (n) {
         util_log(this._name + ".protocol(" + n + ")");
     }
 })
@@ -29,28 +29,27 @@ for (let k in location._props) {
 
 screen = _proxy({
     availHeight: 1080,
-    availLeft : 78,
-    availTop : 0,
-    availWidth : 1842,
-    colorDepth : 24,
-    height : 1080,
-    orientation : { // ScreenOrientation
-        angle : 0,
-        onchange : null,
-        type : "landscape-primary"
+    availLeft: 78,
+    availTop: 0,
+    availWidth: 1842,
+    colorDepth: 24,
+    height: 1080,
+    orientation: { // ScreenOrientation
+        angle: 0,
+        onchange: null,
+        type: "landscape-primary"
     },
-    pixelDepth : 24,
-    width : 1920
+    pixelDepth: 24,
+    width: 1920
 })
 screen.toString = () => { return "screen" }
 
 
 _setInterval_calls = [];
 _setTimeout_calls = [];
-window = _proxy(new function() {
+window = _proxy(new function () {
     this.id = _object_id++;
     this._name = "window[" + this.id + "]";
-    util_log("Created: " + this._name);
     //this._props = {
     //    "userAgent" : "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko",
     //    "chrome" : false,
@@ -60,63 +59,63 @@ window = _proxy(new function() {
     //    _defineProperty(this, k, this._props);
     //}
     this.eval = eval;
-    this.settimeout = function() {
+    this.settimeout = function () {
         util_log(this._name + ".setTimeout(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _setTimeout_calls[_setTimeout_calls.length] = arguments[0].toString();
         //util_log(typeof arguments[0]);
         return _setTimeout.apply(this, Array.prototype.slice.call(arguments, 0));
     }
-    this.cleartimeout = function() {
+    this.cleartimeout = function () {
         util_log(this._name + ".clearTimeout(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _clearTimeout.apply(this, Array.prototype.slice.call(arguments, 0));
     }
-    this.scrollby = function(x, y) {
+    this.scrollby = function (x, y) {
         util_log(this._name + ".scrollBy(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
     }
-    this.setinterval = function() {
+    this.setinterval = function () {
         util_log(this._name + ".setInterval(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _setInterval_calls[_setInterval_calls.length] = arguments[0].toString();
         //util_log(typeof arguments[0]);
         return _setInterval.apply(this, Array.prototype.slice.call(arguments, 0));
     }
-    this.clearinterval = function() {
+    this.clearinterval = function () {
         util_log(this._name + ".clearInterval(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _clearInterval.apply(this, Array.prototype.slice.call(arguments, 0));
     }
-    this.settimeoutsync = function() {
+    this.settimeoutsync = function () {
         util_log(this._name + ".setTimeout(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _setTimeout_calls[_setTimeout_calls.length] = arguments[0].toString();
         //util_log(typeof arguments[0]);
         return arguments[0].apply(this, Array.prototype.slice.call(arguments, 1));
     }
-    this.setintervalsync = function() {
+    this.setintervalsync = function () {
         util_log(this._name + ".setInterval(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         _setInterval_calls[_setInterval_calls.length] = arguments[0].toString();
         //util_log(typeof arguments[0]);
         return arguments[0].apply(this, Array.prototype.slice.call(arguments, 1));
     }
 
-    this.clearintervalsync = function() {
+    this.clearintervalsync = function () {
         util_log(this._name + ".clearInterval(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
     }
-    this.onload = function() {}
-    this.onunload = function() {}
-    this.jstiming = function() {}
-    this.jstiming.load = function() {}
-    this.jstiming.load.tick = function() {}
-    this.platform = function() {}
-    this.gapi = function() {}
-    this.console = function() {}
-    this.crypto = function() {
+    this.onload = function () { }
+    this.onunload = function () { }
+    this.jstiming = function () { }
+    this.jstiming.load = function () { }
+    this.jstiming.load.tick = function () { }
+    this.platform = function () { }
+    this.gapi = function () { }
+    this.console = function () { }
+    this.crypto = function () {
         util_log(arguments);
         util_log(this._name + ".crypto(" + arguments + ")");
     }
-    this.gapi_onload = function() {}
-    this.__GOOGLEAPIS = function() {}
-    this.___gu = function() {}
-    this.___jsl = function() {}
-    this.___gcfg = function() {}
-    this.ga = function() {}
+    this.gapi_onload = function () { }
+    this.__GOOGLEAPIS = function () { }
+    this.___gu = function () { }
+    this.___jsl = function () { }
+    this.___gcfg = function () { }
+    this.ga = function () { }
     this.navigator = this;
     // Defaulting to Microsoft for the time being
     this.appName = "Microsoft";
@@ -128,25 +127,25 @@ window = _proxy(new function() {
     }
     this._location = location,
         Object.defineProperty(this, "location", {
-            get: function(n) {
+            get: function (n) {
                 return this._location;
             },
-            set: function(n) {
+            set: function (n) {
                 util_log("document.location.set(" + n + ")");
                 this._location.href = n;
             }
         })
-    this.top = function() {}
-    this.self = function(){
-        this.location = function() {
+    this.top = function () { }
+    this.self = function () {
+        this.location = function () {
             util_log("get location" + arguments)
         }
     }
     this.platform = "Windows";
-    this.frames = function() {
+    this.frames = function () {
         this.odbFrame = "";
     }
-    this.addEventListener = function(n) {
+    this.addEventListener = function (n) {
         util_log(this._name + ".addEventListener(" + n + ")")
     }
 });
@@ -157,7 +156,7 @@ window.XMLHttpRequest = true;
 
 for (let k in _browser_api) {
     if (_browser_api.hasOwnProperty(k))
-        if (typeof  _browser_api[k] !== 'undefined') {
+        if (typeof _browser_api[k] !== 'undefined') {
             window[k] = _browser_api[k];
         }
 }
@@ -165,7 +164,7 @@ for (let k in _browser_api) {
 window.Element = Element;
 window.HTMLElement = HTMLElement;
 window.Node = Node;
-window.msSaveOrOpenBlob = function(content, filename) {
+window.msSaveOrOpenBlob = function (content, filename) {
     util_log("msSaveOrOpenBlob(" + content + ", " + filename + ")")
     if (content.constructor.name == "Blob") {
         content = content.buffer;
@@ -179,16 +178,15 @@ clearTimeout = window.clearInterval.bind(window);
 
 navigator = window;
 
-Document = _proxy(function() {
+Document = _proxy(function () {
     this.id = _object_id++;
     this._name = "document[" + this.id + "]";
-    util_log("Created: " + this._name);
     this._content = "";
     this._elements = [];
-    this.getelementsbytagname = function(n) {
+    this.getelementsbytagname = function (n) {
         let ret = []
         util_log(this._name + ".getElementsByTagName(" + n + ")");
-        for(i = 0; i < this._elements.length; i++) {
+        for (i = 0; i < this._elements.length; i++) {
             let e = this._elements[i];
             if (e.elementName.toLowerCase() === n.toLowerCase()) {
                 ret[ret.length] = e;
@@ -197,10 +195,10 @@ Document = _proxy(function() {
         util_log(this._name + ".getElementsByTagName(" + n + ") ... " + ret.length + " found");
         return ret;
     };
-    this.getelementsbyclassname = function(n) {
+    this.getelementsbyclassname = function (n) {
         let ret = []
         util_log(this._name + ".getElementsByClassName(" + n + ")");
-        for(i = 0; i < this._elements.length; i++) {
+        for (i = 0; i < this._elements.length; i++) {
             let e = this._elements[i];
             if (e.class.toLowerCase() === n.toLowerCase()) {
                 ret[ret.length] = e;
@@ -209,11 +207,14 @@ Document = _proxy(function() {
         util_log(this._name + ".getElementsByClassName(" + n + ") ... " + ret.length + " found");
         return ret;
     };
-    this.getelementbyid = function(n) {
+    this.getelementbyid = function (n) {
         util_log(this._name + ".getElementById(" + n + ")");
-        for(i = 0; i < this._elements.length; i++) {
+        if (n === undefined) {
+            return this._elements[0];
+        }
+        for (i = 0; i < this._elements.length; i++) {
             let e = this._elements[i];
-            if ((""+ e._id).toLowerCase() === n.toLowerCase()) {
+            if (("" + e._id).toLowerCase() === n.toLowerCase()) {
                 util_log(this._name + ".getElementById(" + n + ") => " + e._name);
                 return e;
             }
@@ -223,7 +224,7 @@ Document = _proxy(function() {
         // Bad hack here because it doesn't really matter
         return this._elements[0];
     };
-    this.createelement = function(n) {
+    this.createelement = function (n) {
         util_log(this._name + ".createElement(" + n + ")");
         let e;
         if (n.toLowerCase() === "iframe") {
@@ -236,33 +237,33 @@ Document = _proxy(function() {
         this._elements[this._elements.length] = e;
         return e;
     };
-    this.createtextnode = function(n) {
+    this.createtextnode = function (n) {
         util_log(this._name + ".createTextNode(" + n + ")");
         return new Element(n);
     };
-    this.createstylesheet = function(n) {
+    this.createstylesheet = function (n) {
         util_log(this._name + ".createStyleSheet(" + n + ")");
         return this.createelement("style");
     };
-    this.write = function(c) {
+    this.write = function (c) {
         util_log(this._name + ".write(content) " + c.length + " bytes");
         util_log("=> '" + c + "'");
         _content = c;
         _browser_documents[_browser_documents.length] = c;
     };
-    this.writeln = function(c) {
+    this.writeln = function (c) {
         util_log(this._name + ".writeln(content) " + c.length + " bytes");
         util_log("=> '" + c + "'");
         _content = c;
         _browser_documents[_browser_documents.length] = c;
     };
-    this._addElementById = function(id, content) {
+    this._addElementById = function (id, content) {
         let e = new Element("div");
         e.id = _object_id;
         e.innerHTML = content;
         this._elements[this._elements.length] = e;
     };
-    this._addElementByClass = function(cls, content) {
+    this._addElementByClass = function (cls, content) {
         let e = new Element("div");
         e.class = cls;
         e.innerHTML = content;
@@ -284,11 +285,11 @@ Document = _proxy(function() {
     this.namespaces = new Collection();
     this.documentelement.appendchild(this.head);
     this.documentelement.appendchild(this.body);
-    this.childNodes = function(c) {
+    this.childNodes = function (c) {
         return c._elements;
     };
     this.defaultView = this.window;
-    this.nodeType = function(c) {
+    this.nodeType = function (c) {
         util_log(this._name + ".nodeType");
         if (typeof c === Element) {
             return 1;
@@ -303,25 +304,25 @@ Document = _proxy(function() {
             return 8;
         }
     };
-    this.onmouseover = function() {}
-    this.onclick = function() {}
-    this.onmouseout = function() {}
-    this.documentMode = function() {}
-    this.compatMode = function() {}
-    this.scripts = function(n) {
+    this.onmouseover = function () { }
+    this.onclick = function () { }
+    this.onmouseout = function () { }
+    this.documentMode = function () { }
+    this.compatMode = function () { }
+    this.scripts = function (n) {
         util_log("Script: " + n);
     }
-    this.readyState = function(n) {
+    this.readyState = function (n) {
         util_log("readyState(" + n + ")");
     }
-    this.addEventListener = function(n) {
+    this.addEventListener = function (n) {
         util_log("addEventListener(" + n + ")");
     }
-    this.attachEvent = function(n) {
+    this.attachEvent = function (n) {
         util_log("attachEvent(" + n + ")");
     }
     this.URL = location;
-    this.evaluate = function(n) {
+    this.evaluate = function (n) {
         util_log(this._name + ".evaluate(" + n + ")");
     }
 
@@ -333,20 +334,28 @@ Document.toString = Document.toJSON = () => { return "Document" }
 document = _proxy(new Document());
 document.toString = () => { return "document" }
 window.document = document;
+window.URL = URL;
 
+$ = function (thing) {
+    util_log("$(" + thing + ")");
+    if (thing == this) {
+        thing = this.id;
+    }
+    return document.getElementById(thing);
+};
 
 Object.defineProperty(document, "location", {
-    get: function() {
+    get: function () {
         util_log("document.location.get()");
         return this._location;
     },
-    set: function(n) {
+    set: function (n) {
         util_log("document.location.set(" + n + ")");
         this._location.href = n;
     }
 })
 
-let Image = function(w, h) {
+let Image = function (w, h) {
     Element.call(this, "Image");
     util_log("Image(" + w + ", " + h + ")");
 
@@ -358,9 +367,9 @@ let Image = function(w, h) {
 Image.prototype = Object.create(Element.prototype);
 Image.prototype.constructor = Image;
 
-atob = function(n) {
+atob = function (n) {
     return window.atob(n);
 }
-btoa = function(n) {
+btoa = function (n) {
     return window.btoa(n);
 }

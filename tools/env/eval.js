@@ -29,7 +29,7 @@ eval = function () {
 
         //util_log("Strict mode:", _isStrict);
         if (ns1 !== "") {
-            util_log("Calling eval('" + _truncateOutput(ns1) + "')");
+            util_log("Calling eval('" + ns1 + "')");
         }
         return _orig_eval(ns1);
     }
