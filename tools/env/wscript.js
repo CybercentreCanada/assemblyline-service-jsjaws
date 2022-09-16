@@ -3,6 +3,7 @@
 */
 
 const Blob = require('node-blob');
+const URL = require('url').URL;
 
 util_log("Preparing sandbox to emulate WScript environment.");
 _wscript_saved_files = {};
@@ -14,7 +15,7 @@ _pw32 = require('path').win32;
 Date = _date;
 Date.prototype._getYear = Date.prototype.getYear;
 
-Date.prototype.getYear = function() {
+Date.prototype.getYear = function () {
     // https://msdn.microsoft.com/cs-cz/library/b9x8b9k7(v=vs.100).aspx
     // Approximate solution
     var r = this._getYear() + 1900;
@@ -23,21 +24,36 @@ Date.prototype.getYear = function() {
 }
 
 Object.defineProperty(Error.prototype, "number", {
-    get: function() {
+    get: function () {
         ret = parseInt(this.message);
         util_log("Error.number => " + ret);
         return ret;
     }
 });
 
-print = function() {
+print = function () {
     a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
     util_log("print(" + a + ")");
 }
 
-jQuery = function() {}
-gapi = function() {
-    this.load = function() {};
+jQuery = function () { }
+gapi = function () {
+    this.load = function () { };
+}
+
+URL.createObjectURL = function (content) {
+    util_log("URL.createObjectURL(" + content + ")")
+    if (content.constructor.name == "Blob") {
+        content = content.buffer;
+    }
+    const url_blob = document.createElement("url_blob");
+    url_blob.srcObject = content
+    return url_blob;
+}
+
+URL.revokeObjectURL = function (src) {
+    util_log("URL.revokeObjectURL(" + src + ")");
+    _wscript_saved_files["url_blob"] = src.srcObject;
 }
 
 let Base64 = {
@@ -46,7 +62,7 @@ let Base64 = {
 
     _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
-    encode: function(input) {
+    encode: function (input) {
         var output = "";
         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         var i = 0;
@@ -77,7 +93,7 @@ let Base64 = {
         return output;
     },
 
-    decode: function(input) {
+    decode: function (input) {
         var output = "";
         var chr1, chr2, chr3;
         var enc1, enc2, enc3, enc4;
@@ -113,7 +129,7 @@ let Base64 = {
 
     },
 
-    _utf8_encode: function(string) {
+    _utf8_encode: function (string) {
         string = string.replace(/\r\n/g, "\n");
         var utftext = "";
 
@@ -137,7 +153,7 @@ let Base64 = {
         return utftext;
     },
 
-    _utf8_decode: function(utftext) {
+    _utf8_decode: function (utftext) {
         var string = "";
         var i = 0;
         var c = c1 = c2 = 0;
@@ -166,7 +182,7 @@ let Base64 = {
     }
 };
 
-saveAs = function(content, filename) {
+saveAs = function (content, filename) {
     util_log("saveAs(" + content + ", " + filename + ")")
     if (content.constructor.name == "Blob") {
         content = content.buffer;
@@ -174,42 +190,41 @@ saveAs = function(content, filename) {
     _wscript_saved_files[filename] = content;
 }
 
-TextStream = function(filename) {
+TextStream = function (filename) {
     this.id = _object_id++;
     this._name = "TextStream[" + this.id + "]";
     this._filename = filename;
     this._content = "";
-    util_log("new " + this._name);
-    this.writeline = function(s) {
+    this.writeline = function (s) {
         util_log(this._name + ".WriteLine(" + _truncateOutput(s) + ")");
         this._content += s + '\r\n';
         _wscript_saved_files[this._filename] = this._content;
         FS.writeFile(this._filename, this._content);
     }
-    this.write = function(s) {
+    this.write = function (s) {
         util_log(this._name + ".Write(" + s + ")");
         this._content += s;
         _wscript_saved_files[this._filename] = this._content;
     }
-    this.readall = function() {
+    this.readall = function () {
         util_log(this._name + ".ReadAll()");
         return "readall";
     }
-    this.close = function() {
+    this.close = function () {
         util_log(this._name + ".Close()");
     }
-    this.readline = function() {
+    this.readline = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".ReadLine(" + a + ")");
         return "MZreadline";
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
-    this.toJSON = function() {
+    this.toJSON = function () {
         return this.toString();
     }
-    this.inspect = function() {
+    this.inspect = function () {
         return this.toString();
     }
 };
@@ -217,45 +232,45 @@ TextStream.toString = () => {
     return "TextStream"
 }
 
-FileSystemObject = function() {
+FileSystemObject = function () {
     this.id = _object_id++;
     this._name = "Scripting.FileSystemObject[" + this.id + "]";
     util_log("new " + this._name);
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
-    this.createtextfile = function(filename) { //(filename[, overwrite[, unicode]])
+    this.createtextfile = function (filename) { //(filename[, overwrite[, unicode]])
         util_log(this._name + ".CreateTextFile(" + filename + ")");
         return _proxy(new TextStream(filename));
     }
-    this.opentextfile = function(filename) { //(filename[, iomode[, create[, format]]])
+    this.opentextfile = function (filename) { //(filename[, iomode[, create[, format]]])
         util_log(this._name + ".OpenTextFile(" + filename + ")");
         return _proxy(new TextStream(filename));
     }
-    this.getfileversion = function(f) {
+    this.getfileversion = function (f) {
         util_log(this._name + ".GetFileVersion(" + f + ")");
         return "1.0";
     }
-    this.getbasename = function(f) {
+    this.getbasename = function (f) {
         var ret = _pw32.basename(f);
         util_log(this._name + ".GetBaseName(" + f + ") => " + ret);
         return ret;
     }
-    this.buildpath = function() {
+    this.buildpath = function () {
         util_log(this._name + ".BuildPath(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
         return Array.prototype.slice.call(arguments, 0).join("\\");
     }
-    this.getdrive = function(drivespec) {
+    this.getdrive = function (drivespec) {
         util_log(this._name + ".GetDrive(" + drivespec + ")");
         return _proxy(new DriveObject(drivespec));
     }
-    this.getdrivename = function(path) {
+    this.getdrivename = function (path) {
         util_log(this._name + ".GetDriveName(" + _truncateOutput(path) + ")");
         return path[0]; //Fixme
     }
     _defineSingleProperty(this, "drives");
     this._drives = _proxy(new Collection([new DriveObject("C:")]));
-    this.fileexists = function(f) {
+    this.fileexists = function (f) {
         var ret = false;
         var abs = _pw32.isAbsolute(f);
         if (!abs)
@@ -278,7 +293,7 @@ FileSystemObject = function() {
         util_log(this._name + ".FileExists(" + f + ") => " + ret);
         return ret;
     }
-    this.folderexists = function(f) {
+    this.folderexists = function (f) {
         var ret = false;
         f = "" + f;
         var abs = _pw32.isAbsolute(f);
@@ -298,28 +313,28 @@ FileSystemObject = function() {
         util_log(this._name + ".FolderExists(" + _truncateOutput(f) + ") => " + ret);
         return ret;
     }
-    this.deletefile = function(f) {
+    this.deletefile = function (f) {
         util_log(this._name + ".DeleteFile(" + f + ")");
         return true;
     }
-    this.copyfile = function(f1, f2) {
+    this.copyfile = function (f1, f2) {
         util_log(this._name + ".CopyFile(" + f1 + ", " + f2 + ")");
         return true;
     }
-    this.getfolder = function(d) {
+    this.getfolder = function (d) {
         d1 = _pw32.normalize(d);
         util_log(this._name + ".GetFolder(" + d + ") => " + d1);
         return _proxy(new FolderObject(d1));
     }
-    this.getfile = function(d) {
+    this.getfile = function (d) {
         d1 = _pw32.normalize(d);
         util_log(this._name + ".GetFile(" + d + ") => " + d1);
         return _proxy(new FileObject(d1));
     }
-    this.deletefolder = function(d) {
+    this.deletefolder = function (d) {
         util_log(this._name + ".DeleteFolder(" + d + ")");
     }
-    this.createfolder = function(f) {
+    this.createfolder = function (f) {
         util_log(this._name + ".CreateFolder(" + f + ")");
         var abs = _pw32.isAbsolute(f);
         if (!abs)
@@ -337,7 +352,7 @@ FileSystemObject = function() {
         }
         return _proxy(new FolderObject(f));
     }
-    this.getspecialfolder = function(f) {
+    this.getspecialfolder = function (f) {
         switch ("" + f) {
             case "0":
                 fn = ENV["WINDIR"]; //"WindowsFolder";
@@ -355,12 +370,12 @@ FileSystemObject = function() {
         util_log(this._name + ".GetSpecialFolder(" + f + ") => " + fn + _pw32.sep);
         return fn + _pw32.sep;
     }
-    this.gettempname = function() {
+    this.gettempname = function () {
         var fn = "TempFile_" + _object_id++ + ".tmp";
         util_log(this._name + ".GetTempName() => " + fn);
         return fn;
     }
-    this.getabsolutepathname = function(d) {
+    this.getabsolutepathname = function (d) {
         d1 = _pw32.normalize(d);
         if (!_pw32.isAbsolute(d1)) {
             d1 = ENV["CWD"] + _pw32.sep + d1;
@@ -426,7 +441,7 @@ var FS = {
             }
         }
     },
-    "writeFile": function(f, c) {
+    "writeFile": function (f, c) {
         var abs = _pw32.isAbsolute(f);
         if (!abs)
             util_log("FIXME: FS.writeFile - relative path");
@@ -491,7 +506,7 @@ var ENV = {
     "SYSTEMDIRECTORY": "C:\\WINDOWS\\System32"
 };
 
-FolderObject = function(d) {
+FolderObject = function (d) {
     this.id = _object_id++;
     this._name = "FolderObject[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -516,7 +531,7 @@ FolderObject = function(d) {
     this.name = d;
     this.parentfolder = _pw32.join(d, "..");
     Object.defineProperty(this, "files", {
-        get: function() {
+        get: function () {
             var ret = [];
             var f = this.name;
             var abs = _pw32.isAbsolute(f);
@@ -539,7 +554,7 @@ FolderObject = function(d) {
         }
     });
     Object.defineProperty(this, "subfolders", {
-        get: function() {
+        get: function () {
             var f = this.name;
             var ret = [];
             var abs = _pw32.isAbsolute(f);
@@ -562,7 +577,7 @@ FolderObject = function(d) {
         }
     });
 
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
 };
@@ -570,7 +585,7 @@ FolderObject.toString = () => {
     return "FolderObject"
 }
 
-DriveObject = function(d) {
+DriveObject = function (d) {
     this.id = _object_id++;
     this._name = "DriveObject[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -590,14 +605,14 @@ DriveObject = function(d) {
 
     this.name = d;
 
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
 };
 DriveObject.toString = () => {
     return "DriveObject"
 }
-Folder2 = function(d) {
+Folder2 = function (d) {
     this.id = _object_id++;
     this._name = "Folder2[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -612,7 +627,7 @@ Folder2.toString = () => {
     return "Folder2";
 }
 
-FolderItem = function(d) {
+FolderItem = function (d) {
     this.id = _object_id++;
     this._name = "FolderItem[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -638,7 +653,7 @@ FolderItem.toString = () => {
     return "FolderItem";
 }
 
-FileObject = function(d) {
+FileObject = function (d) {
     this.id = _object_id++;
     this._name = "FileObject[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -647,12 +662,12 @@ FileObject = function(d) {
     _defineSingleProperty(this, "attributes");
     _defineSingleProperty(this, "datelastmodified");
     this._datelastmodified = new Date();
-    this.openastextstream = function() {
+    this.openastextstream = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".OpenAsTextStream(" + a + ")");
         return _proxy(new TextStream());
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
 };
@@ -660,10 +675,10 @@ FileObject.toString = () => {
     return "FileObject"
 }
 
-Collection = _proxy(function(init = undefined) {
+Collection = _proxy(function (init = undefined) {
     this.id = _object_id++;
     this._name = "Collection[" + this.id + "]";
-    util_log("new " + this._name +"(" + _truncateOutput(_inspect(init)) + ")");
+    util_log("new " + this._name + "(" + _truncateOutput(_inspect(init)) + ")");
     if (!init)
         this._items = _proxy([]);
     else
@@ -671,18 +686,18 @@ Collection = _proxy(function(init = undefined) {
 
     _defineSingleProperty(this, "count");
     this.count = this._items.length;
-    this.add = function(a) {
+    this.add = function (a) {
         util_log(this._name + ".add(" + a + ")");
         this._items[this._items.length] = a;
         this.count = this._items.length;
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
-    this.toJSON = function() {
+    this.toJSON = function () {
         return this.toString();
     }
-    this.inspect = function() {
+    this.inspect = function () {
         return this.toString();
     }
 });
@@ -693,21 +708,21 @@ Collection.toJSON = () => {
     return "Collection";
 }
 
-Enumerator = _proxy(function(a) {
+Enumerator = _proxy(function (a) {
     this.id = _object_id++;
     this._enum = a;
     this._index = 0;
     this._name = "Enumerator[" + this.id + "]";
     util_log("new " + this._name + " for " + _truncateOutput(_inspect(a)));
-    this.atend = function() {
+    this.atend = function () {
         var r = (this._index === this._enum.length);
         //util_log(this._name + ".atEnd() => "+ r);
         return r;
     };
-    this.movenext = function() {
+    this.movenext = function () {
         this._index++;
     };
-    this.item = function() {
+    this.item = function () {
         var ret = this._enum[this._index];
         let n = this._name + ".item(" + this._index + ")";
         util_log(n + " => " + _truncateOutput(_inspect(ret)));
@@ -722,45 +737,44 @@ Enumerator.toString = () => {
 Enumerator.toJSON = () => {
     return "Enumerator";
 }
-Enumerator.prototype.toString = function() {
+Enumerator.prototype.toString = function () {
     return this._name;
 }
 
-WshArguments = function(init = undefined) {
+WshArguments = function (init = undefined) {
     this.id = _object_id++;
     this._name = "WshArguments[" + this.id + "]";
-    util_log("new " + this._name);
     if (!init)
         this._args = _proxy([]);
     else
         this._args = _proxy(init);
-    this.add = function(a) {
+    this.add = function (a) {
         util_log(this._name + ".add(" + a + ")");
         this._args[this._args.length] = a;
     }
-    this.item = function(a) {
+    this.item = function (a) {
         if (!a)
             a = 0;
         util_log(this._name + ".Item(" + a + ")");
         return this._args[a];
     }
-    this.items = function() {
+    this.items = function () {
         util_log(this._name + ".Items()");
         return this._args;
     }
-    this.length = function() {
+    this.length = function () {
         util_log(this._name + ".Length()");
         return this._args.length;
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
     Object.defineProperty(this, "args", {
-        get: function() {
+        get: function () {
             util_log(this._name + "." + name + ".get() => (" + typeof this._args + ") '" + _truncateOutput(this._args) + "'");
             return this[intvar];
         },
-        set: function(v) {
+        set: function (v) {
             util_log(this._name + "." + name + " = (" + typeof v + ") '" + _truncateOutput(v) + "'");
             this._args = _proxy(v);
         }
@@ -770,32 +784,31 @@ WshArguments.toString = () => {
     return "WshArguments"
 }
 
-WScript = _proxy(new function() {
+WScript = _proxy(new function () {
     this._name = "WScript";
-    util_log("new " + this._name);
-    this.createobject = function(a) {
+    this.createobject = function (a) {
         util_log(this._name + ".CreateObject(" + a + ")");
         return create_object(a);
     };
-    this.sleep = function(a) {
+    this.sleep = function (a) {
         util_log(this._name + ".Sleep(" + a + ")");
         var waitTill = new Date(new Date().getTime() + a);
-        while (waitTill > new Date()) {}
+        while (waitTill > new Date()) { }
     };
-    this.echo = function(a) {
+    this.echo = function (a) {
         util_log(this._name + ".Echo(" + a + ")");
     };
-    this.quit = function(a) {
+    this.quit = function (a) {
         util_log(this._name + ".Quit(" + a + ")");
         throw {
             _source: "WScript.Quit"
         }
     };
     //ScriptFullName: _script_name,
-    this.toString = function() {
+    this.toString = function () {
         return "Windows Script Host";
     };
-    this.toJSON = function() {
+    this.toJSON = function () {
         return this.toString();
     }
     _defineSingleProperty(this, "scriptfullname");
@@ -819,7 +832,7 @@ WScript = _proxy(new function() {
     this._stderr = _proxy(new TextStream());
 })
 
-var create_object = function(a) {
+var create_object = function (a) {
     var ret = null;
     a = a.toLowerCase();
     if (a.startsWith("winhttp.winhttprequest") ||
@@ -877,7 +890,7 @@ create_object.toString = () => {
     return "create_object"
 }
 
-GetObject = function(a, b) {
+GetObject = function (a, b) {
     util_log("GetObject(" + a + ", " + b + ")");
     return _proxy(new AutomationObject(a, b));
 }
@@ -887,11 +900,11 @@ GetObject.toString = () => {
 
 WSH = WScript;
 
-AutomationObject = function(a, b) {
+AutomationObject = function (a, b) {
     this.id = _object_id++;
     this._name = "AutomationObject[" + this.id + "](" + a + ", " + b + ")";
     util_log("new " + this._name);
-    this.execquery = function() {
+    this.execquery = function () {
         var ret = "Unknown";
         var a = Array.prototype.slice.call(arguments, 0).join(",");
         qry = arguments[0].toUpperCase();
@@ -961,11 +974,11 @@ AutomationObject = function(a, b) {
                 "windowsdirectory": "C:\\WINDOWS"
             }];
         }
-        if (qry.indexOf("SELECT * FROM WIN32_PROCESS") >= 0)  {
+        if (qry.indexOf("SELECT * FROM WIN32_PROCESS") >= 0) {
             //FIXME: parse query to get the process name
             ret = _proxy(new Collection([new Process("app.exe")]));
         }
-        _wscript_wmis[_wscript_wmis.length] = { "arguments" : arguments, "return": ret }
+        _wscript_wmis[_wscript_wmis.length] = { "arguments": arguments, "return": ret }
         util_log(this._name + ".ExecQuery(" + a + ") => " + _truncateOutput(_inspect(ret)));
         return ret;
     }
@@ -974,16 +987,16 @@ AutomationObject.toString = () => {
     return "AutomationObject";
 }
 
-MSScriptControl_ScriptControl = function() {
+MSScriptControl_ScriptControl = function () {
     this.id = _object_id++;
     this._name = "MSScriptControl.ScriptControl[" + this.id + "]";
     util_log("new " + this._name);
     _defineSingleProperty(this, "Language");
     _defineSingleProperty(this, "Timeout");
-    this.addcode = function(a) {
+    this.addcode = function (a) {
         util_log(this._name + ".AddCode(" + a + ")");
     }
-    this.addobject = function(a, b) {
+    this.addobject = function (a, b) {
         util_log(this._name + ".AddObject(" + a + ", " + b + ")");
     }
 }
@@ -991,26 +1004,26 @@ MSScriptControl_ScriptControl.toString = () => {
     return "MSScriptControl_ScriptControl"
 }
 
-Scripting_Dictionary = function() {
+Scripting_Dictionary = function () {
     this.id = _object_id++;
     this._name = "Scripting.Dictionary[" + this.id + "]";
     util_log("new " + this._name);
     this._dict = {};
-    this.add = function(a, b) {
+    this.add = function (a, b) {
         util_log(this._name + ".add(" + a + ", " + b + ")");
         this._dict[a] = b;
     }
-    this.item = function(a) {
+    this.item = function (a) {
         if (!a)
             a = 0;
         util_log(this._name + ".Item(" + a + ")");
         return this._dict[a];
     }
-    this.items = function() {
+    this.items = function () {
         util_log(this._name + ".Item()");
         return this._dict;
     }
-    this.exists = function(a) {
+    this.exists = function (a) {
         var ret;
         ret = (a in this._dict);
         util_log(this._name + ".Exists(" + a + ") => " + ret);
@@ -1021,7 +1034,7 @@ Scripting_Dictionary.toString = () => {
     return "Scripting_Dictionary"
 }
 
-ActiveXObject = function(a) {
+ActiveXObject = function (a) {
     util_log("ActiveXObject(" + a + ")");
     return create_object(a);
 };
@@ -1029,11 +1042,11 @@ ActiveXObject.toString = () => {
     return "ActiveXObject"
 }
 
-Shell_Application = function() {
+Shell_Application = function () {
     this.id = _object_id++;
     this._name = "Shell.Application[" + this.id + "]";
     util_log("new " + this._name);
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
     var nms = {
@@ -1094,7 +1107,7 @@ Shell_Application = function() {
         61: "::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}"
 
     }
-    this.namespace = function(a) {
+    this.namespace = function (a) {
         var ret;
         if (typeof a === "string") {
             ret = _proxy(new Folder2(a));
@@ -1108,7 +1121,7 @@ Shell_Application = function() {
         util_log(this._name + ".Namespace(" + a + ") => " + ret);
         return ret;
     }
-    this.shellexecute = function() {
+    this.shellexecute = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".ShellExecute(" + a + ")");
     }
@@ -1118,7 +1131,7 @@ Shell_Application.toString = () => {
 }
 
 
-Process = function(d) {
+Process = function (d) {
     this.id = _object_id++;
     this._name = "Process[" + this.id + "](" + d + ")";
     util_log("new " + this._name);
@@ -1136,11 +1149,11 @@ Process = function(d) {
     this.stdout = _proxy(new TextStream());
     this.stderr = _proxy(new TextStream());
     this.stdin = _proxy(new TextStream());
-    this.terminate = function() {
+    this.terminate = function () {
         var a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".Terminate(" + a + ")");
     }
-    this.getowner = function() {
+    this.getowner = function () {
         var a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".GetOwner(" + a + ")");
     }
@@ -1159,7 +1172,7 @@ Process.toString = () => {
 // HKEY_CURRENT_CONFIG
 var REG = {
     "HKLM\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\PRODUCTID": "00330-80000-00000-AA676",
-    "HKLM\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\SYSTEMROOT" : "c:\\WINDOWS",
+    "HKLM\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\SYSTEMROOT": "c:\\WINDOWS",
     /* Windows 10 64bit */
     "HKLM\\SOFTWARE\\CLASSES\\MIME\\DATABASE\\RFC1766\\1034": "en-us;@%SystemRoot%\system32\mlang.dll,-4386",
     "HKLM\\SOFTWARE\\CLASSES\\MIME\\DATABASE\\RFC1766\\0409": "en-us;@%SystemRoot%\system32\mlang.dll,-4386",
@@ -1168,30 +1181,30 @@ var REG = {
     "eee": ""
 }
 
-WScript_Shell = function() {
+WScript_Shell = function () {
     this.id = _object_id++;
     this._name = "WScript.Shell[" + this.id + "]";
     util_log("new " + this._name);
-    this.expandenvironmentstrings = function(a) {
+    this.expandenvironmentstrings = function (a) {
         var ret = a;
         var regex;
         for (var key in ENV) {
             if (ENV.hasOwnProperty(key)) {
-                regex = new RegExp("%"+key+"%", "ig");
+                regex = new RegExp("%" + key + "%", "ig");
                 ret = ret.replace(regex, ENV[key]);
             }
         }
         util_log(this._name + ".ExpandEnvironmentStrings(" + a + ") => " + ret);
         return ret;
     };
-    this.run = function(a, b, c) {
+    this.run = function (a, b, c) {
         util_log(this._name + ".Run(" + a + ", " + b + ", " + c + ")");
     }
-    this.exec = function(a) {
+    this.exec = function (a) {
         util_log(this._name + ".Exec(" + a + ")");
         return new _proxy(new Process(a));
     }
-    var _reg_normalize = function(r) {
+    var _reg_normalize = function (r) {
         var ret;
         ret = r.replace(/\\+/g, '\\').toUpperCase();
         ret = ret.replace('HKEY_CURRENT_USER', 'HKCU');
@@ -1199,11 +1212,11 @@ WScript_Shell = function() {
         ret = ret.replace('HKEY_CLASSES_ROOT', 'HKCR');
         return ret;
     }
-    this.regwrite = function(a, b, c) {
+    this.regwrite = function (a, b, c) {
         util_log(this._name + ".RegWrite(" + a + ", " + b + ", " + c + ")");
         REG[_reg_normalize(a)] = b;
     }
-    this.regread = function(a) {
+    this.regread = function (a) {
         var ret = "" + REG[_reg_normalize(a)];
         if (ret === "undefined") {
             util_log("FIXME: " + this._name + ".RegRead(" + a + ") - unknown key");
@@ -1211,21 +1224,21 @@ WScript_Shell = function() {
         util_log(this._name + ".RegRead(" + a + ") => " + ret);
         return ret;
     }
-    this.environment = function(a) {
+    this.environment = function (a) {
         var ret = WshEnvironment(a);
         util_log(this._name + ".Environment(" + a + ")");
         return ret;
     }
-    this.specialfolders = function(a) {
+    this.specialfolders = function (a) {
         util_log("WScript.SpecialFolders(" + a + ")");
         return a + "/";
     }
-    this.createshortcut = function(a) {
+    this.createshortcut = function (a) {
         a = _truncateOutput(a);
         util_log("WScript.CreateShortcut(" + a + ")");
         return _proxy(new WshShortcut(a));
     }
-    this.popup = function() {
+    this.popup = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log("WScript.Popup(" + a + ")");
         return 1;
@@ -1240,7 +1253,7 @@ WScript_Shell = function() {
         // 10 Try Again button
         // 11 Continue button
     }
-    this.toString = this.tostring = function() {
+    this.toString = this.tostring = function () {
         return this._name;
     }
 };
@@ -1249,11 +1262,11 @@ WScript_Shell.toString = () => {
 }
 Shell = WScript_Shell;
 
-WScript_Network = function() {
+WScript_Network = function () {
     this.id = _object_id++;
     this._name = "WScript.Network[" + this.id + "]";
     util_log("new " + this._name);
-    this.toString = this.tostring = function() {
+    this.toString = this.tostring = function () {
         return this._name;
     }
     _defineSingleProperty(this, "userdomain");
@@ -1263,11 +1276,11 @@ WScript_Network.toString = () => {
     return "WScript_Network"
 }
 
-VBScript_RegExp = function() {
+VBScript_RegExp = function () {
     this.id = _object_id++;
     this._name = "VBScript.RegExp[" + this.id + "]";
     util_log("new " + this._name);
-    this.toString = this.tostring = function() {
+    this.toString = this.tostring = function () {
         return this._name;
     }
 };
@@ -1280,7 +1293,7 @@ VBScript_RegExp.toString = () => {
 // SYSTEM      TEMP=%SystemRoot%\TEMP
 // USER        TEMP=%USERPROFILE%\Local Settings\Temp
 // VOLATILE    TEMP=
-WshEnvironment = function(a) {
+WshEnvironment = function (a) {
     var _id = _object_id++;
     var _type = a.toUpperCase();
     var _name = "WshEnvironment[" + _id + "](" + _type + ")";
@@ -1311,7 +1324,7 @@ WshEnvironment = function(a) {
         try {
             //r = _env[_type][x];
             r = ENV[x];
-        } catch (e) {}
+        } catch (e) { }
         if (typeof r === "undefined") {
             util_log("FIXME: " + _name + "(" + x + ") undefined variable ");
             r = x;
@@ -1319,7 +1332,7 @@ WshEnvironment = function(a) {
         util_log(_name + "(" + x + ") => " + r);
         return r;
     }
-    b.item = function(x) {
+    b.item = function (x) {
         util_log(_name + ".Item(" + x + ")");
         return "itemvalue";
     }
@@ -1329,7 +1342,7 @@ WshEnvironment.toString = () => {
     return "WshEnvironment"
 }
 
-WshShortcut = function(a) {
+WshShortcut = function (a) {
     this.id = _object_id++;
     this._link = a;
     this._name = "WshShortcut[" + this.id + "](" + this._link + ")";
@@ -1342,23 +1355,23 @@ WshShortcut = function(a) {
     _defineSingleProperty(this, "iconlocation");
     _defineSingleProperty(this, "description");
     _defineSingleProperty(this, "workingdirectory");
-    this.save = function() {
-            util_log(this._name + ".save()");
-        }
-        //this[Symbol.unscopables] = _proxy({})
+    this.save = function () {
+        util_log(this._name + ".save()");
+    }
+    //this[Symbol.unscopables] = _proxy({})
 };
 WshShortcut.toString = () => {
     return "WshShortcut"
 }
 
-ADODB_Stream = function() {
+ADODB_Stream = function () {
     this.id = _object_id++;
     this._name = "ADODB_Stream[" + this.id + "]";
     util_log("new " + this._name);
 
     //_trace("ADOBE");
 
-    this.open = function() {
+    this.open = function () {
         util_log(this._name + ".Open()");
     }
     this._type = 2;
@@ -1370,7 +1383,7 @@ ADODB_Stream = function() {
         return this._name /*JSON.stringify(this)*/
     }
 
-    this.write = function(a) {
+    this.write = function (a) {
         this.content = a;
         if (typeof a === 'undefined')
             util_log(this._name + ".Write(undefined) - Error ?");
@@ -1379,7 +1392,7 @@ ADODB_Stream = function() {
             this.size = a.length
         }
     }
-    this.writetext = function(a) {
+    this.writetext = function (a) {
         var encoding = 'binary'
         if (typeof a === 'undefined')
             util_log(this._name + ".WriteText(undefined) - Error ?");
@@ -1394,29 +1407,29 @@ ADODB_Stream = function() {
             this.size = this.content.length
         }
     }
-    this.savetofile = function(a, b) {
+    this.savetofile = function (a, b) {
         util_log(this._name + ".SaveToFile(" + a + ", " + b + ")");
         _wscript_saved_files[a] = this.content;
     }
     this.saveToFile = this.savetofile;
 
-    this.loadfromfile = function(a) {
-            var encoding = 'binary';
-            //util_log(this._name + ".LoadFromFile(" + a + ")");
-            if (this.type == 2 && typeof this.charset !== 'undefined') {
-                //util_log("here");
-                this.content = _iconv.decode(Buffer.from(_wscript_saved_files[a]), this.charset);
-                encoding = this.charset;
-            } else {
-                this.content = _wscript_saved_files[a];
-            }
-            util_log(this._name + ".LoadFromFile(" + a + ") " + this.content.length + " bytes, encoding: " + encoding);
-            this.Position = 0;
+    this.loadfromfile = function (a) {
+        var encoding = 'binary';
+        //util_log(this._name + ".LoadFromFile(" + a + ")");
+        if (this.type == 2 && typeof this.charset !== 'undefined') {
+            //util_log("here");
+            this.content = _iconv.decode(Buffer.from(_wscript_saved_files[a]), this.charset);
+            encoding = this.charset;
+        } else {
+            this.content = _wscript_saved_files[a];
         }
-        // adReadAll -1 Default. Reads all bytes from the stream, from the current position onwards to the EOS marker.
-        // This is the only valid StreamReadEnum value with binary streams (Type is adTypeBinary).
-        // adReadLine -2 Reads the next line from the stream (designated by the LineSeparator property).
-    this.readtext = function(a) {
+        util_log(this._name + ".LoadFromFile(" + a + ") " + this.content.length + " bytes, encoding: " + encoding);
+        this.Position = 0;
+    }
+    // adReadAll -1 Default. Reads all bytes from the stream, from the current position onwards to the EOS marker.
+    // This is the only valid StreamReadEnum value with binary streams (Type is adTypeBinary).
+    // adReadLine -2 Reads the next line from the stream (designated by the LineSeparator property).
+    this.readtext = function (a) {
         util_log(this._name + ".ReadText(" + a + ")");
         if (typeof a === "undefined" || a == adReadAll) {
             return this.content;
@@ -1428,7 +1441,7 @@ ADODB_Stream = function() {
             return this.content;
         }
     }
-    this.read = function(a) {
+    this.read = function (a) {
         util_log(this._name + ".Read(" + a + ")");
         if (typeof a === "undefined" || a == adReadAll) {
             return this.content;
@@ -1440,10 +1453,10 @@ ADODB_Stream = function() {
             return this.content;
         }
     }
-    this.close = function() {
+    this.close = function () {
         util_log(this._name + ".Close()");
     }
-    this.copyto = function(t) {
+    this.copyto = function (t) {
         util_log(this._name + ".CopyTo(" + t + ")");
         t._type = this._type;
         t._position = this._position;
@@ -1465,7 +1478,7 @@ ADODB_Stream = function() {
 //ADODB_Stream.prototype.constructor = ADODB_Stream;
 
 // http://www.dofactory.com/tutorial/javascript-function-objects
-ADODB_Recordset = function() {
+ADODB_Recordset = function () {
     this.id = _object_id++;
     this._name = "ADODB_Recordset[" + this.id + "]";
     var father = this;
@@ -1473,19 +1486,19 @@ ADODB_Recordset = function() {
     this.toString = this.tostring = () => {
         return this._name
     }
-    this.close = function() {
+    this.close = function () {
         util_log(this._name + ".Close()");
     }
-    this.open = function() {
+    this.open = function () {
         let a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".Open(" + a + ")");
     }
-    this.addnew = function() {
+    this.addnew = function () {
         let a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".AddNew(" + a + ")");
         return {};
     }
-    this.update = function() {
+    this.update = function () {
         let a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".Update(" + a + ")");
         return {};
@@ -1498,7 +1511,7 @@ ADODB_Recordset = function() {
 ADODB_Recordset.toString = ADODB_Recordset.toJSON = () => {
     return "ADODB_Recordset"
 }
-ADODB_Fields = function(father) {
+ADODB_Fields = function (father) {
     this.id = _object_id++;
     this._name = "ADODB_Fields[" + this.id + "]";
     this._father = father;
@@ -1510,14 +1523,14 @@ ADODB_Fields = function(father) {
     _defineSingleProperty(this, "count");
     this._items = [];
     this._count = 0;
-    this._item = function(i) {
+    this._item = function (i) {
         return this._items[i];
     }
-    this.resync = function() {
+    this.resync = function () {
         let a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".Resync(" + a + ")");
     }
-    this.append = function() {
+    this.append = function () {
         let fds = Array.prototype.slice.call(arguments, 0);
         let a = _truncateOutput(fds.join(","));
         util_log(this._name + ".Append(" + a + ")");
@@ -1533,11 +1546,11 @@ ADODB_Fields = function(father) {
         this._father[fds[0]] = newfield;
         this._items[this._items.length] = newfield;
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
 }
-ADODB_Field = function(father) {
+ADODB_Field = function (father) {
     this.id = _object_id++;
     this._name = "ADODB_Field[" + this.id + "]";
     this._father = father;
@@ -1549,22 +1562,22 @@ ADODB_Field = function(father) {
     _defineSingleProperty(this, "value");
     _defineSingleProperty(this, "definedsize");
     this._value = "";
-    this.appendchunk = function() {
+    this.appendchunk = function () {
         let fds = Array.prototype.slice.call(arguments, 0);
         let a = _truncateOutput(fds.join(","));
         util_log(this._name + ".AppendChunk(" + a + ")");
         this._value = fds[0]
     }
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
 }
 
-Msxml2_DOMDocument_6_0 = function() {
+Msxml2_DOMDocument_6_0 = function () {
     this.id = _object_id++;
     this._name = "Msxml2.DOMDocument.6.0[" + this.id + "]";
     util_log("new " + this._name);
-    this.createelement = function(a) {
+    this.createelement = function (a) {
         util_log(this._name + ".createElement(" + a + ")");
         return new Element(a);
     }
@@ -1574,7 +1587,7 @@ Msxml2_DOMDocument_6_0.toString = () => {
 }
 
 // Pretty much a copy of MSXML2_XMLHTTP
-XMLHttpRequest = function() {
+XMLHttpRequest = function () {
     this.id = _object_id++;
     this._name = "XMLHttpRequest[" + this.id + "]";
     util_log("new " + this._name);
@@ -1582,7 +1595,7 @@ XMLHttpRequest = function() {
     this.toString = this.tostring = () => {
         return this._name
     }
-    this.open = function(m, u, a) {
+    this.open = function (m, u, a) {
         u = u.replace(/\r|\n/g, "");
         util_log(this._name + ".open(" + m + "," + u + "," + a + ")");
         this.method = m;
@@ -1601,9 +1614,9 @@ XMLHttpRequest = function() {
         }
         // TODO: exit if URL seen x times
         this._wscript_urls_index = _wscript_urls.length
-        _wscript_urls[this._wscript_urls_index] = {"url": u, "method": m};
+        _wscript_urls[this._wscript_urls_index] = { "url": u, "method": m };
     }
-    this.send = function(a) {
+    this.send = function (a) {
         util_log(this._name + ".send(" + a + ")");
         if (_download === "Yes") {
             try {
@@ -1676,7 +1689,7 @@ XMLHttpRequest = function() {
     }
 }
 
-MSXML2_XMLHTTP = function() {
+MSXML2_XMLHTTP = function () {
     this.id = _object_id++;
     this._name = "MSXML2.XMLHTTP[" + this.id + "]";
     util_log("new " + this._name);
@@ -1693,7 +1706,7 @@ MSXML2_XMLHTTP = function() {
     _defineSingleProperty(this, "activexobject");
     this._activexobject = ActiveXObject;
 
-    this.open = function(m, u, a) {
+    this.open = function (m, u, a) {
         u = u.replace(/\r|\n/g, "");
         util_log(this._name + ".open(" + m + "," + u + "," + a + ")");
         this.method = m;
@@ -1712,17 +1725,17 @@ MSXML2_XMLHTTP = function() {
         }
         // TODO: exit if URL seen x times
         this._wscript_urls_index = _wscript_urls.length
-        _wscript_urls[this._wscript_urls_index] = { "url": u, "method" : m };
+        _wscript_urls[this._wscript_urls_index] = { "url": u, "method": m };
     }
-    this.close = function() {
+    this.close = function () {
         util_log(this._name + ".close()");
     }
-    this.getallresponseheaders = function() {
+    this.getallresponseheaders = function () {
         var ret = this.allresponseheaders;
         util_log(this._name + ".getAllResponseHeaders() => " + _inspect(ret));
         return ret;
     }
-    this.send = function(a) {
+    this.send = function (a) {
         util_log(this._name + ".send(" + a + ")");
         if (_download === "Yes") {
             try {
@@ -1793,20 +1806,20 @@ MSXML2_XMLHTTP = function() {
         }
         util_log(this._name + ".send(" + a + ") finished");
     }
-    this.setrequestheader = function(a, b) {
+    this.setrequestheader = function (a, b) {
         util_log(this._name + ".setRequestHeader(" + a + ", " + b + ")");
         this._headers[a] = b;
         if (this._wscript_urls_index != null) {
             _wscript_urls[this._wscript_urls_index]["request_headers"] = b;
         }
     }
-    this.setoption = function() {
+    this.setoption = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments, 0).join(","));
         util_log(this._name + ".setOption(" + a + ")");
     }
-    this.settimeouts = function() {
+    this.settimeouts = function () {
         a = _truncateOutput(Array.prototype.slice.call(arguments,
-                    0).join(","));
+            0).join(","));
         util_log(this._name + ".setTimeouts(" + a + ")");
     }
     this._responseBody = [];
@@ -1820,12 +1833,12 @@ MSXML2_XMLHTTP = function() {
     _defineSingleProperty(this, "onreadystatechange");
     this.onreadystatechange = undefined;
     Object.defineProperty(this, "responsetext", {
-        get: function() {
+        get: function () {
             var ret = "" + this._responseBody;
             util_log(this._name + ".ResponseText.get() => (" + typeof ret + ") '" + _truncateOutput(ret) + "'");
             return ret;
         },
-        set: function(v) {
+        set: function (v) {
             util_log(this._name + ".ResponseText = (" + typeof v + ") '" + _truncateOutput(v) + "'");
             this.responseBody = v;
         }
@@ -1836,11 +1849,10 @@ MSXML2_XMLHTTP.toString = () => {
     return "MSXML2_XMLHTTP"
 }
 
-Style = _proxy(function() {
+Style = _proxy(function () {
     this._id = _object_id++;
     this._name = "Style[" + this._id + "]";
     this.elementName = "style";
-    util_log("new " + this._name + "()");
     this._attributes = {
         "visibility": true,
         "left": 0,
@@ -1865,7 +1877,7 @@ Style.toString = Style.toJSON = () => {
     return "Style"
 }
 
-Node = _proxy(function() {
+Node = _proxy(function () {
     this._id = _object_id++;
     this._name = "Node[" + this._id + "]";
     util_log("new " + this._name + "()");
@@ -1878,7 +1890,7 @@ Node.toString = Node.toJSON = () => {
 }
 
 
-Element = _proxy(function(n) {
+Element = _proxy(function (n) {
     Node.call(this);
     this._name = "Element[" + this._id + "]<" + n + ">";
     util_log("new " + this._name);
@@ -1894,10 +1906,10 @@ Element = _proxy(function(n) {
     _defineSingleProperty(this, "class");
     _defineSingleProperty(this, "_vgRuntimeStyle");
     this.tagname = n;
-    this.toString = function() {
+    this.toString = function () {
         return this._name;
     }
-    this.appendchild = function(e) {
+    this.appendchild = function (e) {
         util_log(this._name + ".appendChild(" + e._name + ")");
         if (this._children.length === 0) {
             this.firstChild = e;
@@ -1907,16 +1919,16 @@ Element = _proxy(function(n) {
         e.parentelement = this;
         return e;
     }
-    this.removechild = function(e) {
+    this.removechild = function (e) {
         util_log(this._name + ".removeChild(" + e._name + ") - dummy");
         return e;
     }
-    this.setattribute = function(n, v) {
+    this.setattribute = function (n, v) {
         util_log(this._name + ".setAttribute(" + n + ", " + v + ")");
         this._attributes[n] = v;
     }
     Object.defineProperty(this, "nodetypedvalue", {
-        get: function() {
+        get: function () {
             util_log(this._name + ".nodeTypedValue");
             if (this.dataType === "bin.base64") {
                 //return new Buffer(this.text, 'base64').toString('binary');
@@ -1927,14 +1939,14 @@ Element = _proxy(function(n) {
         }
     })
     Object.defineProperty(this, "innerHTML", {
-       get: function() {
-           util_log(this._name + ".innerHTML returns '"+this._innerHTML+"'");
-           return this._innerHTML;
-       },
-       set: function(v) {
-           util_log(this._name + ".innerHTML = '"+v+"'");
-           this._innerHTML = _decodeHTML(v);
-       }
+        get: function () {
+            util_log(this._name + ".innerHTML returns '" + this._innerHTML + "'");
+            return this._innerHTML;
+        },
+        set: function (v) {
+            util_log(this._name + ".innerHTML = '" + v + "'");
+            this._innerHTML = _decodeHTML(v);
+        }
     })
     _defineSingleProperty(this, "firstchild");
     _defineSingleProperty(this, "parentelement");
@@ -1946,10 +1958,10 @@ Element = _proxy(function(n) {
     _defineSingleProperty(this, "text", "_text");
     _defineSingleProperty(this, "id", "_id");
     this.style = new Style();
-    this.getElementsByTagName = function(n) {
+    this.getElementsByTagName = function (n) {
         let ret = []
         util_log(this._name + ".getElementsByTagName(" + n + ")");
-        for(i = 0; i < this._children.length; i++) {
+        for (i = 0; i < this._children.length; i++) {
             let e = this._children[i];
             if (e.elementName.toLowerCase() === n.toLowerCase()) {
                 ret[ret.length] = e;
@@ -1958,17 +1970,25 @@ Element = _proxy(function(n) {
         util_log(this._name + ".getElementsByTagName(" + n + ") ... " + ret.length + " found");
         return ret;
     };
-    this.insertAdjacentHTML = function(where, html) {
+    this.insertAdjacentHTML = function (where, html) {
         util_log(this._name + ".insertAdjacentHTML(" + where + ", " + html + ")");
     }
     this.insertBefore = function (newNode, referenceNode) {
         util_log(this._name + ".insertBefore(" + newNode + ", " + referenceNode + ")");
     }
-    this.getContext = function() {
+    this.getContext = function () {
         util_log("getContext(" + arguments + ")");
     }
-    this.doScroll = function() {
+    this.doScroll = function () {
         util_log("doScroll(" + arguments + ")");
+    }
+    this.click = function (fn) {
+        util_log(this._name + ".click(" + fn + ")");
+        fn();
+    }
+    this.text = function () {
+        util_log(this._name + ".text()");
+        return this._name;
     }
 });
 Element.prototype = Object.create(Node.prototype);
@@ -1978,7 +1998,7 @@ Element.toString = Element.toJSON = () => {
 }
 
 
-HTMLElement = _proxy(function(n) {
+HTMLElement = _proxy(function (n) {
     Element.call(this, n);
     this._name = "HTMLElement[" + this._id + "]";
     util_log("new " + this._name + "(" + n + ")");
@@ -1989,7 +2009,7 @@ HTMLElement.toString = HTMLElement.toJSON = () => {
     return "HTMLElement"
 }
 
-HTMLIFrameElement = _proxy(function() {
+HTMLIFrameElement = _proxy(function () {
     util_log("new HTMLIFrameElement() start");
     HTMLElement.call(this, "iframe");
     this._name = "HTMLIFrameElement[" + this._id + "]";
@@ -2006,26 +2026,26 @@ HTMLIFrameElement.toString = HTMLIFrameElement.toJSON = () => {
     return "HTMLIFrameElement"
 }
 
-_WidgetManager = function() {
+_WidgetManager = function () {
     util_log("new _WidgetManager object");
 }
-_WidgetManager._Init = function() {
+_WidgetManager._Init = function () {
     util_log("_WidgetManager._Init(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
 }
-_WidgetManager._SetDataContext = function() {
+_WidgetManager._SetDataContext = function () {
     util_log("_WidgetManager._SetDataContext(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
 }
-_WidgetManager._RegisterWidget = function() {
+_WidgetManager._RegisterWidget = function () {
     util_log("_WidgetManager._RegisterWidget(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
 }
-_WidgetInfo = function(n) {
+_WidgetInfo = function (n) {
     util_log("new _WidgetInfo " + n);
 }
 
-ga = function() {
+ga = function () {
     util_log("ga(" + Array.prototype.slice.call(arguments, 0).join(",") + ")");
 }
 
-XPathResult = function() {
+XPathResult = function () {
     return XPathResult;
 }
