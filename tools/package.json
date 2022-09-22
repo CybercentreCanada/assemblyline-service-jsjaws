@@ -20,7 +20,6 @@
         "sync-request": "^3.0.1",
         "box-js": "^1.9.15",
         "js-x-ray": "^3.2.0",
-        "node-blob": "0.0.2",
         "url": "0.11.0"
     },
     "license": "MIT",

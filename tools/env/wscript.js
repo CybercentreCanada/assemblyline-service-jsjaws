@@ -2,7 +2,7 @@
     wscript.js - simulates WScript (Windows scripting host) environment
 */
 
-const Blob = require('node-blob');
+const { Blob } = require("node:buffer");
 const URL = require('url').URL;
 
 util_log("Preparing sandbox to emulate WScript environment.");
@@ -41,10 +41,10 @@ gapi = function () {
     this.load = function () { };
 }
 
-URL.createObjectURL = function (content) {
+URL.createObjectURL = async function (content) {
     util_log("URL.createObjectURL(" + content + ")")
     if (content.constructor.name == "Blob") {
-        content = content.buffer;
+        content = Buffer.from(await content.arrayBuffer());
     }
     const url_blob = document.createElement("url_blob");
     url_blob.srcObject = content
@@ -182,10 +182,10 @@ let Base64 = {
     }
 };
 
-saveAs = function (content, filename) {
+saveAs = async function (content, filename) {
     util_log("saveAs(" + content + ", " + filename + ")")
     if (content.constructor.name == "Blob") {
-        content = content.buffer;
+        content = Buffer.from(await content.arrayBuffer());
     }
     _wscript_saved_files[filename] = content;
 }
