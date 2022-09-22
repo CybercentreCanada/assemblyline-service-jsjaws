@@ -53,10 +53,13 @@ jobs:
       - script: |
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           sudo apt-get update
-          sudo apt-get install -y libfuzzy-dev libfuzzy2
+          sudo apt-get install -y libfuzzy-dev libfuzzy2 curl
           if [[ -f "$(pwd)/pkglist.txt" ]]; then
             grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
           fi
+          curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh && sudo bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
+          sudo apt-get install -y nodejs
+          cd tools && npm install && cd ..
           sudo rm -rf /var/lib/apt/lists/*
           sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
           [ -f $(pwd)/requirements.txt ] && sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/requirements.txt

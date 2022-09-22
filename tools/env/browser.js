@@ -5,6 +5,8 @@
 util_log("Preparing sandbox to emulate Browser environment (default = IE11).");
 _browser_documents = [];
 
+const { atob, btoa } = require("abab");
+
 location = _proxy({
     _name: "location",
     _props: {
@@ -119,12 +121,8 @@ window = _proxy(new function () {
     this.navigator = this;
     // Defaulting to Microsoft for the time being
     this.appName = "Microsoft";
-    this.atob = function (m) {
-        return Base64.decode(m)
-    }
-    this.btoa = function (m) {
-        return Base64.encode(m)
-    }
+    this.atob = atob;
+    this.btoa = btoa;
     this._location = location,
         Object.defineProperty(this, "location", {
             get: function (n) {
@@ -164,10 +162,10 @@ for (let k in _browser_api) {
 window.Element = Element;
 window.HTMLElement = HTMLElement;
 window.Node = Node;
-window.msSaveOrOpenBlob = function (content, filename) {
+window.msSaveOrOpenBlob = async function (content, filename) {
     util_log("msSaveOrOpenBlob(" + content + ", " + filename + ")")
     if (content.constructor.name == "Blob") {
-        content = content.buffer;
+        content = Buffer.from(await content.arrayBuffer())
     }
     _wscript_saved_files[filename] = content;
 }
@@ -366,10 +364,3 @@ let Image = function (w, h) {
 }
 Image.prototype = Object.create(Element.prototype);
 Image.prototype.constructor = Image;
-
-atob = function (n) {
-    return window.atob(n);
-}
-btoa = function (n) {
-    return window.btoa(n);
-}
