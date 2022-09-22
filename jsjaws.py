@@ -43,8 +43,8 @@ RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf0
 # Signature Constants
 TRANSLATED_SCORE = {
     0: 10,  # Informational (0-24% hit rate)
-    1: 100, # On the road to being suspicious (25-34% hit rate)
-    2: 250, # Wow this file could be suspicious (35-44% hit rate)
+    1: 100,  # On the road to being suspicious (25-34% hit rate)
+    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
     3: 500,  # Definitely Suspicious (45-50% hit rate)
     4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
     5: 1000,  # Malware (95-100% hit rate)
@@ -747,7 +747,14 @@ class JsJaws(ServiceBase):
             request.result.add_section(malware_jail_res_sec)
 
         for line in self._parse_malwarejail_output(output):
-            log_line = line.split(" - ", 2)[1]
+            log_line = line.split(" - ", 1)[1]
+            if log_line.startswith("Exception occurred in "):
+                exception_lines = []
+                for exception_line in log_line.split("\n")[::-1]:
+                    if not exception_line.strip():
+                        break
+                    exception_lines.append(exception_line)
+                raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
             if log_line.startswith("location.href = "):
                 # We need to recover the non-truncated content from the sandbox_dump.json file
                 with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
