@@ -22,6 +22,8 @@ config:
   allow_download_from_internet: false
   # Maximum payload files extracted if deep scan is turned off
   max_payloads_extracted: 50
+  # Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
+  raise_malware_jail_exc: false
 
 submission_params:
   # Service-wide parameters
