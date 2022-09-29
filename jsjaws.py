@@ -754,7 +754,10 @@ class JsJaws(ServiceBase):
                     if not exception_line.strip():
                         break
                     exception_lines.append(exception_line)
-                raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                if self.config.get("raise_malware_jail_exc", False):
+                    raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                else:
+                    self.log.warning("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
             if log_line.startswith("location.href = "):
                 # We need to recover the non-truncated content from the sandbox_dump.json file
                 with open(self.malware_jail_sandbox_env_dump_path, "r") as f:

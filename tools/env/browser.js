@@ -342,6 +342,12 @@ $ = function (thing) {
     return document.getElementById(thing);
 };
 
+$.ajax = function (thing) {
+    util_log("$.ajax(" + JSON.stringify(thing) + ")");
+    ret = _proxy(new XMLHttpRequest(thing));
+    ret.open(thing.type, thing.url);
+}
+
 Object.defineProperty(document, "location", {
     get: function () {
         util_log("document.location.get()");

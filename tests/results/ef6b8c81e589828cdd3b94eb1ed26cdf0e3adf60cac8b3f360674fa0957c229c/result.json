@@ -1,0 +1,71 @@
+{
+    "files": {
+        "extracted": [],
+        "supplementary": []
+    },
+    "results": {
+        "heuristics": [
+            {
+                "attack_ids": [],
+                "heur_id": 1,
+                "signatures": []
+            },
+            {
+                "attack_ids": [],
+                "heur_id": 2,
+                "signatures": []
+            },
+            {
+                "attack_ids": [],
+                "heur_id": 3,
+                "signatures": [
+                    "ajax_network_request"
+                ]
+            }
+        ],
+        "tags": {
+            "network.dynamic.domain": [
+                {
+                    "heur_id": 2,
+                    "signatures": [],
+                    "value": "www.icodeps.com"
+                },
+                {
+                    "heur_id": 1,
+                    "signatures": [],
+                    "value": "www.icodeps.com"
+                }
+            ],
+            "network.dynamic.uri": [
+                {
+                    "heur_id": 2,
+                    "signatures": [],
+                    "value": "https://www.icodeps.com/jsapi.php\"})"
+                },
+                {
+                    "heur_id": 2,
+                    "signatures": [],
+                    "value": "https://www.icodeps.com/jsapi.php\"})"
+                },
+                {
+                    "heur_id": 1,
+                    "signatures": [],
+                    "value": "https://www.icodeps.com/jsapi.php"
+                }
+            ],
+            "network.dynamic.uri_path": [
+                {
+                    "heur_id": 1,
+                    "signatures": [],
+                    "value": "/jsapi.php"
+                },
+                {
+                    "heur_id": 2,
+                    "signatures": [],
+                    "value": "/jsapi.php\"})"
+                }
+            ]
+        },
+        "temp_submission_data": {}
+    }
+}
