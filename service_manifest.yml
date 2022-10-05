@@ -121,6 +121,12 @@ heuristics:
     filetype: '*'
     description: This technique was widely seen as part of the Follina exploit
 
+  - heur_id: 6
+    name: Automatic location redirection
+    score: 0
+    filetype: '*'
+    description: Automatic redirection to another resource
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

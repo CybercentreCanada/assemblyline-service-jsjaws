@@ -20,9 +20,7 @@ location = _proxy({
         util_log(this._name + ".replace(" + n + ")");
         this._props["href"] = n;
     },
-    protocol: function (n) {
-        util_log(this._name + ".protocol(" + n + ")");
-    }
+    protocol: "http:" //Would be best if it could dynamically get the protocol from the _props["href"]
 })
 location.toString = () => { return "location" }
 for (let k in location._props) {
