@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"example.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}, {\"ioc_type\": \"domain\", \"ioc\": \"example.com.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"//example.com.com/?search'\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search'\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"example.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -21,47 +21,18 @@
           "network": {
             "dynamic": {
               "domain": [
-                "example.com",
-                "example.com.com"
+                "example.com"
               ],
               "uri": [
-                "http://example.com/?search",
-                "//example.com.com/?search'"
+                "http://example.com/?search"
               ],
               "uri_path": [
-                "/?search",
-                "/?search'"
+                "/?search"
               ]
             }
           }
         },
         "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "Redirection to:\nfunction (n) {\n        util_log(this._name + \".protocol(\" + n + \")\");\n    }//example.com.com/?search",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 6,
-          "score": 0,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "static": {
-              "uri": [
-                "function (n) {\n        util_log(this._name + \".protocol(\" + n + \")\");\n    }//example.com.com/?search"
-              ]
-            }
-          }
-        },
-        "title_text": "Automatic location redirection",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -76,11 +47,6 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 6,
-        "signatures": []
       }
     ],
     "tags": {
@@ -89,19 +55,9 @@
           "heur_id": 2,
           "signatures": [],
           "value": "example.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "example.com.com"
         }
       ],
       "network.dynamic.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "//example.com.com/?search'"
-        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -113,18 +69,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "/?search"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/?search'"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 6,
-          "signatures": [],
-          "value": "function (n) {\n        util_log(this._name + \".protocol(\" + n + \")\");\n    }//example.com.com/?search"
         }
       ]
     },
