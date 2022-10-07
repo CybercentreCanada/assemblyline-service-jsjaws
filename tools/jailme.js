@@ -194,6 +194,10 @@ var _proxy = function (o, verbose = false, what = undefined) {
 
 
 var sandbox = {};
+sandbox.toLowerCase = function () {
+    return "sandbox";
+}
+
 // too ambitious
 // var sandbox = _proxy({});
 if (argv.down)

@@ -1,0 +1,100 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 2,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"document5934.zip\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "document5934.zip"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn encoded literal was found: AAAAAAAAAAAAAAAA\n\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "file": {
+            "string": {
+              "extracted": [
+                "AAAAAAAAAAAAAAAA"
+              ]
+            }
+          }
+        },
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "Document5934.zip",
+        "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
+      }
+    ],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "file.string.extracted": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "AAAAAAAAAAAAAAAA"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "document5934.zip"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

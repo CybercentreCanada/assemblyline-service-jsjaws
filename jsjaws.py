@@ -2,7 +2,7 @@ import hashlib
 import tempfile
 from inspect import getmembers, isclass
 from json import JSONDecodeError, load, loads
-from os import listdir, mkdir, path
+from os import listdir, mkdir, path, remove
 from pkgutil import iter_modules
 from re import compile, match, search
 from subprocess import TimeoutExpired, run
@@ -36,19 +36,22 @@ from signatures.abstracts import Signature
 
 # Execution constants
 WSCRIPT_SHELL = "wscript.shell"
-WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d\]\.Run\()(.*)(?:\))"
+WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d+\]\.Run\()(.*)(?:\))"
 MAX_PAYLOAD_FILES_EXTRACTED = 50
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 
 # Signature Constants
 TRANSLATED_SCORE = {
     0: 10,  # Informational (0-24% hit rate)
-    1: 100, # On the road to being suspicious (25-34% hit rate)
-    2: 250, # Wow this file could be suspicious (35-44% hit rate)
+    1: 100,  # On the road to being suspicious (25-34% hit rate)
+    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
     3: 500,  # Definitely Suspicious (45-50% hit rate)
     4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
     5: 1000,  # Malware (95-100% hit rate)
 }
+
+# The file path for the file that has its leading and trailing null bytes stripped out
+MODIFIED_SAMPLE = "/tmp/modified_sample.js"
 
 
 class JsJaws(ServiceBase):
@@ -88,6 +91,13 @@ class JsJaws(ServiceBase):
 
     def execute(self, request: ServiceRequest) -> None:
         self.artifact_list = []
+
+        # If the file starts or ends with null bytes, let's trip them out
+        if request.file_contents.startswith(b"\x00") or request.file_contents.endswith(b"\x00"):
+            if path.exists(MODIFIED_SAMPLE):
+                remove(MODIFIED_SAMPLE)
+            with open(MODIFIED_SAMPLE, "wb") as f:
+                f.write(request.file_contents[:].strip(b"\x00"))
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -220,9 +230,15 @@ class JsJaws(ServiceBase):
         jsxray_args = ["node", self.path_to_jsxray]
 
         # Don't forget the sample!
-        boxjs_args.append(request.file_path)
-        malware_jail_args.append(request.file_path)
-        jsxray_args.append(request.file_path)
+        # If the sample has been modified by the service
+        if path.exists(MODIFIED_SAMPLE):
+            boxjs_args.append(MODIFIED_SAMPLE)
+            malware_jail_args.append(MODIFIED_SAMPLE)
+            jsxray_args.append(MODIFIED_SAMPLE)
+        else:
+            boxjs_args.append(request.file_path)
+            malware_jail_args.append(request.file_path)
+            jsxray_args.append(request.file_path)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -288,6 +304,10 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
 
+        # Clean up the modified file, if it exists
+        if path.exists(MODIFIED_SAMPLE):
+            remove(MODIFIED_SAMPLE)
+
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
         This method does a couple of things:
@@ -305,7 +325,7 @@ class JsJaws(ServiceBase):
             if wscript_shell_run:
                 cmd = wscript_shell_run.group(1)
                 # This is a byproduct of the sandbox using WScript.Shell.Run
-                for item in [", 0, undefined", ", 1, 0"]:
+                for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
                     if item in cmd:
                         cmd = cmd.replace(item, "")
                 # Write command to file
@@ -747,7 +767,17 @@ class JsJaws(ServiceBase):
             request.result.add_section(malware_jail_res_sec)
 
         for line in self._parse_malwarejail_output(output):
-            log_line = line.split(" - ", 2)[1]
+            log_line = line.split(" - ", 1)[1]
+            if log_line.startswith("Exception occurred in "):
+                exception_lines = []
+                for exception_line in log_line.split("\n")[::-1]:
+                    if not exception_line.strip():
+                        break
+                    exception_lines.append(exception_line)
+                if self.config.get("raise_malware_jail_exc", False):
+                    raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                else:
+                    self.log.warning("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
             if log_line.startswith("location.href = "):
                 # We need to recover the non-truncated content from the sandbox_dump.json file
                 with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
