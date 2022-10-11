@@ -39,6 +39,9 @@ WSCRIPT_SHELL = "wscript.shell"
 WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d+\]\.Run\()(.*)(?:\))"
 MAX_PAYLOAD_FILES_EXTRACTED = 50
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
+JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
+MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version  ([\d\.]+)\n"
+COMBO_REGEX = r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -79,8 +82,8 @@ class JsJaws(ServiceBase):
         self.boxjs_resources: Optional[str] = None
         self.boxjs_analysis_log: Optional[str] = None
         self.boxjs_snippets: Optional[str] = None
-        self.filtered_jquery: Optional[str] = None
-        self.filtered_jquery_path: Optional[str] = None
+        self.filtered_lib: Optional[str] = None
+        self.filtered_lib_path: Optional[str] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -124,8 +127,8 @@ class JsJaws(ServiceBase):
         self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
         self.boxjs_analysis_log = path.join(self.boxjs_output_dir, "analysis.log")
         self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
-        self.filtered_jquery = "filtered_jquery.js"
-        self.filtered_jquery_path = path.join(self.working_directory, self.filtered_jquery)
+        self.filtered_lib = "filtered_lib.js"
+        self.filtered_lib_path = path.join(self.working_directory, self.filtered_lib)
 
         # Setup directory structure
         if not path.exists(self.malware_jail_payload_extraction_dir):
@@ -294,7 +297,7 @@ class JsJaws(ServiceBase):
         self._extract_urls(request.result)
         if self.service_attributes.docker_config.allow_internet_access:
             try:
-                self._extract_filtered_jquery(request.result, request.file_contents.decode())
+                self._extract_filtered_code(request.result, request.file_contents.decode())
             except UnicodeDecodeError:
                 pass
         if add_supplementary:
@@ -830,31 +833,70 @@ class JsJaws(ServiceBase):
             else:
                 resp[tool_name] = completed_process.stdout.decode()
 
-    def _extract_filtered_jquery(self, result: Result, file_contents: str):
-        file_contents = file_contents.replace("\r", "")
-        jquery_version_regex = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
-        regex_match = match(jquery_version_regex, file_contents)
-        if not regex_match:
-            return
-        version = regex_match.group(1)
-        resp = get(f"https://code.jquery.com/jquery-{version}.js", timeout=15)
-        jquery_contents = resp.text
-        same = set(file_contents.split("\n")).difference(jquery_contents.split("\n"))
-        same.discard("\n")
+    def _extract_filtered_code(self, result: Result, file_contents: str):
+        common_libs = {
+            # URL/FILE: REGEX
+            "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
+            "clean_libs/maplace%s.js": MAPLACE_REGEX,
+            "clean_libs/combo.js": COMBO_REGEX,
 
-        if len(same) > 0:
-            embedded_jquery_res_sec = ResultTextSection("Embedded code was found in jQuery library")
-            embedded_jquery_res_sec.add_line(f"View extracted file {self.filtered_jquery} for details.")
-            embedded_jquery_res_sec.set_heuristic(4)
-            result.add_section(embedded_jquery_res_sec)
-            with open(self.filtered_jquery_path, "w") as f:
-                for line in same:
-                    f.write(line)
-            artifact = {
-                "name": self.filtered_jquery,
-                "path": self.filtered_jquery_path,
-                "description": "JavaScript embedded within jQuery library",
-                "to_be_extracted": True,
-            }
-            self.log.debug(f"Adding extracted file: {self.filtered_jquery}")
-            self.artifact_list.append(artifact)
+        }
+        file_contents = file_contents.replace("\r", "")
+        split_file_contents = [line.strip() for line in file_contents.split("\n")]
+        for path, regex in common_libs.items():
+            regex_match = match(regex, file_contents)
+            if not regex_match:
+                continue
+            if path.startswith("https"):
+                if len(regex_match.regs) > 1:
+                    resp = get(path % regex_match.group(1), timeout=15)
+                else:
+                    resp = get(path, timeout=15)
+
+                path_contents = resp.text
+            else:
+                if len(regex_match.regs) > 1:
+                    path_contents = open(path % regex_match.group(1), "r").read()
+                else:
+                    path_contents = open(path, "r").read()
+
+            diff = list()
+            clean_file_contents = [line.strip() for line in path_contents.split("\n")]
+            # The dirty file contents should always have more lines than the clean file contents
+            dirty_file_line_offset = 0
+            for index, item in enumerate(clean_file_contents):
+                dirty_file_line_index = index + dirty_file_line_offset
+
+                if dirty_file_line_index >= len(split_file_contents):
+                    continue
+
+                dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
+                if item == dirty_file_line_to_compare:
+                    pass
+                else:
+                    while item != dirty_file_line_to_compare:
+                        diff.append(dirty_file_line_to_compare)
+                        dirty_file_line_offset += 1
+                        dirty_file_line_index = index + dirty_file_line_offset
+
+                        if dirty_file_line_index >= len(split_file_contents):
+                            break
+
+                        dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
+
+            if len(diff) > 0:
+                embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
+                embedded_code_in_lib_res_sec.add_line(f"View extracted file {self.filtered_lib} for details.")
+                embedded_code_in_lib_res_sec.set_heuristic(4)
+                result.add_section(embedded_code_in_lib_res_sec)
+                with open(self.filtered_lib_path, "w") as f:
+                    for line in diff:
+                        f.write(f"{line}\n")
+                artifact = {
+                    "name": self.filtered_lib,
+                    "path": self.filtered_lib_path,
+                    "description": "JavaScript embedded within common library",
+                    "to_be_extracted": True,
+                }
+                self.log.debug(f"Adding extracted file: {self.filtered_lib}")
+                self.artifact_list.append(artifact)
