@@ -77,6 +77,13 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+            "writes_archive"
+        ]
       }
     ],
     "tags": {
