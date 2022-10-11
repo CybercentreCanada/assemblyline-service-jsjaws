@@ -18,6 +18,19 @@ class RunsShell(Signature):
         self.check_indicators_in_list(output, match_all=True)
 
 
+class RunsShellApplication(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="runs_shell_application",
+            description="JavaScript runs code via shell application",
+            indicators=["Shell.Application", ".ShellExecute"],
+            severity=1
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
 class RunsExecutable(Signature):
     def __init__(self):
         super().__init__(
