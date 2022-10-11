@@ -19,9 +19,13 @@ location = _proxy({
     replace: function (n) {
         util_log(this._name + ".replace(" + n + ")");
         this._props["href"] = n;
-    },
-    protocol: function (n) {
-        util_log(this._name + ".protocol(" + n + ")");
+    }
+})
+Object.defineProperty(location, "protocol", {
+    get: function () {
+        proto = this._props["href"].split("//")[0];
+        util_log(location._name + "." + "protocol" + ".get() => " + _truncateOutput(proto));
+        return proto;
     }
 })
 location.toString = () => { return "location" }

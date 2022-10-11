@@ -803,7 +803,9 @@ class JsJaws(ServiceBase):
                             out.name, hashlib.sha256(encoded_content).hexdigest(), "Redirection location"
                         )
                     else:
-                        res = ResultTextSection("Found location redirection", parent=request.result)
+                        heur = Heuristic(6)
+                        res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+                        res.add_tag("network.static.uri", location_href)
                     res.add_line("Redirection to:")
                     res.add_line(location_href)
 
