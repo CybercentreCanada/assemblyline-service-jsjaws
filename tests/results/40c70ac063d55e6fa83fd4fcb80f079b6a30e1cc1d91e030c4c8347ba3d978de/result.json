@@ -1,0 +1,27 @@
+{
+    "files": {
+        "extracted": [
+            {
+                "name": "filtered_lib.js",
+                "sha256": "415b31b86f30202252a53cf331332cb55e4d32c037f6b1b758d5385054448450"
+            }
+        ],
+        "supplementary": []
+    },
+    "results": {
+        "heuristics": [
+            {
+                "attack_ids": [],
+                "heur_id": 3,
+                "signatures": ["suspicious_function_call"]
+            },
+            {
+                "attack_ids": [],
+                "heur_id": 4,
+                "signatures": []
+            }
+        ],
+        "tags": {},
+        "temp_submission_data": {}
+    }
+}
