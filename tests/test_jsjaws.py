@@ -774,8 +774,6 @@ class TestJsJaws:
         assert path.exists(jsjaws_class_instance.filtered_lib_path)
         with open(jsjaws_class_instance.filtered_lib_path, "r") as f:
             val = f.read()
-            print(val)
-            print(evil_string.rstrip("\n"))
             assert val == evil_string
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": jsjaws_class_instance.filtered_lib,

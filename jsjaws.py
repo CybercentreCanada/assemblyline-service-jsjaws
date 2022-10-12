@@ -295,11 +295,10 @@ class JsJaws(ServiceBase):
         self._extract_doc_writes(malware_jail_output)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
-        if self.service_attributes.docker_config.allow_internet_access:
-            try:
-                self._extract_filtered_code(request.result, request.file_contents.decode())
-            except UnicodeDecodeError:
-                pass
+        try:
+            self._extract_filtered_code(request.result, request.file_contents.decode())
+        except UnicodeDecodeError:
+            pass
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
         self._flag_jsxray_iocs(jsxray_output, request.result)
@@ -850,6 +849,8 @@ class JsJaws(ServiceBase):
             if not regex_match:
                 continue
             if path.startswith("https"):
+                if not self.service_attributes.docker_config.allow_internet_access:
+                    continue
                 if len(regex_match.regs) > 1:
                     resp = get(path % regex_match.group(1), timeout=15)
                 else:
@@ -870,7 +871,7 @@ class JsJaws(ServiceBase):
                 dirty_file_line_index = index + dirty_file_line_offset
 
                 if dirty_file_line_index >= len(split_file_contents):
-                    continue
+                    break
 
                 dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
                 if item == dirty_file_line_to_compare:
