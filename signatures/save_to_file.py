@@ -5,7 +5,7 @@ from signatures.abstracts import Signature
 
 
 # List of commands used to save a file to disk
-save_commands = ["SaveToFile", "navigator.msSaveOrOpenBlob(", "saveAs("]
+save_commands = ["SaveToFile", "msSaveOrOpenBlob(", "saveAs("]
 
 
 class SaveToFile(Signature):
@@ -28,8 +28,8 @@ class WritesExecutable(Signature):
             heuristic_id=3,
             name="writes_executable",
             description="JavaScript writes executable file to disk",
-            indicators=[".exe"],
-            severity=0
+            indicators=[".exe", ".dll"],
+            severity=2
         )
 
     def process_output(self, output):
@@ -53,7 +53,7 @@ class WritesArchive(Signature):
             name="writes_archive",
             description="JavaScript writes archive file to disk",
             indicators=[".zip", ".iso"],
-            severity=0
+            severity=3
         )
 
     def process_output(self, output):
