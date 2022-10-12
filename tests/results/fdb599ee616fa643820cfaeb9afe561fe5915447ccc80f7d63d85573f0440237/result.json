@@ -1,8 +1,63 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2,
+    "score": 512,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "writes_archive": 500
+          },
+          "signatures": {
+            "writes_archive": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WritesArchive",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"document5934.zip\"}]",
@@ -82,7 +137,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-            "writes_archive"
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_archive"
         ]
       }
     ],
