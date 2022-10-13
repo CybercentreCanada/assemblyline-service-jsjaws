@@ -799,7 +799,7 @@ class TestSignature:
         assert default_sig.indicators == []
         assert default_sig.severity == 0
         assert default_sig.safelist == []
-        assert default_sig.marks == set()
+        assert default_sig.marks == list()
 
         loaded_sig = Signature(
             heuristic_id=1,
@@ -819,21 +819,21 @@ class TestSignature:
         assert loaded_sig.indicators == ["blah"]
         assert loaded_sig.severity == 1
         assert loaded_sig.safelist == ["yabadabadoo"]
-        assert loaded_sig.marks == set()
+        assert loaded_sig.marks == list()
 
     @staticmethod
     @pytest.mark.parametrize(
         "indicators, safelist, output, match_all, expected_marks",
         [
-            (None, [], [], False, set()),
-            (None, [], ["blah"], False, set()),
-            (None, [], ["blah - blah"], False, set()),
-            (["yabadabadoo"], [], ["blah"], False, set()),
-            (["blah"], [], ["blah"], False, {"blah"}),
-            (["blah"], [], ["blah"], True, {"blah"}),
-            (["blah"], ["yabadabadoo"], ["blah"], True, {"blah"}),
-            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, set()),
-            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, set()),
+            (None, [], [], False, list()),
+            (None, [], ["blah"], False, list()),
+            (None, [], ["blah - blah"], False, list()),
+            (["yabadabadoo"], [], ["blah"], False, list()),
+            (["blah"], [], ["blah"], False, ["blah"]),
+            (["blah"], [], ["blah"], True, ["blah"]),
+            (["blah"], ["yabadabadoo"], ["blah"], True, ["blah"]),
+            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, list()),
+            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, list()),
         ],
     )
     def test_check_indicators_in_list(indicators, safelist, output, match_all, expected_marks):
@@ -873,73 +873,73 @@ class TestSignature:
         sig.add_mark("")
         sig.add_mark(None)
         sig.add_mark(0)
-        assert sig.marks == set()
+        assert sig.marks == list()
 
         sig.add_mark("blah")
-        assert sig.marks == {"blah"}
+        assert sig.marks == ["blah"]
 
     @staticmethod
     @pytest.mark.parametrize(
         "indicators, safelist, output, expected_marks",
         [
-            (None, [], [], set()),
-            (None, [], ["blah"], set()),
-            (None, [], ["blah - blah"], set()),
+            (None, [], [], list()),
+            (None, [], ["blah"], list()),
+            (None, [], ["blah - blah"], list()),
             # 1 any indicator that will match
-            ([{"method": "any", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            ([{"method": "any", "indicators": ["blah"]}], [], ["blah"], ["blah"]),
             # 1 all indicator that will match
-            ([{"method": "all", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            ([{"method": "all", "indicators": ["blah"]}], [], ["blah"], ["blah"]),
             # 1 any indicator that will match, safelisted item
-            ([{"method": "any", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            ([{"method": "any", "indicators": ["blah"]}], ["blah"], ["blah"], list()),
             # 1 all indicator that will match, safelisted item
-            ([{"method": "all", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            ([{"method": "all", "indicators": ["blah"]}], ["blah"], ["blah"], list()),
             # 1 any indicator that will not match
-            ([{"method": "any", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            ([{"method": "any", "indicators": ["yabadabadoo"]}], [], ["blah"], list()),
             # 1 all indicator that will not match
-            ([{"method": "all", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            ([{"method": "all", "indicators": ["yabadabadoo"]}], [], ["blah"], list()),
             # 2 any indicators, only one matches, therefore no marks
             (
                 [{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah"],
-                set(),
+                list(),
             ),
             # 2 all indicators, only one matches, therefore no marks
             (
                 [{"method": "all", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah"],
-                set(),
+                list(),
             ),
             # 2 any indicators, both match, one mark
             (
                 [{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah blahblah"],
-                {"blah blahblah"},
+                ["blah blahblah"],
             ),
             # 2 all indicators, both match, one mark
             (
                 [{"method": "all", "indicators": ["blah"]}, {"method": "all", "indicators": ["blahblah"]}],
                 [],
                 ["blah blahblah"],
-                {"blah blahblah"},
+                ["blah blahblah"],
             ),
             # 1 any indicator with multiple indicators, which matches on multiple lines, therefore multiple marks
             (
                 [{"method": "any", "indicators": ["blah", "yabadabadoo"]}],
                 [],
                 ["blah", "yabadabadoo", "abc123"],
-                {"blah", "yabadabadoo"},
+                ["blah", "yabadabadoo"],
             ),
             # 1 all indicator with multiple indicators, which doesn't match on multiple lines, therefore no marks
-            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], set()),
+            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], list()),
             # 1 all indicator with multiple indicators, which match on single line, therefore one mark
             (
                 [{"method": "all", "indicators": ["blah", "yabadabadoo"]}],
                 [],
                 ["blah yabadabadoo", "yabadabadoo", "abc123"],
-                {"blah yabadabadoo"},
+                ["blah yabadabadoo"],
             ),
             # 2 all indicators with multiple indicators, which match on single line, therefore one mark
             (
@@ -949,14 +949,14 @@ class TestSignature:
                 ],
                 [],
                 ["blah yabadabadoo oodabadabay halb", "abc123"],
-                {"blah yabadabadoo oodabadabay halb"},
+                ["blah yabadabadoo oodabadabay halb"],
             ),
             # 1 any indicator with multiple indicators, 1 all indicator with multiple indicators, which match on single line, therefore one mark
             (
                 [{"method": "any", "indicators": ["abc", "def"]}, {"method": "all", "indicators": ["ghi", "jkl"]}],
                 [],
                 ["abcdef", "abcghi", "abcghijkl"],
-                {"abcghijkl"},
+                ["abcghijkl"],
             ),
             # 2 any indicator with multiple indicators, 2 all indicator with multiple indicators, which match on single line, therefore one mark
             (
@@ -968,7 +968,7 @@ class TestSignature:
                 ],
                 [],
                 ["abcdef", "abcghi", "abcghijkl", "abcghijklpqrstuvwx"],
-                {"abcghijklpqrstuvwx"},
+                ["abcghijklpqrstuvwx"],
             ),
         ],
     )

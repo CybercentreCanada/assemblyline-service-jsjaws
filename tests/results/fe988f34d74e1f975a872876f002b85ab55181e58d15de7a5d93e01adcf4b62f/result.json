@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript removes objects that were recently appended\n\t\t      document.body.appendChild(tip)\n\t\t      document.body.appendChild(this.label)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))",
+        "body": "JavaScript removes objects that were recently appended\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))\n\t\t      document.body.appendChild(this.label)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\t      document.body.appendChild(tip)\n\t\t      document.body.appendChild(this.label)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))\n\t\t      document.body.appendChild(this.label)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
