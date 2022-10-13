@@ -1917,6 +1917,8 @@ Element = _proxy(function (n) {
         this._children[this._children.length] = e;
         e.parentNode = this;
         e.parentelement = this;
+        if (e._attributes["src"])
+            _wscript_saved_files[e._name] = e._attributes["src"];
         return e;
     }
     this.removechild = function (e) {
@@ -1924,7 +1926,6 @@ Element = _proxy(function (n) {
         return e;
     }
     this.setattribute = function (n, v) {
-        util_log(this._name + ".setAttribute(" + n + ", " + v + ")");
         this._attributes[n] = v;
     }
     Object.defineProperty(this, "nodetypedvalue", {
