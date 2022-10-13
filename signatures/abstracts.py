@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Union
 from re import findall
 from assemblyline.common.str_utils import safe_str
 
@@ -51,7 +51,7 @@ class Signature:
         self.safelist: List[str] = [] if safelist is None else safelist
 
         # These are the lines of code from the sandbox that reflect when an indicator has been found
-        self.marks: Set[str] = set()
+        self.marks: List[str] = list()
 
     def check_indicators_in_list(self, output: List[str], match_all: bool = False) -> None:
         """
@@ -68,14 +68,16 @@ class Signature:
             # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
             if match_all and all(indicator.lower() in string.lower() for indicator in self.indicators) and \
                     not any(item.lower() in string.lower() for item in self.safelist):
-                self.marks.add(safe_str(string))
+                if safe_str(string) not in self.marks:
+                    self.marks.append(safe_str(string))
 
             # If we only want to match at least one indicator in a line, then mark it!
             if not match_all:
                 for indicator in self.indicators:
                     if indicator.lower() in string.lower() and \
                         not any(item.lower() in string.lower() for item in self.safelist):
-                        self.marks.add(safe_str(string))
+                        if safe_str(string) not in self.marks:
+                            self.marks.append(safe_str(string))
                         continue
 
     @staticmethod
@@ -104,7 +106,8 @@ class Signature:
         :return: A boolean indicating if the mark was added
         """
         if mark:
-            self.marks.add(safe_str(mark))
+            if safe_str(mark) not in self.marks:
+                self.marks.append(safe_str(mark))
         else:
             return False
 
@@ -148,4 +151,5 @@ class Signature:
                         are_indicators_matched = False
 
             if are_indicators_matched and not any(item.lower() in string.lower() for item in self.safelist):
-                self.marks.add(safe_str(string))
+                if safe_str(string) not in self.marks:
+                    self.marks.append(safe_str(string))
