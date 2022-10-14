@@ -784,6 +784,18 @@ class TestJsJaws:
         assert check_section_equality(res.sections[0], correct_res_sec)
         remove(jsjaws_class_instance.filtered_lib_path)
 
+    @staticmethod
+    @pytest.mark.parametrize("line_1, line_2, expected_result", [
+        ("blah", "blah", True),
+        ("blah", "blahblah", False),
+        ("blah", "//blah", True),
+        ("//blah", "blah", True),
+        ("\tblah", "blah", True),
+        ("//\tblah", "blah", True),
+    ])
+    def test_compare_lines(line_1, line_2, expected_result, jsjaws_class_instance):
+        assert jsjaws_class_instance._compare_lines(line_1, line_2) == expected_result
+
 
 class TestSignature:
     @staticmethod
