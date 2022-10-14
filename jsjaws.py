@@ -843,7 +843,7 @@ class JsJaws(ServiceBase):
 
         }
         file_contents = file_contents.replace("\r", "")
-        split_file_contents = [line.strip() for line in file_contents.split("\n")]
+        split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
         for path, regex in common_libs.items():
             regex_match = match(regex, file_contents)
             if not regex_match:
@@ -864,7 +864,7 @@ class JsJaws(ServiceBase):
                     path_contents = open(path, "r").read()
 
             diff = list()
-            clean_file_contents = [line.strip() for line in path_contents.split("\n")]
+            clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
             # The dirty file contents should always have more lines than the clean file contents
             dirty_file_line_offset = 0
             for index, item in enumerate(clean_file_contents):
@@ -874,10 +874,10 @@ class JsJaws(ServiceBase):
                     break
 
                 dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-                if item == dirty_file_line_to_compare:
+                if self._compare_lines(item, dirty_file_line_to_compare):
                     pass
                 else:
-                    while item != dirty_file_line_to_compare:
+                    while not self._compare_lines(item, dirty_file_line_to_compare):
                         diff.append(dirty_file_line_to_compare)
                         dirty_file_line_offset += 1
                         dirty_file_line_index = index + dirty_file_line_offset
@@ -903,3 +903,23 @@ class JsJaws(ServiceBase):
                 }
                 self.log.debug(f"Adding extracted file: {self.filtered_lib}")
                 self.artifact_list.append(artifact)
+
+
+    @staticmethod
+    def _compare_lines(line_1: str, line_2: str) -> bool:
+        """
+        This method compares two lines and returns their equivalence
+        :param line_1: The first line to compare
+        :param line_2: The second line to compare
+        :return: A boolean representing that the lines are equivalent
+        """
+        if line_1.startswith("//"):
+            line_1 = line_1[2:]
+
+        if line_2.startswith("//"):
+            line_2 = line_2[2:]
+
+        line_1 = line_1.strip()
+        line_2 = line_2.strip()
+
+        return line_1 == line_2
