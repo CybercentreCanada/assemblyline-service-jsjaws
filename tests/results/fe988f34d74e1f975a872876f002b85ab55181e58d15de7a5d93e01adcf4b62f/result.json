@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 530,
+    "score": 540,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript removes objects that were recently appended\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))\n\t\t      document.body.appendChild(this.label)",
+        "body": "JavaScript removes objects that were recently appended\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))\n\t\t      document.body.appendChild(this.label)",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -56,6 +56,28 @@
         },
         "tags": {},
         "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in /tmp/fe988f34d74e1f975a872876f002b85ab55181e58d15de7a5d93e01adcf4b62f: object ...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "antisandbox_timeout": 10
+          },
+          "signatures": {
+            "antisandbox_timeout": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AntiSandboxTimeout",
         "zeroize_on_tag_safe": false
       },
       {
@@ -123,6 +145,13 @@
         "heur_id": 3,
         "signatures": [
           "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "antisandbox_timeout"
         ]
       },
       {

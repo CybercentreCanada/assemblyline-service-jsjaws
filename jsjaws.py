@@ -1,15 +1,15 @@
 import hashlib
 import tempfile
 from inspect import getmembers, isclass
-from json import JSONDecodeError, load, loads
+from json import dumps, JSONDecodeError, load, loads
 from os import listdir, mkdir, path, remove
 from pkgutil import iter_modules
 from re import compile, match, search
-from subprocess import TimeoutExpired, run
+from subprocess import TimeoutExpired, Popen, PIPE
 from sys import modules
 from threading import Thread
 from time import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.str_utils import safe_str, truncate
@@ -56,6 +56,8 @@ TRANSLATED_SCORE = {
 # The file path for the file that has its leading and trailing null bytes stripped out
 MODIFIED_SAMPLE = "/tmp/modified_sample.js"
 
+# Default cap of 10k lines of stdout from tools
+STDOUT_LIMIT = 10000
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -84,10 +86,12 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets: Optional[str] = None
         self.filtered_lib: Optional[str] = None
         self.filtered_lib_path: Optional[str] = None
+        self.stdout_limit: Optional[int] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
         self.log.debug("JsJaws service started")
+        self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
 
     def stop(self) -> None:
         self.log.debug("JsJaws service ended")
@@ -110,7 +114,7 @@ class JsJaws(ServiceBase):
             self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.abspath(__file__))
-        self.path_to_jailme_js = path.join(root_dir, "tools/jailme.js")
+        self.path_to_jailme_js = path.join(root_dir, "tools/jailme.cjs")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
@@ -245,19 +249,19 @@ class JsJaws(ServiceBase):
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
-        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, tool_timeout, responses)))
+        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses)))
         tool_threads.append(
-            Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, tool_timeout, responses, True, True))
+            Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses))
         )
         tool_threads.append(
-            Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, tool_timeout, responses, True))
+            Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses))
         )
 
         for thr in tool_threads:
             thr.start()
 
         for thr in tool_threads:
-            thr.join()
+            thr.join(timeout=tool_timeout)
 
         boxjs_output: List[str] = []
         if path.exists(self.boxjs_analysis_log):
@@ -265,10 +269,12 @@ class JsJaws(ServiceBase):
                 boxjs_output = f.readlines()
 
         malware_jail_output = responses.get("MalwareJail", [])
+        jsxray_output: Dict[Any] = {}
         try:
-            jsxray_output = loads(responses.get("JS-X-Ray", ""))
+            if len(responses.get("JS-X-Ray", [])) > 0:
+                jsxray_output = loads(responses["JS-X-Ray"][0])
         except JSONDecodeError:
-            jsxray_output: Dict[Any] = {}
+            pass
 
         # ==================================================================
         # Magic Section
@@ -284,9 +290,11 @@ class JsJaws(ServiceBase):
                     static_file_lines.extend(line.split(";"))
                 else:
                     static_file_lines.append(line)
-            total_output = boxjs_output + malware_jail_output + static_file_lines
+            total_output = boxjs_output[:self.stdout_limit] + malware_jail_output[:self.stdout_limit] + static_file_lines
         else:
-            total_output = boxjs_output + malware_jail_output
+            total_output = boxjs_output[:self.stdout_limit] + malware_jail_output[:self.stdout_limit]
+
+        total_output = total_output[:self.stdout_limit]
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
@@ -414,24 +422,6 @@ class JsJaws(ServiceBase):
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
 
-    def _parse_malwarejail_output(self, output: List[str]):
-
-        ret = None
-        for line in output:
-            if "-" in line:
-                try:
-                    dtparse(line.split("-")[0].strip())
-                    if ret is not None:
-                        yield ret
-                    ret = ""
-                except ValueError:
-                    pass
-            if ret:
-                ret = f"{ret}\n"
-            ret = f"{ret}{line}"
-        if ret is not None:
-            yield ret
-
     def _extract_doc_writes(self, output: List[str]) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
@@ -440,12 +430,20 @@ class JsJaws(ServiceBase):
         """
         extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
         doc_write = False
-        for line in self._parse_malwarejail_output(output):
+        for line in output:
             if doc_write:
-                extracted_doc_writes.write(line.split(" - => '", 1)[1][:-1] + "\n")
-                doc_write = False
-            if all(item in line.split("-", 1)[1][:40] for item in ["document", "write(content)"]):
+                if "] => '" in line:
+                    extracted_doc_writes.write(line.split("] => '", 1)[1][:-1] + "\n")
+                elif not "] " in line:
+                    if line.endswith("'"):
+                        extracted_doc_writes.write(line[:-1] + "\n")
+                    else:
+                        extracted_doc_writes.write(line + "\n")
+                continue
+            if "] " in line and all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
                 doc_write = True
+            else:
+                doc_write = False
 
         extracted_doc_writes.close()
 
@@ -473,11 +471,18 @@ class JsJaws(ServiceBase):
         urls_result_section = ResultTableSection("URLs")
 
         urls_rows: List[TableRow] = []
+        items_seen: Set[str] = set()
+
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
                 file_contents = f.read()
                 urls_json = loads(file_contents)
-                [urls_rows.append(TableRow(**item)) for item in urls_json]
+                for item in urls_json:
+                    if dumps(item) not in items_seen:
+                        items_seen.add(dumps(item))
+                        urls_rows.append(TableRow(**item))
+                    else:
+                        continue
                 for url in urls_rows:
                     self._tag_uri(url["url"], urls_result_section)
 
@@ -490,11 +495,12 @@ class JsJaws(ServiceBase):
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
-                        urls_rows.append(
-                            TableRow(
-                                **{"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
-                            )
-                        )
+                        item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
+                        if dumps(item) not in items_seen:
+                            items_seen.add(dumps(item))
+                            urls_rows.append(TableRow(**item))
+                        else:
+                            continue
                         self._tag_uri(value["url"], urls_result_section)
 
         if urls_rows:
@@ -764,18 +770,19 @@ class JsJaws(ServiceBase):
         malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         for line in output:
             extract_iocs_from_text_blob(line, malware_jail_res_sec)
-        if malware_jail_res_sec.body:
-            malware_jail_res_sec.set_heuristic(2)
-            request.result.add_section(malware_jail_res_sec)
+            if "] " in line:
+                log_line = line.split("] ", 1)[1]
+            else:
+                log_line = line
 
-        for line in self._parse_malwarejail_output(output):
-            log_line = line.split(" - ", 1)[1]
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []
                 for exception_line in log_line.split("\n")[::-1]:
                     if not exception_line.strip():
                         break
                     exception_lines.append(exception_line)
+                if not exception_lines:
+                    continue
                 if self.config.get("raise_malware_jail_exc", False):
                     raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
                 else:
@@ -808,31 +815,29 @@ class JsJaws(ServiceBase):
                     res.add_line("Redirection to:")
                     res.add_line(location_href)
 
+        if malware_jail_res_sec.body:
+            malware_jail_res_sec.set_heuristic(2)
+            request.result.add_section(malware_jail_res_sec)
+
     def _run_tool(
         self,
         tool_name: str,
         args: List[str],
-        tool_timeout: int,
         resp: Dict[str, Any],
-        get_stdout: bool = False,
-        split: bool = False,
     ) -> None:
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
-        completed_process = None
+        resp[tool_name] = []
         try:
-            completed_process = run(args=args, capture_output=True, timeout=tool_timeout)
+            # Stream stdout to resp rather than waiting for process to finish
+            with Popen(args=args, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
+                for line in p.stdout:
+                    resp[tool_name].append(line)
         except TimeoutExpired:
             pass
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
-
-        if completed_process and get_stdout:
-            if split:
-                resp[tool_name] = completed_process.stdout.decode().split("\n")
-            else:
-                resp[tool_name] = completed_process.stdout.decode()
 
     def _extract_filtered_code(self, result: Result, file_contents: str):
         common_libs = {

@@ -24,6 +24,8 @@ config:
   max_payloads_extracted: 50
   # Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
   raise_malware_jail_exc: false
+  # The limit to number of stdout lines analyzed that werre captured from tools
+  total_stdout_limit: 10000
 
 submission_params:
   # Service-wide parameters

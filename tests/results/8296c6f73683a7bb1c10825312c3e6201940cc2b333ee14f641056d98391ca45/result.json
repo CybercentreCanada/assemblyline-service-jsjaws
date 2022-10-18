@@ -5,6 +5,32 @@
     "sections": [
       {
         "auto_collapse": false,
+        "body": "Redirection to:\nhttp://www.savethechildren.org",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://www.savethechildren.org"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.savethechildren.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.savethechildren.org\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
@@ -30,32 +56,6 @@
           }
         },
         "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "Redirection to:\nhttp://www.savethechildren.org",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 6,
-          "score": 0,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "static": {
-              "uri": [
-                "http://www.savethechildren.org"
-              ]
-            }
-          }
-        },
-        "title_text": "Automatic location redirection",
         "zeroize_on_tag_safe": false
       }
     ]
