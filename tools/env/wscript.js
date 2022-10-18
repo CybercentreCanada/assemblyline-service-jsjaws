@@ -12,6 +12,8 @@ _wscript_wmis = [];
 _wscript_objects = [];
 _pw32 = require('path').win32;
 
+const appendChild_base64_regex = new RegExp("data:[^;]*;base64,(.*)");
+
 Date = _date;
 Date.prototype._getYear = Date.prototype.getYear;
 
@@ -1917,6 +1919,13 @@ Element = _proxy(function (n) {
         this._children[this._children.length] = e;
         e.parentNode = this;
         e.parentelement = this;
+        if (e._attributes["src"]) {
+            match = e._attributes["src"].match(appendChild_base64_regex);
+            if (match)
+                _wscript_saved_files[e._name] = Buffer.from(match[1], 'base64');
+            else
+                _wscript_saved_files[e._name] = e._attributes["src"];
+        }
         return e;
     }
     this.removechild = function (e) {
@@ -1924,7 +1933,6 @@ Element = _proxy(function (n) {
         return e;
     }
     this.setattribute = function (n, v) {
-        util_log(this._name + ".setAttribute(" + n + ", " + v + ")");
         this._attributes[n] = v;
     }
     Object.defineProperty(this, "nodetypedvalue", {

@@ -1,71 +1,181 @@
 {
-    "files": {
-        "extracted": [],
-        "supplementary": []
-    },
-    "results": {
-        "heuristics": [
-            {
-                "attack_ids": [],
-                "heur_id": 1,
-                "signatures": []
-            },
-            {
-                "attack_ids": [],
-                "heur_id": 2,
-                "signatures": []
-            },
-            {
-                "attack_ids": [],
-                "heur_id": 3,
-                "signatures": [
-                    "ajax_network_request"
-                ]
-            }
-        ],
-        "tags": {
-            "network.dynamic.domain": [
-                {
-                    "heur_id": 2,
-                    "signatures": [],
-                    "value": "www.icodeps.com"
-                },
-                {
-                    "heur_id": 1,
-                    "signatures": [],
-                    "value": "www.icodeps.com"
-                }
-            ],
-            "network.dynamic.uri": [
-                {
-                    "heur_id": 2,
-                    "signatures": [],
-                    "value": "https://www.icodeps.com/jsapi.php\"})"
-                },
-                {
-                    "heur_id": 2,
-                    "signatures": [],
-                    "value": "https://www.icodeps.com/jsapi.php\"})"
-                },
-                {
-                    "heur_id": 1,
-                    "signatures": [],
-                    "value": "https://www.icodeps.com/jsapi.php"
-                }
-            ],
-            "network.dynamic.uri_path": [
-                {
-                    "heur_id": 1,
-                    "signatures": [],
-                    "value": "/jsapi.php"
-                },
-                {
-                    "heur_id": 2,
-                    "signatures": [],
-                    "value": "/jsapi.php\"})"
-                }
-            ]
+  "extra": {
+    "drop_file": false,
+    "score": 12,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request via AJAX\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "ajax_network_request": 10
+          },
+          "signatures": {
+            "ajax_network_request": 1
+          }
         },
-        "temp_submission_data": {}
-    }
+        "tags": {},
+        "title_text": "Signature: AJAXNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.icodeps.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\\\"})\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\\\"})\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.icodeps.com"
+              ],
+              "uri": [
+                "https://www.icodeps.com/jsapi.php\"})",
+                "https://www.icodeps.com/jsapi.php"
+              ],
+              "uri_path": [
+                "/jsapi.php\"})",
+                "/jsapi.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://www.icodeps.com/jsapi.php\", \"method\": \"GET\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.icodeps.com"
+              ],
+              "uri": [
+                "https://www.icodeps.com/jsapi.php"
+              ],
+              "uri_path": [
+                "/jsapi.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "ajax_network_request"
+        ]
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.icodeps.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "www.icodeps.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.icodeps.com/jsapi.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://www.icodeps.com/jsapi.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.icodeps.com/jsapi.php\"})"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/jsapi.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/jsapi.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/jsapi.php\"})"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
 }

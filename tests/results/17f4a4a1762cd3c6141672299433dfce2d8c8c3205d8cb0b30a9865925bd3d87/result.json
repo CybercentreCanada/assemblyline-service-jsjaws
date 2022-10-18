@@ -1,0 +1,77 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"example.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "example.com"
+              ],
+              "uri": [
+                "http://example.com/?search"
+              ],
+              "uri_path": [
+                "/?search"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "example.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://example.com/?search"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?search"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

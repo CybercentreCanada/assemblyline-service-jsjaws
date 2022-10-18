@@ -751,7 +751,7 @@ class TestJsJaws:
         assert check_section_equality(request.result.sections[0], correct_res_sec)
 
     @staticmethod
-    def test_extract_filtered_jquery(jsjaws_class_instance, dummy_get_response_class, mocker):
+    def test_extract_filtered_code(jsjaws_class_instance, dummy_get_response_class, mocker):
         from os import path, remove
 
         from assemblyline_v4_service.common.result import Result, ResultSection
@@ -760,28 +760,41 @@ class TestJsJaws:
         fake_response_text = "/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
         mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
         file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
-        jsjaws_class_instance.filtered_jquery = "filtered_jquery.js"
-        jsjaws_class_instance.filtered_jquery_path = path.join("/tmp", jsjaws_class_instance.filtered_jquery)
+        jsjaws_class_instance.filtered_lib = "filtered_lib.js"
+        jsjaws_class_instance.filtered_lib_path = path.join("/tmp", jsjaws_class_instance.filtered_lib)
         jsjaws_class_instance.artifact_list = []
         res = Result()
         correct_res_sec = ResultSection(
-            "Embedded code was found in jQuery library",
-            body=f"View extracted file {jsjaws_class_instance.filtered_jquery} for details.",
+            "Embedded code was found in common library",
+            body=f"View extracted file {jsjaws_class_instance.filtered_lib} for details.",
         )
         correct_res_sec.set_heuristic(4)
-        jsjaws_class_instance._extract_filtered_jquery(res, file_contents)
+        jsjaws_class_instance._extract_filtered_code(res, file_contents)
 
-        assert path.exists(jsjaws_class_instance.filtered_jquery_path)
-        with open(jsjaws_class_instance.filtered_jquery_path, "r") as f:
-            assert f.read() == evil_string.rstrip("\n")
+        assert path.exists(jsjaws_class_instance.filtered_lib_path)
+        with open(jsjaws_class_instance.filtered_lib_path, "r") as f:
+            val = f.read()
+            assert val == evil_string
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.filtered_jquery,
-            "path": jsjaws_class_instance.filtered_jquery_path,
-            "description": "JavaScript embedded within jQuery library",
+            "name": jsjaws_class_instance.filtered_lib,
+            "path": jsjaws_class_instance.filtered_lib_path,
+            "description": "JavaScript embedded within common library",
             "to_be_extracted": True,
         }
         assert check_section_equality(res.sections[0], correct_res_sec)
-        remove(jsjaws_class_instance.filtered_jquery_path)
+        remove(jsjaws_class_instance.filtered_lib_path)
+
+    @staticmethod
+    @pytest.mark.parametrize("line_1, line_2, expected_result", [
+        ("blah", "blah", True),
+        ("blah", "blahblah", False),
+        ("blah", "//blah", True),
+        ("//blah", "blah", True),
+        ("\tblah", "blah", True),
+        ("//\tblah", "blah", True),
+    ])
+    def test_compare_lines(line_1, line_2, expected_result, jsjaws_class_instance):
+        assert jsjaws_class_instance._compare_lines(line_1, line_2) == expected_result
 
 
 class TestSignature:
@@ -798,7 +811,7 @@ class TestSignature:
         assert default_sig.indicators == []
         assert default_sig.severity == 0
         assert default_sig.safelist == []
-        assert default_sig.marks == set()
+        assert default_sig.marks == list()
 
         loaded_sig = Signature(
             heuristic_id=1,
@@ -818,21 +831,21 @@ class TestSignature:
         assert loaded_sig.indicators == ["blah"]
         assert loaded_sig.severity == 1
         assert loaded_sig.safelist == ["yabadabadoo"]
-        assert loaded_sig.marks == set()
+        assert loaded_sig.marks == list()
 
     @staticmethod
     @pytest.mark.parametrize(
         "indicators, safelist, output, match_all, expected_marks",
         [
-            (None, [], [], False, set()),
-            (None, [], ["blah"], False, set()),
-            (None, [], ["blah - blah"], False, set()),
-            (["yabadabadoo"], [], ["blah"], False, set()),
-            (["blah"], [], ["blah"], False, {"blah"}),
-            (["blah"], [], ["blah"], True, {"blah"}),
-            (["blah"], ["yabadabadoo"], ["blah"], True, {"blah"}),
-            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, set()),
-            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, set()),
+            (None, [], [], False, list()),
+            (None, [], ["blah"], False, list()),
+            (None, [], ["blah - blah"], False, list()),
+            (["yabadabadoo"], [], ["blah"], False, list()),
+            (["blah"], [], ["blah"], False, ["blah"]),
+            (["blah"], [], ["blah"], True, ["blah"]),
+            (["blah"], ["yabadabadoo"], ["blah"], True, ["blah"]),
+            (["blah", "blahblah"], ["yabadabadoo"], ["blah"], True, list()),
+            (["blah"], ["yabadabadoo"], ["yabadabadoo"], True, list()),
         ],
     )
     def test_check_indicators_in_list(indicators, safelist, output, match_all, expected_marks):
@@ -872,73 +885,73 @@ class TestSignature:
         sig.add_mark("")
         sig.add_mark(None)
         sig.add_mark(0)
-        assert sig.marks == set()
+        assert sig.marks == list()
 
         sig.add_mark("blah")
-        assert sig.marks == {"blah"}
+        assert sig.marks == ["blah"]
 
     @staticmethod
     @pytest.mark.parametrize(
         "indicators, safelist, output, expected_marks",
         [
-            (None, [], [], set()),
-            (None, [], ["blah"], set()),
-            (None, [], ["blah - blah"], set()),
+            (None, [], [], list()),
+            (None, [], ["blah"], list()),
+            (None, [], ["blah - blah"], list()),
             # 1 any indicator that will match
-            ([{"method": "any", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            ([{"method": "any", "indicators": ["blah"]}], [], ["blah"], ["blah"]),
             # 1 all indicator that will match
-            ([{"method": "all", "indicators": ["blah"]}], [], ["blah"], {"blah"}),
+            ([{"method": "all", "indicators": ["blah"]}], [], ["blah"], ["blah"]),
             # 1 any indicator that will match, safelisted item
-            ([{"method": "any", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            ([{"method": "any", "indicators": ["blah"]}], ["blah"], ["blah"], list()),
             # 1 all indicator that will match, safelisted item
-            ([{"method": "all", "indicators": ["blah"]}], ["blah"], ["blah"], set()),
+            ([{"method": "all", "indicators": ["blah"]}], ["blah"], ["blah"], list()),
             # 1 any indicator that will not match
-            ([{"method": "any", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            ([{"method": "any", "indicators": ["yabadabadoo"]}], [], ["blah"], list()),
             # 1 all indicator that will not match
-            ([{"method": "all", "indicators": ["yabadabadoo"]}], [], ["blah"], set()),
+            ([{"method": "all", "indicators": ["yabadabadoo"]}], [], ["blah"], list()),
             # 2 any indicators, only one matches, therefore no marks
             (
                 [{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah"],
-                set(),
+                list(),
             ),
             # 2 all indicators, only one matches, therefore no marks
             (
                 [{"method": "all", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah"],
-                set(),
+                list(),
             ),
             # 2 any indicators, both match, one mark
             (
                 [{"method": "any", "indicators": ["blah"]}, {"method": "any", "indicators": ["blahblah"]}],
                 [],
                 ["blah blahblah"],
-                {"blah blahblah"},
+                ["blah blahblah"],
             ),
             # 2 all indicators, both match, one mark
             (
                 [{"method": "all", "indicators": ["blah"]}, {"method": "all", "indicators": ["blahblah"]}],
                 [],
                 ["blah blahblah"],
-                {"blah blahblah"},
+                ["blah blahblah"],
             ),
             # 1 any indicator with multiple indicators, which matches on multiple lines, therefore multiple marks
             (
                 [{"method": "any", "indicators": ["blah", "yabadabadoo"]}],
                 [],
                 ["blah", "yabadabadoo", "abc123"],
-                {"blah", "yabadabadoo"},
+                ["blah", "yabadabadoo"],
             ),
             # 1 all indicator with multiple indicators, which doesn't match on multiple lines, therefore no marks
-            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], set()),
+            ([{"method": "all", "indicators": ["blah", "yabadabadoo"]}], [], ["blah", "yabadabadoo", "abc123"], list()),
             # 1 all indicator with multiple indicators, which match on single line, therefore one mark
             (
                 [{"method": "all", "indicators": ["blah", "yabadabadoo"]}],
                 [],
                 ["blah yabadabadoo", "yabadabadoo", "abc123"],
-                {"blah yabadabadoo"},
+                ["blah yabadabadoo"],
             ),
             # 2 all indicators with multiple indicators, which match on single line, therefore one mark
             (
@@ -948,14 +961,14 @@ class TestSignature:
                 ],
                 [],
                 ["blah yabadabadoo oodabadabay halb", "abc123"],
-                {"blah yabadabadoo oodabadabay halb"},
+                ["blah yabadabadoo oodabadabay halb"],
             ),
             # 1 any indicator with multiple indicators, 1 all indicator with multiple indicators, which match on single line, therefore one mark
             (
                 [{"method": "any", "indicators": ["abc", "def"]}, {"method": "all", "indicators": ["ghi", "jkl"]}],
                 [],
                 ["abcdef", "abcghi", "abcghijkl"],
-                {"abcghijkl"},
+                ["abcghijkl"],
             ),
             # 2 any indicator with multiple indicators, 2 all indicator with multiple indicators, which match on single line, therefore one mark
             (
@@ -967,7 +980,7 @@ class TestSignature:
                 ],
                 [],
                 ["abcdef", "abcghi", "abcghijkl", "abcghijklpqrstuvwx"],
-                {"abcghijklpqrstuvwx"},
+                ["abcghijklpqrstuvwx"],
             ),
         ],
     )

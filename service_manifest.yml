@@ -110,16 +110,22 @@ heuristics:
     description: Suspicious activity was detected during execution.
 
   - heur_id: 4
-    name: Embedded Code in jQuery Library
-    score: 1
+    name: Embedded Code in Common Library
+    score: 500
     filetype: '*'
-    description: Embedded code was discovered in a file posing as a jQuery library
+    description: Embedded code was discovered in a file posing as a common library
 
   - heur_id: 5
     name: Microsoft Support Diagnostic Tool found in location redirection
     score: 500
     filetype: '*'
     description: This technique was widely seen as part of the Follina exploit
+
+  - heur_id: 6
+    name: Automatic location redirection
+    score: 0
+    filetype: '*'
+    description: Automatic redirection to another resource
 
 docker_config:
   allow_internet_access: true

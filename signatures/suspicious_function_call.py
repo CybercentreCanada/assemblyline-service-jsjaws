@@ -22,4 +22,5 @@ class SuspiciousFunctionCall(Signature):
 
         if len(results) > 0:
             for result in results:
-                self.marks.add(f"{result} is evaluated using a suspicious pattern")
+                if f"{result} is evaluated using a suspicious pattern" not in self.marks:
+                    self.marks.append(f"{result} is evaluated using a suspicious pattern")
