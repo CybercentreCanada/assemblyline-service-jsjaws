@@ -403,11 +403,11 @@ class TestJsJaws:
         )
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         output = [
-            "[29 Jun 08:24:36] document[15].write(content) 0 bytes",
-            "[29 Jun 08:24:37] => 'write me!'",
-            "[29 Jun 08:24:38] => Something else",
-            "[29 Jun 08:24:39] document[15].write(content) 0 bytes",
-            "[29 Jun 08:24:40] => 'write me too!'",
+            "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:50.924Z] => 'write me!'",
+            "[2022-10-18T20:12:51.924Z] => Something else",
+            "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:53.924Z] => 'write me too!'",
         ]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)
@@ -437,11 +437,11 @@ class TestJsJaws:
         )
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         output = [
-            "[29 Jun 08:24:36] document[15].write(content) 0 bytes",
-            "[29 Jun 08:24:37] => '",
+            "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:50.924Z] => '",
             "<html>",
             "</html>'",
-            "[29 Jun 08:24:38] - Something else",
+            "[2022-10-18T20:12:51.924Z] - Something else",
         ]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)

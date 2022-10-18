@@ -4,7 +4,7 @@ from inspect import getmembers, isclass
 from json import dumps, JSONDecodeError, load, loads
 from os import listdir, mkdir, path, remove
 from pkgutil import iter_modules
-from re import compile, match, search
+from re import compile as re_compile, match, search
 from subprocess import TimeoutExpired, Popen, PIPE
 from sys import modules
 from threading import Thread
@@ -42,6 +42,7 @@ RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf0
 JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
 MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version  ([\d\.]+)\n"
 COMBO_REGEX = r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
+MALWARE_JAIL_TIME_STAMP = re_compile(r"\[(.+)\] ")
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -58,6 +59,7 @@ MODIFIED_SAMPLE = "/tmp/modified_sample.js"
 
 # Default cap of 10k lines of stdout from tools
 STDOUT_LIMIT = 10000
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -330,7 +332,7 @@ class JsJaws(ServiceBase):
         wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
-            wscript_shell_run = search(compile(WSCRIPT_SHELL_REGEX), line)
+            wscript_shell_run = search(re_compile(WSCRIPT_SHELL_REGEX), line)
             # Script was run
             if wscript_shell_run:
                 cmd = wscript_shell_run.group(1)
@@ -422,6 +424,38 @@ class JsJaws(ServiceBase):
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
 
+    def _parse_malwarejail_output(self, output: List[str]) -> str:
+        """
+        This method is a generator that validates whether a new line of malwarejail output exists
+        :param output: All malwarejail output
+        :return: None
+        """
+        # ret represents the value to be yielded
+        ret = None
+        for line in output:
+            if "] " in line:
+                try:
+                    timestamp = match(MALWARE_JAIL_TIME_STAMP, line)
+                    if not timestamp:
+                        continue
+                    if len(timestamp.regs) < 2:
+                        continue
+                    dtparse(timestamp.group(1))
+                    if ret is not None:
+                        yield ret
+                    # We have a valid timestamp match but nothing to yield
+                    ret = ""
+                except ValueError:
+                    pass
+            if ret:
+                ret = f"{ret}\n"
+            if not ret:
+                ret = f"{line}"
+                continue
+            ret = f"{ret}{line}"
+        if ret is not None:
+            yield ret
+
     def _extract_doc_writes(self, output: List[str]) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
@@ -430,20 +464,12 @@ class JsJaws(ServiceBase):
         """
         extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
         doc_write = False
-        for line in output:
+        for line in self._parse_malwarejail_output(output):
             if doc_write:
-                if "] => '" in line:
-                    extracted_doc_writes.write(line.split("] => '", 1)[1][:-1] + "\n")
-                elif not "] " in line:
-                    if line.endswith("'"):
-                        extracted_doc_writes.write(line[:-1] + "\n")
-                    else:
-                        extracted_doc_writes.write(line + "\n")
-                continue
-            if "] " in line and all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
-                doc_write = True
-            else:
+                extracted_doc_writes.write(line.split("] => '", 1)[1][:-1] + "\n")
                 doc_write = False
+            if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
+                doc_write = True
 
         extracted_doc_writes.close()
 
@@ -768,12 +794,13 @@ class JsJaws(ServiceBase):
 
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
         malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
-        for line in output:
-            extract_iocs_from_text_blob(line, malware_jail_res_sec)
-            if "] " in line:
-                log_line = line.split("] ", 1)[1]
+        for line in self._parse_malwarejail_output(output):
+            split_line = line.split("] ", 1)
+            if len(split_line) == 2:
+                log_line = split_line[1]
             else:
                 log_line = line
+            extract_iocs_from_text_blob(log_line, malware_jail_res_sec)
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []
