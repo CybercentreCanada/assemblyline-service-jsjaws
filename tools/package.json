@@ -16,10 +16,10 @@
     "dependencies": {
         "entities": "^1.1.1",
         "iconv-lite": "^0.4.13",
-        "minimist": "^1.2.0",
+        "log-timestamp": "0.3.0",
         "sync-request": "^3.0.1",
         "box-js": "^1.9.15",
-        "js-x-ray": "^3.2.0",
+        "@nodesecure/js-x-ray": "^5.1.0",
         "url": "0.11.0"
     },
     "license": "MIT",
@@ -37,5 +37,6 @@
     "files": [
         "env/*",
         "jailme.js"
-    ]
+    ],
+    "type": "module"
 }

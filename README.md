@@ -20,6 +20,7 @@ have a signature written for it, then please make a Pull Request or share the sa
   * `allow_download_from_internet` - [default: false]: See "Features included with Internet connectivity" section.
   * `max_payloads_extracted` - [default: 50]: Maximum payload files extracted if deep scan is turned off.
   * `raise_malware_jail_exc` - [default: false]: Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
+  * `total_stdout_limit` - [default: 10000]: The limit to number of stdout lines analyzed that werre captured from tools.
 
 ## Submission Parameters
 Generic parameters:

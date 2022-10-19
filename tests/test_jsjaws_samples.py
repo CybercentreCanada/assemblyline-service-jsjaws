@@ -15,7 +15,6 @@ SAMPLES_FOLDER = os.path.join(os.path.dirname(__file__), "samples")
 service_class = load_module_by_path("jsjaws.JsJaws", os.path.join(os.path.dirname(__file__), ".."))
 th = TestHelper(service_class, RESULTS_FOLDER, SAMPLES_FOLDER)
 
-
 @pytest.mark.parametrize("sample", th.result_list())
 def test_sample(sample):
     th.run_test_comparison(sample)
