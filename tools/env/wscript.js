@@ -793,9 +793,8 @@ WScript = _proxy(new function () {
         return create_object(a);
     };
     this.sleep = function (a) {
+        // This is our attempt at sleep-skipping
         util_log(this._name + ".Sleep(" + a + ")");
-        var waitTill = new Date(new Date().getTime() + a);
-        while (waitTill > new Date()) { }
     };
     this.echo = function (a) {
         util_log(this._name + ".Echo(" + a + ")");
@@ -806,7 +805,6 @@ WScript = _proxy(new function () {
             _source: "WScript.Quit"
         }
     };
-    //ScriptFullName: _script_name,
     this.toString = function () {
         return "Windows Script Host";
     };
@@ -912,77 +910,141 @@ AutomationObject = function (a, b) {
         qry = arguments[0].toUpperCase();
         if (qry === "SELECT * FROM WIN32_OPERATINGSYSTEM") {
             ret = [{
-                "BOOTDEVICE": "\\Device\\HarddiskVolume1",
-                "BUILDNUMBER": "14393",
-                "BUILDTYPE": "Multiprocessor Free",
-                "CAPTION": "Microsoft Windows 10 Pro",
-                "CODESET": "1250",
-                "COUNTRYCODE": "420",
-                "CREATIONCLASSNAME": "Win32_OperatingSystem",
-                "CSCREATIONCLASSNAME": "Win32_ComputerSystem",
-                "CSDVERSION": "null",
-                "CSNAME": "CARBON",
-                "CURRENTTIMEZONE": "60",
-                "DATAEXECUTIONPREVENTION_32BITAPPLICATIONS": "true",
-                "DATAEXECUTIONPREVENTION_AVAILABLE": "true",
-                "DATAEXECUTIONPREVENTION_DRIVERS": "true",
-                "DATAEXECUTIONPREVENTION_SUPPORTPOLICY": "2",
-                "DEBUG": "false",
-                "DESCRIPTION": "Carbon",
-                "DISTRIBUTED": "false",
-                "ENCRYPTIONLEVEL": "256",
-                "FOREGROUNDAPPLICATIONBOOST": "2",
-                "FREEPHYSICALMEMORY": "4095708",
-                "FREESPACEINPAGINGFILES": "1192496",
-                "FREEVIRTUALMEMORY": "4011584",
-                "INSTALLDATE": "9/4/2016 03:00:28",
-                "LARGESYSTEMCACHE": "null",
-                "LASTBOOTUPTIME": "10/30/2016 00:06:03",
-                "LOCALDATETIME": "11/1/2016 00:30:15",
-                "LOCALE": "0405",
-                "MANUFACTURER": "Microsoft Corporation",
-                "MAXNUMBEROFPROCESSES": "-1",
-                "MAXPROCESSMEMORYSIZE": "137438953344",
-                "NAME": "Microsoft Windows 10 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition2",
-                "NUMBEROFLICENSEDUSERS": "null",
-                "NUMBEROFPROCESSES": "153",
-                "NUMBEROFUSERS": "2",
-                "ORGANIZATION": "",
+                "BootDevice": "\\Device\\HarddiskVolume1",
+                "BuildNumber": "14393",
+                "BuildType": "Multiprocessor Free",
+                "Caption": "Microsoft Windows 10 Pro",
+                "CodeSet": "1250",
+                "CountryCode": "420",
+                "CreationClassName": "Win32_OperatingSystem",
+                "CSCreationClassName": "Win32_ComputerSystem",
+                "CSDVersion": "null",
+                "CSName": "CARBON",
+                "CurrentTimeZone": "60",
+                "DataExecutionPrevention_32BitApplications": "true",
+                "DataExecutionPrevention_Available": "true",
+                "DataExecutionPrevention_Drivers": "true",
+                "DataExecutionPrevention_SupportPolicy": "2",
+                "Debug": "false",
+                "Description": "Carbon",
+                "Distributed": "false",
+                "EncryptionLevel": "256",
+                "ForegroundApplicationBoost": "2",
+                "FreePhysicalMemory": "4095708",
+                "FreeSpaceInPagingFiles": "1192496",
+                "FreeVirtualMemory": "4011584",
+                "InstallDate": "9/4/2016 03:00:28",
+                "LargeSystemCache": "null",
+                "LastBootUpTime": "10/30/2016 00:06:03",
+                "LocalDateTime": "11/1/2016 00:30:15",
+                "Locale": "0405",
+                "Manufacturer": "Microsoft Corporation",
+                "MaxNumberOfProcesses": "-1",
+                "MaxProcessMemorySize": "137438953344",
+                "Name": "Microsoft Windows 10 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition2",
+                "NumberOfLicensedUsers": "null",
+                "NumberOfProcesses": "153",
+                "NumberOfUsers": "2",
+                "Organization": "",
                 "OSLanguage": "0409",
                 /* "1033", */
-                "OSPRODUCTSUITE": "256",
-                "OSTYPE": "18",
-                "OTHERTYPEDESCRIPTION": "null",
-                "PLUSPRODUCTID": "null",
-                "PLUSVERSIONNUMBER": "null",
-                "PRIMARY": "true",
-                "PRODUCTTYPE": "1",
-                "QUANTUMLENGTH": "undefined",
-                "QUANTUMTYPE": "undefined",
-                "REGISTEREDUSER": "Uzivatel",
-                "SERIALNUMBER": "00330-80000-00000-AA676",
-                "SERVICEPACKMAJORVERSION": "0",
-                "SERVICEPACKMINORVERSION": "0",
-                "SIZESTOREDINPAGINGFILES": "1245184",
-                "STATUS": "OK",
-                "SUITEMASK": "272",
-                "SYSTEMDEVICE": "\\Device\\HarddiskVolume2",
-                "SYSTEMDIRECTORY": "C:\\WINDOWS\\system32",
-                "SYSTEMDRIVE": "C:",
-                "TOTALSWAPSPACESIZE": "null",
-                "TOTALVIRTUALMEMORYSIZE": "9306340",
-                "TOTALVISIBLEMEMORYSIZE": "8061156",
-                "version": "10.0.14393",
-                "windowsdirectory": "C:\\WINDOWS"
+                "OSProductSuite": "256",
+                "OSType": "18",
+                "OtherTypeDescription": "null",
+                "PlusProductID": "null",
+                "PlusVersionNumber": "null",
+                "Primary": "true",
+                "ProductType": "1",
+                "QuantumLength": "undefined",
+                "QuantumType": "undefined",
+                "RegisteredUser": "Uzivatel",
+                "SerialNumber": "00330-80000-00000-AA676",
+                "ServicePackMajorVersion": "0",
+                "ServicePackMinorVersion": "0",
+                "SizeStoredInPagingFiles": "1245184",
+                "Status": "OK",
+                "SuiteMask": "272",
+                "SystemDevice": "\\Device\\HarddiskVolume2",
+                "SystemDirectory": "C:\\WINDOWS\\system32",
+                "SystemDrive": "C:",
+                "TotalSwapSpaceSize": "null",
+                "TotalVirtualMemorySize": "9306340",
+                "TotalVisibleMemorySize": "8061156",
+                "Version": "10.0.14393",
+                "WindowsDirectory": "C:\\WINDOWS"
             }];
         }
-        if (qry.indexOf("SELECT * FROM WIN32_PROCESS") >= 0) {
+        else if (qry.indexOf("SELECT * FROM WIN32_PROCESS") >= 0) {
             //FIXME: parse query to get the process name
             ret = _proxy(new Collection([new Process("app.exe")]));
+        }
+        else if (qry === "SELECT * FROM WIN32_LOGICALDISK") {
+            ret = [{
+                "Access": "0",
+                "Availability": "",
+                "BlockSize": "",
+                "Caption": "C:",
+                "Compressed": "FALSE",
+                "ConfigManagerErrorCode": "",
+                "ConfigManagerUserConfig": "",
+                "CreationClassName": "Win32_LogicalDisk",
+                "Description": "Local Fixed Disk",
+                "DeviceID": "C:",
+                "DriveType": "3",
+                "ErrorCleared": "",
+                "ErrorDescription": "",
+                "ErrorMethodology": "",
+                "FileSystem": "NTFS",
+                "FreeSpace": "611749265408",
+                "InstallDate": "",
+                "LastErrorCode": "",
+                "MaximumComponentLength": "255",
+                "MediaType": "12",
+                "Name": "C:",
+                "NumberOfBlocks": "",
+                "PNPDeviceID": "",
+                "PowerManagementCapabilities": "",
+                "PowerManagementSupported": "",
+                "ProviderName": "",
+                "Purpose": "",
+                "QuotasDisabled": "",
+                "QuotasIncomplete": "",
+                "QuotasRebuilding": "",
+                "Size": "1013309239296",
+                "Status": "",
+                "StatusInfo": "",
+                "SupportsDiskQuotas": "FALSE",
+                "SupportsFileBasedCompression": "TRUE",
+                "SystemCreationClassName": "Win32_ComputerSystem",
+                "SystemName": "BLAH-BLAH8l44",
+                "VolumeDirty": "",
+                "VolumeName": "Windows",
+                "VolumeSerialNumber": "BLAHBLAH",
+            }];
+        }
+        else if (qry.indexOf("SELECT * FROM ANTIVIRUSPRODUCT") >= 0) {
+            ret = [{
+                "DisplayName": "INSECURE_AS_HECK"
+            }];
         }
         _wscript_wmis[_wscript_wmis.length] = { "arguments": arguments, "return": ret }
         util_log(this._name + ".ExecQuery(" + a + ") => " + _truncateOutput(_inspect(ret)));
         return ret;
+    }
+    this.InstancesOf = function(thing) {
+        util_log(thing);
+        if (thing.toLowerCase() == "win32_logicaldisk") {
+            return this.execquery("SELECT * FROM WIN32_LOGICALDISK");
+        }
+        else if (thing.toLowerCase() == "win32_operatingsystem") {
+            return this.execquery("SELECT * FROM WIN32_OPERATINGSYSTEM");
+        }
+        else if (thing.toLowerCase() == "win32_process") {
+            return this.execquery("SELECT * FROM WIN32_PROCESS");
+        }
+        else if (thing.toLowerCase() == "antivirusproduct") {
+            return this.execquery("SELECT * FROM ANTIVIRUSPRODUCT");
+        }
     }
 }
 AutomationObject.toString = () => {

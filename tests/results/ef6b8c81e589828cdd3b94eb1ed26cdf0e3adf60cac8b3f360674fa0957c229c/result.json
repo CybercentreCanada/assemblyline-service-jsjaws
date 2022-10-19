@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})",
+        "body": "JavaScript sends a network request via AJAX\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,

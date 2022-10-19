@@ -60,8 +60,8 @@ class Signature:
         :param match_all: All indicators must be found in a single line for a mark to be added
         """
         for string in output:
-            # For more lines of output, there is a datetime separated by a -. We do not want the datetime.
-            split_line = string.split(" - ")
+            # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
+            split_line = string.split("] ")
             if len(split_line) == 2:
                 string = split_line[1]
 
@@ -125,8 +125,8 @@ class Signature:
         any_indicators: List[Dict[str, Union[str, List[str]]]] = [indicator for indicator in indicators if indicator["method"] == ANY]
 
         for string in output:
-            # For more lines of output, there is a datetime separated by a -. We do not want the datetime.
-            split_line = string.split(" - ")
+            # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
+            split_line = string.split("] ")
             if len(split_line) == 2:
                 string = split_line[1]
 
