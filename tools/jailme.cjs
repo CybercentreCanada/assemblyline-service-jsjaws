@@ -2,6 +2,7 @@ const util = require('node:util');
 require('log-timestamp');
 const vm = require('vm');
 require('./cycle.cjs');
+const minimist = require("minimist")
 
 process.on('uncaughtException', (err) => {
     console.log('!!! Uncaught Exception !!!');
@@ -12,7 +13,7 @@ console.log("mailware-jail, a malware sandbox ver. 0.20");
 console.log("------------------------");
 
 // commandline overwrites config.json values
-var argv = require('minimist')(process.argv.slice(2), {
+var argv = minimist(process.argv.slice(2), {
     "boolean": true
 });
 var _exit = false;
