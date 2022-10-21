@@ -1,11 +1,11 @@
 import hashlib
+import re
 import tempfile
 from inspect import getmembers, isclass
-from json import dumps, JSONDecodeError, load, loads
-from os import listdir, mkdir, path, remove
+from json import JSONDecodeError, dumps, load, loads
+from os import listdir, mkdir, path
 from pkgutil import iter_modules
-from re import compile as re_compile, match, search
-from subprocess import TimeoutExpired, Popen, PIPE
+from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import time
@@ -28,6 +28,8 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
+from bs4 import BeautifulSoup
+from bs4.element import Comment
 from dateutil.parser import parse as dtparse
 from requests import get
 
@@ -41,8 +43,10 @@ MAX_PAYLOAD_FILES_EXTRACTED = 50
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
 MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version  ([\d\.]+)\n"
-COMBO_REGEX = r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
-MALWARE_JAIL_TIME_STAMP = re_compile(r"\[(.+)\] ")
+COMBO_REGEX = (
+    r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
+)
+MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -54,11 +58,41 @@ TRANSLATED_SCORE = {
     5: 1000,  # Malware (95-100% hit rate)
 }
 
-# The file path for the file that has its leading and trailing null bytes stripped out
-MODIFIED_SAMPLE = "/tmp/modified_sample.js"
-
 # Default cap of 10k lines of stdout from tools
 STDOUT_LIMIT = 10000
+
+# TODO: Remove this and the same in emlparser to put it in the core
+# Arabic, Chinese Simplified, Chinese Traditional, English, French, German, Italian, Portuguese, Russian, Spanish
+PASSWORD_WORDS = [
+    "كلمه السر",
+    "密码",
+    "密碼",
+    "password",
+    "mot de passe",
+    "passwort",
+    "parola d'ordine",
+    "senha",
+    "пароль",
+    "contraseña",
+]
+PASSWORD_REGEXES = [re.compile(fr".*{p}:(.+)", re.I) for p in PASSWORD_WORDS]
+
+
+def extract_passwords(text):
+    passwords = set()
+    text_split, text_split_n = set(text.split()), set(text.split("\n"))
+    passwords.update(text_split)
+    passwords.update(re.split(r"\W+", text))
+    for i, r in enumerate(PASSWORD_REGEXES):
+        for line in text_split:
+            if PASSWORD_WORDS[i] in line.lower():
+                passwords.update(re.split(r, line))
+        for line in text_split_n:
+            if PASSWORD_WORDS[i] in line.lower():
+                passwords.update(re.split(r, line))
+    for p in list(passwords):
+        passwords.update([p.strip(), p.strip().strip('"'), p.strip().strip("'")])
+    return passwords
 
 
 class JsJaws(ServiceBase):
@@ -99,14 +133,26 @@ class JsJaws(ServiceBase):
         self.log.debug("JsJaws service ended")
 
     def execute(self, request: ServiceRequest) -> None:
+        request.result = Result()
         self.artifact_list = []
+        file_to_analyze = request.file_path
+
+        if request.file_type == "code/html":
+            file_to_analyze = self.extract_from_html(request)
+        elif request.file_type == "image/svg":
+            file_to_analyze = self.extract_from_svg(request)
+
+        if file_to_analyze is None:
+            return
+
+        with open(file_to_analyze, "rb") as fh:
+            file_content = fh.read()
 
         # If the file starts or ends with null bytes, let's trip them out
-        if request.file_contents.startswith(b"\x00") or request.file_contents.endswith(b"\x00"):
-            if path.exists(MODIFIED_SAMPLE):
-                remove(MODIFIED_SAMPLE)
-            with open(MODIFIED_SAMPLE, "wb") as f:
-                f.write(request.file_contents[:].strip(b"\x00"))
+        if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(file_content[:].strip(b"\x00"))
+                file_to_analyze = f.name
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -142,8 +188,6 @@ class JsJaws(ServiceBase):
 
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
-
-        request.result = Result()
 
         # Grabbing service level configuration variables and submission variables
         download_payload = request.get_param("download_payload")
@@ -239,25 +283,15 @@ class JsJaws(ServiceBase):
         jsxray_args = ["node", self.path_to_jsxray]
 
         # Don't forget the sample!
-        # If the sample has been modified by the service
-        if path.exists(MODIFIED_SAMPLE):
-            boxjs_args.append(MODIFIED_SAMPLE)
-            malware_jail_args.append(MODIFIED_SAMPLE)
-            jsxray_args.append(MODIFIED_SAMPLE)
-        else:
-            boxjs_args.append(request.file_path)
-            malware_jail_args.append(request.file_path)
-            jsxray_args.append(request.file_path)
+        boxjs_args.append(file_to_analyze)
+        malware_jail_args.append(file_to_analyze)
+        jsxray_args.append(file_to_analyze)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses)))
-        tool_threads.append(
-            Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses))
-        )
-        tool_threads.append(
-            Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses))
-        )
+        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses)))
+        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses)))
 
         for thr in tool_threads:
             thr.start()
@@ -292,11 +326,13 @@ class JsJaws(ServiceBase):
                     static_file_lines.extend(line.split(";"))
                 else:
                     static_file_lines.append(line)
-            total_output = boxjs_output[:self.stdout_limit] + malware_jail_output[:self.stdout_limit] + static_file_lines
+            total_output = (
+                boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit] + static_file_lines
+            )
         else:
-            total_output = boxjs_output[:self.stdout_limit] + malware_jail_output[:self.stdout_limit]
+            total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
 
-        total_output = total_output[:self.stdout_limit]
+        total_output = total_output[: self.stdout_limit]
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
@@ -316,9 +352,89 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
 
-        # Clean up the modified file, if it exists
-        if path.exists(MODIFIED_SAMPLE):
-            remove(MODIFIED_SAMPLE)
+    def extract_from_soup(self, soup: BeautifulSoup):
+        scripts = soup.findAll("script")
+        aggregated_js_script = None
+        for script in scripts:
+            # Make sure there is actually a body to the script
+            body = script.string
+            if body is None:
+                continue
+            body = str(body).strip()  # Remove whitespace
+            if len(body) <= 2:  # We can treat 2 character scripts as empty
+                continue
+
+            if script.get("type", "").lower() in ["", "text/javascript"]:
+                # If there is no "type" attribute specified in a script element, then the default assumption is
+                # that the body of the element is Javascript
+                encoded_script = body.encode()
+                if aggregated_js_script is None:
+                    aggregated_js_script = tempfile.NamedTemporaryFile(
+                        dir=self.working_directory, delete=False, mode="wb"
+                    )
+                aggregated_js_script.write(encoded_script + b"\n")
+
+        if aggregated_js_script is None:
+            return
+
+        onloads = soup.body.get_attribute_list("onload")
+        for onload in onloads:
+            if onload:
+                aggregated_js_script.write(b"\n" + onload.encode() + b"\n")
+
+        aggregated_js_script.close()
+
+        return aggregated_js_script.name
+
+    def extract_from_html(self, request: ServiceRequest):
+        with open(request.file_path, "rb") as f:
+            data = f.read()
+
+        soup = BeautifulSoup(data, features="html5lib")
+        file_path = self.extract_from_soup(soup)
+
+        if file_path is None:
+            return
+
+        request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
+
+        # Extract password from visible text, taken from https://stackoverflow.com/a/1983219
+        def tag_visible(element):
+            if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
+                return False
+            if isinstance(element, Comment):
+                return False
+            return True
+
+        visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
+
+        if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_texts):
+            new_passwords = set()
+
+            for line in visible_texts:
+                new_passwords.update(set(extract_passwords(line)))
+
+            if new_passwords:
+                self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
+                # It is technically not required to sort them, but it makes the output of the module predictable
+                if "passwords" in request.temp_submission_data:
+                    new_passwords.update(set(request.temp_submission_data["passwords"]))
+                request.temp_submission_data["passwords"] = sorted(list(new_passwords))
+
+        return file_path
+
+    def extract_from_svg(self, request: ServiceRequest):
+        with open(request.file_path, "rb") as f:
+            data = f.read()
+
+        soup = BeautifulSoup(data, features="html5lib")
+        file_path = self.extract_from_soup(soup)
+
+        if file_path is None:
+            return
+
+        request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
+        return file_path
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
@@ -332,7 +448,7 @@ class JsJaws(ServiceBase):
         wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
-            wscript_shell_run = search(re_compile(WSCRIPT_SHELL_REGEX), line)
+            wscript_shell_run = re.search(re.compile(WSCRIPT_SHELL_REGEX), line)
             # Script was run
             if wscript_shell_run:
                 cmd = wscript_shell_run.group(1)
@@ -435,7 +551,7 @@ class JsJaws(ServiceBase):
         for line in output:
             if "] " in line:
                 try:
-                    timestamp = match(MALWARE_JAIL_TIME_STAMP, line)
+                    timestamp = re.match(MALWARE_JAIL_TIME_STAMP, line)
                     if not timestamp:
                         continue
                     if len(timestamp.regs) < 2:
@@ -724,23 +840,23 @@ class JsJaws(ServiceBase):
         """
         safe_url = safe_str(url)
         # Extract URI
-        uri_match = match(FULL_URI, safe_url)
+        uri_match = re.match(FULL_URI, safe_url)
         if uri_match:
             urls_result_section.add_tag("network.dynamic.uri", safe_url)
             # Extract domain
-            domain_match = search(DOMAIN_REGEX, safe_url)
+            domain_match = re.search(DOMAIN_REGEX, safe_url)
             if domain_match:
                 domain = domain_match.group(0)
                 urls_result_section.add_tag("network.dynamic.domain", domain)
             # Extract IP
-            ip_match = search(IP_REGEX, safe_url)
+            ip_match = re.search(IP_REGEX, safe_url)
             if ip_match:
                 ip = ip_match.group(0)
                 urls_result_section.add_tag("network.dynamic.ip", ip)
             # Extract URI path
             if "//" in safe_url:
                 safe_url = safe_url.split("//")[1]
-            uri_path_match = search(URI_PATH, safe_url)
+            uri_path_match = re.search(URI_PATH, safe_url)
             if uri_path_match:
                 uri_path = uri_path_match.group(0)
                 urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
@@ -872,28 +988,27 @@ class JsJaws(ServiceBase):
             "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
             "clean_libs/maplace%s.js": MAPLACE_REGEX,
             "clean_libs/combo.js": COMBO_REGEX,
-
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
-        for path, regex in common_libs.items():
-            regex_match = match(regex, file_contents)
+        for lib_path, regex in common_libs.items():
+            regex_match = re.match(regex, file_contents)
             if not regex_match:
                 continue
-            if path.startswith("https"):
+            if lib_path.startswith("https"):
                 if not self.service_attributes.docker_config.allow_internet_access:
                     continue
                 if len(regex_match.regs) > 1:
-                    resp = get(path % regex_match.group(1), timeout=15)
+                    resp = get(lib_path % regex_match.group(1), timeout=15)
                 else:
-                    resp = get(path, timeout=15)
+                    resp = get(lib_path, timeout=15)
 
                 path_contents = resp.text
             else:
                 if len(regex_match.regs) > 1:
-                    path_contents = open(path % regex_match.group(1), "r").read()
+                    path_contents = open(lib_path % regex_match.group(1), "r").read()
                 else:
-                    path_contents = open(path, "r").read()
+                    path_contents = open(lib_path, "r").read()
 
             diff = list()
             clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
@@ -935,7 +1050,6 @@ class JsJaws(ServiceBase):
                 }
                 self.log.debug(f"Adding extracted file: {self.filtered_lib}")
                 self.artifact_list.append(artifact)
-
 
     @staticmethod
     def _compare_lines(line_1: str, line_2: str) -> bool:

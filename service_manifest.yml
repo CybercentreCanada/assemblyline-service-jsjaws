@@ -3,7 +3,7 @@ version: $SERVICE_TAG
 description: >
   Provides sandboxing for JavaScript.
 
-accepts: code/javascript
+accepts: code/javascript|code/html|image/svg
 rejects: empty|metadata/.*
 
 stage: CORE
