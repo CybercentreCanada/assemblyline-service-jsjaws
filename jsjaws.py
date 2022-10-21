@@ -135,24 +135,25 @@ class JsJaws(ServiceBase):
     def execute(self, request: ServiceRequest) -> None:
         request.result = Result()
         self.artifact_list = []
-        file_to_analyze = request.file_path
+        file_path = request.file_path
 
-        if request.file_type == "code/html":
-            file_to_analyze = self.extract_from_html(request)
-        elif request.file_type == "image/svg":
-            file_to_analyze = self.extract_from_svg(request)
-
-        if file_to_analyze is None:
-            return
-
-        with open(file_to_analyze, "rb") as fh:
+        with open(file_path, "rb") as fh:
             file_content = fh.read()
+
+        if request.file_type in ["code/html", "code/hta"]:
+            file_path, file_content = self.extract_from_html(request, file_content)
+        elif request.file_type == "image/svg":
+            file_path, file_content = self.extract_from_svg(request, file_content)
+
+        if file_path is None:
+            return
 
         # If the file starts or ends with null bytes, let's trip them out
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
-                f.write(file_content[:].strip(b"\x00"))
-                file_to_analyze = f.name
+                file_content = file_content[:].strip(b"\x00")
+                f.write(file_content)
+                file_path = f.name
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -283,9 +284,9 @@ class JsJaws(ServiceBase):
         jsxray_args = ["node", self.path_to_jsxray]
 
         # Don't forget the sample!
-        boxjs_args.append(file_to_analyze)
-        malware_jail_args.append(file_to_analyze)
-        jsxray_args.append(file_to_analyze)
+        boxjs_args.append(file_path)
+        malware_jail_args.append(file_path)
+        jsxray_args.append(file_path)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -321,7 +322,7 @@ class JsJaws(ServiceBase):
         # as well as the file contents themselves (static analysis)
         if static_signatures:
             static_file_lines = []
-            for line in safe_str(request.file_contents).split("\n"):
+            for line in safe_str(file_content).split("\n"):
                 if ";" in line:
                     static_file_lines.extend(line.split(";"))
                 else:
@@ -342,7 +343,7 @@ class JsJaws(ServiceBase):
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
         try:
-            self._extract_filtered_code(request.result, request.file_contents.decode())
+            self._extract_filtered_code(request.result, file_content.decode())
         except UnicodeDecodeError:
             pass
         if add_supplementary:
@@ -355,6 +356,7 @@ class JsJaws(ServiceBase):
     def extract_from_soup(self, soup: BeautifulSoup):
         scripts = soup.findAll("script")
         aggregated_js_script = None
+        file_content = b""
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -372,10 +374,11 @@ class JsJaws(ServiceBase):
                     aggregated_js_script = tempfile.NamedTemporaryFile(
                         dir=self.working_directory, delete=False, mode="wb"
                     )
+                file_content += encoded_script + b"\n"
                 aggregated_js_script.write(encoded_script + b"\n")
 
         if aggregated_js_script is None:
-            return
+            return None, file_content
 
         onloads = soup.body.get_attribute_list("onload")
         for onload in onloads:
@@ -384,17 +387,14 @@ class JsJaws(ServiceBase):
 
         aggregated_js_script.close()
 
-        return aggregated_js_script.name
+        return aggregated_js_script.name, file_content
 
-    def extract_from_html(self, request: ServiceRequest):
-        with open(request.file_path, "rb") as f:
-            data = f.read()
-
-        soup = BeautifulSoup(data, features="html5lib")
-        file_path = self.extract_from_soup(soup)
+    def extract_from_html(self, request: ServiceRequest, file_content):
+        soup = BeautifulSoup(file_content, features="html5lib")
+        file_path, file_content = self.extract_from_soup(soup)
 
         if file_path is None:
-            return
+            return file_path, file_content
 
         request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
 
@@ -421,20 +421,16 @@ class JsJaws(ServiceBase):
                     new_passwords.update(set(request.temp_submission_data["passwords"]))
                 request.temp_submission_data["passwords"] = sorted(list(new_passwords))
 
-        return file_path
+        return file_path, file_content
 
-    def extract_from_svg(self, request: ServiceRequest):
-        with open(request.file_path, "rb") as f:
-            data = f.read()
+    def extract_from_svg(self, request: ServiceRequest, file_content):
+        soup = BeautifulSoup(file_content, features="html5lib")
+        file_path, file_content = self.extract_from_soup(soup)
 
-        soup = BeautifulSoup(data, features="html5lib")
-        file_path = self.extract_from_soup(soup)
+        if file_path is not None:
+            request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
 
-        if file_path is None:
-            return
-
-        request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
-        return file_path
+        return file_path, file_content
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
