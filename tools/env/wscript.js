@@ -43,6 +43,31 @@ gapi = function () {
     this.load = function () { };
 }
 
+// /*
+File = function (sources, filename, options = undefined) {
+    if (options)
+        return new Blob(sources, options);
+    return new Blob(sources);
+}
+// */
+
+/*
+File = function (sources, filename, options = undefined) {
+    if (options)
+        this._blob = new Blob(sources, options);
+    else
+        this._blob = new Blob(sources)
+    this._filename = filename;
+    this.constructor.name = "File";
+    this.toString = function () {
+        return "File[" + this._filename + "]";
+    }
+    this.arrayBuffer = function () {
+        return this._blob.arrayBuffer();
+    }
+};
+*/
+
 URL.createObjectURL = async function (content) {
     util_log("URL.createObjectURL(" + content + ")")
     if (content.constructor.name == "Blob") {
@@ -1031,7 +1056,7 @@ AutomationObject = function (a, b) {
         util_log(this._name + ".ExecQuery(" + a + ") => " + _truncateOutput(_inspect(ret)));
         return ret;
     }
-    this.InstancesOf = function(thing) {
+    this.InstancesOf = function (thing) {
         util_log(thing);
         if (thing.toLowerCase() == "win32_logicaldisk") {
             return this.execquery("SELECT * FROM WIN32_LOGICALDISK");
@@ -2054,7 +2079,10 @@ Element = _proxy(function (n) {
     }
     this.click = function (fn) {
         util_log(this._name + ".click(" + fn + ")");
-        fn();
+        if (fn)
+            fn();
+        else if (this.href)
+            URL.revokeObjectURL(this.href);
     }
     this.text = function () {
         util_log(this._name + ".text()");
