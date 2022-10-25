@@ -19,6 +19,12 @@ location = _proxy({
     replace: function (n) {
         util_log(this._name + ".replace(" + n + ")");
         this._props["href"] = n;
+    },
+    assign: async function (n) {
+        util_log(this._name + ".assign(" + n + ")");
+        // In our sample, it is a promise
+        // It would be better to handle it, but promises break everything
+        // this._props["href"] = n;
     }
 })
 Object.defineProperty(location, "protocol", {
