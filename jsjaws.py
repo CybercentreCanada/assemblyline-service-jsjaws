@@ -28,6 +28,7 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
+from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from dateutil.parser import parse as dtparse
@@ -60,39 +61,6 @@ TRANSLATED_SCORE = {
 
 # Default cap of 10k lines of stdout from tools
 STDOUT_LIMIT = 10000
-
-# TODO: Remove this and the same in emlparser to put it in the core
-# Arabic, Chinese Simplified, Chinese Traditional, English, French, German, Italian, Portuguese, Russian, Spanish
-PASSWORD_WORDS = [
-    "كلمه السر",
-    "密码",
-    "密碼",
-    "password",
-    "mot de passe",
-    "passwort",
-    "parola d'ordine",
-    "senha",
-    "пароль",
-    "contraseña",
-]
-PASSWORD_REGEXES = [re.compile(fr".*{p}:(.+)", re.I) for p in PASSWORD_WORDS]
-
-
-def extract_passwords(text):
-    passwords = set()
-    text_split, text_split_n = set(text.split()), set(text.split("\n"))
-    passwords.update(text_split)
-    passwords.update(re.split(r"\W+", text))
-    for i, r in enumerate(PASSWORD_REGEXES):
-        for line in text_split:
-            if PASSWORD_WORDS[i] in line.lower():
-                passwords.update(re.split(r, line))
-        for line in text_split_n:
-            if PASSWORD_WORDS[i] in line.lower():
-                passwords.update(re.split(r, line))
-    for p in list(passwords):
-        passwords.update([p.strip(), p.strip().strip('"'), p.strip().strip("'")])
-    return passwords
 
 
 class JsJaws(ServiceBase):
