@@ -353,6 +353,14 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the SandboxOntology helper class
         _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
 
+    def append_js_content(self, js_content, file_content, aggregated_js_script):
+        encoded_script = js_content.encode()
+        if aggregated_js_script is None:
+            aggregated_js_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
+        file_content += encoded_script + b"\n"
+        aggregated_js_script.write(encoded_script + b"\n")
+        return file_content, aggregated_js_script
+
     def extract_from_soup(self, soup: BeautifulSoup):
         scripts = soup.findAll("script")
         aggregated_js_script = None
@@ -369,13 +377,11 @@ class JsJaws(ServiceBase):
             if script.get("type", "").lower() in ["", "text/javascript"]:
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
-                encoded_script = body.encode()
-                if aggregated_js_script is None:
-                    aggregated_js_script = tempfile.NamedTemporaryFile(
-                        dir=self.working_directory, delete=False, mode="wb"
-                    )
-                file_content += encoded_script + b"\n"
-                aggregated_js_script.write(encoded_script + b"\n")
+                file_content, aggregated_js_script = self.append_js_content(body, file_content, aggregated_js_script)
+
+        for line in soup.body.get_attribute_list("onpageshow"):
+            if line:
+                file_content, aggregated_js_script = self.append_js_content(line, file_content, aggregated_js_script)
 
         if aggregated_js_script is None:
             return None, file_content
@@ -383,7 +389,7 @@ class JsJaws(ServiceBase):
         onloads = soup.body.get_attribute_list("onload")
         for onload in onloads:
             if onload:
-                aggregated_js_script.write(b"\n" + onload.encode() + b"\n")
+                file_content, aggregated_js_script = self.append_js_content(onload, file_content, aggregated_js_script)
 
         aggregated_js_script.close()
 
