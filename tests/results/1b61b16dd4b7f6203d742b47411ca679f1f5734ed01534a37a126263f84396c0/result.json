@@ -169,22 +169,6 @@
         }
       ]
     },
-    "temp_submission_data": {
-      "passwords": [
-        "",
-        "Download",
-        "Download-completed",
-        "Password",
-        "Password of file: U523",
-        "Successfully",
-        "U523",
-        "completed",
-        "downloaded",
-        "downloaded.",
-        "file",
-        "file:",
-        "of"
-      ]
-    }
+    "temp_submission_data": {}
   }
 }

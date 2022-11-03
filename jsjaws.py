@@ -30,7 +30,6 @@ from assemblyline_v4_service.common.result import (
 )
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
-from bs4.element import Comment
 from dateutil.parser import parse as dtparse
 from requests import get
 
@@ -109,9 +108,9 @@ class JsJaws(ServiceBase):
             file_content = fh.read()
 
         if request.file_type in ["code/html", "code/hta"]:
-            file_path, file_content = self.extract_from_html(request, file_content)
+            file_path, file_content = self.extract_using_soup(request, file_content)
         elif request.file_type == "image/svg":
-            file_path, file_content = self.extract_from_svg(request, file_content)
+            file_path, file_content = self.extract_using_soup(request, file_content)
 
         if file_path is None:
             return
@@ -329,7 +328,8 @@ class JsJaws(ServiceBase):
         aggregated_js_script.write(encoded_script + b"\n")
         return file_content, aggregated_js_script
 
-    def extract_from_soup(self, soup: BeautifulSoup):
+    def extract_using_soup(self, request: ServiceRequest, file_content):
+        soup = BeautifulSoup(file_content, features="html5lib")
         scripts = soup.findAll("script")
         aggregated_js_script = None
         file_content = b""
@@ -361,50 +361,9 @@ class JsJaws(ServiceBase):
 
         aggregated_js_script.close()
 
+        request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted javascript")
+
         return aggregated_js_script.name, file_content
-
-    def extract_from_html(self, request: ServiceRequest, file_content):
-        soup = BeautifulSoup(file_content, features="html5lib")
-        file_path, file_content = self.extract_from_soup(soup)
-
-        if file_path is None:
-            return file_path, file_content
-
-        request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
-
-        # Extract password from visible text, taken from https://stackoverflow.com/a/1983219
-        def tag_visible(element):
-            if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
-                return False
-            if isinstance(element, Comment):
-                return False
-            return True
-
-        visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
-
-        if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_texts):
-            new_passwords = set()
-
-            for line in visible_texts:
-                new_passwords.update(set(extract_passwords(line)))
-
-            if new_passwords:
-                self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
-                # It is technically not required to sort them, but it makes the output of the module predictable
-                if "passwords" in request.temp_submission_data:
-                    new_passwords.update(set(request.temp_submission_data["passwords"]))
-                request.temp_submission_data["passwords"] = sorted(list(new_passwords))
-
-        return file_path, file_content
-
-    def extract_from_svg(self, request: ServiceRequest, file_content):
-        soup = BeautifulSoup(file_content, features="html5lib")
-        file_path, file_content = self.extract_from_soup(soup)
-
-        if file_path is not None:
-            request.add_supplementary(file_path, "temp_javascript.js", "Extracted javascript")
-
-        return file_path, file_content
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """

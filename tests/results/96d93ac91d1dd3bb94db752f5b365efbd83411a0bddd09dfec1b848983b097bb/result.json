@@ -92,16 +92,6 @@
       }
     ],
     "tags": {},
-    "temp_submission_data": {
-      "passwords": [
-        "",
-        "\t\tDocument password:",
-        "Document",
-        "Document password:",
-        "abc555",
-        "password",
-        "password:"
-      ]
-    }
+    "temp_submission_data": {}
   }
 }
