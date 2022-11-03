@@ -94,15 +94,8 @@
     "tags": {},
     "temp_submission_data": {
       "passwords": [
-        "",
-        "\t\tDocument password:",
         "AA",
-        "BB",
-        "Document",
-        "Document password:",
-        "abc555",
-        "password",
-        "password:"
+        "BB"
       ]
     }
   }
