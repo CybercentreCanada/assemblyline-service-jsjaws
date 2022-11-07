@@ -252,7 +252,7 @@ class TestJsJaws:
 
         from assemblyline.odm.messages.task import Task as ServiceTask
         from assemblyline_v4_service.common.dynamic_service_helper import (
-            SandboxOntology,
+            OntologyResults,
         )
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
@@ -266,7 +266,7 @@ class TestJsJaws:
         mocker.patch.object(jsjaws_class_instance, "_extract_urls")
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
         mocker.patch.object(jsjaws_class_instance, "_flag_jsxray_iocs")
-        mocker.patch.object(SandboxOntology, "handle_artifacts")
+        mocker.patch.object(OntologyResults, "handle_artifacts")
         mocker.patch("jsjaws.Popen", return_value=dummy_completed_process_instance)
 
         service_task = ServiceTask(sample)

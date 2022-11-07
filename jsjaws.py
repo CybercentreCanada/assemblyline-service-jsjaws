@@ -16,7 +16,7 @@ from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.dynamic_service_helper import (
-    SandboxOntology,
+    OntologyResults,
     extract_iocs_from_text_blob,
 )
 from assemblyline_v4_service.common.request import ServiceRequest
@@ -317,8 +317,8 @@ class JsJaws(ServiceBase):
             self._extract_supplementary(malware_jail_output)
         self._flag_jsxray_iocs(jsxray_output, request.result)
 
-        # Adding sandbox artifacts using the SandboxOntology helper class
-        _ = SandboxOntology.handle_artifacts(self.artifact_list, request)
+        # Adding sandbox artifacts using the OntologyResults helper class
+        _ = OntologyResults.handle_artifacts(self.artifact_list, request)
 
     def append_js_content(self, js_content, file_content, aggregated_js_script):
         encoded_script = js_content.encode()
