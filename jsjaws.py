@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+from dateutil.parser import parse as dtparse
 import hashlib
 import re
 import tempfile
@@ -5,11 +7,13 @@ from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
 from os import listdir, mkdir, path
 from pkgutil import iter_modules
+from requests import get
 from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import time
-from typing import Any, Dict, List, Optional, Set
+from tinycss2 import parse_stylesheet
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.str_utils import safe_str, truncate
@@ -28,12 +32,10 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
-from bs4 import BeautifulSoup
-from dateutil.parser import parse as dtparse
-from requests import get
 
 import signatures
 from signatures.abstracts import Signature
+from tools import tinycss2_helper
 
 # Execution constants
 WSCRIPT_SHELL = "wscript.shell"
@@ -106,15 +108,16 @@ class JsJaws(ServiceBase):
         with open(file_path, "rb") as fh:
             file_content = fh.read()
 
+        css_path = None
         if request.file_type in ["code/html", "code/hta"]:
-            file_path, file_content = self.extract_using_soup(request, file_content)
+            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
         elif request.file_type == "image/svg":
-            file_path, file_content = self.extract_using_soup(request, file_content)
+            file_path, file_content, _ = self.extract_using_soup(request, file_content)
 
         if file_path is None:
             return
 
-        # If the file starts or ends with null bytes, let's trip them out
+        # If the file starts or ends with null bytes, let's strip them out
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 file_content = file_content[:].strip(b"\x00")
@@ -194,6 +197,10 @@ class JsJaws(ServiceBase):
             "-t",
             f"{tool_timeout * 1000}",
         ]
+
+        # If a CSS file path was extracted from the HTML/HTA, pass it to MalwareJail
+        if css_path:
+            malware_jail_args.append(f"--stylesheet={css_path}")
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
         # then allow_download_from_internet service variable needs to be set to true
@@ -319,19 +326,32 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(self.artifact_list, request)
 
-    def append_js_content(self, js_content, file_content, aggregated_js_script):
-        encoded_script = js_content.encode()
-        if aggregated_js_script is None:
-            aggregated_js_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
+    def append_content(self, content: str, file_content: bytes, aggregated_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method appends contents to a NamedTemporaryFile
+        :param content: content to be appended
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        encoded_script = content.encode()
+        if aggregated_script is None:
+            aggregated_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
         file_content += encoded_script + b"\n"
-        aggregated_js_script.write(encoded_script + b"\n")
-        return file_content, aggregated_js_script
+        aggregated_script.write(encoded_script + b"\n")
+        return file_content, aggregated_script
 
-    def extract_using_soup(self, request: ServiceRequest, file_content):
+    def extract_using_soup(self, request: ServiceRequest, file_content: bytes) -> Tuple[str, bytes, Optional[str]]:
+        """
+        This method extracts elements from an HTML file using the BeautifulSoup library
+        :param request: The ServiceRequest object
+        :param file_content: The contents of the file to be written
+        :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
+        """
         soup = BeautifulSoup(file_content, features="html5lib")
         scripts = soup.findAll("script")
         aggregated_js_script = None
-        file_content = b""
+        js_content = b""
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -344,25 +364,67 @@ class JsJaws(ServiceBase):
             if script.get("type", "").lower() in ["", "text/javascript"]:
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
-                file_content, aggregated_js_script = self.append_js_content(body, file_content, aggregated_js_script)
+                js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
         for line in soup.body.get_attribute_list("onpageshow"):
             if line:
-                file_content, aggregated_js_script = self.append_js_content(line, file_content, aggregated_js_script)
+                js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
 
         if aggregated_js_script is None:
-            return None, file_content
+            return None, js_content
 
         onloads = soup.body.get_attribute_list("onload")
         for onload in onloads:
             if onload:
-                file_content, aggregated_js_script = self.append_js_content(onload, file_content, aggregated_js_script)
+                js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
 
         aggregated_js_script.close()
 
         request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted javascript")
 
-        return aggregated_js_script.name, file_content
+        # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript analysis envs
+        styles = soup.findAll("style")
+        style_json = dict()
+        css_content = b""
+        aggregated_css_script = None
+        for style in styles:
+            # Make sure there is actually a body to the script
+            body = style.string
+            if body is None:
+                continue
+            body = str(body).strip()  # Remove whitespace
+
+            css_content, aggregated_css_script = self.append_content(body, css_content, aggregated_css_script)
+
+            # Parse CSS to JSON
+            qualified_rules = parse_stylesheet(body, skip_comments=True, skip_whitespace=True)
+            for qualified_rule in qualified_rules:
+                preludes = tinycss2_helper.significant_tokens(qualified_rule.prelude)
+                if len(preludes) > 1:
+                    prelude_name = ''.join([prelude.value for prelude in preludes])
+                    self.log.debug(f"Combine all preludes to get the declaration name: {[prelude.value for prelude in preludes]} -> {prelude_name}")
+                else:
+                    prelude_name = preludes[0].value
+                output = tinycss2_helper.parse_declaration_list(qualified_rule.content, skip_comments=True, skip_whitespace=True)
+                style_json[prelude_name] = output
+
+        aggregated_css_script.close()
+
+        if aggregated_css_script is None:
+            return None, js_content
+
+        if style_json:
+            request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
+            css_json_name = aggregated_css_script.name
+
+            # Look for suspicious CSS usage
+            for element, declarations in style_json.items():
+                for value in declarations["values"]:
+                    print(value)
+        else:
+            css_json_name = None
+
+        return aggregated_js_script.name, file_content, css_json_name
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
