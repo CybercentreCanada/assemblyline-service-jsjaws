@@ -129,6 +129,12 @@ heuristics:
     filetype: '*'
     description: Automatic redirection to another resource
 
+  - heur_id: 7
+    name: Suspicious CSS Usage
+    score: 0
+    filetype: '*'
+    description: Suspicious declarations were detected in HTML stylesheets
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

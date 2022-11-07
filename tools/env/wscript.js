@@ -45,9 +45,12 @@ gapi = function () {
 
 // /*
 File = function (sources, filename, options = undefined) {
+    util_log("File(" + sources + ", " + filename + ", " + options + ")")
     if (options)
-        return new Blob(sources, options);
-    return new Blob(sources);
+        blob = new Blob(sources, options);
+    blob = new Blob(sources);
+    saveAs(blob, filename)
+    return blob;
 }
 // */
 
@@ -1506,7 +1509,6 @@ ADODB_Stream = function () {
         var encoding = 'binary';
         //util_log(this._name + ".LoadFromFile(" + a + ")");
         if (this.type == 2 && typeof this.charset !== 'undefined') {
-            //util_log("here");
             this.content = _iconv.decode(Buffer.from(_wscript_saved_files[a]), this.charset);
             encoding = this.charset;
         } else {
@@ -1938,7 +1940,7 @@ MSXML2_XMLHTTP.toString = () => {
     return "MSXML2_XMLHTTP"
 }
 
-Style = _proxy(function () {
+Style = _proxy(function (css_text = "") {
     this._id = _object_id++;
     this._name = "Style[" + this._id + "]";
     this.elementName = "style";
@@ -1947,8 +1949,8 @@ Style = _proxy(function () {
         "left": 0,
         "top": 0,
         "position": "",
-        "stylesheet": {
-            cssText: ""
+        "styleSheet": {
+            cssText: css_text
         }
     };
     this.toString = this.tostring = () => {

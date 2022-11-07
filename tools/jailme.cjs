@@ -28,6 +28,7 @@ if (argv.h || argv.help) {
     console.log("\t-s odir  ... output directory for generated files (malware payload)");
     console.log("\t-b id    ... browser type, use -b list for possible values");
     console.log("\t-t msecs ... number of miliseconds before terminating execution, default 1 minute");
+    console.log("\t--stylesheet stylesheet  ... custom CSS stylesheet");
     console.log("\t--trace  ... print stack trace with every log line");
     console.log("\t--down   ... allow downloading malware payloads from remote servers");
     console.log("\t--h404   ... on download return always HTTP/404");
@@ -102,6 +103,11 @@ console.log("Output file for sandbox dump: " + config.context_dump_after);
 if (typeof argv.s === 'string')
     config.save_files = argv.s
 console.log("Output directory for generated files: " + config.save_files);
+
+if (argv.stylesheet) {
+    config.stylesheet = argv.stylesheet;
+    console.log("Use a custom stylesheet: " + config.stylesheet);
+}
 //if (process.platform === "win32") {
 //    var rl = require("readline").createInterface({
 //        input: process.stdin,
@@ -283,6 +289,8 @@ sandbox._browser_api = {
     'JSON': JSON,
     'Function': Function
 }
+
+sandbox._stylesheet = config.stylesheet;
 
 fs = require('fs');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
