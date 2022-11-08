@@ -6,6 +6,7 @@ util_log("Preparing sandbox to emulate Browser environment (default = IE11).");
 _browser_documents = [];
 
 const { atob, btoa } = require("abab");
+const fs = require("fs");
 
 location = _proxy({
     _name: "location",
@@ -143,7 +144,6 @@ window = _proxy(new function () {
                 this._location.href = n;
             }
         })
-    this.top = function () { }
     this.self = function () {
         this.location = function () {
             util_log("get location" + arguments)
@@ -161,6 +161,8 @@ window = _proxy(new function () {
 window.toString = () => { return "window" }
 window.XMLHttpRequest = true;
 
+// top is actually the sandbox environment itself. Mind blown.
+top = this;
 
 for (let k in _browser_api) {
     if (_browser_api.hasOwnProperty(k))
@@ -251,7 +253,9 @@ Document = _proxy(function () {
     };
     this.createstylesheet = function (n) {
         util_log(this._name + ".createStyleSheet(" + n + ")");
-        return this.createelement("style");
+        style_element = this.createelement("style");
+        style_element._attributes["styleSheet"]["cssText"] = n;
+        return style_element;
     };
     this.write = function (c) {
         util_log(this._name + ".write(content) " + c.length + " bytes");
@@ -323,8 +327,14 @@ Document = _proxy(function () {
     this.readyState = function (n) {
         util_log("readyState(" + n + ")");
     }
-    this.addEventListener = function (n) {
-        util_log("addEventListener(" + n + ")");
+    this.addEventListener = function () {
+        util_log(this._name + ".addEventListener(" + Array.prototype.slice.call(arguments, 0) + ")")
+        for (i = 0; i < arguments.length; i++) {
+            let e = arguments[i];
+            if (typeof(e) === "function") {
+                e();
+            }
+        }
     }
     this.attachEvent = function (n) {
         util_log("attachEvent(" + n + ")");
@@ -340,6 +350,16 @@ Document.prototype.constructor = Document;
 Document.toString = Document.toJSON = () => { return "Document" }
 
 document = _proxy(new Document());
+
+// create a stylesheet element with the contents from the extracted CSS in the HTML
+try {
+    stylesheet_contents = fs.readFileSync(_stylesheet, "utf8");
+}
+catch(err) {
+    stylesheet_contents = "";
+}
+document.createstylesheet(stylesheet_contents)
+
 document.toString = () => { return "document" }
 window.document = document;
 window.URL = URL;
