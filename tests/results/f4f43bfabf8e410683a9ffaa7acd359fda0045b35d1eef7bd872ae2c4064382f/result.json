@@ -131,7 +131,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "attachment.zip",
+        "sha256": "6e997245b12dc1a3cdaf9620f129810908990458da866f8b70a6bdb8a279fd43"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",

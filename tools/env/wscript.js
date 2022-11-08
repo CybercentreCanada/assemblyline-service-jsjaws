@@ -43,7 +43,6 @@ gapi = function () {
     this.load = function () { };
 }
 
-// /*
 File = function (sources, filename, options = undefined) {
     util_log("File(" + sources + ", " + filename + ", " + options + ")")
     if (options)
@@ -52,24 +51,6 @@ File = function (sources, filename, options = undefined) {
     saveAs(blob, filename)
     return blob;
 }
-// */
-
-/*
-File = function (sources, filename, options = undefined) {
-    if (options)
-        this._blob = new Blob(sources, options);
-    else
-        this._blob = new Blob(sources)
-    this._filename = filename;
-    this.constructor.name = "File";
-    this.toString = function () {
-        return "File[" + this._filename + "]";
-    }
-    this.arrayBuffer = function () {
-        return this._blob.arrayBuffer();
-    }
-};
-*/
 
 URL.createObjectURL = async function (content) {
     util_log("URL.createObjectURL(" + content + ")")
@@ -81,9 +62,14 @@ URL.createObjectURL = async function (content) {
     return url_blob;
 }
 
-URL.revokeObjectURL = function (src) {
+URL.revokeObjectURL = async function (src) {
     util_log("URL.revokeObjectURL(" + src + ")");
-    _wscript_saved_files["url_blob"] = src.srcObject;
+    if (src.constructor.name == "Promise") {
+        util_log("Revoking ObjectURL Promise");
+    }
+    else {
+        _wscript_saved_files["url_blob"] = src.srcObject;
+    }
 }
 
 let Base64 = {
