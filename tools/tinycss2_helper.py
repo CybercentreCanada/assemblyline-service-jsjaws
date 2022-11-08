@@ -1,3 +1,7 @@
+"""
+This helper class is for facilitating the adoption of the tinycss2 library
+"""
+
 import functools
 
 from tinycss2.ast import (
@@ -16,8 +20,38 @@ SKIP_WHITESPACE = False
 
 
 def parse_declaration_list(tokens, skip_comments=False, skip_whitespace=False):
-    """
-    This method is the entry point to parsing the declaration list
+    """Parse a :diagram:`declaration list` (which may also contain at-rules).
+
+    This is used e.g. for the tokenized values of :attr:`~tinycss2.ast.QualifiedRule.content`
+    of a style rule or ``@page`` rule,
+    or for the ``style`` attribute of an HTML element.
+
+    In contexts that don’t expect any at-rule,
+    all :class:`~tinycss2.ast.AtRule` objects
+    should simply be rejected as invalid.
+
+    :type tokens: :term:`iterator`
+    :param tokens: An iterator yielding :term:`component values`.
+    :type skip_comments: :obj:`bool`
+    :param skip_comments:
+        Ignore CSS comments at the top-level of the list.
+        If the input is a string, ignore all comments.
+    :type skip_whitespace: :obj:`bool`
+    :param skip_whitespace:
+        Ignore whitespace at the top-level of the list.
+        Whitespace is still preserved
+        in the :attr:`~tinycss2.ast.Declaration.value` of declarations
+        and the :attr:`~tinycss2.ast.AtRule.prelude`
+        and :attr:`~tinycss2.ast.AtRule.content` of at-rules.
+    :returns:
+        A list of
+        :class:`~tinycss2.ast.Declaration`,
+        :class:`~tinycss2.ast.AtRule`,
+        :class:`~tinycss2.ast.Comment` (if ``skip_comments`` is false),
+        :class:`~tinycss2.ast.WhitespaceToken`
+        (if ``skip_whitespace`` is false),
+        and :class:`~tinycss2.ast.ParseError` objects
+
     """
     global SKIP_WHITESPACE
     global SKIP_COMMENTS
@@ -78,20 +112,12 @@ def _parse_declaration(first_token, tokens):
     name = first_token
     if name.type != 'ident':
         return
-        # return ParseError(name.source_line, name.source_column, 'invalid',
-        #                   'Expected <ident> for declaration name, got %s.'
-        #                   % name.type)
 
     colon = _next_significant(tokens)
     if colon is None:
         return
-        # return ParseError(name.source_line, name.source_column, 'invalid',
-        #                   "Expected ':' after declaration name, got EOF")
     elif colon != ':':
         return
-        # return ParseError(colon.source_line, colon.source_column, 'invalid',
-        #                   "Expected ':' after declaration name, got %s."
-        #                   % colon.type)
 
     value = []
     state = 'value'
@@ -127,9 +153,18 @@ def _next_significant(tokens):
 
 
 def significant_tokens(tokens):
+    """
+    This method returns the significant tokens (neither whitespace or comment)
+
+    :type tokens: :term:`iterator`
+    :param tokens: An iterator yielding :term:`component values`.
+    :returns: The significant tokens.
+    """
     return [token for token in tokens if token.type not in ('whitespace', 'comment')]
 
 
+
+# The following was pulled from the tinycss2 testing suite to assist with JSON conversions
 def _generic(func):
     implementations = func()
 

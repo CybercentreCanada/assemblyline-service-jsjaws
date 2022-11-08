@@ -352,7 +352,12 @@ Document.toString = Document.toJSON = () => { return "Document" }
 document = _proxy(new Document());
 
 // create a stylesheet element with the contents from the extracted CSS in the HTML
-stylesheet_contents = fs.readFileSync(_stylesheet, "utf8");
+try {
+    stylesheet_contents = fs.readFileSync(_stylesheet, "utf8");
+}
+catch(err) {
+    stylesheet_contents = "";
+}
 document.createstylesheet(stylesheet_contents)
 
 document.toString = () => { return "document" }

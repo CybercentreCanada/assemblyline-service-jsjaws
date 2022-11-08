@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 20,
+    "score": 531,
     "sections": [
       {
         "auto_collapse": false,
@@ -57,6 +57,76 @@
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes archive file to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "writes_archive": 500
+          },
+          "signatures": {
+            "writes_archive": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WritesArchive",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"attachment.zip\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "attachment.zip"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -73,6 +143,11 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "suspicious_char_codes"
@@ -84,9 +159,31 @@
         "signatures": [
           "prepare_network_request"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_archive"
+        ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "attachment.zip"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

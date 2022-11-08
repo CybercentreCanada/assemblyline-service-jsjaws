@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from dateutil.parser import parse as dtparse
-import hashlib
 import re
 import tempfile
 from inspect import getmembers, isclass
@@ -371,7 +370,7 @@ class JsJaws(ServiceBase):
                 js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
 
         if aggregated_js_script is None:
-            return None, js_content
+            return None, js_content, None
 
         onloads = soup.body.get_attribute_list("onload")
         for onload in onloads:
@@ -408,23 +407,35 @@ class JsJaws(ServiceBase):
                 output = tinycss2_helper.parse_declaration_list(qualified_rule.content, skip_comments=True, skip_whitespace=True)
                 style_json[prelude_name] = output
 
-        aggregated_css_script.close()
-
+        if aggregated_css_script:
+            aggregated_css_script.close()
         if aggregated_css_script is None:
-            return None, js_content
+            return aggregated_js_script.name, js_content, None
 
         if style_json:
             request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
-            css_json_name = aggregated_css_script.name
+            css_script_name = aggregated_css_script.name
 
             # Look for suspicious CSS usage
-            for element, declarations in style_json.items():
-                for value in declarations["values"]:
-                    print(value)
+            for _, rules in style_json.items():
+                for rule in rules:
+                    declaration_blocks = rule.values()
+                    for declaration_block in declaration_blocks:
+                        for item in declaration_block.get("values", []):
+                            if isinstance(item, dict):
+                                if item.get("url"):
+                                    # SUS
+                                    url_path = None
+                                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                                        t.write(item["url"].encode())
+                                        url_path = t.name
+                                    request.add_extracted(url_path, get_sha256_for_file(url_path), "URL value from CSS")
+                                    heur = Heuristic(7)
+                                    _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
         else:
-            css_json_name = None
+            css_script_name = None
 
-        return aggregated_js_script.name, file_content, css_json_name
+        return aggregated_js_script.name, file_content, css_script_name
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
@@ -906,6 +917,8 @@ class JsJaws(ServiceBase):
                 log_line = split_line[1]
             else:
                 log_line = line
+            if len(log_line) > 10000:
+                log_line = truncate(log_line, 10000)
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec)
 
             if log_line.startswith("Exception occurred in "):
@@ -939,7 +952,7 @@ class JsJaws(ServiceBase):
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(encoded_content)
                         request.add_extracted(
-                            out.name, hashlib.sha256(encoded_content).hexdigest(), "Redirection location"
+                            out.name, get_sha256_for_file(out.name), "Redirection location"
                         )
                     else:
                         heur = Heuristic(6)
