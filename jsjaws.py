@@ -45,6 +45,7 @@ MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version
 COMBO_REGEX = (
     r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 )
+UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
 
 # Signature Constants
@@ -916,6 +917,7 @@ class JsJaws(ServiceBase):
             "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
             "clean_libs/maplace%s.js": MAPLACE_REGEX,
             "clean_libs/combo.js": COMBO_REGEX,
+            "clean_libs/underscore%s.js": UNDERSCORE_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
