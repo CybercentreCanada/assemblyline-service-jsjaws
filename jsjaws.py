@@ -31,6 +31,7 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
+from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 
 import signatures
 from signatures.abstracts import Signature
