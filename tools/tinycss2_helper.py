@@ -1,9 +1,11 @@
 """
 This helper class is for facilitating the adoption of the tinycss2 library
+https://github.com/Kozea/tinycss2
 """
 
 import functools
 
+# https://github.com/Kozea/tinycss2/blob/master/tinycss2/ast.py
 from tinycss2.ast import (
     AtKeywordToken, AtRule, Comment, CurlyBracketsBlock, Declaration,
     DimensionToken, FunctionBlock, HashToken, IdentToken, LiteralToken,
@@ -11,6 +13,7 @@ from tinycss2.ast import (
     SquareBracketsBlock, StringToken, UnicodeRangeToken, URLToken,
     WhitespaceToken)
 
+# https://github.com/Kozea/tinycss2/blob/master/tinycss2/color3.py
 from tinycss2.color3 import RGBA
 
 from webencodings import Encoding
@@ -19,6 +22,8 @@ SKIP_COMMENTS = False
 SKIP_WHITESPACE = False
 
 
+# Similar to parse_declaration_list in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
+# Except that it accepts tokens rather than a string
 def parse_declaration_list(tokens, skip_comments=False, skip_whitespace=False):
     """Parse a :diagram:`declaration list` (which may also contain at-rules).
 
@@ -79,6 +84,8 @@ def parse_declaration_list(tokens, skip_comments=False, skip_whitespace=False):
     return result
 
 
+# Similar to _consume_declaration_in_list in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
+# Changed to skip first_token in list of tokens, whitespace, and comments
 def _consume_declaration_in_list(first_token, tokens):
     """Like :func:`_parse_declaration`, but stop at the first ``;``."""
     other_declaration_tokens = []
@@ -95,6 +102,8 @@ def _consume_declaration_in_list(first_token, tokens):
     return _parse_declaration(first_token, iter(other_declaration_tokens))
 
 
+# The same as _parse_declaration in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
+# Needed to be pulled out so that it was accessible to the modified _consume_declaration_in_list
 def _parse_declaration(first_token, tokens):
     """Parse a declaration.
 
@@ -139,6 +148,8 @@ def _parse_declaration(first_token, tokens):
                        name.lower_value, value, state == 'important')
 
 
+# The same as _next_significant in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
+# Needed to be pulled out so that it was accessible to _parse_declaration
 def _next_significant(tokens):
     """Return the next significant (neither whitespace or comment) token.
 
@@ -152,6 +163,7 @@ def _next_significant(tokens):
             return token
 
 
+# Custom method
 def significant_tokens(tokens):
     """
     This method returns the significant tokens (neither whitespace or comment)
@@ -163,8 +175,9 @@ def significant_tokens(tokens):
     return [token for token in tokens if token.type not in ('whitespace', 'comment')]
 
 
-
-# The following was pulled from the tinycss2 testing suite to assist with JSON conversions
+# The following was pulled from the tinycss2 testing suite
+# https://github.com/Kozea/tinycss2/blob/master/tests/test_tinycss2.py to assist with JSON conversions.
+# The to_json() method was tweaked for a more pythonic JSON format of token serialization
 def _generic(func):
     implementations = func()
 

@@ -1,14 +1,16 @@
+from base64 import b64decode
 from bs4 import BeautifulSoup
 from dateutil.parser import parse as dtparse
-import re
-import tempfile
+from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
 from os import listdir, mkdir, path
 from pkgutil import iter_modules
+import re
 from requests import get
 from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
+import tempfile
 from threading import Thread
 from time import time
 from tinycss2 import parse_stylesheet
@@ -47,6 +49,7 @@ COMBO_REGEX = (
     r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 )
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
+APPENDCHILD_BASE64_REGEX = re.compile("data:[^;]*;base64,(.*)")
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -344,7 +347,7 @@ class JsJaws(ServiceBase):
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
-        :param file_content: The contents of the file to be written
+        :param file_content: The contents of the file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
         soup = BeautifulSoup(file_content, features="html5lib")
@@ -407,10 +410,10 @@ class JsJaws(ServiceBase):
                 output = tinycss2_helper.parse_declaration_list(qualified_rule.content, skip_comments=True, skip_whitespace=True)
                 style_json[prelude_name] = output
 
-        if aggregated_css_script:
-            aggregated_css_script.close()
         if aggregated_css_script is None:
             return aggregated_js_script.name, js_content, None
+
+        aggregated_css_script.close()
 
         if style_json:
             request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
@@ -426,8 +429,14 @@ class JsJaws(ServiceBase):
                                 if item.get("url"):
                                     # SUS
                                     url_path = None
+                                    # If the content is base64 encoded, decode it before we extract it
+                                    matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
+                                    if len(matches.regs) == 2:
+                                        item["url"] = b64decode(matches.group(1).encode())
+                                    else:
+                                        item["url"] = item["url"].encode()
                                     with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                                        t.write(item["url"].encode())
+                                        t.write(item["url"])
                                         url_path = t.name
                                     request.add_extracted(url_path, get_sha256_for_file(url_path), "URL value from CSS")
                                     heur = Heuristic(7)
@@ -952,7 +961,7 @@ class JsJaws(ServiceBase):
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(encoded_content)
                         request.add_extracted(
-                            out.name, get_sha256_for_file(out.name), "Redirection location"
+                            out.name, sha256(encoded_content).hexdigest(), "Redirection location"
                         )
                     else:
                         heur = Heuristic(6)
