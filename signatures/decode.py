@@ -30,3 +30,17 @@ class SuspiciousUseOfCharCodes(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class Base64Decoding(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="base64_decoding",
+            description="JavaScript uses a common base64 method for decoding characters",
+            indicators=["reverse(", "b64toblob(", "atob("],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)

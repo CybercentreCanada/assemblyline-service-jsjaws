@@ -9,8 +9,8 @@ class HideObjects(Signature):
         super().__init__(
             heuristic_id=3,
             name="hide_object",
-            description="JavaScript removes objects that were recently appended",
-            indicators=["document.body.appendChild(", "document.body.removeChild("],
+            description="JavaScript removes objects from the DOM",
+            indicators=[".removeChild("],
             severity=0
         )
 

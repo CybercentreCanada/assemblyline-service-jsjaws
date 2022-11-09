@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 531,
+    "score": 541,
     "sections": [
       {
         "auto_collapse": false,
@@ -12,6 +12,28 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\t\t\tvar byteCharacters = atob(b64Data)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "base64_decoding": 10
+          },
+          "signatures": {
+            "base64_decoding": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Base64Decoding",
         "zeroize_on_tag_safe": false
       },
       {
@@ -150,6 +172,13 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "base64_decoding"
+        ]
       },
       {
         "attack_ids": [],

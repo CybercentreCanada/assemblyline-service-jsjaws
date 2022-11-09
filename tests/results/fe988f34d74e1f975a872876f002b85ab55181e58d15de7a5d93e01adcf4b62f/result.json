@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript removes objects that were recently appended\n\t\t      document.body.appendChild(tip)\n\t\t      elem = G_vmlCanvasManager.initElement(document.body.appendChild(elem))",
+        "body": "JavaScript removes objects from the DOM\n\t\t    elem.parentNode.removeChild(elem)\n\t\t        elem.parentNode.removeChild(elem)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
