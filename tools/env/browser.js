@@ -224,7 +224,8 @@ Document = _proxy(function () {
         }
         for (i = 0; i < this._elements.length; i++) {
             let e = this._elements[i];
-            if (("" + e._id).toLowerCase() === n.toLowerCase()) {
+            // _nodename is a better represenation of ID than _id
+            if (("" + e._nodename).toLowerCase() === n.toLowerCase()) {
                 util_log(this._name + ".getElementById(" + n + ") => " + e._name);
                 return e;
             }

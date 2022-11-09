@@ -2039,6 +2039,7 @@ Element = _proxy(function (n) {
     _defineSingleProperty(this, "outerhtml", "_outerHTML");
     _defineSingleProperty(this, "style", "_style");
     _defineSingleProperty(this, "text", "_text");
+    _defineSingleProperty(this, "textContent", "_text");
     _defineSingleProperty(this, "id", "_id");
     this.style = new Style();
     this.getElementsByTagName = function (n) {
@@ -2071,10 +2072,6 @@ Element = _proxy(function (n) {
             fn();
         else if (this.href)
             URL.revokeObjectURL(this.href);
-    }
-    this.text = function () {
-        util_log(this._name + ".text()");
-        return this._name;
     }
 });
 Element.prototype = Object.create(Node.prototype);

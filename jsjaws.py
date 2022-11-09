@@ -51,6 +51,7 @@ COMBO_REGEX = (
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
 APPENDCHILD_BASE64_REGEX = re.compile("data:[^;]*;base64,(.*)")
+GETELEMENTBYID_REGEX = re.compile(b"document\.getElementById\(\"([a-zA-Z0-9_]+)\"\)\.")
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -353,6 +354,10 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
         soup = BeautifulSoup(file_content, features="html5lib")
+
+        ##############
+        # JavaScript #
+        ##############
         scripts = soup.findAll("script")
         aggregated_js_script = None
         js_content = b""
@@ -370,6 +375,16 @@ class JsJaws(ServiceBase):
                 # that the body of the element is Javascript
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
+        # Hunting for elements to programmatically create
+        get_element_by_id_match = re.search(GETELEMENTBYID_REGEX, js_content)
+        if get_element_by_id_match and len(get_element_by_id_match.regs) == 2:
+            element_id = get_element_by_id_match.group(1).decode()
+            element = soup.find(id=element_id)
+
+            # Create an element and set the text
+            create_element_script = f"const {element_id} = document.createElement(\"{element_id}\");document.body.appendChild({element_id});{element_id}.text = \"{element.text.strip()}\";"
+            js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
+
         for line in soup.body.get_attribute_list("onpageshow"):
             if line:
                 js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
@@ -386,6 +401,9 @@ class JsJaws(ServiceBase):
 
         request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted javascript")
 
+        #######
+        # CSS #
+        #######
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript analysis envs
         styles = soup.findAll("style")
         style_json = dict()
