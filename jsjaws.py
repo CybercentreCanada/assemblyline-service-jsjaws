@@ -176,7 +176,8 @@ class JsJaws(ServiceBase):
         # --no-kill              Do not kill the application when runtime errors occur
         # --output-dir           The location on disk to write the results files and folders to (defaults to the
         #                        current directory)
-        boxjs_args = [self.path_to_boxjs, "--loglevel", "debug", "--no-kill", "--output-dir", self.working_directory]
+        # --timeout              The script will timeout after this many seconds (default 10)
+        boxjs_args = [self.path_to_boxjs, "--loglevel", "debug", "--no-kill", "--output-dir", self.working_directory, "--timeout", str(tool_timeout)]
 
         # -s odir  ... output directory for generated files (malware payload)
         # -o ofile ... name of the file where sandbox shall be dumped at the end
@@ -257,9 +258,9 @@ class JsJaws(ServiceBase):
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
-        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses)))
-        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses)))
-        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses)))
+        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
 
         for thr in tool_threads:
             thr.start()
