@@ -66,6 +66,9 @@ URL.revokeObjectURL = async function (src) {
     util_log("URL.revokeObjectURL(" + src + ")");
     if (src.constructor.name == "Promise") {
         util_log("Revoking ObjectURL Promise");
+        src.then(function(result) {
+            _wscript_saved_files["url_blob"] = result.srcObject;
+        });
     }
     else {
         _wscript_saved_files["url_blob"] = src.srcObject;

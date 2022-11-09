@@ -1,0 +1,155 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 40,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t            var jUVqAOisGJal = atob(pameAjsMTYht)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "base64_decoding": 10
+          },
+          "signatures": {
+            "base64_decoding": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Base64Decoding",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_char_codes": 10
+          },
+          "signatures": {
+            "suspicious_char_codes": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[15]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "url_blob",
+        "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "69fabb2c7195f5ff89d07b529a33d9297f28a13707db0135eddf967ee493b44f"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "base64_decoding"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_char_codes"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "append_and_click"
+        ]
+      }
+    ],
+    "tags": {},
+    "temp_submission_data": {}
+  }
+}
