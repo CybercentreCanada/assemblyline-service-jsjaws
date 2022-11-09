@@ -12,7 +12,7 @@ _wscript_wmis = [];
 _wscript_objects = [];
 _pw32 = require('path').win32;
 
-const appendChild_base64_regex = new RegExp("data:[^;]*;base64,(.*)");
+const appendChild_base64_regex = new RegExp("data:(?:[^;]+;)+base64,(.*)");
 
 Date = _date;
 Date.prototype._getYear = Date.prototype.getYear;
@@ -1996,8 +1996,10 @@ Element = _proxy(function (n) {
         e.parentelement = this;
         if (e._attributes["src"]) {
             match = e._attributes["src"].match(appendChild_base64_regex);
-            if (match)
+            if (match) {
+                util_log("Base64 match, decoding...");
                 _wscript_saved_files[e._name] = Buffer.from(match[1], 'base64');
+            }
             else
                 _wscript_saved_files[e._name] = e._attributes["src"];
         }
@@ -2008,7 +2010,15 @@ Element = _proxy(function (n) {
         return e;
     }
     this.setattribute = function (n, v) {
-        this._attributes[n] = v;
+        if (n.slice(0,5) === "data-") {
+            var key = n.slice(5,);
+            this._dataset = {};
+            this._dataset[key] = v;
+            util_log(this._name + "._dataset[" + key + "] = " + this._dataset[key])
+        } else {
+            util_log(this._name + "._attributes[" + n + "] = " + v);
+            this._attributes[n] = v;
+        }
     }
     Object.defineProperty(this, "nodetypedvalue", {
         get: function () {
@@ -2031,16 +2041,72 @@ Element = _proxy(function (n) {
             this._innerHTML = _decodeHTML(v);
         }
     })
+    Object.defineProperty(this, "textContent", {
+        get: function () {
+            item_to_return = undefined;
+            if (this.text) {
+                item_to_return = this.text
+            } else if (this.href) {
+                item_to_return = this.href
+            } else if (this.innerHTML) {
+                item_to_return = this.innerHTML
+            } else if (this._attributes["text"]) {
+                item_to_return = this._attributes["text"]
+            } else if (this._attributes["href"]) {
+                item_to_return = this._attributes["href"]
+            }
+            util_log(this._name + ".textContent returns '" + item_to_return + "'");
+            match = item_to_return.match(appendChild_base64_regex);
+            if (match) {
+                util_log("Base64 match, decoding...");
+                _wscript_saved_files[this._name] = Buffer.from(match[1], 'base64');
+            }
+            return item_to_return;
+        },
+        set: function (v) {
+            util_log(this._name + ".textContent = '" + v + "'");
+            this._text = v;
+            match = this._text.match(appendChild_base64_regex);
+            if (match) {
+                util_log("Base64 match, decoding...");
+                _wscript_saved_files[this._name] = Buffer.from(match[1], 'base64');
+            }
+            return this._text;
+        }
+    })
+    Object.defineProperty(this, "src", {
+        get: function () {
+            util_log(this._name + ".src returns '" + this._text + "'");
+            match = this._text.match(appendChild_base64_regex);
+            if (match) {
+                util_log("Base64 match, decoding...");
+                _wscript_saved_files[this._name] = Buffer.from(match[1], 'base64');
+            }
+            return this._text;
+        },
+        set: function (v) {
+            util_log(this._name + ".src = '" + v + "'");
+            this._text = v;
+            match = this._text.match(appendChild_base64_regex);
+            if (match) {
+                util_log("Base64 match, decoding...");
+                _wscript_saved_files[this._name] = Buffer.from(match[1], 'base64');
+            }
+            return this._text;
+        }
+    })
+
     _defineSingleProperty(this, "firstchild");
     _defineSingleProperty(this, "parentelement");
     _defineSingleProperty(this, "parentnode", "_parentNode");
     _defineSingleProperty(this, "innerhtml", "_innerHTML");
-    _defineSingleProperty(this, "innertext", "_innerHTML");
+    _defineSingleProperty(this, "innertext", "_text");
     _defineSingleProperty(this, "outerhtml", "_outerHTML");
     _defineSingleProperty(this, "style", "_style");
     _defineSingleProperty(this, "text", "_text");
-    _defineSingleProperty(this, "textContent", "_text");
     _defineSingleProperty(this, "id", "_id");
+    _defineSingleProperty(this, "href", "_text");
+    _defineSingleProperty(this, "dataset");
     this.style = new Style();
     this.getElementsByTagName = function (n) {
         let ret = []

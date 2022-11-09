@@ -163,6 +163,42 @@ def _next_significant(tokens):
             return token
 
 
+# Similar to _consume_at_rule in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
+# Modified to handle most At-Rules
+def consume_at_rule(at_token, tokens):
+    """Parse an at-rule.
+
+    Consume just enough of :obj:`tokens` for this rule.
+
+    :type at_token: :class:`AtKeywordToken`
+    :param at_token: The at-rule keyword token starting this rule.
+    :type tokens: :term:`iterator`
+    :param tokens: An iterator yielding :term:`component values`.
+    :returns:
+        A :class:`~tinycss2.ast.QualifiedRule`,
+        or :class:`~tinycss2.ast.ParseError`.
+
+    """
+    prelude = []
+    content = None
+    if not tokens:
+        return at_token
+
+    for token in tokens:
+        if token.type == 'whitespace' and SKIP_WHITESPACE:
+            continue
+        elif token.type == 'comment' and SKIP_COMMENTS:
+            continue
+        elif token.type == '{} block':
+            content = token.content
+            break
+        elif token == ';':
+            break
+        prelude.append(token)
+    return AtRule(at_token.source_line, at_token.source_column,
+                  getattr(at_token, "value", None), getattr(at_token, "lower_value", None), prelude, content)
+
+
 # Custom method
 def significant_tokens(tokens):
     """
