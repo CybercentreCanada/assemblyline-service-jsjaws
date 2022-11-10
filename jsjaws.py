@@ -51,7 +51,7 @@ COMBO_REGEX = (
 )
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
-APPENDCHILD_BASE64_REGEX = re.compile("data:[^;]*;base64,(.*)")
+APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
 GETELEMENTBYID_REGEX = re.compile("document\.(?:getElementById|querySelector)\([\"\']([a-zA-Z0-9_#]+)[\"\']\)")
 
 # Signature Constants

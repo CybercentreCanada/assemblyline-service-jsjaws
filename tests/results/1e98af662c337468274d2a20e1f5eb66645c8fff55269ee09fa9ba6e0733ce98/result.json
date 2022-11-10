@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 20,
+    "score": 10,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\treturn(s.split(\"\").reverse().join(\"\"))",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\t\treturn(s.split(\"\").reverse().join(\"\"))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -26,36 +26,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "base64_decoding": 10
+            "obfuscation": 10
           },
           "signatures": {
-            "base64_decoding": 1
+            "obfuscation": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Base64Decoding",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\t\tdocument.body.appendChild(h988ZW1F)",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "append_and_click": 10
-          },
-          "signatures": {
-            "append_and_click": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: AppendAndClick",
+        "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -84,14 +62,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "base64_decoding"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "append_and_click"
+          "obfuscation"
         ]
       }
     ],

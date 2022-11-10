@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction reverse(s)\\x0d\n\t\tdocument.getElementById(\"preview\").src = reverse(viewer)",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tfunction reverse(s)\\x0d\n\t\tdocument.getElementById(\"preview\").src = reverse(viewer)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -26,14 +26,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "base64_decoding": 10
+            "obfuscation": 10
           },
           "signatures": {
-            "base64_decoding": 1
+            "obfuscation": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Base64Decoding",
+        "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -62,7 +62,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "base64_decoding"
+          "obfuscation"
         ]
       }
     ],
