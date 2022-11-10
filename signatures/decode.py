@@ -38,7 +38,21 @@ class Base64Decoding(Signature):
             heuristic_id=3,
             name="base64_decoding",
             description="JavaScript uses a common base64 method for decoding characters",
-            indicators=["reverse(", "b64toblob(", "atob("],
+            indicators=["b64toblob(", "atob("],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
+
+
+class Obfuscation(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="obfuscation",
+            description="JavaScript uses a commonly-seen method for de-obfuscating a string",
+            indicators=["reverse("],
             severity=0
         )
 

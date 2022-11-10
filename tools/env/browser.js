@@ -247,8 +247,11 @@ Document = _proxy(function () {
         if (n === undefined) {
             return this._elements[0];
         }
-        if (n[0] === "#") {
+        else if (n[0] === "#") {
             return this.getElementById(n.slice(1,));
+        }
+        else {
+            return this.getElementById(n);
         }
     };
     this.createelement = function (n) {
