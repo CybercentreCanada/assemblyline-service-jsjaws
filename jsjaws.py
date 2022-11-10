@@ -136,11 +136,11 @@ class JsJaws(ServiceBase):
             self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.abspath(__file__))
-        self.path_to_jailme_js = path.join(root_dir, "tools/jailme.cjs")
+        self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.cjs")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
-        self.wscript_only_config = path.join(root_dir, "tools/config_wscript_only.json")
+        self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
         self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
