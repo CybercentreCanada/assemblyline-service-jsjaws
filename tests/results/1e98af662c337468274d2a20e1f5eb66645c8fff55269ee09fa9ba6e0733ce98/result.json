@@ -5,24 +5,6 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Suspicious declarations were detected in HTML stylesheets",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 7,
-          "score": 0,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {},
-        "title_text": "Suspicious CSS Usage",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -34,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\treturn s.split(\"\").reverse().join(\"\")",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\t\treturn(s.split(\"\").reverse().join(\"\"))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -59,22 +41,18 @@
   "files": {
     "extracted": [
       {
-        "name": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa",
-        "sha256": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa"
-      },
-      {
-        "name": "Element[15]<embed>",
-        "sha256": "f4f43bfabf8e410683a9ffaa7acd359fda0045b35d1eef7bd872ae2c4064382f"
+        "name": "Element[17]<embed>",
+        "sha256": "c9d18e2d8379ac4e6c8e24ca1215a3812f0cb6e81bb676b4858fac717b192640"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "66c02bb2c5f562b07c93e75a820da97de351f8e012b6033c48cec05e57589677"
+        "sha256": "32357158959f8e843b2860a8cbd57269d197d431178c2e774fb07da32272877e"
       },
       {
         "name": "temp_css.css",
-        "sha256": "9ae702f0ebdbe99d96c0270cfca6e0cc5fb69de7f6544a246e2a58fe7f478ce1"
+        "sha256": "7f1cd9bb980c4fcaefb23d5cb926814c1a99b12792311157d12d52cfc7630fe0"
       }
     ]
   },
@@ -86,11 +64,6 @@
         "signatures": [
           "obfuscation"
         ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 7,
-        "signatures": []
       }
     ],
     "tags": {},

@@ -222,17 +222,37 @@ Document = _proxy(function () {
         if (n === undefined) {
             return this._elements[0];
         }
+        // This list will contain elements that have interesting attributes
+        elements_of_interest = [];
         for (i = 0; i < this._elements.length; i++) {
             let e = this._elements[i];
-            if (("" + e._id).toLowerCase() === n.toLowerCase()) {
+            // _nodename is a better representation of ID than _id
+            if (("" + e._nodename).toLowerCase() === n.toLowerCase()) {
                 util_log(this._name + ".getElementById(" + n + ") => " + e._name);
                 return e;
+            } else if ("download" in e._attributes || "href" in e._attributes) {
+                elements_of_interest.push(e);
             }
         }
+        if (elements_of_interest.length > 0) {
+            util_log(this._name + ".getElementById(" + n + ") => first interesting element (" + elements_of_interest[0] + ")");
+            return elements_of_interest[0];
+        }
         util_log(this._name + ".getElementById(" + n + ") => null");
-        // return null;
         // Bad hack here because it doesn't really matter
         return this._elements[0];
+    };
+    this.queryselector = function(n) {
+        util_log(this._name + ".querySelector(" + n + ")");
+        if (n === undefined) {
+            return this._elements[0];
+        }
+        else if (n[0] === "#") {
+            return this.getElementById(n.slice(1,));
+        }
+        else {
+            return this.getElementById(n);
+        }
     };
     this.createelement = function (n) {
         util_log(this._name + ".createElement(" + n + ")");

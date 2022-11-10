@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 541,
+    "score": 40,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\t\t\tvar byteCharacters = atob(b64Data)",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t            var jUVqAOisGJal = atob(pameAjsMTYht)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= slice.charCodeAt(i)",
+        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n",
+        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[15]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -92,62 +92,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "save_to_file": 10
+            "append_and_click": 10
           },
           "signatures": {
-            "save_to_file": 1
+            "append_and_click": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: SaveToFile",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "writes_archive": 500
-          },
-          "signatures": {
-            "writes_archive": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: WritesArchive",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"attachment.zip\"}]",
-        "body_format": "TABLE",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "attachment.zip"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
+        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -155,24 +107,19 @@
   "files": {
     "extracted": [
       {
-        "name": "attachment.zip",
-        "sha256": "6e997245b12dc1a3cdaf9620f129810908990458da866f8b70a6bdb8a279fd43"
+        "name": "url_blob",
+        "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "67c34aec1f9dc2ebddaa0503055066dbc00d6aa8c7973bba4258790cfd10c74a"
+        "sha256": "69fabb2c7195f5ff89d07b529a33d9297f28a13707db0135eddf967ee493b44f"
       }
     ]
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -198,26 +145,11 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "save_to_file"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "writes_archive"
+          "append_and_click"
         ]
       }
     ],
-    "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "attachment.zip"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

@@ -50,7 +50,8 @@ COMBO_REGEX = (
 )
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
-APPENDCHILD_BASE64_REGEX = re.compile("data:[^;]*;base64,(.*)")
+APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
+GETELEMENTBYID_REGEX = re.compile("document\.(?:getElementById|querySelector)\([\"\']([a-zA-Z0-9_#]+)[\"\']\)")
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -353,6 +354,10 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
         soup = BeautifulSoup(file_content, features="html5lib")
+
+        ##############
+        # JavaScript #
+        ##############
         scripts = soup.findAll("script")
         aggregated_js_script = None
         js_content = b""
@@ -366,6 +371,21 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
+                # Hunting for elements to programmatically create
+                get_element_by_id_match = re.findall(GETELEMENTBYID_REGEX, body)
+                for element_id in get_element_by_id_match:
+                    if element_id.startswith("#"):
+                        element_id = element_id.replace("#", "", 1)
+                    element = soup.find(id=element_id)
+
+                    # Create an element and set the text
+                    random_element_varname = f"{element_id}_jsjaws"
+                    create_element_script = f"const {random_element_varname} = document.createElement(\"{element_id}\");document.body.appendChild({random_element_varname});{random_element_varname}.text = \"{element.text.strip()}\";"
+                    for attr_id, attr_val in element.attrs.items():
+                        if attr_id != "id":
+                            create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");"
+                    js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
+
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
@@ -386,64 +406,76 @@ class JsJaws(ServiceBase):
 
         request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted javascript")
 
+        #######
+        # CSS #
+        #######
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript analysis envs
-        styles = soup.findAll("style")
-        style_json = dict()
-        css_content = b""
-        aggregated_css_script = None
-        for style in styles:
-            # Make sure there is actually a body to the script
-            body = style.string
-            if body is None:
-                continue
-            body = str(body).strip()  # Remove whitespace
+        try:
+            styles = soup.findAll("style")
+            style_json = dict()
+            css_content = b""
+            aggregated_css_script = None
+            for style in styles:
+                # Make sure there is actually a body to the script
+                body = style.string
+                if body is None:
+                    continue
+                body = str(body).strip()  # Remove whitespace
 
-            css_content, aggregated_css_script = self.append_content(body, css_content, aggregated_css_script)
+                css_content, aggregated_css_script = self.append_content(body, css_content, aggregated_css_script)
 
-            # Parse CSS to JSON
-            qualified_rules = parse_stylesheet(body, skip_comments=True, skip_whitespace=True)
-            for qualified_rule in qualified_rules:
-                preludes = tinycss2_helper.significant_tokens(qualified_rule.prelude)
-                if len(preludes) > 1:
-                    prelude_name = ''.join([prelude.value for prelude in preludes])
-                    self.log.debug(f"Combine all preludes to get the declaration name: {[prelude.value for prelude in preludes]} -> {prelude_name}")
-                else:
-                    prelude_name = preludes[0].value
-                output = tinycss2_helper.parse_declaration_list(qualified_rule.content, skip_comments=True, skip_whitespace=True)
-                style_json[prelude_name] = output
+                # Parse CSS to JSON
+                qualified_rules = parse_stylesheet(body, skip_comments=True, skip_whitespace=True)
+                for qualified_rule in qualified_rules:
+                    if qualified_rule.type == "at-rule":
+                        qualified_rule = tinycss2_helper.consume_at_rule(qualified_rule, qualified_rule.content)
+                    preludes = tinycss2_helper.significant_tokens(qualified_rule.prelude)
+                    if len(preludes) > 1:
+                        prelude_name = ''.join([prelude.value for prelude in preludes])
+                        self.log.debug(f"Combine all preludes to get the declaration name: {[prelude.value for prelude in preludes]} -> {prelude_name}")
+                    else:
+                        # If a function block is the prelude, use the lower_name, not the value
+                        prelude_name = preludes[0].value if hasattr(preludes[0], "value") else preludes[0].lower_name
+                    if hasattr(qualified_rule, "content") and qualified_rule.content:
+                        output = tinycss2_helper.parse_declaration_list(qualified_rule.content, skip_comments=True, skip_whitespace=True)
+                        style_json[prelude_name] = output
 
-        if aggregated_css_script is None:
-            return aggregated_js_script.name, js_content, None
+            if aggregated_css_script is None:
+                return aggregated_js_script.name, js_content, None
 
-        aggregated_css_script.close()
+            aggregated_css_script.close()
 
-        if style_json:
-            request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
-            css_script_name = aggregated_css_script.name
+            if style_json:
+                request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
+                css_script_name = aggregated_css_script.name
 
-            # Look for suspicious CSS usage
-            for _, rules in style_json.items():
-                for rule in rules:
-                    declaration_blocks = rule.values()
-                    for declaration_block in declaration_blocks:
-                        for item in declaration_block.get("values", []):
-                            if isinstance(item, dict):
-                                if item.get("url"):
-                                    # SUS
-                                    url_path = None
-                                    # If the content is base64 encoded, decode it before we extract it
-                                    matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
-                                    if len(matches.regs) == 2:
-                                        item["url"] = b64decode(matches.group(1).encode())
-                                    else:
-                                        item["url"] = item["url"].encode()
-                                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                                        t.write(item["url"])
-                                        url_path = t.name
-                                    request.add_extracted(url_path, get_sha256_for_file(url_path), "URL value from CSS")
-                                    heur = Heuristic(7)
-                                    _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
-        else:
+                # Look for suspicious CSS usage
+                for _, rules in style_json.items():
+                    for rule in rules:
+                        declaration_blocks = rule.values()
+                        for declaration_block in declaration_blocks:
+                            for item in declaration_block.get("values", []):
+                                if isinstance(item, dict):
+                                    if item.get("url"):
+                                        # SUS
+                                        url_path = None
+                                        # If the content is base64 encoded, decode it before we extract it
+                                        matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
+                                        if len(matches.regs) == 2:
+                                            item["url"] = b64decode(matches.group(1).encode())
+                                        else:
+                                            item["url"] = item["url"].encode()
+                                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                                            t.write(item["url"])
+                                            url_path = t.name
+                                        request.add_extracted(url_path, get_sha256_for_file(url_path), "URL value from CSS")
+                                        heur = Heuristic(7)
+                                        _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+            else:
+                css_script_name = None
+        except Exception as e:
+            # It's not the end of the world if we cannot parse the CSS... this is JsJaws after all!
+            self.log.debug(f"Could not parse CSS due to {e}.")
             css_script_name = None
 
         return aggregated_js_script.name, file_content, css_script_name
