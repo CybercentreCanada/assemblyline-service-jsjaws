@@ -208,17 +208,6 @@ function createSizePropertyCheck(getSizeProperty) {
 }
 
 // Internal helper to generate a function to obtain property `key` from `obj`.
-function locate7(fishic, meet9) {
-	viewl = sun6(meet9);
-	for (khgld = ftwzrlh; khgld<=sun6(fishic)-viewl; khgld++) {
-		if (dnkkvk(fishic,khgld,viewl)==meet9){
-			wifez[sun6(wifez)] = dnkkvk(fishic,blxgvp,khgld-blxgvp);
-			blxgvp = khgld+viewl;
-		}
-	}
-	wifez[sun6(wifez)] = dnkkvk(fishic,blxgvp);
-	return wifez;
-}
 function shallowProperty(key) {
   return function(obj) {
     return obj == null ? void 0 : obj[key];
