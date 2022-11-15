@@ -379,11 +379,15 @@ class JsJaws(ServiceBase):
                     element = soup.find(id=element_id)
 
                     # Create an element and set the text
-                    random_element_varname = f"{element_id}_jsjaws"
-                    create_element_script = f"const {random_element_varname} = document.createElement(\"{element_id}\");document.body.appendChild({random_element_varname});{random_element_varname}.text = \"{element.text.strip()}\";"
+                    random_element_varname = f"{element_id.lower()}_jsjaws"
+                    element_value = element.text.strip().replace("\n", "")
+                    create_element_script = f"const {random_element_varname} = document.createElement(\"div\");\n" \
+                                            f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
+                                            f"document.body.appendChild({random_element_varname});\n" \
+                                            f"{random_element_varname}.text = \"{element_value}\";\n"
                     for attr_id, attr_val in element.attrs.items():
                         if attr_id != "id":
-                            create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");"
+                            create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
                     js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
 
                 # If there is no "type" attribute specified in a script element, then the default assumption is
