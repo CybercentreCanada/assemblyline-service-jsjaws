@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 530,
+    "score": 531,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript removes objects from the DOM\n\t\t    elem.parentNode.removeChild(elem)\n\t\t        elem.parentNode.removeChild(elem)",
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tvar unescapeMap = invert(escapeMap)\n\t\tvar _unescape = createEscaper(unescapeMap)\n\t\t  unescape: _unescape,",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -26,19 +26,19 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "hide_object": 10
+            "unescape": 10
           },
           "signatures": {
-            "hide_object": 1
+            "unescape": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: HideObjects",
+        "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in /tmp/fe988f34d74e1f975a872876f002b85ab55181e58d15de7a5d93e01adcf4b62f: object ...",
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in /tmp/e826df2ff2104f8fe4e968ce85ea3530f03236d28e3af0efe6f3dd4e28b4fb85: object ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tblood4 is evaluated using a suspicious pattern",
+        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tchief6 is evaluated using a suspicious pattern",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -97,6 +97,24 @@
         "tags": {},
         "title_text": "Embedded code was found in common library",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn unsafe statement was found: Function",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -104,7 +122,7 @@
     "extracted": [
       {
         "name": "filtered_lib.js",
-        "sha256": "8aeebe6b5ee8c6e0917509a86e034726d167ea50be745fc0db0f6147f6bd65af"
+        "sha256": "b810dbb154f0e3d11700a9427feb1f86f5672353de86f7e9054f7ead1130ef60"
       }
     ],
     "supplementary": []
@@ -113,9 +131,14 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "hide_object"
+          "unescape"
         ]
       },
       {

@@ -3,7 +3,7 @@ version: $SERVICE_TAG
 description: >
   Provides sandboxing for JavaScript.
 
-accepts: code/javascript
+accepts: code/javascript|code/html|code/hta|image/svg
 rejects: empty|metadata/.*
 
 stage: CORE
@@ -24,6 +24,8 @@ config:
   max_payloads_extracted: 50
   # Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
   raise_malware_jail_exc: false
+  # The limit to number of stdout lines analyzed that werre captured from tools
+  total_stdout_limit: 10000
 
 submission_params:
   # Service-wide parameters
@@ -126,6 +128,12 @@ heuristics:
     score: 0
     filetype: '*'
     description: Automatic redirection to another resource
+
+  - heur_id: 7
+    name: Suspicious CSS Usage
+    score: 0
+    filetype: '*'
+    description: Suspicious declarations were detected in HTML stylesheets
 
 docker_config:
   allow_internet_access: true

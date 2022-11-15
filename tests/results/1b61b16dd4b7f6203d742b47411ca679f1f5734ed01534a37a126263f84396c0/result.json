@@ -141,7 +141,12 @@
         "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
       }
     ],
-    "supplementary": []
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237"
+      }
+    ]
   },
   "results": {
     "heuristics": [

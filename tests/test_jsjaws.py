@@ -177,7 +177,7 @@ def jsjaws_class_instance():
 def dummy_completed_process_instance():
     class DummyCompletedProcess:
         def __init__(self):
-            self.stdout = b"29 Jun 08:24:36 - blah\n29 Jun 08:24:37 - blah"
+            self.stdout = b"[29 Jun 08:24:36] blah\n[29 Jun 08:24:37] blah"
 
     yield DummyCompletedProcess()
 
@@ -252,7 +252,7 @@ class TestJsJaws:
 
         from assemblyline.odm.messages.task import Task as ServiceTask
         from assemblyline_v4_service.common.dynamic_service_helper import (
-            SandboxOntology,
+            OntologyResults,
         )
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
@@ -266,8 +266,8 @@ class TestJsJaws:
         mocker.patch.object(jsjaws_class_instance, "_extract_urls")
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
         mocker.patch.object(jsjaws_class_instance, "_flag_jsxray_iocs")
-        mocker.patch.object(SandboxOntology, "handle_artifacts")
-        mocker.patch("jsjaws.run", return_value=dummy_completed_process_instance)
+        mocker.patch.object(OntologyResults, "handle_artifacts")
+        mocker.patch("jsjaws.Popen", return_value=dummy_completed_process_instance)
 
         service_task = ServiceTask(sample)
         task = Task(service_task)
@@ -311,11 +311,11 @@ class TestJsJaws:
             jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/jailme.js")
+        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.cjs")
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
-        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/config_wscript_only.json")
+        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
         assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
         assert jsjaws_class_instance.extracted_wscript_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript
@@ -357,7 +357,7 @@ class TestJsJaws:
         service_request.task.service_config["static_signatures"] = False
         service_request.task.service_config["add_supplementary"] = True
         service_request.task.service_config["log_errors"] = True
-        mocker.patch("jsjaws.run", side_effect=TimeoutExpired("blah", 1))
+        mocker.patch("jsjaws.Popen", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 
     @staticmethod
@@ -403,11 +403,11 @@ class TestJsJaws:
         )
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         output = [
-            "29 Jun 08:24:36 - document[15].write(content) 0 bytes",
-            "29 Jun 08:24:37 - => 'write me!'",
-            "29 Jun 08:24:38 - => Something else",
-            "29 Jun 08:24:39 - document[15].write(content) 0 bytes",
-            "29 Jun 08:24:40 - => 'write me too!'",
+            "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:50.924Z] => 'write me!'",
+            "[2022-10-18T20:12:51.924Z] => Something else",
+            "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:53.924Z] => 'write me too!'",
         ]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)
@@ -437,11 +437,11 @@ class TestJsJaws:
         )
         mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         output = [
-            "29 Jun 08:24:36 - document[15].write(content) 0 bytes",
-            "29 Jun 08:24:37 - => '",
+            "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:50.924Z] => '",
             "<html>",
             "</html>'",
-            "29 Jun 08:24:38 - Something else",
+            "[2022-10-18T20:12:51.924Z] - Something else",
         ]
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output)

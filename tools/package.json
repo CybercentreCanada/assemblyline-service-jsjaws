@@ -2,13 +2,13 @@
     "name": "malware-jail",
     "version": "0.18.0",
     "description": "Nodejs based Sandbox for malware analysis.",
-    "main": "jailme.js",
+    "main": "malwarejail/jailme.cjs",
     "author": {
         "name": "Hynek Petrak",
         "email": "hynek.petrak@gmail.com"
     },
     "bin": {
-        "jailme": "jailme.js"
+        "jailme": "malwarejail/jailme.cjs"
     },
     "engines": {
         "node": ">=6.0.0"
@@ -16,11 +16,12 @@
     "dependencies": {
         "entities": "^1.1.1",
         "iconv-lite": "^0.4.13",
-        "minimist": "^1.2.0",
+        "log-timestamp": "0.3.0",
         "sync-request": "^3.0.1",
         "box-js": "^1.9.15",
-        "js-x-ray": "^3.2.0",
-        "url": "0.11.0"
+        "@nodesecure/js-x-ray": "^5.1.0",
+        "url": "0.11.0",
+        "minimist": "^1.2.0"
     },
     "license": "MIT",
     "repository": {
@@ -35,7 +36,7 @@
         "analysis"
     ],
     "files": [
-        "env/*",
-        "jailme.js"
-    ]
+        "malwarejail/*"
+    ],
+    "type": "module"
 }

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 530,
+    "score": 40,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript removes objects from the DOM\n\t\t    elem.parentNode.removeChild(elem)\n\t\t        elem.parentNode.removeChild(elem)",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t            var jUVqAOisGJal = atob(pameAjsMTYht)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -26,19 +26,19 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "hide_object": 10
+            "base64_decoding": 10
           },
           "signatures": {
-            "hide_object": 1
+            "base64_decoding": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: HideObjects",
+        "title_text": "Signature: Base64Decoding",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in /tmp/fe988f34d74e1f975a872876f002b85ab55181e58d15de7a5d93e01adcf4b62f: object ...",
+        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -48,19 +48,19 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "antisandbox_timeout": 10
+            "suspicious_char_codes": 10
           },
           "signatures": {
-            "antisandbox_timeout": 1
+            "suspicious_char_codes": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: AntiSandboxTimeout",
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tblood4 is evaluated using a suspicious pattern",
+        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -70,32 +70,36 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "suspicious_function_call": 10
+            "prepare_network_request": 10
           },
           "signatures": {
-            "suspicious_function_call": 1
+            "prepare_network_request": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: SuspiciousFunctionCall",
+        "title_text": "Signature: PrepareNetworkRequest",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "View extracted file filtered_lib.js for details.",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[15]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
         "body_format": "TEXT",
         "classification": "TLP:W",
-        "depth": 0,
+        "depth": 1,
         "heuristic": {
           "attack_ids": [],
           "frequency": 1,
-          "heur_id": 4,
-          "score": 500,
-          "score_map": {},
-          "signatures": {}
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
         },
         "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -103,11 +107,16 @@
   "files": {
     "extracted": [
       {
-        "name": "filtered_lib.js",
-        "sha256": "8aeebe6b5ee8c6e0917509a86e034726d167ea50be745fc0db0f6147f6bd65af"
+        "name": "url_blob",
+        "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }
     ],
-    "supplementary": []
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "69fabb2c7195f5ff89d07b529a33d9297f28a13707db0135eddf967ee493b44f"
+      }
+    ]
   },
   "results": {
     "heuristics": [
@@ -115,27 +124,29 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "hide_object"
+          "base64_decoding"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "antisandbox_timeout"
+          "suspicious_char_codes"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "suspicious_function_call"
+          "prepare_network_request"
         ]
       },
       {
         "attack_ids": [],
-        "heur_id": 4,
-        "signatures": []
+        "heur_id": 3,
+        "signatures": [
+          "append_and_click"
+        ]
       }
     ],
     "tags": {},

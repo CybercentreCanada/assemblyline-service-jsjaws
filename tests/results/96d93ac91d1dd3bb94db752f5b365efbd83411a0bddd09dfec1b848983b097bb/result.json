@@ -5,6 +5,24 @@
     "sections": [
       {
         "auto_collapse": false,
+        "body": "Suspicious declarations were detected in HTML stylesheets",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 7,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Suspicious CSS Usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -41,11 +59,24 @@
   "files": {
     "extracted": [
       {
+        "name": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa",
+        "sha256": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa"
+      },
+      {
         "name": "Element[15]<embed>",
         "sha256": "f4f43bfabf8e410683a9ffaa7acd359fda0045b35d1eef7bd872ae2c4064382f"
       }
     ],
-    "supplementary": []
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "66c02bb2c5f562b07c93e75a820da97de351f8e012b6033c48cec05e57589677"
+      },
+      {
+        "name": "temp_css.css",
+        "sha256": "9ae702f0ebdbe99d96c0270cfca6e0cc5fb69de7f6544a246e2a58fe7f478ce1"
+      }
+    ]
   },
   "results": {
     "heuristics": [
@@ -55,6 +86,11 @@
         "signatures": [
           "obfuscation"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 7,
+        "signatures": []
       }
     ],
     "tags": {},
