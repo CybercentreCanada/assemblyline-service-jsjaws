@@ -67,6 +67,9 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools
 STDOUT_LIMIT = 10000
 
+# These are commonly found strings in MalwareJail output that should not be flagged as domains
+FP_DOMAINS = ["ModuleJob.run", ".zip"]
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -137,7 +140,7 @@ class JsJaws(ServiceBase):
             self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.abspath(__file__))
-        self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.cjs")
+        self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
@@ -967,6 +970,12 @@ class JsJaws(ServiceBase):
                 log_line = line
             if len(log_line) > 10000:
                 log_line = truncate(log_line, 10000)
+
+            # Remove domains that are most likely false positives in MalwareJail output
+            if any(fp_domain in log_line for fp_domain in FP_DOMAINS):
+                for fp_domain in FP_DOMAINS:
+                    log_line = log_line.replace(fp_domain, "<replaced>")
+
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec)
 
             if log_line.startswith("Exception occurred in "):
