@@ -311,7 +311,7 @@ class TestJsJaws:
             jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.cjs")
+        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.js")
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )

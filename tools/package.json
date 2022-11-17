@@ -2,13 +2,13 @@
     "name": "malware-jail",
     "version": "0.18.0",
     "description": "Nodejs based Sandbox for malware analysis.",
-    "main": "malwarejail/jailme.cjs",
+    "main": "malwarejail/jailme.js",
     "author": {
         "name": "Hynek Petrak",
         "email": "hynek.petrak@gmail.com"
     },
     "bin": {
-        "jailme": "malwarejail/jailme.cjs"
+        "jailme": "malwarejail/jailme.js"
     },
     "engines": {
         "node": ">=6.0.0"

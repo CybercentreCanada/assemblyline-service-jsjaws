@@ -10,7 +10,7 @@ class PrepareNetworkRequest(Signature):
             heuristic_id=3,
             name="prepare_network_request",
             description="JavaScript prepares a network request",
-            indicators=[".setRequestHeader(", "User-Agent", "XMLHttpRequest(", "URL.createObjectURL("],
+            indicators=[".setRequestHeader(", "User-Agent", "XMLHttpRequest("],
             severity=0
         )
 
