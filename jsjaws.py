@@ -381,6 +381,8 @@ class JsJaws(ServiceBase):
                     if element_id.startswith("#"):
                         element_id = element_id.replace("#", "", 1)
                     element = soup.find(id=element_id)
+                    if not element:
+                        continue
 
                     # Create an element and set the text
                     random_element_varname = f"{element_id.lower()}_jsjaws"
