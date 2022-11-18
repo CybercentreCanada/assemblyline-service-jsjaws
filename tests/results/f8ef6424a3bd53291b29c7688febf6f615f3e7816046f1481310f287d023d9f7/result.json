@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(blob:nodedata:38202704-c774-4065-b37a-a5d7071ed68b)\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
+        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[21])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -139,7 +139,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[20]",
+        "name": "Blob[21]",
         "sha256": "f5e236707a45e7af5461e4113d2bc60926142dfb9e83316553d00f0884cad923"
       }
     ],
