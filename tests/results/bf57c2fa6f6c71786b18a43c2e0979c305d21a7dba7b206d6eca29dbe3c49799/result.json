@@ -1,0 +1,126 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 11,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Suspicious declarations were detected in HTML stylesheets",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 7,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Suspicious CSS Usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t_0x1f8499=atob(_0x1f8499)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "base64_decoding": 10
+          },
+          "signatures": {
+            "base64_decoding": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Base64Decoding",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1",
+        "sha256": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1"
+      },
+      {
+        "name": "337f26ec47391ba898f9a2f7ef9f43c33d41f7b34d03eb78b9ec1da6d25b6253",
+        "sha256": "337f26ec47391ba898f9a2f7ef9f43c33d41f7b34d03eb78b9ec1da6d25b6253"
+      },
+      {
+        "name": "document_writes.html",
+        "sha256": "7d7998cbcca611e08584b4872ff6ebda1c893dca1eb77c799e0fbccb62d89929"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_css.css",
+        "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "f0e94a3a980b577ebd5f02d9d12d1dac5f6cadc59e9b73d30543d0fe540132a6"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "base64_decoding"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 7,
+        "signatures": []
+      }
+    ],
+    "tags": {},
+    "temp_submission_data": {}
+  }
+}
