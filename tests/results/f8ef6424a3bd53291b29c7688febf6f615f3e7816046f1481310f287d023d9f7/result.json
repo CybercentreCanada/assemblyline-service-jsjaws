@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 531,
+    "score": 41,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob((function() {????var Module, moduleOverrides, key, arguments_, thisProgram, quit_, ENVIRONM...\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction b64toBlob(_0x31a2b8,_0x3262af,_0x49150f){var _0x1f7950=a0_0x14b753,_0xedd820=atob(_0x31a2b8...\n\t\t}var blob=b64toBlob(text,'application/zip',0x200)",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -48,19 +48,19 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "base64_decoding": 10
+            "creates_object_url": 10
           },
           "signatures": {
-            "base64_decoding": 1
+            "creates_object_url": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Base64Decoding",
+        "title_text": "Signature: CreatesObjectURL",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body": "JavaScript attempts to sleep\n\t\twindow[5].setTimeout(function() {\n\n\t\twindow[5].setTimeout(function(){_0x2063A(_0x2033D)},2000)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -70,19 +70,19 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "save_to_file": 10
+            "sleep": 10
           },
           "signatures": {
-            "save_to_file": 1
+            "sleep": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: SaveToFile",
+        "title_text": "Signature: Sleep",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[15])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -90,22 +90,22 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 500,
+          "score": 10,
           "score_map": {
-            "writes_archive": 500
+            "suspicious_process": 10
           },
           "signatures": {
-            "writes_archive": 1
+            "suspicious_process": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: WritesArchive",
+        "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "\t\tAn encoded literal was found: AAAAAAAAAAAAAAAA\n\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
-        "body_format": "TEXT",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.google-analytics.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.google-analytics.com/analytics.js'\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/analytics.js'\"}]",
+        "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
         "heuristic": {
@@ -117,15 +117,21 @@
           "signatures": {}
         },
         "tags": {
-          "file": {
-            "string": {
-              "extracted": [
-                "AAAAAAAAAAAAAAAA"
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.google-analytics.com"
+              ],
+              "uri": [
+                "https://www.google-analytics.com/analytics.js'"
+              ],
+              "uri_path": [
+                "/analytics.js'"
               ]
             }
           }
         },
-        "title_text": "JS-X-Ray IOCs Detected",
+        "title_text": "MalwareJail extracted the following IOCs",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -133,16 +139,11 @@
   "files": {
     "extracted": [
       {
-        "name": "Document5934.zip",
-        "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
+        "name": "Blob[15]",
+        "sha256": "f5e236707a45e7af5461e4113d2bc60926142dfb9e83316553d00f0884cad923"
       }
     ],
-    "supplementary": [
-      {
-        "name": "temp_javascript.js",
-        "sha256": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237"
-      }
-    ]
+    "supplementary": []
   },
   "results": {
     "heuristics": [
@@ -162,30 +163,44 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "base64_decoding"
+          "creates_object_url"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "save_to_file"
+          "sleep"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "writes_archive"
+          "suspicious_process"
         ]
       }
     ],
     "tags": {
-      "file.string.extracted": [
+      "network.dynamic.domain": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "AAAAAAAAAAAAAAAA"
+          "value": "www.google-analytics.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.google-analytics.com/analytics.js'"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/analytics.js'"
         }
       ]
     },

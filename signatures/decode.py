@@ -38,7 +38,7 @@ class Base64Decoding(Signature):
             heuristic_id=3,
             name="base64_decoding",
             description="JavaScript uses a common base64 method for decoding characters",
-            indicators=["b64toblob(", "atob("],
+            indicators=["b64toblob(", "atob(", "b64blb("],
             severity=0
         )
 

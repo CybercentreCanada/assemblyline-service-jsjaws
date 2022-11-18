@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 40,
+    "score": 50,
     "sections": [
       {
         "auto_collapse": false,
@@ -12,6 +12,50 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0...\n\t\t            return new Blob(xrXkOsltcOME, { type: ali + 'ct################et-s############tre######...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_blob": 10
+          },
+          "signatures": {
+            "creates_blob": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesBlob",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_object_url": 10
+          },
+          "signatures": {
+            "creates_object_url": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesObjectURL",
         "zeroize_on_tag_safe": false
       },
       {
@@ -60,29 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "prepare_network_request": 10
-          },
-          "signatures": {
-            "prepare_network_request": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[15]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[13]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -107,7 +129,7 @@
   "files": {
     "extracted": [
       {
-        "name": "url_blob",
+        "name": "Blob[14]",
         "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }
     ],
@@ -124,6 +146,20 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "creates_blob"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_object_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "base64_decoding"
         ]
       },
@@ -132,13 +168,6 @@
         "heur_id": 3,
         "signatures": [
           "suspicious_char_codes"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "prepare_network_request"
         ]
       },
       {

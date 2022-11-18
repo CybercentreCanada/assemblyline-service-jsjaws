@@ -10,7 +10,7 @@ class SuspiciousProcess(Signature):
             heuristic_id=3,
             name="suspicious_process",
             description="JavaScript uses a suspicious process",
-            indicators=["winmgmts", "eval(", "uneval("],
+            indicators=["winmgmts", "eval(", "uneval(", "new Worker("],
             severity=0
         )
 
