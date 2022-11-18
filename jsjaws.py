@@ -400,17 +400,18 @@ class JsJaws(ServiceBase):
                 # that the body of the element is Javascript
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
-        for line in soup.body.get_attribute_list("onpageshow"):
-            if line:
-                js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
+        if soup.body:
+            for line in soup.body.get_attribute_list("onpageshow"):
+                if line:
+                    js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
 
         if aggregated_js_script is None:
             return None, js_content, None
 
-        onloads = soup.body.get_attribute_list("onload")
-        for onload in onloads:
-            if onload:
-                js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
+        if soup.body:
+            for onload in soup.body.get_attribute_list("onload"):
+                if onload:
+                    js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
 
         aggregated_js_script.close()
 
@@ -674,6 +675,8 @@ class JsJaws(ServiceBase):
                 file_contents = f.read()
                 urls_json = loads(file_contents)
                 for item in urls_json:
+                    if len(item["url"]) > 500:
+                        item["url"] = truncate(item["url"], 500)
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
