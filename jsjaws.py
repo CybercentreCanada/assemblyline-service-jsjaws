@@ -4,7 +4,7 @@ from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
-from os import listdir, mkdir, path
+from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
 import re
 from requests import get
@@ -16,6 +16,7 @@ from time import time
 from tinycss2 import parse_stylesheet
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
@@ -98,6 +99,7 @@ class JsJaws(ServiceBase):
         self.filtered_lib: Optional[str] = None
         self.filtered_lib_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
+        self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -358,10 +360,33 @@ class JsJaws(ServiceBase):
         """
         soup = BeautifulSoup(file_content, features="html5lib")
 
-        ########
-        # HTML #
-        ########
+        aggregated_js_script = None
+        js_content = b""
+        js_script_name = None
+        css_script_name = None
 
+        if request.file_type in ["code/html", "code/hta"]:
+            aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
+            css_script_name = self._extract_css_using_soup(soup, request)
+
+        aggregated_js_script, file_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+        if aggregated_js_script:
+            aggregated_js_script.close()
+            self.log.debug("Adding extracted JavaScript: temp_javascript.js")
+            request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted JavaScript")
+            js_script_name = aggregated_js_script.name
+
+        return js_script_name, file_content, css_script_name
+
+    def _extract_embeds_using_soup(self, soup: BeautifulSoup, request: ServiceRequest, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+        """
+        This method extracts files from embed tag sources via BeautifulSoup enumeration
+        :param soup: The BeautifulSoup object
+        :param request: The ServiceRequest object
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :return: A tuple of the JavaScript file that was written and the contents of the file that was written
+        """
         # https://www.w3schools.com/TAGS/tag_embed.asp
         # Grab all embed srcs with base64-encoded values and extract them
         embeds = soup.findAll("embed")
@@ -371,18 +396,30 @@ class JsJaws(ServiceBase):
                 continue
             matches = re.match(APPENDCHILD_BASE64_REGEX, src)
             if len(matches.regs) == 2:
+                embedded_file_content = b64decode(matches.group(1).encode())
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                    t.write(b64decode(matches.group(1).encode()))
+                    t.write(embedded_file_content)
                     embed_path = t.name
                 self.log.debug(f"Extracting decoded embed tag source {embed_path}")
                 request.add_extracted(embed_path, get_sha256_for_file(embed_path), "Base64-decoded Embed Tag Source")
 
-        ##############
-        # JavaScript #
-        ##############
+                # We also want to aggregate Javscript scripts
+                file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
+                if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
+                    soup = BeautifulSoup(embedded_file_content, features="html5lib")
+                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+
+        return aggregated_js_script, js_content
+
+    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+        """
+        This method extracts JavaScript from BeautifulSoup enumeration
+        :param soup: The BeautifulSoup object
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :return: A tuple of the JavaScript file that was written and the contents of the file that was written
+        """
         scripts = soup.findAll("script")
-        aggregated_js_script = None
-        js_content = b""
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -424,20 +461,22 @@ class JsJaws(ServiceBase):
                     js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
 
         if aggregated_js_script is None:
-            return None, js_content, None
+            return aggregated_js_script, js_content
 
         if soup.body:
             for onload in soup.body.get_attribute_list("onload"):
                 if onload:
                     js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
 
-        aggregated_js_script.close()
+        return aggregated_js_script, js_content
 
-        request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted javascript")
-
-        #######
-        # CSS #
-        #######
+    def _extract_css_using_soup(self, soup: BeautifulSoup, request: ServiceRequest) -> str:
+        """
+        This method extracts CSS from BeautifulSoup enumeration
+        :param soup: The BeautifulSoup object
+        :param request: The ServiceRequest object
+        :return: The name of the CSS script
+        """
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript analysis envs
         try:
             styles = soup.findAll("style")
@@ -470,11 +509,12 @@ class JsJaws(ServiceBase):
                         style_json[prelude_name] = output
 
             if aggregated_css_script is None:
-                return aggregated_js_script.name, js_content, None
+                return None
 
             aggregated_css_script.close()
 
             if style_json:
+                self.log.debug("Adding extracted CSS: temp_css.css")
                 request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
                 css_script_name = aggregated_css_script.name
 
@@ -507,7 +547,7 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Could not parse CSS due to {e}.")
             css_script_name = None
 
-        return aggregated_js_script.name, file_content, css_script_name
+        return css_script_name
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """

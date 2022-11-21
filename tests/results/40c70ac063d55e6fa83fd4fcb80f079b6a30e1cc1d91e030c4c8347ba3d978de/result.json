@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 510,
+    "score": 1010,
     "sections": [
       {
         "auto_collapse": false,
@@ -46,7 +46,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 4,
-          "score": 500,
+          "score": 1000,
           "score_map": {},
           "signatures": {}
         },
