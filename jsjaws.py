@@ -359,6 +359,25 @@ class JsJaws(ServiceBase):
         """
         soup = BeautifulSoup(file_content, features="html5lib")
 
+        ########
+        # HTML #
+        ########
+
+        # https://www.w3schools.com/TAGS/tag_embed.asp
+        # Grab all embed srcs with base64-encoded values and extract them
+        embeds = soup.findAll("embed")
+        for embed in embeds:
+            src = embed.attrs.get("src")
+            if not src:
+                continue
+            matches = re.match(APPENDCHILD_BASE64_REGEX, src)
+            if len(matches.regs) == 2:
+                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                    t.write(b64decode(matches.group(1).encode()))
+                    embed_path = t.name
+                self.log.debug(f"Extracting decoded embed tag source {embed_path}")
+                request.add_extracted(embed_path, get_sha256_for_file(embed_path), "Base64-decoded Embed Tag Source")
+
         ##############
         # JavaScript #
         ##############
