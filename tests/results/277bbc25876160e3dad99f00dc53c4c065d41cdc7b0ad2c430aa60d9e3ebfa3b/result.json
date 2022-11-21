@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tfunction reverse(s)\\x0d\n\t\tdocument.getElementById(\"preview\").src = reverse(viewer)",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tfunction reverse(s)\n\t\tdocument.getElementById(\"preview\").src = reverse(viewer)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
