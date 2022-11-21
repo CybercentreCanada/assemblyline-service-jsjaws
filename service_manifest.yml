@@ -113,7 +113,7 @@ heuristics:
 
   - heur_id: 4
     name: Embedded Code in Common Library
-    score: 500
+    score: 1000
     filetype: '*'
     description: Embedded code was discovered in a file posing as a common library
 
@@ -125,13 +125,13 @@ heuristics:
 
   - heur_id: 6
     name: Automatic location redirection
-    score: 0
+    score: 10
     filetype: '*'
     description: Automatic redirection to another resource
 
   - heur_id: 7
     name: Suspicious CSS Usage
-    score: 0
+    score: 10
     filetype: '*'
     description: Suspicious declarations were detected in HTML stylesheets
 
