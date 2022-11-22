@@ -163,6 +163,16 @@ def remove_tmp_manifest():
 
 
 @pytest.fixture
+def dummy_request_class_instance():
+    class DummyRequest():
+        def __init__(self):
+            super(DummyRequest, self).__init__()
+            self.temp_submission_data = {}
+
+    yield DummyRequest()
+
+
+@pytest.fixture
 def jsjaws_class_instance():
     create_tmp_manifest()
     try:
@@ -387,7 +397,7 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_extract_doc_writes_one_liners(jsjaws_class_instance):
+    def test_extract_doc_writes_one_liners(jsjaws_class_instance, dummy_request_class_instance):
         # Single line example : 697b0e897a7d57e600a1020886f837469ffb87acc65f04c2ae424af50a311c7e
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
@@ -408,21 +418,24 @@ class TestJsJaws:
             "[2022-10-18T20:12:51.924Z] => Something else",
             "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:53.924Z] => 'write me too!'",
+            "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:53.924Z] => 'password?!'",
         ]
         jsjaws_class_instance.artifact_list = []
-        jsjaws_class_instance._extract_doc_writes(output)
+        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
         assert exists(jsjaws_class_instance.extracted_doc_writes_path)
         with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "write me!\nwrite me too!\n"
+            assert f.read() == "write me!\nwrite me too!\npassword?!"
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": jsjaws_class_instance.extracted_doc_writes,
             "path": jsjaws_class_instance.extracted_doc_writes_path,
             "description": "DOM Writes",
             "to_be_extracted": True,
         }
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == ['me', 'me!', 'password', 'password?!', 'too', 'too!', 'write']
 
     @staticmethod
-    def test_extract_doc_writes_multiliner(jsjaws_class_instance):
+    def test_extract_doc_writes_multiliner(jsjaws_class_instance, dummy_request_class_instance):
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
         from os import mkdir
@@ -440,20 +453,22 @@ class TestJsJaws:
             "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:50.924Z] => '",
             "<html>",
+            "password: yabadabadoo",
             "</html>'",
             "[2022-10-18T20:12:51.924Z] - Something else",
         ]
         jsjaws_class_instance.artifact_list = []
-        jsjaws_class_instance._extract_doc_writes(output)
+        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
         assert exists(jsjaws_class_instance.extracted_doc_writes_path)
         with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "\n<html>\n</html>\n"
+            assert f.read() == "<html>\npassword: yabadabadoo\n</html>"
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": jsjaws_class_instance.extracted_doc_writes,
             "path": jsjaws_class_instance.extracted_doc_writes_path,
             "description": "DOM Writes",
             "to_be_extracted": True,
         }
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == [' yabadabadoo', '</html>', '<html>', 'html', 'password', 'password:', 'yabadabadoo']
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
