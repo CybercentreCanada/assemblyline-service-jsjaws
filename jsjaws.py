@@ -365,11 +365,12 @@ class JsJaws(ServiceBase):
         js_script_name = None
         css_script_name = None
 
+        aggregated_js_script, file_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
             css_script_name = self._extract_css_using_soup(soup, request)
 
-        aggregated_js_script, file_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
         if aggregated_js_script:
             aggregated_js_script.close()
             self.log.debug("Adding extracted JavaScript: temp_javascript.js")

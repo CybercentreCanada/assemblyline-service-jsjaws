@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(129,235, [object Object])\n\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,11,0,8,0,3,147,89,85,229,6,95,68,85,138,3,0,0,40,11,0,18,0,28,0,100,111,99,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction b64toBlob(_0x390b80,_0x699e80){var _0x39e099=a0_0x3e7c,_0x1936d3=[],_0x5e2f86=atob(_0x390b8...\n\t\tvar _0x362cf0=_0xa80909[_0x1de451(0x136)],_0x46e8a=b64toBlob(_0x362cf0,0x200)\n\t\t_0x1f8499=atob(_0x1f8499)",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t_0x1f8499=atob(_0x1f8499)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
+        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -173,18 +173,18 @@
         "sha256": "337f26ec47391ba898f9a2f7ef9f43c33d41f7b34d03eb78b9ec1da6d25b6253"
       },
       {
-        "name": "document_writes.html",
-        "sha256": "7d7998cbcca611e08584b4872ff6ebda1c893dca1eb77c799e0fbccb62d89929"
+        "name": "attachment.zip",
+        "sha256": "568f1ebd9c616164eaaec8ad7807f0fc600a5101ea99b441f91d559e3b419afc"
       },
       {
-        "name": "attachment.zip",
-        "sha256": "db1dd90124ebd28a35e591dff072f3bd1429cf4092b9e850d3e6ee879457a954"
+        "name": "document_writes.html",
+        "sha256": "7d7998cbcca611e08584b4872ff6ebda1c893dca1eb77c799e0fbccb62d89929"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "76b6330fa9bbb800bfca5e392adc99dc8fd3e80c55c6a88eac8cbe62b53cdf48"
+        "sha256": "79987630e7fd6e25212c1f696b66affcad36b46fb601360aaf8cf6999d015f38"
       },
       {
         "name": "temp_css.css",
