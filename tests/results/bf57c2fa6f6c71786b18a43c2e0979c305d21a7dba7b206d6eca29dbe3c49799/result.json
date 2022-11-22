@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 11,
+    "score": 551,
     "sections": [
       {
         "auto_collapse": false,
@@ -13,7 +13,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 7,
-          "score": 0,
+          "score": 10,
           "score_map": {},
           "signatures": {}
         },
@@ -34,7 +34,51 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t_0x1f8499=atob(_0x1f8499)",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(129,235, [object Object])\n\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_blob": 10
+          },
+          "signatures": {
+            "creates_blob": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesBlob",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_object_url": 10
+          },
+          "signatures": {
+            "creates_object_url": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesObjectURL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction b64toBlob(_0x390b80,_0x699e80){var _0x39e099=a0_0x3e7c,_0x1936d3=[],_0x5e2f86=atob(_0x390b8...\n\t\tvar _0x362cf0=_0xa80909[_0x1de451(0x136)],_0x46e8a=b64toBlob(_0x362cf0,0x200)\n\t\t_0x1f8499=atob(_0x1f8499)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -52,6 +96,50 @@
         },
         "tags": {},
         "title_text": "Signature: Base64Decoding",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "writes_archive": 500
+          },
+          "signatures": {
+            "writes_archive": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WritesArchive",
         "zeroize_on_tag_safe": false
       },
       {
@@ -87,16 +175,20 @@
       {
         "name": "document_writes.html",
         "sha256": "7d7998cbcca611e08584b4872ff6ebda1c893dca1eb77c799e0fbccb62d89929"
+      },
+      {
+        "name": "attachment.zip",
+        "sha256": "db1dd90124ebd28a35e591dff072f3bd1429cf4092b9e850d3e6ee879457a954"
       }
     ],
     "supplementary": [
       {
-        "name": "temp_css.css",
-        "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
+        "name": "temp_javascript.js",
+        "sha256": "76b6330fa9bbb800bfca5e392adc99dc8fd3e80c55c6a88eac8cbe62b53cdf48"
       },
       {
-        "name": "temp_javascript.js",
-        "sha256": "f0e94a3a980b577ebd5f02d9d12d1dac5f6cadc59e9b73d30543d0fe540132a6"
+        "name": "temp_css.css",
+        "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
       }
     ]
   },
@@ -111,7 +203,35 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "creates_blob"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_object_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "base64_decoding"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_archive"
         ]
       },
       {
