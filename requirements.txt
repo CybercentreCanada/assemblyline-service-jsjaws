@@ -1,3 +1,4 @@
 beautifulsoup4
 html5lib
 tinycss2
+yara-python

@@ -49,6 +49,12 @@ submission_params:
     type: bool
     value: true
 
+  # Set to "true" if you do not want the file to be executed via Box.js and MalwareJail
+  - default: false
+    name: static_analysis_only
+    type: bool
+    value: false
+
   # Box.js parameters
   - default: false
     name: no_shell_error
@@ -89,6 +95,12 @@ submission_params:
 
   - default: false
     name: log_errors
+    type: bool
+    value: false
+
+  # Synchrony parameters
+  - default: false
+    name: enable_synchrony
     type: bool
     value: false
 

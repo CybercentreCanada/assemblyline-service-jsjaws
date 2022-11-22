@@ -168,6 +168,7 @@ def dummy_request_class_instance():
         def __init__(self):
             super(DummyRequest, self).__init__()
             self.temp_submission_data = {}
+            self.result = None
 
     yield DummyRequest()
 
@@ -294,6 +295,8 @@ class TestJsJaws:
             "no_shell_error": False,
             "display_iocs": False,
             "log_errors": False,
+            "static_analysis_only": False,
+            "enable_synchrony": False,
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
@@ -367,6 +370,8 @@ class TestJsJaws:
         service_request.task.service_config["static_signatures"] = False
         service_request.task.service_config["add_supplementary"] = True
         service_request.task.service_config["log_errors"] = True
+        service_request.task.service_config["enable_synchrony"] = True
+        service_request.task.service_config["static_analysis_only"] = True
         mocker.patch("jsjaws.Popen", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 
@@ -717,7 +722,7 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_flag_jsxray_iocs(jsjaws_class_instance):
+    def test_flag_jsxray_iocs(jsjaws_class_instance, dummy_request_class_instance):
         from assemblyline_v4_service.common.result import Result, ResultSection
 
         output = {
@@ -728,7 +733,7 @@ class TestJsJaws:
                 {"kind": "obfuscated-code", "value": "blah"},
             ]
         }
-        res = Result()
+        dummy_request_class_instance.result = Result()
         correct_res_sec = ResultSection(
             "JS-X-Ray IOCs Detected",
             body="\t\tAn unsafe statement was found: blah\n\t\tAn encoded literal was "
@@ -737,8 +742,8 @@ class TestJsJaws:
             tags={"file.string.extracted": ["blah"]},
         )
         correct_res_sec.set_heuristic(2)
-        jsjaws_class_instance._flag_jsxray_iocs(output, res)
-        assert check_section_equality(res.sections[0], correct_res_sec)
+        jsjaws_class_instance._flag_jsxray_iocs(output, dummy_request_class_instance)
+        assert check_section_equality(dummy_request_class_instance.result.sections[0], correct_res_sec)
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
