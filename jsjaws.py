@@ -19,6 +19,10 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.str_utils import safe_str, truncate
+from assemblyline_v4_service.common.utils import (
+    PASSWORD_WORDS,
+    extract_passwords,
+)
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.dynamic_service_helper import (
@@ -323,7 +327,7 @@ class JsJaws(ServiceBase):
         self._extract_boxjs_iocs(request.result)
         self._extract_malware_jail_iocs(malware_jail_output, request)
         self._extract_wscript(total_output, request.result)
-        self._extract_doc_writes(malware_jail_output)
+        self._extract_doc_writes(malware_jail_output, request)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
         try:
@@ -687,22 +691,41 @@ class JsJaws(ServiceBase):
         if ret is not None:
             yield ret
 
-    def _extract_doc_writes(self, output: List[str]) -> None:
+    def _extract_doc_writes(self, output: List[str], request: ServiceRequest) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
-        :param result: A Result object containing the service results
+        :param request: The ServiceRequest object
+        :return: None
         """
-        extracted_doc_writes = open(self.extracted_doc_writes_path, "a+")
         doc_write = False
+        content_to_write = []
         for line in self._parse_malwarejail_output(output):
             if doc_write:
-                extracted_doc_writes.write(line.split("] => '", 1)[1][:-1] + "\n")
+                written_content = line.split("] => '", 1)[1].strip()[:-1]
+                content_to_write.append(written_content)
                 doc_write = False
             if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
                 doc_write = True
 
-        extracted_doc_writes.close()
+        with open(self.extracted_doc_writes_path, "w") as f:
+            f.write("\n".join(content_to_write))
+
+        if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in content_to_write):
+            new_passwords = set()
+            for line in content_to_write:
+                for password in extract_passwords(line):
+                    if not password or len(password) > 30:
+                        # We assume that passwords exist and won't be that long.
+                        continue
+                    new_passwords.add(password)
+
+                if new_passwords:
+                    self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
+                    # It is technically not required to sort them, but it makes the output of the module predictable
+                    if "passwords" in request.temp_submission_data:
+                        new_passwords.update(set(request.temp_submission_data["passwords"]))
+                    request.temp_submission_data["passwords"] = sorted(list(new_passwords))
 
         if path.getsize(self.extracted_doc_writes_path) > 0:
             self.artifact_list.append(
