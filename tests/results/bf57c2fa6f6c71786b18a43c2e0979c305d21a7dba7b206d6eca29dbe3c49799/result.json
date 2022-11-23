@@ -178,7 +178,7 @@
       },
       {
         "name": "document_writes.html",
-        "sha256": "7d7998cbcca611e08584b4872ff6ebda1c893dca1eb77c799e0fbccb62d89929"
+        "sha256": "640ac074bec0e6ad82b795b6082fd0ae95c0a8976d70bb239fc41b9dcbd4f8d9"
       }
     ],
     "supplementary": [
@@ -241,6 +241,25 @@
       }
     ],
     "tags": {},
-    "temp_submission_data": {}
+    "temp_submission_data": {
+      "passwords": [
+        "Document",
+        "Document Password.",
+        "DviggY7r",
+        "Password",
+        "Password.",
+        "The",
+        "Use",
+        "correctly",
+        "correctly.",
+        "displayed",
+        "downloaded",
+        "file",
+        "file.",
+        "is",
+        "local",
+        "not"
+      ]
+    }
   }
 }
