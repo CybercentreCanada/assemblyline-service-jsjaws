@@ -4,11 +4,10 @@ from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
-from os import environ, listdir, mkdir, path, remove
+from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
 import re
 from requests import get
-from shutil import copyfile
 from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 import tempfile
@@ -174,7 +173,7 @@ class JsJaws(ServiceBase):
         self.filtered_lib = "filtered_lib.js"
         self.filtered_lib_path = path.join(self.working_directory, self.filtered_lib)
         self.cleaned_with_synchrony = f"{request.sha256}.cleaned"
-        self.cleaned_with_synchrony_path = f"{request.file_path}.cleaned"
+        self.cleaned_with_synchrony_path = path.join(self.working_directory, self.cleaned_with_synchrony)
 
         # Setup directory structure
         if not path.exists(self.malware_jail_payload_extraction_dir):
@@ -283,11 +282,7 @@ class JsJaws(ServiceBase):
 
         jsxray_args = ["node", self.path_to_jsxray]
 
-        # TODO: https://github.com/relative/synchrony/issues/46
-        # We need the new release of the deobfuscate package to include the "output" option before we can specify
-        # where to write the deobfuscated file.
-        # synchrony_args = ["synchrony", "deobfuscate", "output", self.working_directory]
-        synchrony_args = ["synchrony", "deobfuscate"]
+        synchrony_args = ["synchrony", "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
         # Don't forget the sample!
         boxjs_args.append(file_path)
@@ -1130,14 +1125,9 @@ class JsJaws(ServiceBase):
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
         result.add_section(deobfuscated_with_synchrony_res)
 
-        # TODO: https://github.com/relative/synchrony/issues/46
-        # Until this issue is resolved, we have to perform some cleanup for the written file.
-        moved_path = path.join(self.working_directory, self.cleaned_with_synchrony)
-        copyfile(self.cleaned_with_synchrony_path, moved_path)
-        remove(self.cleaned_with_synchrony_path)
         artifact = {
             "name": self.cleaned_with_synchrony,
-            "path": moved_path,
+            "path": self.cleaned_with_synchrony_path,
             "description": "File deobfuscated with Synchrony",
             "to_be_extracted": True,
         }

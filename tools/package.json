@@ -21,7 +21,7 @@
         "box-js": "^1.9.15",
         "@nodesecure/js-x-ray": "^5.1.0",
         "minimist": "^1.2.0",
-        "deobfuscator": "^2.3.0"
+        "deobfuscator": "^2.4.0"
     },
     "license": "MIT",
     "repository": {

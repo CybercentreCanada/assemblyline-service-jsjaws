@@ -257,7 +257,7 @@ class TestJsJaws:
 
     @staticmethod
     @pytest.mark.parametrize("sample", samples)
-    def test_execute(sample, jsjaws_class_instance, dummy_completed_process_instance, mocker):
+    def test_execute(sample, jsjaws_class_instance, mocker):
         from os import mkdir, path
         from subprocess import TimeoutExpired
 
@@ -278,7 +278,7 @@ class TestJsJaws:
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
         mocker.patch.object(jsjaws_class_instance, "_flag_jsxray_iocs")
         mocker.patch.object(OntologyResults, "handle_artifacts")
-        mocker.patch("jsjaws.Popen", return_value=dummy_completed_process_instance)
+        mocker.patch.object(jsjaws_class_instance, "_run_tool")
 
         service_task = ServiceTask(sample)
         task = Task(service_task)
