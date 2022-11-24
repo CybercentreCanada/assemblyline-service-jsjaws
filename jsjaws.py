@@ -401,7 +401,7 @@ class JsJaws(ServiceBase):
             if not src:
                 continue
             matches = re.match(APPENDCHILD_BASE64_REGEX, src)
-            if len(matches.regs) == 2:
+            if matches and len(matches.regs) == 2:
                 embedded_file_content = b64decode(matches.group(1).encode())
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                     t.write(embedded_file_content)
@@ -536,7 +536,7 @@ class JsJaws(ServiceBase):
                                         url_path = None
                                         # If the content is base64 encoded, decode it before we extract it
                                         matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
-                                        if len(matches.regs) == 2:
+                                        if matches and len(matches.regs) == 2:
                                             item["url"] = b64decode(matches.group(1).encode())
                                         else:
                                             item["url"] = item["url"].encode()
@@ -909,7 +909,13 @@ class JsJaws(ServiceBase):
             ioc_result_section = ResultSection("IOCs extracted by Box.js")
             with open(self.boxjs_iocs, "r") as f:
                 file_contents = f.read()
+
+            ioc_json: List[Dict[str, Any]] = []
+            try:
                 ioc_json = loads(file_contents)
+            except JSONDecodeError as e:
+                self.log.warning(f"Failed to json.load() Box.js's IOC JSON due to {e}")
+
             commands = set()
             file_writes = set()
             file_reads = set()
