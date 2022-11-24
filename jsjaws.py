@@ -15,9 +15,11 @@ from threading import Thread
 from time import time
 from tinycss2 import parse_stylesheet
 from typing import Any, Dict, List, Optional, Set, Tuple
+from yara import compile as yara_compile
 
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
+from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline_v4_service.common.utils import (
     PASSWORD_WORDS,
@@ -75,6 +77,10 @@ STDOUT_LIMIT = 10000
 # These are commonly found strings in MalwareJail output that should not be flagged as domains
 FP_DOMAINS = ["ModuleJob.run", ".zip"]
 
+PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
+
+OBFUSCATOR_IO = "obfuscator.io"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -87,6 +93,7 @@ class JsJaws(ServiceBase):
         self.path_to_jailme_js: Optional[str] = None
         self.path_to_boxjs: Optional[str] = None
         self.path_to_jsxray: Optional[str] = None
+        self.path_to_synchrony: Optional[str] = None
         self.boxjs_urls_json_path: Optional[str] = None
         self.malware_jail_urls_json_path: Optional[str] = None
         self.wscript_only_config: Optional[str] = None
@@ -103,6 +110,8 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets: Optional[str] = None
         self.filtered_lib: Optional[str] = None
         self.filtered_lib_path: Optional[str] = None
+        self.cleaned_with_synchrony: Optional[str] = None
+        self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.log.debug("JsJaws service initialized")
@@ -149,6 +158,7 @@ class JsJaws(ServiceBase):
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
+        self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
         self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
@@ -165,6 +175,8 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
         self.filtered_lib = "filtered_lib.js"
         self.filtered_lib_path = path.join(self.working_directory, self.filtered_lib)
+        self.cleaned_with_synchrony = f"{request.sha256}.cleaned"
+        self.cleaned_with_synchrony_path = path.join(self.working_directory, self.cleaned_with_synchrony)
 
         # Setup directory structure
         if not path.exists(self.malware_jail_payload_extraction_dir):
@@ -187,6 +199,8 @@ class JsJaws(ServiceBase):
         static_signatures = request.get_param("static_signatures")
         no_shell_error = request.get_param("no_shell_error")
         display_iocs = request.get_param("display_iocs")
+        static_analysis_only = request.get_param("static_analysis_only")
+        enable_synchrony = request.get_param("enable_synchrony")
 
         # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --no-kill              Do not kill the application when runtime errors occur
@@ -271,16 +285,37 @@ class JsJaws(ServiceBase):
 
         jsxray_args = ["node", self.path_to_jsxray]
 
+        synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
+
         # Don't forget the sample!
         boxjs_args.append(file_path)
         malware_jail_args.append(file_path)
         jsxray_args.append(file_path)
+        synchrony_args.append(file_path)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
-        tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
-        tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
+        if not static_analysis_only:
+            tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+            tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
         tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
+
+        # There are three ways that Synchrony will run.
+        has_synchrony_run = False
+
+        # 1. If it is enabled in the submission parameter
+        if enable_synchrony:
+            tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+            has_synchrony_run = True
+        else:
+            for yara_rule in listdir("./yara"):
+                rules = yara_compile(filepath=path.join("./yara", yara_rule))
+                matches = rules.match(file_path)
+                # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
+                if matches:
+                    tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+                    has_synchrony_run = True
+                    break
 
         for thr in tool_threads:
             thr.start()
@@ -336,7 +371,18 @@ class JsJaws(ServiceBase):
             pass
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
-        self._flag_jsxray_iocs(jsxray_output, request.result)
+
+        # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
+        run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
+        if not has_synchrony_run and run_synchrony:
+            synchrony_thr = Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True)
+            synchrony_thr.start()
+            synchrony_thr.join(timeout=tool_timeout)
+
+        # TODO: Do something with the Synchrony output
+        _ = responses.get("Synchrony")
+
+        self._extract_synchrony(request.result)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(self.artifact_list, request)
@@ -1010,31 +1056,86 @@ class JsJaws(ServiceBase):
             # Might as well tag this while we're here
             urls_result_section.add_tag("file.string.extracted", safe_url)
 
-    @staticmethod
-    def _flag_jsxray_iocs(output: Dict[str, Any], result: Result) -> None:
+    def _flag_jsxray_iocs(self, output: Dict[str, Any], request: ServiceRequest) -> bool:
         """
         This method flags anything noteworthy from the Js-X-Ray output
         :param output: The output from JS-X-Ray
-        :param result: A Result object containing the service results
-        :return: None
+        :param request: The ServiceRequest object
+        :return: A boolean flag representing that we should run Synchrony
         """
         jsxray_iocs_result_section = ResultTextSection("JS-X-Ray IOCs Detected")
         warnings: List[Dict[str, Any]] = output.get("warnings", [])
+        signature = None
+        run_synchrony = False
         for warning in warnings:
             kind = warning["kind"]
             val = warning.get("value")
             if kind == "unsafe-stmt":
                 jsxray_iocs_result_section.add_line(f"\t\tAn unsafe statement was found: {truncate(safe_str(val))}")
             elif kind == "encoded-literal":
-                jsxray_iocs_result_section.add_line(f"\t\tAn encoded literal was found: {truncate(safe_str(val))}")
-                jsxray_iocs_result_section.add_tag("file.string.extracted", safe_str(val))
+                line = f"\t\tAn encoded literal was found: {truncate(safe_str(val))}"
+                if not jsxray_iocs_result_section.body or jsxray_iocs_result_section.body and line not in jsxray_iocs_result_section.body:
+                    # Determine if value is hex
+                    is_hex = False
+                    try:
+                        int(val, 16)
+                        is_hex = True
+                    except ValueError:
+                        pass
+                    if is_hex:
+                        decoded_hex = hexload(val.encode())
+                        if any(PE_indicator in decoded_hex for PE_indicator in PE_INDICATORS):
+                            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                                out.write(decoded_hex)
+                            file_name = sha256(decoded_hex).hexdigest()
+                            self.log.debug(f"Adding extracted PE {file_name} that was found in decoded HEX string.")
+                            self.artifact_list.append(
+                                {
+                                    "name": file_name,
+                                    "path": out.name,
+                                    "description": "Extracted PE found in decoded HEX string",
+                                    "to_be_extracted": True,
+                                }
+                            )
+                            signature = "decoded_hex_pe"
+                    jsxray_iocs_result_section.add_line(line)
+                    jsxray_iocs_result_section.add_tag("file.string.extracted", truncate(safe_str(val)))
             elif kind == "obfuscated-code":
                 jsxray_iocs_result_section.add_line(
                     f"\t\tObfuscated code was found that was obfuscated by: " f"{safe_str(val)}"
                 )
+                # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
+                if safe_str(val) == OBFUSCATOR_IO:
+                    run_synchrony = True
+
         if jsxray_iocs_result_section.body and len(jsxray_iocs_result_section.body) > 0:
             jsxray_iocs_result_section.set_heuristic(2)
-            result.add_section(jsxray_iocs_result_section)
+            if signature:
+                jsxray_iocs_result_section.heuristic.add_signature_id(signature)
+            request.result.add_section(jsxray_iocs_result_section)
+
+        return run_synchrony
+
+    def _extract_synchrony(self, result: Result):
+        """
+        This method extracts the created Synchrony artifact, if applicable
+        :param result: A Result object containing the service results
+        :return: None
+        """
+        if not path.exists(self.cleaned_with_synchrony_path):
+            return
+        deobfuscated_with_synchrony_res = ResultTextSection("The file was deobfuscated/cleaned by Synchrony")
+        deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
+        result.add_section(deobfuscated_with_synchrony_res)
+
+        artifact = {
+            "name": self.cleaned_with_synchrony,
+            "path": self.cleaned_with_synchrony_path,
+            "description": "File deobfuscated with Synchrony",
+            "to_be_extracted": True,
+        }
+        self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
+        self.artifact_list.append(artifact)
 
     def parse_msdt_powershell(self, cmd):
         import shlex

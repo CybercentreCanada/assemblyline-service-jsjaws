@@ -1,9 +1,10 @@
 # JsJaws Service
-This Assemblyline service integrates components from three open-source projects:
+This Assemblyline service integrates components from four open-source projects:
 * [Malware Jail](https://github.com/HynekPetrak/malware-jail), which provides a sandbox for semi-automatic Javascript
   malware analysis, deobfuscation and payload extraction.
 * [Box.js](https://github.com/CapacitorSet/box-js), which is a sandbox tool for studying JavaScript malware.
 * [JS-X-Ray](https://github.com/NodeSecure/js-x-ray), which is a tool for static analysis via SAST scanning.
+* [Synchrony](https://github.com/relative/synchrony), which is a tool for deobfuscating JavaScript that has been obfuscated with obfuscator.io (https://obfuscator.io).
 
 Both sandboxes use [Node VM](https://nodejs.org/api/vm.html) under the hood for malware sandboxing, although Box.js prefers a
 modified version of Node VM called [vm2](https://github.com/patriksimek/vm2).
@@ -30,6 +31,7 @@ Generic parameters:
   dynamic excecution output.
 * `display_sig_marks`: If you want the lines of code that caused the signatures to be raised to be displayed in the
   ResultSections.
+* `static_analysis_only`: If you do not want the file to be executed via Box.js and MalwareJail, and only with static analysis tools such as JS-X-Ray and Synchony, set this to "true".
 
 Box.js parameters:
 * `no_shell_error`: For Box.js, select this flag if you want to.
@@ -45,6 +47,10 @@ MalwareJail parameters:
   flag turns on this extraction.
 * `extract_eval_calls`: Files that each represent a Eval Call can be noisy and not particularly useful. This flag turns
   on this extraction.
+
+Synchrony parameters:
+* `enable_synchrony`: Synchrony will most likely extract a "cleaned" file given any JavaScript file, which adds load
+to Assemblyline. So only enable this option if you are sure you want this.
 
 ## Features included with Internet connectivity
 ### jQuery Fetching
