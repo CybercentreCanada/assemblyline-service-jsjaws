@@ -159,11 +159,26 @@
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file bf57c2fa6f6c71786b18a43c2e0979c305d21a7dba7b206d6eca29dbe3c49799.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
     "extracted": [
+      {
+        "name": "bf57c2fa6f6c71786b18a43c2e0979c305d21a7dba7b206d6eca29dbe3c49799.cleaned",
+        "sha256": "00229bee89d230077535973971fff96c1ad9efd02de0e9dba6af0638673f8fea"
+      },
       {
         "name": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1",
         "sha256": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1"
