@@ -92,6 +92,7 @@ class JsJaws(ServiceBase):
         self.path_to_jailme_js: Optional[str] = None
         self.path_to_boxjs: Optional[str] = None
         self.path_to_jsxray: Optional[str] = None
+        self.path_to_synchrony: Optional[str] = None
         self.boxjs_urls_json_path: Optional[str] = None
         self.malware_jail_urls_json_path: Optional[str] = None
         self.wscript_only_config: Optional[str] = None
@@ -156,6 +157,7 @@ class JsJaws(ServiceBase):
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
+        self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
         self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
@@ -282,7 +284,7 @@ class JsJaws(ServiceBase):
 
         jsxray_args = ["node", self.path_to_jsxray]
 
-        synchrony_args = ["synchrony", "deobfuscate", "--output", self.cleaned_with_synchrony_path]
+        synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
         # Don't forget the sample!
         boxjs_args.append(file_path)
