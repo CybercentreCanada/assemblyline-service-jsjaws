@@ -17,6 +17,8 @@ enabled: false
 is_external: false
 licence_count: 0
 
+uses_temp_submission_data: true
+
 config:
   # Note that the Docker container must be allowed Internet access as well
   allow_download_from_internet: false
