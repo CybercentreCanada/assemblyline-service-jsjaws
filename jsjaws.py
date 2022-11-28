@@ -1125,6 +1125,7 @@ class JsJaws(ServiceBase):
             return
         deobfuscated_with_synchrony_res = ResultTextSection("The file was deobfuscated/cleaned by Synchrony")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
+        deobfuscated_with_synchrony_res.set_heuristic(8)
         result.add_section(deobfuscated_with_synchrony_res)
 
         artifact = {
