@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 551,
+    "score": 801,
     "sections": [
       {
         "auto_collapse": false,
@@ -166,7 +166,14 @@
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
-        "heuristic": null,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 250,
+          "score_map": {},
+          "signatures": {}
+        },
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false
@@ -252,6 +259,11 @@
       {
         "attack_ids": [],
         "heur_id": 7,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
         "signatures": []
       }
     ],

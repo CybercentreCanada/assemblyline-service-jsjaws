@@ -149,6 +149,12 @@ heuristics:
     filetype: '*'
     description: Suspicious declarations were detected in HTML stylesheets
 
+  - heur_id: 8
+    name: Obfuscated with Obfuscator.io
+    score: 250
+    filetype: '*'
+    description: Sample was obfuscated with Obfuscator.io
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
