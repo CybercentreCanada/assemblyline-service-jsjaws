@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.google-analytics.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.google-analytics.com/analytics.js'\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/analytics.js'\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.google-analytics.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.google-analytics.com/analytics.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/analytics.js\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -123,10 +123,10 @@
                 "www.google-analytics.com"
               ],
               "uri": [
-                "https://www.google-analytics.com/analytics.js'"
+                "https://www.google-analytics.com/analytics.js"
               ],
               "uri_path": [
-                "/analytics.js'"
+                "/analytics.js"
               ]
             }
           }
@@ -193,14 +193,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.google-analytics.com/analytics.js'"
+          "value": "https://www.google-analytics.com/analytics.js"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/analytics.js'"
+          "value": "/analytics.js"
         }
       ]
     },
