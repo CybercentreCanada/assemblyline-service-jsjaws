@@ -151,7 +151,7 @@ heuristics:
 
   - heur_id: 8
     name: Obfuscated with Obfuscator.io
-    score: 250
+    score: 1000
     filetype: '*'
     description: Sample was obfuscated with Obfuscator.io
 
