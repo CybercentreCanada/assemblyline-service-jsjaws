@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"fonts.googleapis.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css2?family=open+sans:wght@300;400;600&display=swap');\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"fonts.googleapis.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css2?family=open+sans:wght@300;400;600&display=swap\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -24,10 +24,10 @@
                 "fonts.googleapis.com"
               ],
               "uri": [
-                "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');"
+                "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
               ],
               "uri_path": [
-                "/css2?family=open+sans:wght@300;400;600&display=swap');"
+                "/css2?family=open+sans:wght@300;400;600&display=swap"
               ]
             }
           }
@@ -75,14 +75,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');"
+          "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/css2?family=open+sans:wght@300;400;600&display=swap');"
+          "value": "/css2?family=open+sans:wght@300;400;600&display=swap"
         }
       ]
     },
