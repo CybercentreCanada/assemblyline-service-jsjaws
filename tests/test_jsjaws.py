@@ -473,7 +473,7 @@ class TestJsJaws:
             "description": "DOM Writes",
             "to_be_extracted": True,
         }
-        assert dummy_request_class_instance.temp_submission_data.get("passwords") == [' yabadabadoo', '</html>', '<html>', 'html', 'password', 'password:', 'yabadabadoo']
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == [' yabadabadoo', 'password', 'password:', 'yabadabadoo']
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
