@@ -759,6 +759,8 @@ class JsJaws(ServiceBase):
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in content_to_write):
             new_passwords = set()
             for line in content_to_write:
+                if len(line) > 10000:
+                    line = truncate(line, 10000)
                 for password in extract_passwords(line):
                     if not password or len(password) > 30:
                         # We assume that passwords exist and won't be that long.
