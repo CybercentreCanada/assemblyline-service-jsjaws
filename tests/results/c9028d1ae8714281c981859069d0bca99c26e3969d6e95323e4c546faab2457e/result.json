@@ -1,0 +1,424 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1022,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tCalling unescape() no.: 1\n\n\t\t}}}(_0x36ce,0xe3320),document['write'](unescape(_0x5ab5f6(0x1c5))))",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "unescape": 10
+          },
+          "signatures": {
+            "unescape": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Unescape",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tvar _0x1a3571=_0x33f5;(function(_0x4480ea,_0x3a2a81){var _0x560b13=_0x33f5,_0x282a51=_0x4480ea();whi...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "cdn.jsdelivr.net",
+                "folderdata021755.tk"
+              ],
+              "uri": [
+                "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css",
+                "https://folderdata021755.tk"
+              ],
+              "uri_path": [
+                "/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file c9028d1ae8714281c981859069d0bca99c26e3969d6e95323e4c546faab2457e.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "document_writes.html",
+        "sha256": "d8dc6cdfb6f7adfbd25f4d191ccc3025961fc1ae93893113c58288877a23eae1"
+      },
+      {
+        "name": "c9028d1ae8714281c981859069d0bca99c26e3969d6e95323e4c546faab2457e.cleaned",
+        "sha256": "e6e8a2193b1c03d3982125b0b058533a45f15a77d840e564d1a71c67cc08365e"
+      }
+    ],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "unescape"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "cdn.jsdelivr.net"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "folderdata021755.tk"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://folderdata021755.tk"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        }
+      ]
+    },
+    "temp_submission_data": {
+      "passwords": [
+        "$",
+        ",",
+        "-",
+        ".",
+        "...",
+        "/",
+        "00",
+        "1",
+        "1.00",
+        "15",
+        "5",
+        ":",
+        "Address",
+        "American",
+        "Amounts",
+        "Amounts:",
+        "BANK",
+        "Bank",
+        "CCV",
+        "Card",
+        "City",
+        "Code",
+        "Credit",
+        "Date",
+        "Date:",
+        "Declined",
+        "Deliverd",
+        "Discover",
+        "Do",
+        "Email",
+        "Express",
+        "For",
+        "Full",
+        "Has",
+        "ID",
+        "INFORMATION",
+        "Identify",
+        "In",
+        "J",
+        "J/Secure\u2122",
+        "JCB",
+        "Log",
+        "MasterCard",
+        "Mastercard",
+        "Mobile",
+        "Month",
+        "Name",
+        "Next",
+        "No",
+        "No.",
+        "Number",
+        "One",
+        "One-Time-Passcode:",
+        "Online",
+        "Our",
+        "PACKAGE",
+        "Passcode",
+        "Passcode:",
+        "Password",
+        "Phone",
+        "Please",
+        "Process",
+        "Processing",
+        "ProtectBuy",
+        "ProtectBuy\u2122",
+        "QR",
+        "Ready",
+        "SMS",
+        "Schedule",
+        "Secure",
+        "SecureCode",
+        "SecureCode\u2122",
+        "Shipping",
+        "Sign",
+        "Status",
+        "Submit",
+        "System",
+        "The",
+        "This",
+        "Time",
+        "Today",
+        "Today's",
+        "Try",
+        "USD",
+        "USPS",
+        "USPS.com",
+        "Unauthorized",
+        "Usage",
+        "Validate",
+        "Verification",
+        "Verified",
+        "We",
+        "Year",
+        "Your",
+        "Zip",
+        "above",
+        "accepted",
+        "accepted:",
+        "access",
+        "account",
+        "additional",
+        "address",
+        "again",
+        "against",
+        "all",
+        "any",
+        "app",
+        "assistance",
+        "at",
+        "back",
+        "bank",
+        "be",
+        "been",
+        "below",
+        "button",
+        "button.",
+        "by",
+        "canceled",
+        "card",
+        "cards",
+        "charge",
+        "click",
+        "close",
+        "code",
+        "com",
+        "complete",
+        "completed",
+        "confirm",
+        "cost",
+        "cost.",
+        "credentials",
+        "credit",
+        "delivery",
+        "details",
+        "do",
+        "few",
+        "fill",
+        "for",
+        "have",
+        "here",
+        "identification",
+        "if",
+        "in",
+        "information",
+        "is",
+        "issues",
+        "it",
+        "login",
+        "marchant",
+        "marchant.",
+        "may",
+        "monitored",
+        "monitored.",
+        "need",
+        "no",
+        "not",
+        "now",
+        "online",
+        "or",
+        "our",
+        "payment",
+        "please",
+        "prohibited",
+        "prohibited.",
+        "protects",
+        "purchase",
+        "redirection",
+        "refresh",
+        "registered",
+        "rejected",
+        "required",
+        "reserved",
+        "rights",
+        "s",
+        "safekey",
+        "safekey\u2122",
+        "scan",
+        "sec",
+        "seconds",
+        "seconds.",
+        "sent",
+        "shared",
+        "shipping",
+        "take",
+        "the",
+        "this",
+        "to",
+        "transaction",
+        "transaction.Your",
+        "unauthorized",
+        "up",
+        "use",
+        "using",
+        "validate",
+        "visa",
+        "visa\u2122",
+        "visit",
+        "wait",
+        "website",
+        "website:",
+        "will",
+        "window",
+        "with",
+        "you",
+        "your",
+        "yourself",
+        "yourself.",
+        "|"
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 from base64 import b64decode
 from bs4 import BeautifulSoup
+from bs4.element import Comment
 from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
@@ -601,6 +602,29 @@ class JsJaws(ServiceBase):
 
         return css_script_name
 
+    def _extract_visible_text_using_soup(self, dom_content) -> List[str]:
+        """
+        This method extracts visible text from the HTML page
+        :param dom_content: The content of written to the DOM
+        :return: A list of visible text that was written to the DOM
+        """
+        try:
+            soup = BeautifulSoup(dom_content, features="html5lib")
+        except Exception:
+            # If the written text is not an HTML document, return it
+            return [dom_content]
+
+        # Extract password from visible text, taken from https://stackoverflow.com/a/1983219
+        def tag_visible(element):
+            if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
+                return False
+            if isinstance(element, Comment):
+                return False
+            return True
+
+        visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
+        return visible_texts
+
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
         This method does a couple of things:
@@ -757,16 +781,22 @@ class JsJaws(ServiceBase):
         with open(self.extracted_doc_writes_path, "w") as f:
             f.write("\n".join(content_to_write))
 
-        if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in content_to_write):
+        visible_text: Set[str] = set()
+        for line in content_to_write:
+            visible_text.update(self._extract_visible_text_using_soup(line))
+        if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
-            for line in content_to_write:
+            for line in visible_text:
+                previous_password_set = new_passwords.copy()
+                if len(line) > 10000:
+                    line = truncate(line, 10000)
                 for password in extract_passwords(line):
                     if not password or len(password) > 30:
                         # We assume that passwords exist and won't be that long.
                         continue
                     new_passwords.add(password)
 
-                if new_passwords:
+                if new_passwords and new_passwords != previous_password_set:
                     self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
                     # It is technically not required to sort them, but it makes the output of the module predictable
                     if "passwords" in request.temp_submission_data:
