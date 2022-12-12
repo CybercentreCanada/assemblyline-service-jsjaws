@@ -787,7 +787,6 @@ class JsJaws(ServiceBase):
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
             for line in visible_text:
-                previous_password_set = new_passwords.copy()
                 if len(line) > 10000:
                     line = truncate(line, 10000)
                 for password in extract_passwords(line):
@@ -796,12 +795,12 @@ class JsJaws(ServiceBase):
                         continue
                     new_passwords.add(password)
 
-                if new_passwords and new_passwords != previous_password_set:
-                    self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
-                    # It is technically not required to sort them, but it makes the output of the module predictable
-                    if "passwords" in request.temp_submission_data:
-                        new_passwords.update(set(request.temp_submission_data["passwords"]))
-                    request.temp_submission_data["passwords"] = sorted(list(new_passwords))
+            if new_passwords:
+                self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
+                # It is technically not required to sort them, but it makes the output of the module predictable
+                if "passwords" in request.temp_submission_data:
+                    new_passwords.update(set(request.temp_submission_data["passwords"]))
+                request.temp_submission_data["passwords"] = sorted(list(new_passwords))
 
         if path.getsize(self.extracted_doc_writes_path) > 0:
             self.artifact_list.append(
