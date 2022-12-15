@@ -16,6 +16,7 @@ from threading import Thread
 from time import time
 from tinycss2 import parse_stylesheet
 from typing import Any, Dict, List, Optional, Set, Tuple
+from yaml import safe_load as yaml_safe_load
 from yara import compile as yara_compile
 
 from assemblyline.common import forge
@@ -31,6 +32,7 @@ from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.dynamic_service_helper import (
     OntologyResults,
     extract_iocs_from_text_blob,
+    URL_REGEX,
 )
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import (
@@ -41,6 +43,7 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
+from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 
 import signatures
@@ -60,7 +63,13 @@ COMBO_REGEX = (
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
 APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
-GETELEMENTBYID_REGEX = re.compile("document\.(?:getElementById|querySelector)\([\"\']([a-zA-Z0-9_#]+)[\"\']\)")
+DIVIDING_COMMENT = "// This comment was created by JsJaws"
+SAFELIST_PATH = "al_config/system_safelist.yaml"
+ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
+SAFELISTED_ATTRS_TO_POP = {
+    "link": ["href"],
+    "svg": ["xmlns"],
+}
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -115,9 +124,13 @@ class JsJaws(ServiceBase):
         self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
+        self.safelist = Optional[Dict[str, List[str]]]
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
+        with open(SAFELIST_PATH, "r") as f:
+            self.safelist = yaml_safe_load(f)
+
         self.log.debug("JsJaws service started")
         self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
 
@@ -284,7 +297,7 @@ class JsJaws(ServiceBase):
         if log_errors:
             malware_jail_args.append("--logerrors")
 
-        jsxray_args = ["node", self.path_to_jsxray]
+        jsxray_args = ["node", self.path_to_jsxray, f"{DIVIDING_COMMENT}\n"]
 
         synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
@@ -292,7 +305,15 @@ class JsJaws(ServiceBase):
         boxjs_args.append(file_path)
         malware_jail_args.append(file_path)
         jsxray_args.append(file_path)
-        synchrony_args.append(file_path)
+
+        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script and send that to Synchrony
+        if f"{DIVIDING_COMMENT}\n".encode() in file_content:
+            _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                t.write(actual_script)
+                synchrony_args.append(t.name)
+        else:
+            synchrony_args.append(file_path)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -403,21 +424,44 @@ class JsJaws(ServiceBase):
         aggregated_script.write(encoded_script + b"\n")
         return file_content, aggregated_script
 
-    def extract_using_soup(self, request: ServiceRequest, file_content: bytes) -> Tuple[str, bytes, Optional[str]]:
+    def insert_content(self, content: str, file_content: bytes, aggregated_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method inserts contents above the dividing comment line in a NamedTemporaryFile
+        :param content: content to be inserted
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        encoded_script = content.encode()
+        if aggregated_script is None:
+            aggregated_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
+        # Get the point in the file contents where the divider exists
+        if file_content != b"":
+            index_of_divider = file_content.index(DIVIDING_COMMENT.encode())
+            # Find the beginning of the file
+            aggregated_script.seek(0, 0)
+            # Insert the encoded script before the divider
+            file_content = file_content[:index_of_divider] + encoded_script + b"\n" + file_content[index_of_divider:]
+            aggregated_script.write(file_content)
+            # Find the end of the file
+            aggregated_script.seek(0, 2)
+        return file_content, aggregated_script
+
+    def extract_using_soup(self, request: ServiceRequest, initial_file_content: bytes) -> Tuple[str, bytes, Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
-        :param file_content: The contents of the file to be read
+        :param initial_file_content: The contents of the initial file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
-        soup = BeautifulSoup(file_content, features="html5lib")
+        soup = BeautifulSoup(initial_file_content, features="html5lib")
 
         aggregated_js_script = None
         js_content = b""
         js_script_name = None
         css_script_name = None
 
-        aggregated_js_script, file_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
 
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
@@ -429,7 +473,9 @@ class JsJaws(ServiceBase):
             request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted JavaScript")
             js_script_name = aggregated_js_script.name
 
-        return js_script_name, file_content, css_script_name
+        if js_content != b"":
+            return js_script_name, js_content, css_script_name
+        return js_script_name, initial_file_content, css_script_name
 
     def _extract_embeds_using_soup(self, soup: BeautifulSoup, request: ServiceRequest, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
@@ -456,23 +502,94 @@ class JsJaws(ServiceBase):
                 self.log.debug(f"Extracting decoded embed tag source {embed_path}")
                 request.add_extracted(embed_path, get_sha256_for_file(embed_path), "Base64-decoded Embed Tag Source")
 
-                # We also want to aggregate Javscript scripts
+                # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
                 file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     soup = BeautifulSoup(embedded_file_content, features="html5lib")
-                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, insert_above_divider=True)
 
         return aggregated_js_script, js_content
 
-    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
         :param aggregated_js_script: The NamedTemporaryFile object
         :param js_content: The file content of the NamedTemporaryFile
+        :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
         scripts = soup.findAll("script")
+
+        # Create most HTML elements with JavaScript
+        elements = soup.findAll()
+        for index, element in enumerate(elements):
+            # We don't want these elements dynamically created
+            if element.name in ["html", "head", "meta", "style", "body", "script"]:
+                continue
+
+            # If an element has an attribute that is safelisted, don't include it when we create the element
+            if element.name in SAFELISTED_ATTRS_TO_POP:
+                for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
+                    if is_tag_safelisted(element.attrs.get(attr), ["network.dynamic.domain", "network.dynamic.uri"], self.safelist):
+                        element.attrs.pop(attr)
+
+            # To avoid duplicate of embed extraction, check if embed matches criteria used in the extract_embeds_using_soup method
+            if element.name == "embed":
+                src = element.attrs.get("src")
+                if src and re.match(APPENDCHILD_BASE64_REGEX, src):
+                    continue
+
+            # If we are inserting an element above the divider, we should grab the last index used and add to that...
+            # Find last occurrence of "element{}_jsjaws ="" in the js_content
+            if insert_above_divider:
+                matches = re.findall(ELEMENT_INDEX_REGEX, js_content)
+                last_used_index = int(matches[-1])
+                idx = index + last_used_index + 1
+            else:
+                idx = index
+
+            # If the element does not have an ID, mock one
+            element_id = element.attrs.get("id", f"element{idx}")
+            random_element_varname = f"{element_id.lower()}_jsjaws"
+            # We cannot trust the text value of these elements, since it contains all nested items within it...
+            if element.name in ["div", "p", "svg"]:
+                # If the element contains a script child, and the element's string is the same as the script child's, set value to None
+                if element.next.name == "script" and element.string == element.next.string:
+                    element_value = None
+                elif element.string is not None:
+                    element_value = element.string.strip().replace("\n", "")
+                else:
+                    element_value = None
+            else:
+                element_value = element.text.strip().replace("\n", "")
+            # Create an element and set the innertext
+            # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
+            create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
+                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
+                                    f"document.body.appendChild({random_element_varname});\n"
+            # Only set innertext field if there is a value to set it to
+            if element_value:
+                # Escape double quotes since we are wrapping the value in double quotes
+                if '"' in element_value:
+                    element_value = element_value.replace('"', '\\"')
+                create_element_script += f"{random_element_varname}.innertext = \"{element_value}\";\n"
+            for attr_id, attr_val in element.attrs.items():
+                if attr_id != "id":
+                    create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
+
+            if insert_above_divider:
+                js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
+            else:
+                js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
+
+        if not insert_above_divider:
+            # Add a break that is obvious for JS-X-Ray to differentiate
+            js_content, aggregated_js_script = self.append_content(DIVIDING_COMMENT, js_content, aggregated_js_script)
+
+        # We need this flag since we are now creating most HTML elements dynamically,
+        # and there is a chance that an HTML file has no JavaScript to be run.
+        is_script_body = False
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -483,43 +600,25 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
-                # Hunting for elements to programmatically create
-                get_element_by_id_match = re.findall(GETELEMENTBYID_REGEX, body)
-                for element_id in get_element_by_id_match:
-                    if element_id.startswith("#"):
-                        element_id = element_id.replace("#", "", 1)
-                    element = soup.find(id=element_id)
-                    if not element:
-                        continue
-
-                    # Create an element and set the text
-                    random_element_varname = f"{element_id.lower()}_jsjaws"
-                    element_value = element.text.strip().replace("\n", "")
-                    create_element_script = f"const {random_element_varname} = document.createElement(\"div\");\n" \
-                                            f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
-                                            f"document.body.appendChild({random_element_varname});\n" \
-                                            f"{random_element_varname}.text = \"{element_value}\";\n"
-                    for attr_id, attr_val in element.attrs.items():
-                        if attr_id != "id":
-                            create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
-                    js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
-
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
+                is_script_body = True
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
         if soup.body:
             for line in soup.body.get_attribute_list("onpageshow"):
                 if line:
+                    is_script_body = True
                     js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
-
-        if aggregated_js_script is None:
-            return aggregated_js_script, js_content
 
         if soup.body:
             for onload in soup.body.get_attribute_list("onload"):
                 if onload:
+                    is_script_body = True
                     js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
+
+        if aggregated_js_script is None or not is_script_body:
+            return None, js_content
 
         return aggregated_js_script, js_content
 
@@ -1201,7 +1300,7 @@ class JsJaws(ServiceBase):
                 for fp_domain in FP_DOMAINS:
                     log_line = log_line.replace(fp_domain, "<replaced>")
 
-            extract_iocs_from_text_blob(log_line, malware_jail_res_sec)
+            extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True)
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []
@@ -1216,32 +1315,41 @@ class JsJaws(ServiceBase):
                 else:
                     self.log.warning("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
             if log_line.startswith("location.href = "):
-                # We need to recover the non-truncated content from the sandbox_dump.json file
-                with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
-                    data = load(f)
-                    location_href = data["location"]["_props"]["href"]
-                    if location_href.lower().startswith("ms-msdt:"):
-                        heur = Heuristic(5)
-                        res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
 
-                        # Try to only recover the msdt command's powershell for the extracted file
-                        # If we can't, write the whole command
-                        try:
-                            encoded_content = self.parse_msdt_powershell(location_href).encode()
-                        except ValueError:
-                            encoded_content = location_href.encode()
+                # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)
+                location_href = ""
+                if not path.exists(self.malware_jail_sandbox_env_dump_path):
+                    matches = re.findall(URL_REGEX, log_line)
+                    if matches and len(matches) == 2:
+                        location_href = matches[1]
+                else:
+                    # We need to recover the non-truncated content from the sandbox_dump.json file
+                    with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
+                        data = load(f)
+                        location_href = data["location"]["_props"]["href"]
+
+                if location_href.lower().startswith("ms-msdt:"):
+                    heur = Heuristic(5)
+                    res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+                    # Try to only recover the msdt command's powershell for the extracted file
+                    # If we can't, write the whole command
+                    try:
+                        encoded_content = self.parse_msdt_powershell(location_href).encode()
+                    except ValueError:
+                        encoded_content = location_href.encode()
 
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(encoded_content)
-                        request.add_extracted(
-                            out.name, sha256(encoded_content).hexdigest(), "Redirection location"
-                        )
-                    else:
-                        heur = Heuristic(6)
-                        res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-                        res.add_tag("network.static.uri", location_href)
-                    res.add_line("Redirection to:")
-                    res.add_line(location_href)
+                    request.add_extracted(
+                        out.name, sha256(encoded_content).hexdigest(), "Redirection location"
+                    )
+                else:
+                    heur = Heuristic(6)
+                    res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+                    res.add_tag("network.static.uri", location_href)
+                res.add_line("Redirection to:")
+                res.add_line(location_href)
 
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)

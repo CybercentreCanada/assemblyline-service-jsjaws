@@ -59,3 +59,8 @@ access to the Internet, then we can fetch the actual jQuery library and compare 
 difference between them and then extracting the difference (aka malicious code). If the service Docker container
 does not have Internet access, then please set the `docker_config` value of `allow_internet_access` to `False` in the
 `service_manifest.yml`.
+
+## Assemblyline System Safelist
+### JsJaws-specific safelisted items
+The file at `al_config/system_safelist.yaml` contains suggested safelisted values that can be added to the Assemblyline system safelist
+either by copy-and-pasting directly to the text editor on the page `https://<Assemblyline Instance>/admin/tag_safelist` or through the [Assemblyline Client](https://github.com/CybercentreCanada/assemblyline_client).

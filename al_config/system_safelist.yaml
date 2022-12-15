@@ -1,0 +1,19 @@
+regex:
+  network.dynamic.domain:
+  # GoogleAPIs
+  - .*\.googleapis\.com$
+  # GStatic
+  - .*\.gstatic\.com$
+  # jsDelivr
+  - cdn\.jsdelivr\.net$
+  # WWW
+  - www\.w3\.org$
+  network.dynamic.uri:
+  # GoogleAPIs
+  - https?://.*\.googleapis\.com(?:$|/.*)
+  # GStatic
+  - https?://.*\.gstatic\.com(?:$|/.*)
+  # jsDelivr
+  - https?://cdn\.jsdelivr\.net(?:$|/.*)
+  # WWW
+  - https?://www\.w3\.org(?:$|/.*)
