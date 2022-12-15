@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -76,12 +76,12 @@
           "network": {
             "dynamic": {
               "domain": [
-                "cdn.jsdelivr.net",
-                "folderdata021755.tk"
+                "folderdata021755.tk",
+                "cdn.jsdelivr.net"
               ],
               "uri": [
-                "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css",
-                "https://folderdata021755.tk"
+                "https://folderdata021755.tk",
+                "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
               ],
               "uri_path": [
                 "/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
