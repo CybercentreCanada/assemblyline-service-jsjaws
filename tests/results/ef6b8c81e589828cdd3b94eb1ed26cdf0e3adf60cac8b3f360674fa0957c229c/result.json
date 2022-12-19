@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})\n",
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.icodeps.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\\\"})\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\\\"})\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.icodeps.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -57,11 +57,9 @@
                 "www.icodeps.com"
               ],
               "uri": [
-                "https://www.icodeps.com/jsapi.php\"})",
                 "https://www.icodeps.com/jsapi.php"
               ],
               "uri_path": [
-                "/jsapi.php\"})",
                 "/jsapi.php"
               ]
             }
@@ -151,11 +149,6 @@
           "heur_id": 1,
           "signatures": [],
           "value": "https://www.icodeps.com/jsapi.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.icodeps.com/jsapi.php\"})"
         }
       ],
       "network.dynamic.uri_path": [
@@ -168,11 +161,6 @@
           "heur_id": 1,
           "signatures": [],
           "value": "/jsapi.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/jsapi.php\"})"
         }
       ]
     },

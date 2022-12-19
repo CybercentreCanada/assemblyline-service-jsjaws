@@ -163,6 +163,17 @@ def remove_tmp_manifest():
 
 
 @pytest.fixture
+def dummy_request_class_instance():
+    class DummyRequest():
+        def __init__(self):
+            super(DummyRequest, self).__init__()
+            self.temp_submission_data = {}
+            self.result = None
+
+    yield DummyRequest()
+
+
+@pytest.fixture
 def jsjaws_class_instance():
     create_tmp_manifest()
     try:
@@ -246,7 +257,7 @@ class TestJsJaws:
 
     @staticmethod
     @pytest.mark.parametrize("sample", samples)
-    def test_execute(sample, jsjaws_class_instance, dummy_completed_process_instance, mocker):
+    def test_execute(sample, jsjaws_class_instance, mocker):
         from os import mkdir, path
         from subprocess import TimeoutExpired
 
@@ -267,7 +278,7 @@ class TestJsJaws:
         mocker.patch.object(jsjaws_class_instance, "_extract_supplementary")
         mocker.patch.object(jsjaws_class_instance, "_flag_jsxray_iocs")
         mocker.patch.object(OntologyResults, "handle_artifacts")
-        mocker.patch("jsjaws.Popen", return_value=dummy_completed_process_instance)
+        mocker.patch.object(jsjaws_class_instance, "_run_tool")
 
         service_task = ServiceTask(sample)
         task = Task(service_task)
@@ -284,6 +295,8 @@ class TestJsJaws:
             "no_shell_error": False,
             "display_iocs": False,
             "log_errors": False,
+            "static_analysis_only": False,
+            "enable_synchrony": False,
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)
@@ -311,7 +324,7 @@ class TestJsJaws:
             jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
         )
         root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.cjs")
+        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.js")
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
@@ -357,6 +370,8 @@ class TestJsJaws:
         service_request.task.service_config["static_signatures"] = False
         service_request.task.service_config["add_supplementary"] = True
         service_request.task.service_config["log_errors"] = True
+        service_request.task.service_config["enable_synchrony"] = True
+        service_request.task.service_config["static_analysis_only"] = True
         mocker.patch("jsjaws.Popen", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 
@@ -387,7 +402,7 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_extract_doc_writes_one_liners(jsjaws_class_instance):
+    def test_extract_doc_writes_one_liners(jsjaws_class_instance, dummy_request_class_instance):
         # Single line example : 697b0e897a7d57e600a1020886f837469ffb87acc65f04c2ae424af50a311c7e
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
@@ -408,21 +423,24 @@ class TestJsJaws:
             "[2022-10-18T20:12:51.924Z] => Something else",
             "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:53.924Z] => 'write me too!'",
+            "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
+            "[2022-10-18T20:12:53.924Z] => 'password?!'",
         ]
         jsjaws_class_instance.artifact_list = []
-        jsjaws_class_instance._extract_doc_writes(output)
+        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
         assert exists(jsjaws_class_instance.extracted_doc_writes_path)
         with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "write me!\nwrite me too!\n"
+            assert f.read() == "write me!\nwrite me too!\npassword?!"
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": jsjaws_class_instance.extracted_doc_writes,
             "path": jsjaws_class_instance.extracted_doc_writes_path,
             "description": "DOM Writes",
             "to_be_extracted": True,
         }
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == ['me', 'me!', 'password', 'password?!', 'too', 'too!', 'write']
 
     @staticmethod
-    def test_extract_doc_writes_multiliner(jsjaws_class_instance):
+    def test_extract_doc_writes_multiliner(jsjaws_class_instance, dummy_request_class_instance):
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
         from os import mkdir
@@ -440,20 +458,22 @@ class TestJsJaws:
             "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:50.924Z] => '",
             "<html>",
+            "password: yabadabadoo",
             "</html>'",
             "[2022-10-18T20:12:51.924Z] - Something else",
         ]
         jsjaws_class_instance.artifact_list = []
-        jsjaws_class_instance._extract_doc_writes(output)
+        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
         assert exists(jsjaws_class_instance.extracted_doc_writes_path)
         with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "\n<html>\n</html>\n"
+            assert f.read() == "<html>\npassword: yabadabadoo\n</html>"
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": jsjaws_class_instance.extracted_doc_writes,
             "path": jsjaws_class_instance.extracted_doc_writes_path,
             "description": "DOM Writes",
             "to_be_extracted": True,
         }
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == [' yabadabadoo', 'password', 'password:', 'yabadabadoo']
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
@@ -702,7 +722,7 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_flag_jsxray_iocs(jsjaws_class_instance):
+    def test_flag_jsxray_iocs(jsjaws_class_instance, dummy_request_class_instance):
         from assemblyline_v4_service.common.result import Result, ResultSection
 
         output = {
@@ -713,7 +733,7 @@ class TestJsJaws:
                 {"kind": "obfuscated-code", "value": "blah"},
             ]
         }
-        res = Result()
+        dummy_request_class_instance.result = Result()
         correct_res_sec = ResultSection(
             "JS-X-Ray IOCs Detected",
             body="\t\tAn unsafe statement was found: blah\n\t\tAn encoded literal was "
@@ -722,8 +742,8 @@ class TestJsJaws:
             tags={"file.string.extracted": ["blah"]},
         )
         correct_res_sec.set_heuristic(2)
-        jsjaws_class_instance._flag_jsxray_iocs(output, res)
-        assert check_section_equality(res.sections[0], correct_res_sec)
+        jsjaws_class_instance._flag_jsxray_iocs(output, dummy_request_class_instance)
+        assert check_section_equality(dummy_request_class_instance.result.sections[0], correct_res_sec)
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):

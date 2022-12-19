@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"fonts.googleapis.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css2?family=open+sans:wght@300;400;600&display=swap');\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"fonts.googleapis.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css2?family=open+sans:wght@300;400;600&display=swap\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -24,10 +24,10 @@
                 "fonts.googleapis.com"
               ],
               "uri": [
-                "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');"
+                "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
               ],
               "uri_path": [
-                "/css2?family=open+sans:wght@300;400;600&display=swap');"
+                "/css2?family=open+sans:wght@300;400;600&display=swap"
               ]
             }
           }
@@ -40,7 +40,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Element[19]<embed>",
+        "name": "Element[25]<embed>",
         "sha256": "2823b855fd79efac8f598671e9ffbe9e0837e28dba7bafc77d0f9d36cbed13a8"
       }
     ],
@@ -51,7 +51,7 @@
       },
       {
         "name": "temp_javascript.js",
-        "sha256": "ecf7d22c29202631acfb725655baf3df6c677fcb0512996bffd11e1e57360db4"
+        "sha256": "3cd7de285ec1df9cf61b821222571248709d4ae33f8d7adfb51beddc8e5c2607"
       }
     ]
   },
@@ -75,14 +75,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap');"
+          "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/css2?family=open+sans:wght@300;400;600&display=swap');"
+          "value": "/css2?family=open+sans:wght@300;400;600&display=swap"
         }
       ]
     },

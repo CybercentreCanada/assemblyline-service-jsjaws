@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 522,
+    "score": 1531,
     "sections": [
       {
         "auto_collapse": false,
@@ -12,6 +12,28 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_blob": 10
+          },
+          "signatures": {
+            "creates_blob": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesBlob",
         "zeroize_on_tag_safe": false
       },
       {
@@ -82,32 +104,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"document5934.zip\"}]",
-        "body_format": "TABLE",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "document5934.zip"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "\t\tAn encoded literal was found: AAAAAAAAAAAAAAAA\n\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -131,6 +127,24 @@
         },
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -139,6 +153,10 @@
       {
         "name": "Document5934.zip",
         "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
+      },
+      {
+        "name": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned",
+        "sha256": "b2aa35a73009051ea945789bb6ae12c644338595cf97d825c8a2266eb592d997"
       }
     ],
     "supplementary": []
@@ -152,8 +170,10 @@
       },
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
+        "heur_id": 3,
+        "signatures": [
+          "creates_blob"
+        ]
       },
       {
         "attack_ids": [],
@@ -175,6 +195,11 @@
         "signatures": [
           "writes_archive"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
       }
     ],
     "tags": {
@@ -183,13 +208,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "AAAAAAAAAAAAAAAA"
-        }
-      ],
-      "network.dynamic.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "document5934.zip"
         }
       ]
     },

@@ -13,9 +13,11 @@ file_required: true
 timeout: 300
 disable_cache: false
 
-enabled: false
+enabled: true
 is_external: false
 licence_count: 0
+
+uses_temp_submission_data: true
 
 config:
   # Note that the Docker container must be allowed Internet access as well
@@ -48,6 +50,12 @@ submission_params:
     name: display_iocs
     type: bool
     value: true
+
+  # Set to "true" if you do not want the file to be executed via Box.js and MalwareJail
+  - default: false
+    name: static_analysis_only
+    type: bool
+    value: false
 
   # Box.js parameters
   - default: false
@@ -92,6 +100,12 @@ submission_params:
     type: bool
     value: false
 
+  # Synchrony parameters
+  - default: false
+    name: enable_synchrony
+    type: bool
+    value: false
+
 heuristics:
   - heur_id: 1
     name: Network Traffic Detected
@@ -113,7 +127,7 @@ heuristics:
 
   - heur_id: 4
     name: Embedded Code in Common Library
-    score: 500
+    score: 1000
     filetype: '*'
     description: Embedded code was discovered in a file posing as a common library
 
@@ -125,15 +139,21 @@ heuristics:
 
   - heur_id: 6
     name: Automatic location redirection
-    score: 0
+    score: 10
     filetype: '*'
     description: Automatic redirection to another resource
 
   - heur_id: 7
     name: Suspicious CSS Usage
-    score: 0
+    score: 10
     filetype: '*'
     description: Suspicious declarations were detected in HTML stylesheets
+
+  - heur_id: 8
+    name: Obfuscated with Obfuscator.io
+    score: 1000
+    filetype: '*'
+    description: Sample was obfuscated with Obfuscator.io
 
 docker_config:
   allow_internet_access: true

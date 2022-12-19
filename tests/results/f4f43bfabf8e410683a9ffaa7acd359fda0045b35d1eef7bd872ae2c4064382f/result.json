@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 541,
+    "score": 550,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,51 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\t\t\tvar byteCharacters = atob(b64Data)",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,1,0,8,0,234,145,70,85,152,108,183,42,144,114,3,0,0,248,6,0,16,0,0,0,79,118,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t\t\t\t\tvar blob = new Blob(byteArrays, {type: \"application/zip\"})\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_blob": 10
+          },
+          "signatures": {
+            "creates_blob": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesBlob",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_object_url": 10
+          },
+          "signatures": {
+            "creates_object_url": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesObjectURL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\t\tfunction b64blb(b64Data, sliceSize)\n\t\t\t\t\t\tvar byteCharacters = atob(b64Data)\n\t\t\t\t\tvar blob = b64blb(content, 512)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,29 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tURL.createObjectURL([object Blob])\n",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "prepare_network_request": 10
-          },
-          "signatures": {
-            "prepare_network_request": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
+        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tsaveAs([object Blob], attachment.zip)\n",
+        "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -123,32 +145,6 @@
         "tags": {},
         "title_text": "Signature: WritesArchive",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"attachment.zip\"}]",
-        "body_format": "TABLE",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "attachment.zip"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -162,7 +158,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "67c34aec1f9dc2ebddaa0503055066dbc00d6aa8c7973bba4258790cfd10c74a"
+        "sha256": "40e1a302e6a37e03664203cf3a3abda5577db7f13312ebb752e47121923e7c66"
       }
     ]
   },
@@ -170,8 +166,17 @@
     "heuristics": [
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
+        "heur_id": 3,
+        "signatures": [
+          "creates_blob"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_object_url"
+        ]
       },
       {
         "attack_ids": [],
@@ -191,13 +196,6 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "prepare_network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "save_to_file"
         ]
       },
@@ -209,15 +207,7 @@
         ]
       }
     ],
-    "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "attachment.zip"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

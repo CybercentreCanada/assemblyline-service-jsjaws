@@ -1,8 +1,26 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1531,
+    "score": 1551,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Suspicious declarations were detected in HTML stylesheets",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 7,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Suspicious CSS Usage",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": null,
@@ -16,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,11,0,8,0,3,147,89,85,229,6,95,68,85,138,3,0,0,40,11,0,18,0,28,0,100,111,99,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +56,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction b64toBlob(_0x31a2b8,_0x3262af,_0x49150f){var _0x1f7950=a0_0x14b753,_0xedd820=atob(_0x31a2b8...\n\t\t}var blob=b64toBlob(text,'application/zip',0x200)",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_object_url": 10
+          },
+          "signatures": {
+            "creates_object_url": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesObjectURL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t_0x1f8499=atob(_0x1f8499)\n\t\tfunction b64toBlob(_0x390b80,_0x699e80){var _0x39e099=a0_0x3e7c,_0x1936d3=[],_0x5e2f86=atob(_0x390b8...\n\t\tvar _0x362cf0=_0xa80909[_0x1de451(0x136)],_0x46e8a=b64toBlob(_0x362cf0,0x200)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +122,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +144,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "\t\tAn encoded literal was found: AAAAAAAAAAAAAAAA\n\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -116,21 +156,13 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {
-          "file": {
-            "string": {
-              "extracted": [
-                "AAAAAAAAAAAAAAAA"
-              ]
-            }
-          }
-        },
+        "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "View extracted file 1b61b16dd4b7f6203d742b47411ca679f1f5734ed01534a37a126263f84396c0.cleaned for details.",
+        "body": "View extracted file bf57c2fa6f6c71786b18a43c2e0979c305d21a7dba7b206d6eca29dbe3c49799.cleaned for details.",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -151,18 +183,34 @@
   "files": {
     "extracted": [
       {
-        "name": "Document5934.zip",
-        "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
+        "name": "bf57c2fa6f6c71786b18a43c2e0979c305d21a7dba7b206d6eca29dbe3c49799.cleaned",
+        "sha256": "00229bee89d230077535973971fff96c1ad9efd02de0e9dba6af0638673f8fea"
       },
       {
-        "name": "1b61b16dd4b7f6203d742b47411ca679f1f5734ed01534a37a126263f84396c0.cleaned",
-        "sha256": "b2aa35a73009051ea945789bb6ae12c644338595cf97d825c8a2266eb592d997"
+        "name": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1",
+        "sha256": "0d2f10999adf98a8127fe39cf9fd8fcfd1fcb0e8092e3099c35e2c72fb1e0af1"
+      },
+      {
+        "name": "337f26ec47391ba898f9a2f7ef9f43c33d41f7b34d03eb78b9ec1da6d25b6253",
+        "sha256": "337f26ec47391ba898f9a2f7ef9f43c33d41f7b34d03eb78b9ec1da6d25b6253"
+      },
+      {
+        "name": "attachment.zip",
+        "sha256": "568f1ebd9c616164eaaec8ad7807f0fc600a5101ea99b441f91d559e3b419afc"
+      },
+      {
+        "name": "document_writes.html",
+        "sha256": "640ac074bec0e6ad82b795b6082fd0ae95c0a8976d70bb239fc41b9dcbd4f8d9"
       }
     ],
     "supplementary": [
       {
+        "name": "temp_css.css",
+        "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
+      },
+      {
         "name": "temp_javascript.js",
-        "sha256": "60036b577df967efacc994bb15ca34f31a11990c7231636362cd02008981ac2c"
+        "sha256": "add21b4780b502cf93737dac5f3d9c4c36c960e5d8e3229e00598e2a66cd11c5"
       }
     ]
   },
@@ -178,6 +226,13 @@
         "heur_id": 3,
         "signatures": [
           "creates_blob"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_object_url"
         ]
       },
       {
@@ -203,19 +258,35 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 7,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 8,
         "signatures": []
       }
     ],
-    "tags": {
-      "file.string.extracted": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "AAAAAAAAAAAAAAAA"
-        }
+    "tags": {},
+    "temp_submission_data": {
+      "passwords": [
+        "Document",
+        "Document Password.",
+        "DviggY7r",
+        "Password",
+        "Password.",
+        "The",
+        "Use",
+        "correctly",
+        "correctly.",
+        "displayed",
+        "downloaded",
+        "file",
+        "file.",
+        "is",
+        "local",
+        "not"
       ]
-    },
-    "temp_submission_data": {}
+    }
   }
 }
