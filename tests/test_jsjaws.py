@@ -295,6 +295,7 @@ class TestJsJaws:
             "no_shell_error": False,
             "display_iocs": False,
             "log_errors": False,
+            "override_eval": False,
             "static_analysis_only": False,
             "enable_synchrony": False,
         }

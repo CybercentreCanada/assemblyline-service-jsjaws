@@ -47,6 +47,8 @@ MalwareJail parameters:
   flag turns on this extraction.
 * `extract_eval_calls`: Files that each represent a Eval Call can be noisy and not particularly useful. This flag turns
   on this extraction.
+* `log_errors`: Setting this parameter to true will insert a log of the exception into exception-catching clauses within a script. This is useful for debugging.
+* `override_eval`: Setting this parameter to true will use indirect links to `eval` calls. This is key when scoped variables are used. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#direct_and_indirect_eval for more information. Use wisely.
 
 Synchrony parameters:
 * `enable_synchrony`: Synchrony will most likely extract a "cleaned" file given any JavaScript file, which adds load
