@@ -8,6 +8,8 @@ regex:
   - cdn\.jsdelivr\.net$
   # WWW
   - www\.w3\.org$
+  # Bootstrap
+  - getbootstrap\.com$
   network.dynamic.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
@@ -17,3 +19,5 @@ regex:
   - https?://cdn\.jsdelivr\.net(?:$|/.*)
   # WWW
   - https?://www\.w3\.org(?:$|/.*)
+  # Bootstrap
+  - https?://getbootstrap\.com(?:$|/.*)
