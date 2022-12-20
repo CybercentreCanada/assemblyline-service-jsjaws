@@ -4,6 +4,34 @@ These are all of the signatures related to running a shell command
 from signatures.abstracts import Signature
 
 
+class CreatesWshObject(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="creates_wsh_object",
+            description="JavaScript creates a new Windows Scripting Host Shell Object",
+            indicators=["new WScript.Shell"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
+class AccessWshEnv(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="access_wsh_env",
+            description="JavaScript accesses the WSH Environment",
+            indicators=["new WshEnvironment"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
 class RunsShell(Signature):
     def __init__(self):
         super().__init__(
