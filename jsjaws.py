@@ -175,16 +175,18 @@ class JsJaws(ServiceBase):
         #
         # Therefore we are going to hunt for instances of this, and replace
         # it with an accurate JavaScript technique for setting variables.
-        matches = re.findall(VBSCRIPT_ENV_SETTING_REGEX, file_content)
-        if matches:
-            new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, b"[\\1] = \\2;", file_content)
-            self.log.debug("Replaced VBScript environment variable setting for the following...")
-            for group_1, group_2 in matches:
-                self.log.debug(f"({truncate(group_1)}) = {truncate(group_2)};")
+        def log_and_replace(match):
+            group_1 = match.group(1).decode()
+            group_2 = match.group(2).decode()
+            self.log.debug(f"Replaced VBScript Env variable: ({truncate(group_1)}) = {truncate(group_2)};")
+            return f"[{group_1}] = {group_2};".encode()
+
+        new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
+        if new_content != file_content:
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
-                    file_content = new_content
-                    f.write(file_content)
-                    file_path = f.name
+                file_content = new_content
+                f.write(file_content)
+                file_path = f.name
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
