@@ -112,8 +112,6 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path: Optional[str] = None
         self.malware_jail_output: Optional[str] = None
         self.malware_jail_output_path: Optional[str] = None
-        self.extracted_doc_writes: Optional[str] = None
-        self.extracted_doc_writes_path: Optional[str] = None
         self.boxjs_output_dir: Optional[str] = None
         self.boxjs_iocs: Optional[str] = None
         self.boxjs_resources: Optional[str] = None
@@ -125,7 +123,8 @@ class JsJaws(ServiceBase):
         self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
-        self.safelist = Optional[Dict[str, List[str]]]
+        self.safelist: Dict[str, Dict[str, List[str]]] = {}
+        self.doc_write_hashes: Optional[Set[str]] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -139,28 +138,11 @@ class JsJaws(ServiceBase):
         self.log.debug("JsJaws service ended")
 
     def execute(self, request: ServiceRequest) -> None:
-        request.result = Result()
-        self.artifact_list = []
+        # Reset per sample
+        self.doc_write_hashes = set()
+
         file_path = request.file_path
-
-        with open(file_path, "rb") as fh:
-            file_content = fh.read()
-
-        css_path = None
-        if request.file_type in ["code/html", "code/hta"]:
-            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
-        elif request.file_type == "image/svg":
-            file_path, file_content, _ = self.extract_using_soup(request, file_content)
-
-        if file_path is None:
-            return
-
-        # If the file starts or ends with null bytes, let's strip them out
-        if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
-            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
-                file_content = file_content[:].strip(b"\x00")
-                f.write(file_content)
-                file_path = f.name
+        file_content = request.file_contents
 
         # This is a VBScript method of setting an environment variable:
         #
@@ -205,8 +187,6 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
-        self.extracted_doc_writes = "document_writes.html"
-        self.extracted_doc_writes_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_doc_writes)
         self.boxjs_output_dir = path.join(self.working_directory, f"{request.sha256}.results")
         self.boxjs_urls_json_path = path.join(self.boxjs_output_dir, "urls.json")
         self.boxjs_iocs = path.join(self.boxjs_output_dir, "IOC.json")
@@ -224,6 +204,42 @@ class JsJaws(ServiceBase):
 
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
+
+        self.run_the_gauntlet(request, file_path, file_content)
+
+    def run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+        """
+        Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
+        :param request: The ServiceRequest object
+        :param file_path: The path of the file to use as we traverse this iteration of the gauntlet
+        :param file_content: The content of the file to use as we traverse this iteration of the gauntlet
+        :param subsequent_run: A flag indicating if this is not the initial gauntlet run
+        :return: None
+        """
+        # Reset per gauntlet run
+        self.artifact_list = []
+        request.result = Result()
+        if not subsequent_run:
+            file_type = request.file_type
+        else:
+            file_type_details = self.identify.fileinfo(file_path)
+            file_type = file_type_details["type"]
+
+        css_path = None
+        if file_type in ["code/html", "code/hta"]:
+            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
+        elif file_type == "image/svg":
+            file_path, file_content, _ = self.extract_using_soup(request, file_content)
+
+        if file_path is None:
+            return
+
+        # If the file starts or ends with null bytes, let's strip them out
+        if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                file_content = file_content[:].strip(b"\x00")
+                f.write(file_content)
+                file_path = f.name
 
         # Grabbing service level configuration variables and submission variables
         download_payload = request.get_param("download_payload")
@@ -349,7 +365,9 @@ class JsJaws(ServiceBase):
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         if not static_analysis_only:
-            tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+            if not subsequent_run:
+                # Box.js cannot handle being run more than once on a sample. Oh well!
+                tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
             tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
         tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
 
@@ -375,6 +393,8 @@ class JsJaws(ServiceBase):
 
         for thr in tool_threads:
             thr.join(timeout=tool_timeout)
+            if thr.is_alive():
+                self.log.debug("A tool did not finish. Look at previous logs...")
 
         boxjs_output: List[str] = []
         if path.exists(self.boxjs_analysis_log):
@@ -413,9 +433,8 @@ class JsJaws(ServiceBase):
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
-        self._extract_malware_jail_iocs(malware_jail_output, request)
+        self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
         self._extract_wscript(total_output, request.result)
-        self._extract_doc_writes(malware_jail_output, request)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
         try:
@@ -436,6 +455,9 @@ class JsJaws(ServiceBase):
         _ = responses.get("Synchrony")
 
         self._extract_synchrony(request.result)
+
+        # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
+        self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(self.artifact_list, request)
@@ -500,8 +522,14 @@ class JsJaws(ServiceBase):
 
         if aggregated_js_script:
             aggregated_js_script.close()
+            artifact = {
+                "name": "temp_javascript.js",
+                "path": aggregated_js_script.name,
+                "description": "Extracted JavaScript",
+                "to_be_extracted": False,
+            }
             self.log.debug("Adding extracted JavaScript: temp_javascript.js")
-            request.add_supplementary(aggregated_js_script.name, "temp_javascript.js", "Extracted JavaScript")
+            self.artifact_list.append(artifact)
             js_script_name = aggregated_js_script.name
 
         if js_content != b"":
@@ -530,8 +558,14 @@ class JsJaws(ServiceBase):
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                     t.write(embedded_file_content)
                     embed_path = t.name
+                artifact = {
+                    "name": get_sha256_for_file(embed_path),
+                    "path": embed_path,
+                    "description": "Base64-decoded Embed Tag Source",
+                    "to_be_extracted": True,
+                }
                 self.log.debug(f"Extracting decoded embed tag source {embed_path}")
-                request.add_extracted(embed_path, get_sha256_for_file(embed_path), "Base64-decoded Embed Tag Source")
+                self.artifact_list.append(artifact)
 
                 # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
                 file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
@@ -582,7 +616,8 @@ class JsJaws(ServiceBase):
 
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
-            random_element_varname = f"{element_id.lower()}_jsjaws"
+            # JavaScript variables cannot have hyphens in their names
+            random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
             # We cannot trust the text value of these elements, since it contains all nested items within it...
             if element.name in ["div", "p", "svg"]:
                 # If the element contains a script child, and the element's string is the same as the script child's, set value to None
@@ -607,6 +642,12 @@ class JsJaws(ServiceBase):
                 create_element_script += f"{random_element_varname}.innertext = \"{element_value}\";\n"
             for attr_id, attr_val in element.attrs.items():
                 if attr_id != "id":
+                    # Escape double quotes since we are wrapping the value in double quotes
+                    if '"' in attr_val:
+                        attr_val = attr_val.replace('"', '\\"')
+                    # JavaScript does not like when there are newlines when setting attributes
+                    if isinstance(attr_val, str) and "\n" in attr_val:
+                        attr_val = attr_val.replace("\n", "")
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
             if insert_above_divider:
@@ -614,7 +655,7 @@ class JsJaws(ServiceBase):
             else:
                 js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
 
-        if not insert_above_divider:
+        if js_content and not insert_above_divider:
             # Add a break that is obvious for JS-X-Ray to differentiate
             js_content, aggregated_js_script = self.append_content(DIVIDING_COMMENT, js_content, aggregated_js_script)
 
@@ -697,8 +738,14 @@ class JsJaws(ServiceBase):
             aggregated_css_script.close()
 
             if style_json:
+                artifact = {
+                    "name": "temp_css.css",
+                    "path": aggregated_css_script.name,
+                    "description": "Extracted CSS",
+                    "to_be_extracted": False,
+                }
                 self.log.debug("Adding extracted CSS: temp_css.css")
-                request.add_supplementary(aggregated_css_script.name, "temp_css.css", "Extracted CSS")
+                self.artifact_list.append(artifact)
                 css_script_name = aggregated_css_script.name
 
                 # Look for suspicious CSS usage
@@ -720,7 +767,14 @@ class JsJaws(ServiceBase):
                                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                                             t.write(item["url"])
                                             url_path = t.name
-                                        request.add_extracted(url_path, get_sha256_for_file(url_path), "URL value from CSS")
+                                        artifact = {
+                                            "name": get_sha256_for_file(url_path),
+                                            "path": url_path,
+                                            "description": "URL value from CSS",
+                                            "to_be_extracted": True,
+                                        }
+                                        self.log.debug(f"Extracting URL value from CSS: {url_path}")
+                                        self.artifact_list.append(artifact)
                                         heur = Heuristic(7)
                                         _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
             else:
@@ -835,7 +889,6 @@ class JsJaws(ServiceBase):
             if extracted in [
                 self.malware_jail_urls_json_path,
                 self.extracted_wscript_path,
-                self.extracted_doc_writes_path,
                 self.boxjs_iocs,
                 self.boxjs_resources,
                 self.boxjs_snippets,
@@ -899,20 +952,30 @@ class JsJaws(ServiceBase):
         :return: None
         """
         doc_write = False
-        content_to_write = []
+        content_to_write_list = []
         for line in self._parse_malwarejail_output(output):
             if doc_write:
                 written_content = line.split("] => '", 1)[1].strip()[:-1]
-                content_to_write.append(written_content)
+                content_to_write_list.append(written_content)
                 doc_write = False
             if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
                 doc_write = True
 
-        with open(self.extracted_doc_writes_path, "w") as f:
-            f.write("\n".join(content_to_write))
+        if not content_to_write_list:
+            return
+
+        content_to_write = "\n".join(content_to_write_list).encode()
+        doc_write_hash = sha256(content_to_write).hexdigest()
+
+        if doc_write_hash in self.doc_write_hashes:
+            # To avoid recursive gauntlet runs, perform this check
+            self.log.debug("No new content written to the DOM...")
+            return
+
+        self.doc_write_hashes.add(doc_write_hash)
 
         visible_text: Set[str] = set()
-        for line in content_to_write:
+        for line in content_to_write_list:
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
@@ -932,16 +995,17 @@ class JsJaws(ServiceBase):
                     new_passwords.update(set(request.temp_submission_data["passwords"]))
                 request.temp_submission_data["passwords"] = sorted(list(new_passwords))
 
-        if path.getsize(self.extracted_doc_writes_path) > 0:
-            self.artifact_list.append(
-                {
-                    "name": self.extracted_doc_writes,
-                    "path": self.extracted_doc_writes_path,
-                    "description": "DOM Writes",
-                    "to_be_extracted": True,
-                }
-            )
-            self.log.debug(f"Adding extracted file: {self.extracted_doc_writes}")
+        # The entire point of writing elements into the document is to manipulate the DOM. If certain elements contain script elements that depend on previously declared variables, then we should build an HTML file will all content possible and send that through the gauntlet again.
+
+        total_dom_contents = request.file_contents
+        total_dom_contents += b"\n"
+        total_dom_contents += content_to_write
+        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+            out.write(total_dom_contents)
+            total_dom_path = out.name
+
+        self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
+        self.run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
 
     def _extract_urls(self, result: Result) -> None:
         """
@@ -1068,7 +1132,7 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Running {len(sigs)} signatures...")
         start_time = time()
         for sig in sigs:
-            thr = Thread(target=self._process_signature, args=(sig, output, signatures_that_hit))
+            thr = Thread(target=self._process_signature, args=(sig, output, signatures_that_hit), daemon=True)
             sig_threads.append(thr)
             thr.start()
 
@@ -1372,9 +1436,14 @@ class JsJaws(ServiceBase):
 
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(encoded_content)
-                    request.add_extracted(
-                        out.name, sha256(encoded_content).hexdigest(), "Redirection location"
-                    )
+                    artifact = {
+                        "name": sha256(encoded_content).hexdigest(),
+                        "path": out.name,
+                        "description": "Redirection location",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Redirection location: {out.name}")
+                    self.artifact_list.append(artifact)
                 else:
                     heur = Heuristic(6)
                     res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
@@ -1400,6 +1469,9 @@ class JsJaws(ServiceBase):
             with Popen(args=args, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
                 for line in p.stdout:
                     resp[tool_name].append(line)
+                    if len(resp[tool_name]) > self.stdout_limit:
+                        self.log.warning(f"{tool_name} generated more than {self.stdout_limit} lines of output. Time elapsed: {round(time() - start_time)}s")
+                        return
         except TimeoutExpired:
             pass
         except Exception as e:

@@ -58,3 +58,17 @@ class Obfuscation(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class CryptoJSObfuscation(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="crypto_js_obfuscation",
+            description="JavaScript uses CryptoJS for obfuscating/de-obfuscating a string",
+            indicators=["CryptoJS"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)

@@ -197,10 +197,6 @@
       {
         "name": "attachment.zip",
         "sha256": "568f1ebd9c616164eaaec8ad7807f0fc600a5101ea99b441f91d559e3b419afc"
-      },
-      {
-        "name": "document_writes.html",
-        "sha256": "640ac074bec0e6ad82b795b6082fd0ae95c0a8976d70bb239fc41b9dcbd4f8d9"
       }
     ],
     "supplementary": [
