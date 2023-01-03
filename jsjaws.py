@@ -554,7 +554,7 @@ class JsJaws(ServiceBase):
             # We cannot trust the text value of these elements, since it contains all nested items within it...
             if element.name in ["div", "p", "svg"]:
                 # If the element contains a script child, and the element's string is the same as the script child's, set value to None
-                if element.next.name == "script" and element.string == element.next.string:
+                if element.next and element.next.name == "script" and element.string == element.next.string:
                     element_value = None
                 elif element.string is not None:
                     element_value = element.string.strip().replace("\n", "")
