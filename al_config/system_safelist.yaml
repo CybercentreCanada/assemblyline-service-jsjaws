@@ -10,6 +10,8 @@ regex:
   - www\.w3\.org$
   # Microsoft Auth
   - aadcdn\.msftauth\.net$
+  # Bootstrap
+  - getbootstrap\.com$
   network.dynamic.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
@@ -21,3 +23,5 @@ regex:
   - https?://www\.w3\.org(?:$|/.*)
   # Microsoft Auth
   - https?://aadcdn\.msftauth\.net(?:$|/.*)
+  # Bootstrap
+  - https?://getbootstrap\.com(?:$|/.*)

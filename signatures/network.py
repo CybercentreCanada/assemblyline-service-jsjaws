@@ -58,3 +58,17 @@ class JQueryNetworkRequest(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class GeoIPServiceRequest(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="geoip_service_request",
+            description="A domain associated with GeoIP services was observed",
+            indicators=["GeoIP service"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
