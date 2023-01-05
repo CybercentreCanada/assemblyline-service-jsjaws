@@ -28,6 +28,7 @@ from assemblyline_v4_service.common.utils import (
     extract_passwords,
 )
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
+from assemblyline_v4_service.common.api import ServiceAPIError
 from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.dynamic_service_helper import (
     OntologyResults,
@@ -124,12 +125,19 @@ class JsJaws(ServiceBase):
         self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
-        self.safelist = Optional[Dict[str, List[str]]]
+        self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
-        with open(SAFELIST_PATH, "r") as f:
-            self.safelist = yaml_safe_load(f)
+        try:
+            self.safelist = self.get_api_interface().get_safelist()
+        except ServiceAPIError as e:
+            self.log.warning(
+                f"Couldn't retrieve safelist from service: {e}. Continuing without it.."
+            )
+        if not self.safelist:
+            with open(SAFELIST_PATH, "r") as f:
+                self.safelist = yaml_safe_load(f)
 
         self.log.debug("JsJaws service started")
         self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
