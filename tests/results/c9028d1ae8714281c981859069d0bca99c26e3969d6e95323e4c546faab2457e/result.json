@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -162,8 +162,8 @@
                 "/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif",
                 "/d1.php",
                 "/ads.php",
-                "?load=1&session='+window['ip']",
-                "/adminpanel/returnjson.php?session=127.0.0.1"
+                "/adminpanel/returnjson.php?session=127.0.0.1",
+                "?load=1&session='+window['ip']"
               ]
             }
           }

@@ -181,6 +181,7 @@ def dummy_request_class_instance():
             "log_errors": False,
             "static_analysis_only": False,
             "enable_synchrony": False,
+            "override_eval": False,
         }
 
         def __init__(self):

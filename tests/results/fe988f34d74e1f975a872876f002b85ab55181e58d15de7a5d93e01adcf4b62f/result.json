@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in /tmp/fe988f34d74e1f975a872876f002b85ab55181e58d15de7a5d93e01adcf4b62f: object ...",
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 87560992da11e28f83731fcd76d07cbf035d9151e9b717f54385653acbe59b02: object Error...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,

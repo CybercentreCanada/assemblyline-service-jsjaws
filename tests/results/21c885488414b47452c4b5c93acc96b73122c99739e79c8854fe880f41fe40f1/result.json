@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[22]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[22].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: /tmp/working_directory/tmp0l6c28ss/payload/System.Security.Cryptography.FromBase64Transform[...",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[22]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[22].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: /tmp/working_directory/tmp57203cdg/payload/System.Security.Cryptography.FromBase64Transform[...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -412,7 +412,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"paknavy-gov-pk.downld.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"paknavy-gov-pk.downld.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -431,11 +431,9 @@
                 "paknavy-gov-pk.downld.net"
               ],
               "uri": [
-                "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)",
                 "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
               ],
               "uri_path": [
-                "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)",
                 "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
               ]
             }
@@ -676,11 +674,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)"
         }
       ],
       "network.dynamic.uri_path": [
@@ -693,11 +686,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/)"
         }
       ]
     },
