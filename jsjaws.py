@@ -1,4 +1,5 @@
 from base64 import b64decode
+from binascii import Error as BinasciiError
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from dateutil.parser import parse as dtparse
@@ -1315,7 +1316,15 @@ class JsJaws(ServiceBase):
                     except ValueError:
                         pass
                     if is_hex:
-                        decoded_hex = hexload(val.encode())
+                        try:
+                            encoded_val = val.encode()
+                            # https://stackoverflow.com/questions/41264280/odd-length-string-error-with-binascii-unhexlify
+                            if len(encoded_val) % 2 == 1:
+                                encoded_val = b"0" + encoded_val
+                            decoded_hex = hexload(encoded_val)
+                        except BinasciiError:
+                            decoded_hex = b""
+
                         if any(PE_indicator in decoded_hex for PE_indicator in PE_INDICATORS):
                             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                                 out.write(decoded_hex)
