@@ -24,6 +24,7 @@ from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.str_utils import safe_str, truncate
+from assemblyline.common.uid import get_id_from_data
 from assemblyline_v4_service.common.utils import (
     PASSWORD_WORDS,
     extract_passwords,
@@ -598,6 +599,7 @@ class JsJaws(ServiceBase):
 
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
+        set_of_variable_names = set()
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
             if element.name in ["html", "head", "meta", "style", "body", "script"]:
@@ -626,6 +628,14 @@ class JsJaws(ServiceBase):
 
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
+
+            # If the proposed element ID already exists, then mock one
+            if element_id in set_of_variable_names:
+                proposed_element_id = element_id
+                while element_id in set_of_variable_names:
+                    element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
+            set_of_variable_names.add(element_id)
+
             # JavaScript variables cannot have hyphens in their names
             random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
             # We cannot trust the text value of these elements, since it contains all nested items within it...
