@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[5].setTimeout(function() {????informWorker(newW);???}, 2000)\n\n\t\twindow[5].setTimeout(function(){_0x2063A(_0x2033D)}, 2000)\n",
+        "body": "JavaScript attempts to sleep\n\t\twindow[6].setTimeout(function() {????informWorker(newW);???}, 2000)\n\n\t\twindow[6].setTimeout(function(){_0x2063A(_0x2033D)}, 2000)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
