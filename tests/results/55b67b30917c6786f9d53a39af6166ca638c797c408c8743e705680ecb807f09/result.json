@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[47].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[48].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tButton[37].click(anonymous)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tButton[38].click(anonymous)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
