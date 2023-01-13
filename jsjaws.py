@@ -629,15 +629,19 @@ class JsJaws(ServiceBase):
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
 
-            # If the proposed element ID already exists, then mock one
             if element_id in set_of_variable_names:
                 proposed_element_id = element_id
                 while element_id in set_of_variable_names:
                     element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
             set_of_variable_names.add(element_id)
 
-            # JavaScript variables cannot have hyphens in their names
-            random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
+            # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
+            if element.name == "object":
+                # We cannot assign a random element variable name to obejct tag elements
+                random_element_varname = element_id
+            else:
+                # JavaScript variables cannot have hyphens in their names
+                random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
             # We cannot trust the text value of these elements, since it contains all nested items within it...
             if element.name in ["div", "p", "svg"]:
                 # If the element contains a script child, and the element's string is the same as the script child's, set value to None
@@ -669,6 +673,22 @@ class JsJaws(ServiceBase):
                     if isinstance(attr_val, str) and "\n" in attr_val:
                         attr_val = attr_val.replace("\n", "")
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
+
+            # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
+            if element.name == "object":
+                # We need to handle <param> tags accordingly
+                for descendant in element.descendants:
+                    if descendant and descendant.name == "param":
+                        if all(item in descendant.attrs for item in ["name", "value"]):
+                            name = descendant.attrs["name"]
+                            value = descendant.attrs["value"]
+                            # Escape double quotes since we are wrapping the value in double quotes
+                            if '"' in value:
+                                value = value.replace('"', '\\"')
+                            # JavaScript does not like when there are newlines when setting attributes
+                            if isinstance(value, str) and "\n" in value:
+                                value = value.replace("\n", "")
+                            create_element_script += f"{random_element_varname}.setAttribute(\"{name}\", \"{value}\");\n"
 
             if insert_above_divider:
                 js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
