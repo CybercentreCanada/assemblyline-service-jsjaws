@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[279].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[280].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,

@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[80]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[81]<a>.click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -129,7 +129,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[81]",
+        "name": "Blob[82]",
         "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }
     ],
