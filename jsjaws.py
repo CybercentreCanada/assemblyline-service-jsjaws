@@ -675,20 +675,37 @@ class JsJaws(ServiceBase):
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
             # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
+            # Buttons with ShortCut commands are very interesting as per:
+            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/button-parameter
+            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/shortcut
             if element.name == "object":
+                is_button = False
+                is_shortcut = False
+                command = None
                 # We need to handle <param> tags accordingly
                 for descendant in element.descendants:
                     if descendant and descendant.name == "param":
                         if all(item in descendant.attrs for item in ["name", "value"]):
                             name = descendant.attrs["name"]
                             value = descendant.attrs["value"]
-                            # Escape double quotes since we are wrapping the value in double quotes
-                            if '"' in value:
-                                value = value.replace('"', '\\"')
-                            # JavaScript does not like when there are newlines when setting attributes
-                            if isinstance(value, str) and "\n" in value:
-                                value = value.replace("\n", "")
-                            create_element_script += f"{random_element_varname}.setAttribute(\"{name}\", \"{value}\");\n"
+                            if name == "Button":
+                                is_button = True
+                            elif name == "Command" and value == "ShortCut":
+                                is_shortcut = True
+                            elif name == "Item1":
+                                command_args = value.split(",")
+                                if not command_args[0].strip():
+                                    # This is the default when loaded on Windows
+                                    command_args[0] = "cmd.exe"
+                                command = " ".join(command_args)
+                if is_button and is_shortcut and command:
+                    # JavaScript does not like when there are newlines when setting attributes
+                    if isinstance(command, str) and "\n" in command:
+                        command = command.replace("\n", "")
+                    create_element_script += f"{random_element_varname}.click = function() {{ ws = WScript_Shell(); ws.exec({command})}}"
+
+                    # Add heuristic
+                    # TODO
 
             if insert_above_divider:
                 js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
