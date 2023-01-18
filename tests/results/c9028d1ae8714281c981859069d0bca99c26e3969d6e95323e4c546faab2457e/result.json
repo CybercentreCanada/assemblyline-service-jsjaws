@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[279].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[280].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[5].setTimeout(function(){var _0x4d6bb9=_0x4ac814;$(_0x4d6bb9(0x14c))['hide'](),$(_0x4d6bb9(0x...",
+        "body": "JavaScript attempts to sleep\n\t\twindow[6].setTimeout(function(){var _0x4d6bb9=_0x4ac814;$(_0x4d6bb9(0x14c))['hide'](),$(_0x4d6bb9(0x...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
