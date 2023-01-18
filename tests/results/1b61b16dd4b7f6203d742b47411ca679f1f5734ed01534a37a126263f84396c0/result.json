@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "\t\tAn encoded literal was found: AAAAAAAAAAAAAAAA\n\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -116,15 +116,7 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {
-          "file": {
-            "string": {
-              "extracted": [
-                "AAAAAAAAAAAAAAAA"
-              ]
-            }
-          }
-        },
+        "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
       },
@@ -207,15 +199,7 @@
         "signatures": []
       }
     ],
-    "tags": {
-      "file.string.extracted": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "AAAAAAAAAAAAAAAA"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }
