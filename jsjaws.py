@@ -525,7 +525,7 @@ class JsJaws(ServiceBase):
         js_script_name = None
         css_script_name = None
 
-        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request)
 
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
@@ -582,16 +582,17 @@ class JsJaws(ServiceBase):
                 file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     soup = BeautifulSoup(embedded_file_content, features="html5lib")
-                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, insert_above_divider=True)
+                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider=True)
 
         return aggregated_js_script, js_content
 
-    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", request: Optional[ServiceRequest] = None, insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
         :param aggregated_js_script: The NamedTemporaryFile object
         :param js_content: The file content of the NamedTemporaryFile
+        :param request: An instance of the ServiceRequest object
         :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
@@ -602,7 +603,7 @@ class JsJaws(ServiceBase):
         set_of_variable_names = set()
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
-            if element.name in ["html", "head", "meta", "style", "body", "script"]:
+            if element.name in ["html", "head", "meta", "style", "body", "script", "param"]:
                 continue
 
             # If an element has an attribute that is safelisted, don't include it when we create the element
@@ -629,6 +630,7 @@ class JsJaws(ServiceBase):
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
 
+            # If the proposed element ID already exists, then mock one
             if element_id in set_of_variable_names:
                 proposed_element_id = element_id
                 while element_id in set_of_variable_names:
@@ -702,10 +704,13 @@ class JsJaws(ServiceBase):
                     # JavaScript does not like when there are newlines when setting attributes
                     if isinstance(command, str) and "\n" in command:
                         command = command.replace("\n", "")
-                    create_element_script += f"{random_element_varname}.click = function() {{ ws = WScript_Shell(); ws.exec({command})}}"
+                    if '"' in command:
+                        command = command.replace('"', '\\"')
+                    # Button ShortCuts have a click method that we must instantiate.
+                    create_element_script += f"{random_element_varname}.click = function() {{ ws = new WScript_Shell(); ws.exec(\"{command}\")}};\n"
 
-                    # Add heuristic
-                    # TODO
+                    heur = Heuristic(9)
+                    _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
             if insert_above_divider:
                 js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
