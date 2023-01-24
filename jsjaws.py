@@ -526,7 +526,7 @@ class JsJaws(ServiceBase):
         js_script_name = None
         css_script_name = None
 
-        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content)
+        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request)
 
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
@@ -583,16 +583,17 @@ class JsJaws(ServiceBase):
                 file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     soup = BeautifulSoup(embedded_file_content, features="html5lib")
-                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, insert_above_divider=True)
+                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider=True)
 
         return aggregated_js_script, js_content
 
-    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", request: Optional[ServiceRequest] = None, insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
         :param aggregated_js_script: The NamedTemporaryFile object
         :param js_content: The file content of the NamedTemporaryFile
+        :param request: An instance of the ServiceRequest object
         :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
@@ -603,7 +604,7 @@ class JsJaws(ServiceBase):
         set_of_variable_names = set()
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
-            if element.name in ["html", "head", "meta", "style", "body", "script"]:
+            if element.name in ["html", "head", "meta", "style", "body", "script", "param"]:
                 continue
 
             # If an element has an attribute that is safelisted, don't include it when we create the element
@@ -637,8 +638,13 @@ class JsJaws(ServiceBase):
                     element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
             set_of_variable_names.add(element_id)
 
-            # JavaScript variables cannot have hyphens in their names
-            random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
+            # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
+            if element.name == "object":
+                # We cannot assign a random element variable name to object tag elements
+                random_element_varname = element_id
+            else:
+                # JavaScript variables cannot have hyphens in their names
+                random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
             # We cannot trust the text value of these elements, since it contains all nested items within it...
             if element.name in ["div", "p", "svg"]:
                 # If the element contains a script child, and the element's string is the same as the script child's, set value to None
@@ -670,6 +676,42 @@ class JsJaws(ServiceBase):
                     if isinstance(attr_val, str) and "\n" in attr_val:
                         attr_val = attr_val.replace("\n", "")
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
+
+            # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
+            # Buttons with ShortCut commands are very interesting as per:
+            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/button-parameter
+            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/shortcut
+            if element.name == "object":
+                is_button = False
+                is_shortcut = False
+                command = None
+                # We need to handle <param> tags accordingly
+                for descendant in element.descendants:
+                    if descendant and descendant.name == "param":
+                        if all(item in descendant.attrs for item in ["name", "value"]):
+                            name = descendant.attrs["name"]
+                            value = descendant.attrs["value"]
+                            if name == "Button":
+                                is_button = True
+                            elif name == "Command" and value == "ShortCut":
+                                is_shortcut = True
+                            elif name == "Item1":
+                                command_args = value.split(",")
+                                if not command_args[0].strip():
+                                    # This is the default when loaded on Windows
+                                    command_args[0] = "cmd.exe"
+                                command = " ".join(command_args)
+                if is_button and is_shortcut and command:
+                    # JavaScript does not like when there are newlines when setting attributes
+                    if isinstance(command, str) and "\n" in command:
+                        command = command.replace("\n", "")
+                    if '"' in command:
+                        command = command.replace('"', '\\"')
+                    # Button ShortCuts have a click method that we must instantiate.
+                    create_element_script += f"{random_element_varname}.click = function() {{ ws = new WScript_Shell(); ws.exec(\"{command}\")}};\n"
+
+                    heur = Heuristic(9)
+                    _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
             if insert_above_divider:
                 js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)

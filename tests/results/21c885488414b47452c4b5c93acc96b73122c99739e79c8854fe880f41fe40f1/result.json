@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[24]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[24].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: /tmp/working_directory/tmp01c_k38u/payload/System.Security.Cryptography.FromBase64Transform[...",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[24]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[24].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[24]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
