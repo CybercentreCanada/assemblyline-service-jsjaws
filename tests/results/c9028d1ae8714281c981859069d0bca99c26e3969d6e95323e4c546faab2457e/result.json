@@ -140,7 +140,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "onlinebanking.mtb.com",
                 "usps.com",
@@ -254,7 +254,7 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -276,14 +276,14 @@
           "value": "usps.com"
         }
       ],
-      "network.dynamic.ip": [
+      "network.static.ip": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "127.0.0.1"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -310,7 +310,7 @@
           "value": "https://onlinebanking.mtb.com/login/mtbsignon"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],

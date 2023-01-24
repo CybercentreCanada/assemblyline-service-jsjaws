@@ -636,14 +636,14 @@ class TestJsJaws:
             body_format=BODY_FORMAT.TABLE,
             body=dumps(body),
             tags={
-                "network.dynamic.uri": [
+                "network.static.uri": [
                     "http://blah.ca/blah.exe",
                     "http://1.1.1.1/blah.exe",
                     "http://definitely-a-url.ca",
                 ],
-                "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
-                "network.dynamic.ip": ["1.1.1.1"],
-                "network.dynamic.uri_path": ["/blah.exe"],
+                "network.static.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
+                "network.static.ip": ["1.1.1.1"],
+                "network.static.uri_path": ["/blah.exe"],
                 "file.string.extracted": ["blahblahblah"],
             },
         )
@@ -760,8 +760,8 @@ class TestJsJaws:
         cmd_table = ResultTableSection("IOCs found in command lines", parent=cmd_res_sec)
         table_data = [{"ioc_type": "domain", "ioc": "blah.ca"}, {"ioc_type": "uri", "ioc": "http://blah.ca"}]
         [cmd_table.add_row(TableRow(**item)) for item in table_data]
-        cmd_table.add_tag("network.dynamic.domain", "blah.ca")
-        cmd_table.add_tag("network.dynamic.uri", "http://blah.ca")
+        cmd_table.add_tag("network.static.domain", "blah.ca")
+        cmd_table.add_tag("network.static.uri", "http://blah.ca")
         cmd_table.set_heuristic(2)
         write_res_sec = ResultSection("The script wrote the following files", parent=correct_res_sec)
         write_res_sec.add_lines(["blah.txt"])
@@ -813,9 +813,9 @@ class TestJsJaws:
 
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)
-        correct_res_sec.add_tag("network.dynamic.domain", "blah.com")
-        correct_res_sec.add_tag("network.dynamic.uri", "https://blah.com/blah.exe")
-        correct_res_sec.add_tag("network.dynamic.uri_path", "/blah.exe")
+        correct_res_sec.add_tag("network.static.domain", "blah.com")
+        correct_res_sec.add_tag("network.static.uri", "https://blah.com/blah.exe")
+        correct_res_sec.add_tag("network.static.uri_path", "/blah.exe")
         table_data = [
             {"ioc_type": "domain", "ioc": "blah.com"},
             {"ioc_type": "uri", "ioc": "https://blah.com/blah.exe"},

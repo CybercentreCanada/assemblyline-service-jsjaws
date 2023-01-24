@@ -610,7 +610,7 @@ class JsJaws(ServiceBase):
             # If an element has an attribute that is safelisted, don't include it when we create the element
             if element.name in SAFELISTED_ATTRS_TO_POP:
                 for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
-                    if is_tag_safelisted(element.attrs.get(attr), ["network.dynamic.domain", "network.dynamic.uri"], self.safelist):
+                    if is_tag_safelisted(element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist):
                         element.attrs.pop(attr)
 
             # To avoid duplicate of embed extraction, check if embed matches criteria used in the extract_embeds_using_soup method
@@ -895,7 +895,7 @@ class JsJaws(ServiceBase):
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
                 # Let's try to extract IOCs from it
-                extract_iocs_from_text_blob(line, wscript_res_sec)
+                extract_iocs_from_text_blob(line, wscript_res_sec, is_network_static=True)
         wscript_extraction.close()
 
         if path.getsize(self.extracted_wscript_path) > 0:
@@ -1282,7 +1282,7 @@ class JsJaws(ServiceBase):
                 cmd_result_section.add_lines(list(commands))
                 [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
                 cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
-                extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section)
+                extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, is_network_static=True)
                 if cmd_iocs_result_section.body:
                     cmd_iocs_result_section.set_heuristic(2)
                     cmd_result_section.add_subsection(cmd_iocs_result_section)
@@ -1320,24 +1320,24 @@ class JsJaws(ServiceBase):
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
         if uri_match:
-            urls_result_section.add_tag("network.dynamic.uri", safe_url)
+            urls_result_section.add_tag("network.static.uri", safe_url)
             # Extract domain
             domain_match = re.search(DOMAIN_REGEX, safe_url)
             if domain_match:
                 domain = domain_match.group(0)
-                urls_result_section.add_tag("network.dynamic.domain", domain)
+                urls_result_section.add_tag("network.static.domain", domain)
             # Extract IP
             ip_match = re.search(IP_REGEX, safe_url)
             if ip_match:
                 ip = ip_match.group(0)
-                urls_result_section.add_tag("network.dynamic.ip", ip)
+                urls_result_section.add_tag("network.static.ip", ip)
             # Extract URI path
             if "//" in safe_url:
                 safe_url = safe_url.split("//")[1]
             uri_path_match = re.search(URI_PATH, safe_url)
             if uri_path_match:
                 uri_path = uri_path_match.group(0)
-                urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
+                urls_result_section.add_tag("network.static.uri_path", uri_path)
         else:
             # Might as well tag this while we're here
             urls_result_section.add_tag("file.string.extracted", safe_url)
@@ -1466,7 +1466,7 @@ class JsJaws(ServiceBase):
                 for fp_domain in FP_DOMAINS:
                     log_line = log_line.replace(fp_domain, "<replaced>")
 
-            extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True)
+            extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []

@@ -426,7 +426,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "paknavy-gov-pk.downld.net"
               ],
@@ -458,7 +458,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "paknavy-gov-pk.downld.net"
               ],
@@ -652,7 +652,7 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -664,7 +664,7 @@
           "value": "paknavy-gov-pk.downld.net"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 1,
           "signatures": [],
@@ -676,7 +676,7 @@
           "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 1,
           "signatures": [],

@@ -19,7 +19,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "example.com"
               ],
@@ -50,21 +50,21 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "example.com"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "http://example.com/?search"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],

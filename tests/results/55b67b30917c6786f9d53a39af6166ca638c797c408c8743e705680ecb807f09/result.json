@@ -144,7 +144,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "liftca.org",
                 "logo.clearbit.com",
@@ -282,7 +282,7 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -314,14 +314,14 @@
           "value": "logo.clearbit.com"
         }
       ],
-      "network.dynamic.ip": [
+      "network.static.ip": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "127.0.0.1"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -331,6 +331,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
+        },
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'"
         },
         {
           "heur_id": 2,
@@ -343,7 +348,7 @@
           "value": "https://logo.clearbit.com/liftca.org"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -363,13 +368,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "/liftca.org"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 6,
-          "signatures": [],
-          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'"
         }
       ]
     },

@@ -1,5 +1,5 @@
 regex:
-  network.dynamic.domain:
+  network.static.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
   # GStatic
@@ -14,7 +14,7 @@ regex:
   - getbootstrap\.com$
   # Microsoft Auth
   - aadcdn\.msftauth\.net$
-  network.dynamic.uri:
+  network.static.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
   # GStatic
