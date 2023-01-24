@@ -160,6 +160,12 @@ heuristics:
     filetype: '*'
     description: Sample was obfuscated with Obfuscator.io
 
+  - heur_id: 9
+    name: Button ShortCut usage
+    score: 100
+    filetype: '*'
+    description: Sample uses unusual Button ShortCut objects
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
