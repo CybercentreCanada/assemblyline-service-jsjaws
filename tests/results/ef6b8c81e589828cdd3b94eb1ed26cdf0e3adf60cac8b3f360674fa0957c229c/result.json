@@ -52,7 +52,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.icodeps.com"
               ],
@@ -84,7 +84,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.icodeps.com"
               ],
@@ -127,7 +127,7 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -139,7 +139,7 @@
           "value": "www.icodeps.com"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -151,7 +151,7 @@
           "value": "https://www.icodeps.com/jsapi.php"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
