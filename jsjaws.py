@@ -639,7 +639,7 @@ class JsJaws(ServiceBase):
 
             # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
             if element.name == "object":
-                # We cannot assign a random element variable name to obejct tag elements
+                # We cannot assign a random element variable name to object tag elements
                 random_element_varname = element_id
             else:
                 # JavaScript variables cannot have hyphens in their names
