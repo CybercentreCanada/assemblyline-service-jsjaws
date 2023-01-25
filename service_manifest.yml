@@ -31,10 +31,10 @@ config:
 
 submission_params:
   # Service-wide parameters
-  - default: 60
+  - default: 30
     name: tool_timeout
     type: int
-    value: 60
+    value: 30
 
   - default: false
     name: add_supplementary
