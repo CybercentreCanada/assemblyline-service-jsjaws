@@ -78,7 +78,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "darmstadt.heimatschatz.de"
               ],
@@ -101,7 +101,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "d3165153bac461f0779452777fc69f2b4e5de614a8c828805df6e571efb5f030"
+        "sha256": "fd2f5346f0d894a5490a5880c1769c8d0e566cfa3a6f8305c6a3dd5fde29ef9a"
       }
     ]
   },
@@ -126,25 +126,11 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "darmstadt.heimatschatz.de"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://darmstadt.heimatschatz.de/images/imgs/"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/images/imgs/"
         }
       ],
       "network.static.uri": [
@@ -152,6 +138,18 @@
           "heur_id": 6,
           "signatures": [],
           "value": "https://darmstadt.heimatschatz.de/images/imgs/"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://darmstadt.heimatschatz.de/images/imgs/"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/images/imgs/"
         }
       ]
     },

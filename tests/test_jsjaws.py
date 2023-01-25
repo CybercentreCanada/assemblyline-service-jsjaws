@@ -1,3 +1,4 @@
+from hashlib import sha256
 import os
 import shutil
 
@@ -165,10 +166,38 @@ def remove_tmp_manifest():
 @pytest.fixture
 def dummy_request_class_instance():
     class DummyRequest():
+        SERVICE_CONFIG = {
+            "browser": "IE8",
+            "wscript_only": False,
+            "throw_http_exc": False,
+            "download_payload": False,
+            "extract_function_calls": False,
+            "extract_eval_calls": False,
+            "tool_timeout": 60,
+            "add_supplementary": False,
+            "static_signatures": True,
+            "no_shell_error": False,
+            "display_iocs": False,
+            "log_errors": False,
+            "static_analysis_only": False,
+            "enable_synchrony": False,
+            "override_eval": False,
+        }
+
         def __init__(self):
             super(DummyRequest, self).__init__()
             self.temp_submission_data = {}
             self.result = None
+            self.file_contents = b""
+            self.file_type = "code/html"
+            self.sha256 = sha256(self.file_contents).hexdigest()
+            self.deep_scan = False
+
+        def add_supplementary(*args):
+            pass
+
+        def get_param(self, param):
+            return self.SERVICE_CONFIG[param]
 
     yield DummyRequest()
 
@@ -221,7 +250,7 @@ class TestJsJaws:
 
     @staticmethod
     def test_init(jsjaws_class_instance):
-        from assemblyline_v4_service.common.balbuzard.patterns import PatternMatch
+        from assemblyline.common.identify import Identify
 
         assert jsjaws_class_instance.artifact_list is None
         assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
@@ -237,13 +266,19 @@ class TestJsJaws:
         assert jsjaws_class_instance.extracted_wscript_path is None
         assert jsjaws_class_instance.malware_jail_output is None
         assert jsjaws_class_instance.malware_jail_output_path is None
-        assert jsjaws_class_instance.extracted_doc_writes is None
-        assert jsjaws_class_instance.extracted_doc_writes_path is None
         assert jsjaws_class_instance.boxjs_output_dir is None
         assert jsjaws_class_instance.boxjs_iocs is None
         assert jsjaws_class_instance.boxjs_resources is None
         assert jsjaws_class_instance.boxjs_analysis_log is None
         assert jsjaws_class_instance.boxjs_snippets is None
+        assert jsjaws_class_instance.filtered_lib is None
+        assert jsjaws_class_instance.filtered_lib_path is None
+        assert jsjaws_class_instance.cleaned_with_synchrony is None
+        assert jsjaws_class_instance.cleaned_with_synchrony_path is None
+        assert jsjaws_class_instance.stdout_limit is None
+        assert isinstance(jsjaws_class_instance.identify, Identify)
+        assert jsjaws_class_instance.safelist == {}
+        assert jsjaws_class_instance.doc_write_hashes is None
 
     @staticmethod
     def test_start(jsjaws_class_instance):
@@ -295,6 +330,7 @@ class TestJsJaws:
             "no_shell_error": False,
             "display_iocs": False,
             "log_errors": False,
+            "override_eval": False,
             "static_analysis_only": False,
             "enable_synchrony": False,
         }
@@ -336,10 +372,6 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_output == "output.txt"
         assert jsjaws_class_instance.malware_jail_output_path == path.join(
             jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output
-        )
-        assert jsjaws_class_instance.extracted_doc_writes == "document_writes.html"
-        assert jsjaws_class_instance.extracted_doc_writes_path == path.join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes
         )
 
         assert path.exists(jsjaws_class_instance.malware_jail_payload_extraction_dir)
@@ -402,21 +434,31 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_extract_doc_writes_one_liners(jsjaws_class_instance, dummy_request_class_instance):
+    def test_extract_doc_writes_one_liners(jsjaws_class_instance, dummy_request_class_instance, mocker):
         # Single line example : 697b0e897a7d57e600a1020886f837469ffb87acc65f04c2ae424af50a311c7e
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
-        from os import mkdir
-        from os.path import exists, join
 
-        jsjaws_class_instance.malware_jail_payload_extraction_dir = join(
-            jsjaws_class_instance.working_directory, "payload/"
+        jsjaws_class_instance.doc_write_hashes = set()
+        jsjaws_class_instance.stdout_limit = 10000
+        jsjaws_class_instance.boxjs_analysis_log = "blah"
+        root_dir = os.path.dirname(os.path.abspath(__file__))
+
+        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
+        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = os.path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump_path = os.path.join(
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
         )
-        jsjaws_class_instance.extracted_doc_writes = "document_writes.html"
-        jsjaws_class_instance.extracted_doc_writes_path = join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes
-        )
-        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
+
+        mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
+        mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
+        mocker.patch.object(jsjaws_class_instance, "_extract_payloads")
+        mocker.patch.object(jsjaws_class_instance, "_extract_urls")
+        mocker.patch.object(jsjaws_class_instance, "_extract_synchrony")
+
         output = [
             "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:50.924Z] => 'write me!'",
@@ -426,34 +468,19 @@ class TestJsJaws:
             "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:53.924Z] => 'password?!'",
         ]
-        jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
-        assert exists(jsjaws_class_instance.extracted_doc_writes_path)
-        with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "write me!\nwrite me too!\npassword?!"
-        assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.extracted_doc_writes,
-            "path": jsjaws_class_instance.extracted_doc_writes_path,
-            "description": "DOM Writes",
-            "to_be_extracted": True,
-        }
+        expected_doc_write = "write me!\nwrite me too!\npassword?!"
+        assert jsjaws_class_instance.doc_write_hashes == { sha256(expected_doc_write.encode()).hexdigest() }
         assert dummy_request_class_instance.temp_submission_data.get("passwords") == ['me', 'me!', 'password', 'password?!', 'too', 'too!', 'write']
 
     @staticmethod
-    def test_extract_doc_writes_multiliner(jsjaws_class_instance, dummy_request_class_instance):
+    def test_extract_doc_writes_multiliner(jsjaws_class_instance, dummy_request_class_instance, mocker):
         # Multiple calls to document.write() (with multiline) example :
         # 4b19570cb328f4e47a44e04a74c94993225203260607f615a875cd58500c9abb
-        from os import mkdir
-        from os.path import exists, join
 
-        jsjaws_class_instance.malware_jail_payload_extraction_dir = join(
-            jsjaws_class_instance.working_directory, "payload/"
-        )
-        jsjaws_class_instance.extracted_doc_writes = "document_writes.html"
-        jsjaws_class_instance.extracted_doc_writes_path = join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_doc_writes
-        )
-        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
+        jsjaws_class_instance.doc_write_hashes = set()
+        jsjaws_class_instance.stdout_limit = 10000
+
         output = [
             "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:50.924Z] => '",
@@ -462,18 +489,49 @@ class TestJsJaws:
             "</html>'",
             "[2022-10-18T20:12:51.924Z] - Something else",
         ]
-        jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
-        assert exists(jsjaws_class_instance.extracted_doc_writes_path)
-        with open(jsjaws_class_instance.extracted_doc_writes_path, "r") as f:
-            assert f.read() == "<html>\npassword: yabadabadoo\n</html>"
-        assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.extracted_doc_writes,
-            "path": jsjaws_class_instance.extracted_doc_writes_path,
-            "description": "DOM Writes",
-            "to_be_extracted": True,
-        }
+        expected_doc_write = "<html>\npassword: yabadabadoo\n</html>"
+        assert jsjaws_class_instance.doc_write_hashes == { sha256(expected_doc_write.encode()).hexdigest() }
         assert dummy_request_class_instance.temp_submission_data.get("passwords") == [' yabadabadoo', 'password', 'password:', 'yabadabadoo']
+
+        dummy_request_class_instance.temp_submission_data = {}
+        jsjaws_class_instance.doc_write_hashes = set()
+
+        jsjaws_class_instance.boxjs_analysis_log = "blah"
+        root_dir = os.path.dirname(os.path.abspath(__file__))
+
+        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
+        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
+        jsjaws_class_instance.malware_jail_sandbox_env_dir = os.path.join(jsjaws_class_instance.working_directory, "sandbox_env")
+        jsjaws_class_instance.malware_jail_sandbox_env_dump_path = os.path.join(
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
+        )
+
+        mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
+        mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
+        mocker.patch.object(jsjaws_class_instance, "_extract_payloads")
+        mocker.patch.object(jsjaws_class_instance, "_extract_urls")
+        mocker.patch.object(jsjaws_class_instance, "_extract_synchrony")
+
+        multiple_gauntlet_output = [
+            '[2022-12-21T21:06:23.655Z] document[6].write(content) 173 bytes',
+            '[2022-12-21T21:06:23.655Z] => \'<html><script>var b64_encoded = "PGh0bWw+CnBhc3N3b3JkOiB5YWJhZGFiYWRvbwo8L2h0bWw+";',
+            '    var b64_decoded = atob(b64_encoded);',
+            "    document.write(b64_decoded);</script></html>'",
+            '[2022-12-21T21:06:23.657Z] ==> Cleaning up sandbox.',
+        ]
+        jsjaws_class_instance._extract_doc_writes(multiple_gauntlet_output, dummy_request_class_instance)
+        expected_doc_write_1 = b'<html><script>var b64_encoded = "PGh0bWw+CnBhc3N3b3JkOiB5YWJhZGFiYWRvbwo8L2h0bWw+";\n    var b64_decoded = atob(b64_encoded);\n    document.write(b64_decoded);</script></html>'
+        expected_doc_write_2 = b'<html>\n\npassword: yabadabadoo\n\n</html>'
+        assert jsjaws_class_instance.doc_write_hashes == { sha256(expected_doc_write_1).hexdigest(), sha256(expected_doc_write_2).hexdigest() }
+        assert dummy_request_class_instance.temp_submission_data.get("passwords") == [
+            ' yabadabadoo',
+            'password',
+            'password:',
+            'yabadabadoo',
+        ]
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
@@ -578,14 +636,14 @@ class TestJsJaws:
             body_format=BODY_FORMAT.TABLE,
             body=dumps(body),
             tags={
-                "network.dynamic.uri": [
+                "network.static.uri": [
                     "http://blah.ca/blah.exe",
                     "http://1.1.1.1/blah.exe",
                     "http://definitely-a-url.ca",
                 ],
-                "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
-                "network.dynamic.ip": ["1.1.1.1"],
-                "network.dynamic.uri_path": ["/blah.exe"],
+                "network.static.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
+                "network.static.ip": ["1.1.1.1"],
+                "network.static.uri_path": ["/blah.exe"],
                 "file.string.extracted": ["blahblahblah"],
             },
         )
@@ -702,8 +760,8 @@ class TestJsJaws:
         cmd_table = ResultTableSection("IOCs found in command lines", parent=cmd_res_sec)
         table_data = [{"ioc_type": "domain", "ioc": "blah.ca"}, {"ioc_type": "uri", "ioc": "http://blah.ca"}]
         [cmd_table.add_row(TableRow(**item)) for item in table_data]
-        cmd_table.add_tag("network.dynamic.domain", "blah.ca")
-        cmd_table.add_tag("network.dynamic.uri", "http://blah.ca")
+        cmd_table.add_tag("network.static.domain", "blah.ca")
+        cmd_table.add_tag("network.static.uri", "http://blah.ca")
         cmd_table.set_heuristic(2)
         write_res_sec = ResultSection("The script wrote the following files", parent=correct_res_sec)
         write_res_sec.add_lines(["blah.txt"])
@@ -755,9 +813,9 @@ class TestJsJaws:
 
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)
-        correct_res_sec.add_tag("network.dynamic.domain", "blah.com")
-        correct_res_sec.add_tag("network.dynamic.uri", "https://blah.com/blah.exe")
-        correct_res_sec.add_tag("network.dynamic.uri_path", "/blah.exe")
+        correct_res_sec.add_tag("network.static.domain", "blah.com")
+        correct_res_sec.add_tag("network.static.uri", "https://blah.com/blah.exe")
+        correct_res_sec.add_tag("network.static.uri_path", "/blah.exe")
         table_data = [
             {"ioc_type": "domain", "ioc": "blah.com"},
             {"ioc_type": "uri", "ioc": "https://blah.com/blah.exe"},

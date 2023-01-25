@@ -1,24 +1,24 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 20,
+    "score": 110,
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Suspicious declarations were detected in HTML stylesheets",
+        "body": "Sample uses unusual Button ShortCut objects",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
           "frequency": 1,
-          "heur_id": 7,
-          "score": 10,
+          "heur_id": 9,
+          "score": 100,
           "score_map": {},
           "signatures": {}
         },
         "tags": {},
-        "title_text": "Suspicious CSS Usage",
+        "title_text": "Button ShortCut usage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\treturn s.split(\"\").reverse().join(\"\")",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[18]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -44,14 +44,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "obfuscation": 10
+            "creates_wsh_object": 10
           },
           "signatures": {
-            "obfuscation": 1
+            "creates_wsh_object": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Obfuscation",
+        "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -59,22 +59,14 @@
   "files": {
     "extracted": [
       {
-        "name": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa",
-        "sha256": "e126343a747e4e8748853097e97cf4f1e6f2e488eeb79745ab2514d2bf7acafa"
-      },
-      {
-        "name": "Element[21]<embed>",
-        "sha256": "f4f43bfabf8e410683a9ffaa7acd359fda0045b35d1eef7bd872ae2c4064382f"
+        "name": "WScript.Shell[18]",
+        "sha256": "9c84ce182d6eff60ad2d0fc85ee88e3fccd217ab8dab54e0d4a4b69aa11c8080"
       }
     ],
     "supplementary": [
       {
-        "name": "temp_css.css",
-        "sha256": "9ae702f0ebdbe99d96c0270cfca6e0cc5fb69de7f6544a246e2a58fe7f478ce1"
-      },
-      {
         "name": "temp_javascript.js",
-        "sha256": "a9af67e3bf8b37b023a70a95bcf6e0b1a3d7a18825f8c1de2a57ff21499a215d"
+        "sha256": "95cf08a66ca695ecf49f4e150c0f02863efae9b18cfb18074d5a81c4b0aa0d6c"
       }
     ]
   },
@@ -84,12 +76,12 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "obfuscation"
+          "creates_wsh_object"
         ]
       },
       {
         "attack_ids": [],
-        "heur_id": 7,
+        "heur_id": 9,
         "signatures": []
       }
     ],

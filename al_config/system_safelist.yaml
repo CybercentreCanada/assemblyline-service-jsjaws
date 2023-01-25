@@ -1,5 +1,5 @@
 regex:
-  network.dynamic.domain:
+  network.static.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
   # GStatic
@@ -8,7 +8,13 @@ regex:
   - cdn\.jsdelivr\.net$
   # WWW
   - www\.w3\.org$
-  network.dynamic.uri:
+  # Microsoft Auth
+  - aadcdn\.msftauth\.net$
+  # Bootstrap
+  - getbootstrap\.com$
+  # Microsoft Auth
+  - aadcdn\.msftauth\.net$
+  network.static.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
   # GStatic
@@ -17,3 +23,9 @@ regex:
   - https?://cdn\.jsdelivr\.net(?:$|/.*)
   # WWW
   - https?://www\.w3\.org(?:$|/.*)
+  # Microsoft Auth
+  - https?://aadcdn\.msftauth\.net(?:$|/.*)
+  # Bootstrap
+  - https?://getbootstrap\.com(?:$|/.*)
+  # Microsoft Auth
+  - https?://aadcdn\.msftauth\.net(?:$|/.*)

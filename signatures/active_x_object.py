@@ -18,6 +18,20 @@ class ActiveXObject(Signature):
         self.check_indicators_in_list(output)
 
 
+class GetObject(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="get_object",
+            description="JavaScript returns a reference to an object provided by an ActiveX component",
+            indicators=["GetObject"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
+
+
 class XMLHTTP(Signature):
     def __init__(self):
         super().__init__(

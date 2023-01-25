@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob((function() {????var Module, moduleOverrides, key, arguments_, thisProgram, quit_, ENVIRONM...\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob((function() {????var Module, moduleOverrides, key, arguments_, thisProgram, quit_, ENVIRONM...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,29 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[5].setTimeout(function() {\n\n\t\twindow[5].setTimeout(function(){_0x2063A(_0x2033D)},2000)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "sleep": 10
-          },
-          "signatures": {
-            "sleep": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: Sleep",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[15])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
+        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[18])\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,6 +82,28 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript attempts to sleep\n\t\twindow[6].setTimeout(function() {????informWorker(newW);???}, 2000)\n\n\t\twindow[6].setTimeout(function(){_0x2063A(_0x2033D)}, 2000)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "sleep": 10
+          },
+          "signatures": {
+            "sleep": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.google-analytics.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.google-analytics.com/analytics.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/analytics.js\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
@@ -118,7 +118,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.google-analytics.com"
               ],
@@ -139,7 +139,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[15]",
+        "name": "Blob[18]",
         "sha256": "f5e236707a45e7af5461e4113d2bc60926142dfb9e83316553d00f0884cad923"
       }
     ],
@@ -163,6 +163,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "suspicious_process"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "creates_object_url"
         ]
       },
@@ -177,26 +184,26 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "suspicious_process"
+          "sleep"
         ]
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "www.google-analytics.com"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "https://www.google-analytics.com/analytics.js"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],

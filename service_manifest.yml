@@ -31,10 +31,10 @@ config:
 
 submission_params:
   # Service-wide parameters
-  - default: 60
+  - default: 30
     name: tool_timeout
     type: int
-    value: 60
+    value: 30
 
   - default: false
     name: add_supplementary
@@ -100,6 +100,11 @@ submission_params:
     type: bool
     value: false
 
+  - default: false
+    name: override_eval
+    type: bool
+    value: false
+
   # Synchrony parameters
   - default: false
     name: enable_synchrony
@@ -154,6 +159,12 @@ heuristics:
     score: 1000
     filetype: '*'
     description: Sample was obfuscated with Obfuscator.io
+
+  - heur_id: 9
+    name: Button ShortCut usage
+    score: 100
+    filetype: '*'
+    description: Sample uses unusual Button ShortCut objects
 
 docker_config:
   allow_internet_access: true

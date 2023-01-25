@@ -37,7 +37,7 @@ jobs:
         #Python3_11:
         #  python.version: "3.11"
 
-    timeoutInMinutes: 10
+    timeoutInMinutes: 20
 
     steps:
       - task: UsePythonVersion@0

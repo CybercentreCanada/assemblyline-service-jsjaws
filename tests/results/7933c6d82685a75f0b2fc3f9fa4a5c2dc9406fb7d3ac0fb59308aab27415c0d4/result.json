@@ -19,7 +19,7 @@
         },
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "fonts.googleapis.com"
               ],
@@ -40,7 +40,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Element[25]<embed>",
+        "name": "Element[27]<embed>",
         "sha256": "2823b855fd79efac8f598671e9ffbe9e0837e28dba7bafc77d0f9d36cbed13a8"
       }
     ],
@@ -64,21 +64,21 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
+      "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "fonts.googleapis.com"
         }
       ],
-      "network.dynamic.uri": [
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
         }
       ],
-      "network.dynamic.uri_path": [
+      "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
