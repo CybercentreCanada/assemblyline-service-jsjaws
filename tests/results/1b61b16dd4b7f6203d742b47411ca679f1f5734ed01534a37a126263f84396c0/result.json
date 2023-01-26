@@ -1,8 +1,26 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1531,
+    "score": 1532,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample consists of a long single line of code",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 10,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Long One-Liner",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": null,
@@ -196,6 +214,11 @@
       {
         "attack_ids": [],
         "heur_id": 8,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 10,
         "signatures": []
       }
     ],
