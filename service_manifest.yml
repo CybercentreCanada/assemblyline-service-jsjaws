@@ -166,6 +166,12 @@ heuristics:
     filetype: '*'
     description: Sample uses unusual Button ShortCut objects
 
+  - heur_id: 10
+    name: Long One-Liner
+    score: 1
+    filetype: '*'
+    description: Sample consists of a long single line of code
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
