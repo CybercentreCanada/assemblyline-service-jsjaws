@@ -64,6 +64,8 @@ COMBO_REGEX = (
     r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 )
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
+D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
+
 MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
 APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
 DIVIDING_COMMENT = "// This comment was created by JsJaws"
@@ -1556,6 +1558,7 @@ class JsJaws(ServiceBase):
             "clean_libs/maplace%s.js": MAPLACE_REGEX,
             "clean_libs/combo.js": COMBO_REGEX,
             "clean_libs/underscore%s.js": UNDERSCORE_REGEX,
+            "clean_libs/d3_v%s.js": D3_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
