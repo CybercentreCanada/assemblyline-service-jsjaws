@@ -366,14 +366,32 @@ class JsJaws(ServiceBase):
         malware_jail_args.append(file_path)
         jsxray_args.append(file_path)
 
-        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script and send that to Synchrony
+        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony and
+        # check if script is a long one-liner
+        one_liner_hit = False
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
             _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                 t.write(actual_script)
                 synchrony_args.append(t.name)
+
+            is_single_line = len(list(filter(lambda item: item != b"", actual_script.split(b"\n")))) == 1
+
+            # Arbitrary suspicous length of a file
+            if is_single_line and len(actual_script) > 5000:
+                one_liner_hit = True
         else:
             synchrony_args.append(file_path)
+
+            is_single_line = len(list(filter(lambda item: item != b"", file_content.split(b"\n")))) == 1
+
+            # Arbitrary suspicous length of a file
+            if is_single_line and len(file_content) > 5000:
+                one_liner_hit = True
+
+        if one_liner_hit:
+            heur = Heuristic(10)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -1061,7 +1079,12 @@ class JsJaws(ServiceBase):
 
         # The entire point of writing elements into the document is to manipulate the DOM. If certain elements contain script elements that depend on previously declared variables, then we should build an HTML file will all content possible and send that through the gauntlet again.
 
-        total_dom_contents = request.file_contents
+        # If the initial file was identified as JavaScript, and there were elements written to the DOM, then we should wrap the
+        # JavaScript with <script> tags so that it is correctly handled by the next run of the gauntlet.
+        if request.file_type == "code/javascript":
+            total_dom_contents = b"<script>" + request.file_contents + b"</script>"
+        else:
+            total_dom_contents = request.file_contents
         total_dom_contents += b"\n"
         total_dom_contents += content_to_write
         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:

