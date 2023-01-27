@@ -76,6 +76,16 @@ SAFELISTED_ATTRS_TO_POP = {
 }
 VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
 
+# JScript conditional comments
+# Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
+AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+AT_REGEX = b"@\*\/"
+AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELSE_REGEX = b"@else\s*"
+AT_END_REGEX = b"\/\*@end\s*"
+JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
+
 # Signature Constants
 TRANSLATED_SCORE = {
     0: 10,  # Informational (0-24% hit rate)
@@ -243,6 +253,8 @@ class JsJaws(ServiceBase):
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
         elif file_type == "image/svg":
             file_path, file_content, _ = self.extract_using_soup(request, file_content)
+        elif file_type == "code/jscript":
+            file_path, file_content = self.extract_js_from_jscript(request, file_content)
 
         if file_path is None:
             return
@@ -566,6 +578,27 @@ class JsJaws(ServiceBase):
         if js_content != b"":
             return js_script_name, js_content, css_script_name
         return js_script_name, initial_file_content, css_script_name
+
+    def extract_js_from_jscript(self, request: ServiceRequest, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        This method extracts JavaScript from JScript
+        :param request: The ServiceRequest object
+        :param initial_file_content: The contents of the initial file to be read
+        :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
+        """
+        def log_and_replace_jscript(match):
+            group_0 = match.group(0).decode()
+            self.log.debug(f"Removed JScript conditional comment: (group_0)")
+            return b""
+
+        for regex in JSCRIPT_REGEXES:
+            file_content = re.sub(regex, log_and_replace_jscript, file_content)
+        
+        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+            f.write(file_content)
+
+        return f.name, file_content
+
 
     def _extract_embeds_using_soup(self, soup: BeautifulSoup, request: ServiceRequest, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
