@@ -75,6 +75,7 @@ SAFELISTED_ATTRS_TO_POP = {
     "svg": ["xmlns"],
 }
 VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 
 # JScript conditional comments
 # Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
@@ -1527,16 +1528,33 @@ class JsJaws(ServiceBase):
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []
-                for exception_line in log_line.split("\n")[::-1]:
+                for exception_line in log_line.split("\n"):
                     if not exception_line.strip():
-                        break
+                        continue
                     exception_lines.append(exception_line)
                 if not exception_lines:
                     continue
+                exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
-                    raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                    raise Exception("Exception occurred in MalwareJail\n" + exception_blurb)
                 else:
-                    self.log.warning("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                    self.log.warning("Exception occurred in MalwareJail\n" + exception_blurb)
+
+                # Check if there is an unexpected end of input that we could remedy
+                match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
+                if match and len(match.regs) > 1:
+                    line_to_wrap = match.group(1).decode()
+                    amended_content = request.file_contents.replace(line_to_wrap.encode(), f"\"{line_to_wrap}\"".encode())
+
+                    if request.file_contents != amended_content:
+                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                            out.write(amended_content)
+                            amended_content_path = out.name
+
+                        self.log.debug("There was an unexpected end of input, run the gauntlet again with the amended content!")
+                        self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+
+
             if log_line.startswith("location.href = "):
 
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)

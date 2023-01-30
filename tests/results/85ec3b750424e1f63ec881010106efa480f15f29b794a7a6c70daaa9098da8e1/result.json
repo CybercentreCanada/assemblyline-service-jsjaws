@@ -1,0 +1,250 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 23,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[16].send()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"acehphonnajaya.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://acehphonnajaya.com/css/ke.msi\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css/ke.msi\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "acehphonnajaya.com"
+              ],
+              "uri": [
+                "https://acehphonnajaya.com/css/ke.msi"
+              ],
+              "uri_path": [
+                "/css/ke.msi"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "acehphonnajaya.com"
+              ],
+              "uri": [
+                "https://acehphonnajaya.com/css/ke.msi"
+              ],
+              "uri_path": [
+                "/css/ke.msi"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "acehphonnajaya.com"
+              ],
+              "uri": [
+                "https://acehphonnajaya.com/css/ke.msi"
+              ],
+              "uri_path": [
+                "/css/ke.msi"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
+        ]
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
