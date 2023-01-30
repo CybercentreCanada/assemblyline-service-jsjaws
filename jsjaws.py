@@ -76,6 +76,17 @@ SAFELISTED_ATTRS_TO_POP = {
     "svg": ["xmlns"],
 }
 VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
+
+# JScript conditional comments
+# Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
+AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+AT_REGEX = b"@\*\/"
+AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELSE_REGEX = b"@else\s*"
+AT_END_REGEX = b"\/\*@end\s*"
+JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -244,6 +255,8 @@ class JsJaws(ServiceBase):
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
         elif file_type == "image/svg":
             file_path, file_content, _ = self.extract_using_soup(request, file_content)
+        elif file_type == "code/jscript":
+            file_path, file_content = self.extract_js_from_jscript(request, file_content)
 
         if file_path is None:
             return
@@ -567,6 +580,27 @@ class JsJaws(ServiceBase):
         if js_content != b"":
             return js_script_name, js_content, css_script_name
         return js_script_name, initial_file_content, css_script_name
+
+    def extract_js_from_jscript(self, request: ServiceRequest, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        This method extracts JavaScript from JScript
+        :param request: The ServiceRequest object
+        :param initial_file_content: The contents of the initial file to be read
+        :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
+        """
+        def log_and_replace_jscript(match):
+            group_0 = match.group(0).decode()
+            self.log.debug(f"Removed JScript conditional comment: (group_0)")
+            return b""
+
+        for regex in JSCRIPT_REGEXES:
+            file_content = re.sub(regex, log_and_replace_jscript, file_content)
+        
+        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+            f.write(file_content)
+
+        return f.name, file_content
+
 
     def _extract_embeds_using_soup(self, soup: BeautifulSoup, request: ServiceRequest, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes = b"") -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
@@ -1495,16 +1529,33 @@ class JsJaws(ServiceBase):
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []
-                for exception_line in log_line.split("\n")[::-1]:
+                for exception_line in log_line.split("\n"):
                     if not exception_line.strip():
-                        break
+                        continue
                     exception_lines.append(exception_line)
                 if not exception_lines:
                     continue
+                exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
-                    raise Exception("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                    raise Exception("Exception occurred in MalwareJail\n" + exception_blurb)
                 else:
-                    self.log.warning("Exception occurred in MalwareJail\n" + "\n".join(exception_lines[::-1]))
+                    self.log.warning("Exception occurred in MalwareJail\n" + exception_blurb)
+
+                # Check if there is an unexpected end of input that we could remedy
+                match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
+                if match and len(match.regs) > 1:
+                    line_to_wrap = match.group(1).decode()
+                    amended_content = request.file_contents.replace(line_to_wrap.encode(), f"\"{line_to_wrap}\"".encode())
+
+                    if request.file_contents != amended_content:
+                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                            out.write(amended_content)
+                            amended_content_path = out.name
+
+                        self.log.debug("There was an unexpected end of input, run the gauntlet again with the amended content!")
+                        self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+
+
             if log_line.startswith("location.href = "):
 
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)
