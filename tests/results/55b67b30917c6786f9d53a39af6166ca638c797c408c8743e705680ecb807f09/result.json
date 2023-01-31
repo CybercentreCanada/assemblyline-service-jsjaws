@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1053,
+    "score": 1543,
     "sections": [
       {
         "auto_collapse": false,
@@ -130,9 +130,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 6,
-          "score": 10,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "obfuscator_io_url_redirect": 1
+          }
         },
         "tags": {
           "network": {
@@ -291,7 +293,9 @@
       {
         "attack_ids": [],
         "heur_id": 6,
-        "signatures": []
+        "signatures": [
+          "obfuscator_io_url_redirect"
+        ]
       },
       {
         "attack_ids": [],
@@ -357,7 +361,9 @@
         },
         {
           "heur_id": 6,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_url_redirect"
+          ],
           "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'"
         },
         {

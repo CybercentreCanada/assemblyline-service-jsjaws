@@ -1490,6 +1490,13 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
         self.artifact_list.append(artifact)
 
+        # If there is an automatic URL redirect, we should flag this combination with a signature that scores 500
+        for result_section in result.sections:
+            if result_section.heuristic and result_section.heuristic.heur_id == 6:
+                self.log.debug("Added the obfuscator_io_url_redirect signature to the result section to score the tagged URLs")
+                result_section.heuristic.add_signature_id("obfuscator_io_url_redirect")
+                break
+
     def parse_msdt_powershell(self, cmd):
         import shlex
 
