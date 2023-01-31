@@ -1101,6 +1101,9 @@ class JsJaws(ServiceBase):
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
+            # If the line including "password" was written to the DOM later than when the actual password was, we 
+            # should look in the file contents for it
+            visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
             for line in visible_text:
                 if len(line) > 10000:
                     line = truncate(line, 10000)
