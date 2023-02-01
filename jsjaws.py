@@ -557,7 +557,11 @@ class JsJaws(ServiceBase):
         :param initial_file_content: The contents of the initial file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
+        self.log.debug("Extracting HTML elements from soup...")
+
+        start_time = time()
         soup = BeautifulSoup(initial_file_content, features="html5lib")
+        self.log.debug(f"Parsing the file with BeautifulSoup took {round(time() - start_time)}s")
 
         aggregated_js_script = None
         js_content = b""
@@ -600,7 +604,7 @@ class JsJaws(ServiceBase):
 
         for regex in JSCRIPT_REGEXES:
             file_content = re.sub(regex, log_and_replace_jscript, file_content)
-        
+
         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
             f.write(file_content)
 
@@ -616,6 +620,8 @@ class JsJaws(ServiceBase):
         :param js_content: The file content of the NamedTemporaryFile
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
+        self.log.debug("Extracting embedded files from soup...")
+
         # https://www.w3schools.com/TAGS/tag_embed.asp
         # Grab all embed srcs with base64-encoded values and extract them
         embeds = soup.findAll("embed")
@@ -656,6 +662,7 @@ class JsJaws(ServiceBase):
         :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
+        self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
 
         # Create most HTML elements with JavaScript
@@ -823,6 +830,8 @@ class JsJaws(ServiceBase):
         :param request: The ServiceRequest object
         :return: The name of the CSS script
         """
+        self.log.debug("Extracting CSS from soup...")
+
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript analysis envs
         try:
             styles = soup.findAll("style")
@@ -914,6 +923,8 @@ class JsJaws(ServiceBase):
         :param dom_content: The content of written to the DOM
         :return: A list of visible text that was written to the DOM
         """
+        self.log.debug("Extracting visible text from soup...")
+
         try:
             soup = BeautifulSoup(dom_content, features="html5lib")
         except Exception:
