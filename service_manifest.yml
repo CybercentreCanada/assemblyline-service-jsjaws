@@ -147,6 +147,8 @@ heuristics:
     score: 10
     filetype: '*'
     description: Automatic redirection to another resource
+    signature_score_map:
+      obfuscator_io_url_redirect: 500
 
   - heur_id: 7
     name: Suspicious CSS Usage
