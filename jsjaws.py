@@ -410,9 +410,15 @@ class JsJaws(ServiceBase):
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         if not static_analysis_only:
+            # Box.js cannot handle being run more than once on a sample. Oh well!
             if not subsequent_run:
-                # Box.js cannot handle being run more than once on a sample. Oh well!
-                tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+                # Boxjs does not provide "document" object support
+                if b"document[" not in request.file_contents:
+                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+                else:
+                    self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
+            else:
+                self.log.debug("Do not run Box.js on subsequent runs.")
             tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
         tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
 
@@ -1096,6 +1102,9 @@ class JsJaws(ServiceBase):
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
+            # If the line including "password" was written to the DOM later than when the actual password was, we 
+            # should look in the file contents for it
+            visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
             for line in visible_text:
                 if len(line) > 10000:
                     line = truncate(line, 10000)
