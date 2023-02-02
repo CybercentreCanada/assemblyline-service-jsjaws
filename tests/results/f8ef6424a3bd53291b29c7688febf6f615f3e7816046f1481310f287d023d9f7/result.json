@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob((function() {????var Module, moduleOverrides, key, arguments_, thisProgram, quit_, ENVIRONM...",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob((function() {????var Module, moduleOverrides, key, arguments_, thisProgram, quit_, ENVIRONM...\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,29 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[18])\n",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "suspicious_process": 10
-          },
-          "signatures": {
-            "suspicious_process": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: SuspiciousProcess",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[6].setTimeout(function() {????informWorker(newW);???}, 2000)\n\n\t\twindow[6].setTimeout(function(){_0x2063A(_0x2033D)}, 2000)\n",
+        "body": "JavaScript attempts to sleep\n\t\twindow[6].setTimeout(function() {????informWorker(newW);???}, 2000)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,6 +78,28 @@
         },
         "tags": {},
         "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\tnew Worker(Blob[18])\n\n\t\t\tvar newW = new Worker(URL.createObjectURL(new Blob([\"(\" + function() {\\x0d",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
       },
       {
@@ -139,7 +139,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[18]",
+        "name": "Blob[17]",
         "sha256": "f5e236707a45e7af5461e4113d2bc60926142dfb9e83316553d00f0884cad923"
       }
     ],
@@ -184,7 +184,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "sleep"
+          "suspicious_process"
         ]
       }
     ],
