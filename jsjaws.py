@@ -375,18 +375,20 @@ class JsJaws(ServiceBase):
         synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
         # Don't forget the sample!
-        boxjs_args.append(file_path)
         malware_jail_args.append(file_path)
         jsxray_args.append(file_path)
 
-        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony and
+        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony/Box.js and
         # check if script is a long one-liner
         one_liner_hit = False
+        actual_script = None
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
             _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                 t.write(actual_script)
                 synchrony_args.append(t.name)
+                # Box.js cannot handle the document object, therefore we need to pass it the split file
+                boxjs_args.append(t.name)
 
             is_single_line = len(list(filter(lambda item: item != b"", actual_script.split(b"\n")))) == 1
 
@@ -395,6 +397,7 @@ class JsJaws(ServiceBase):
                 one_liner_hit = True
         else:
             synchrony_args.append(file_path)
+            boxjs_args.append(file_path)
 
             is_single_line = len(list(filter(lambda item: item != b"", file_content.split(b"\n")))) == 1
 
@@ -412,10 +415,12 @@ class JsJaws(ServiceBase):
             # Box.js cannot handle being run more than once on a sample. Oh well!
             if not subsequent_run:
                 # Boxjs does not provide "document" object support
-                if b"document[" not in request.file_contents:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
-                else:
+                if b"document[" in request.file_contents:
                     self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
+                if actual_script and b"document." in actual_script:
+                    self.log.debug("'document.' seen in the file contents. Do not run Box.js.")
+                else:
+                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
             else:
                 self.log.debug("Do not run Box.js on subsequent runs.")
             tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
@@ -1112,7 +1117,7 @@ class JsJaws(ServiceBase):
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
-            # If the line including "password" was written to the DOM later than when the actual password was, we 
+            # If the line including "password" was written to the DOM later than when the actual password was, we
             # should look in the file contents for it
             visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
             for line in visible_text:
