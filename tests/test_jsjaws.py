@@ -164,7 +164,16 @@ def remove_tmp_manifest():
 
 
 @pytest.fixture
-def dummy_request_class_instance():
+def dummy_task_class():
+    class DummyTask:
+        def __init__(self):
+            self.supplementary = []
+            self.extracted = []
+    yield DummyTask
+
+
+@pytest.fixture
+def dummy_request_class_instance(dummy_task_class):
     class DummyRequest():
         SERVICE_CONFIG = {
             "browser": "IE8",
@@ -192,6 +201,7 @@ def dummy_request_class_instance():
             self.file_type = "code/html"
             self.sha256 = sha256(self.file_contents).hexdigest()
             self.deep_scan = False
+            self.task = dummy_task_class()
 
         def add_supplementary(*args):
             pass

