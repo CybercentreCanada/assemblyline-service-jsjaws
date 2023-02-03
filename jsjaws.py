@@ -112,6 +112,12 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)
 WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10}\)\s*{\s*try\s*{\s*[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*[(a-zA-Z0-9]{2,10}\[\d{5,}\]\s*=\s*[(a-zA-Z0-9]{2,10};\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
+# These regular are used for converting simple VBScript to JavaScript so that we can run it all in JsJaws
+VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:\s+Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
+VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\']+),\s*(?P<type>[\w\"\']+)"
+JS_NEW_FUNCTION_REGEX = b"var\s+(?P<function_varname>\w+)\s*=\s*new\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>\w+)\);"
+VBS_FUNCTION_CALL = b"%s\s+(?P<func_args>[\"\'].+[\"\']+)"
+
 # Signature Constants
 TRANSLATED_SCORE = {
     0: 10,  # Informational (0-24% hit rate)
@@ -852,6 +858,10 @@ class JsJaws(ServiceBase):
         # We need this flag since we are now creating most HTML elements dynamically,
         # and there is a chance that an HTML file has no JavaScript to be run.
         is_script_body = False
+
+        # Used for passed Function between VBScript and JavaScript
+        function_varname = None
+
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -862,12 +872,49 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("language", "").lower() in ["vbscript"]:
+                # This code is used for converting simple VBScript to JavaScript
+
+                # Look for WScript Shell usage in VBScript code
+                wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body.encode(), re.IGNORECASE)
+                if wscript_name and len(wscript_name.regs) > 1:
+                    wscript_varname = wscript_name.group("varname").decode()
+                    vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');\n"
+
+                    # Look for WScript RegWrite usage in VBScript code
+                    regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname.encode(), body.encode(), re.IGNORECASE)
+                    if regwrite and len(regwrite.regs) > 3:
+                        key_varname = regwrite.group('key').decode()
+
+                        # Preserve escaped backslashes in the new file
+                        if "\\" in key_varname:
+                            key_varname = key_varname.replace("\\", "\\\\")
+
+                        content_varname = regwrite.group('content').decode()
+                        type_varname = regwrite.group('type').decode()
+                        vbscript_conversion += f"{wscript_varname}.RegWrite({key_varname}, {content_varname}, {type_varname});\n"
+
+                    js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
+                # If a Function is used in JavaScript, but attempted to be run in VBScript
+                if function_varname and function_varname in body:
+                    function_call = re.search(VBS_FUNCTION_CALL % function_varname.encode(), body.encode(), re.IGNORECASE)
+
+                    if function_call and len(function_call.regs) > 1:
+                        func_args = function_call.group("func_args").decode()
+                        vbscript_fn_conversion = f"{function_varname}({func_args})\n"
+                        js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
                 is_script_body = True
+
+                # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
+                new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
+                if new_fn and len(new_fn.regs) > 3:
+                    function_varname = new_fn.group("function_varname").decode()
+
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
         if soup.body:
