@@ -861,6 +861,9 @@ class JsJaws(ServiceBase):
             if len(body) <= 2:  # We can treat 2 character scripts as empty
                 continue
 
+            if script.get("language", "").lower() in ["vbscript"]:
+                continue
+
             if script.get("type", "").lower() in ["", "text/javascript"]:
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
