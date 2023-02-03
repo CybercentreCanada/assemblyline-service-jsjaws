@@ -6,7 +6,7 @@ from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
-from os import environ, listdir, mkdir, path
+from os import environ, listdir, mkdir, path, set_blocking
 from pkgutil import iter_modules
 import re
 from requests import get
@@ -135,6 +135,15 @@ OBFUSCATOR_IO = "obfuscator.io"
 # Global flag that the sample was embedded within a third party library
 embedded_code_in_lib = None
 
+# Default time to wait for new stdout from MalwareJail
+NEW_STDOUT_WAIT_TIME = 10
+
+# Enumerators for tools
+MALWAREJAIL = "MalwareJail"
+BOXJS = "Box.js"
+JS_X_RAY = "JS-X-Ray"
+SYNCHRONY = "Synchrony"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -163,6 +172,7 @@ class JsJaws(ServiceBase):
         self.cleaned_with_synchrony: Optional[str] = None
         self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
+        self.new_stdout_wait_time: Optional[int] = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.doc_write_hashes: Optional[Set[str]] = None
@@ -181,6 +191,7 @@ class JsJaws(ServiceBase):
 
         self.log.debug("JsJaws service started")
         self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
+        self.new_stdout_wait_time = NEW_STDOUT_WAIT_TIME
 
     def stop(self) -> None:
         self.log.debug("JsJaws service ended")
@@ -337,6 +348,7 @@ class JsJaws(ServiceBase):
         extract_function_calls = request.get_param("extract_function_calls")
         extract_eval_calls = request.get_param("extract_eval_calls")
         override_eval = request.get_param("override_eval")
+        self.new_stdout_wait_time = request.get_param("new_stdout_wait_time")
         add_supplementary = request.get_param("add_supplementary")
         static_signatures = request.get_param("static_signatures")
         no_shell_error = request.get_param("no_shell_error")
@@ -475,22 +487,22 @@ class JsJaws(ServiceBase):
             if not subsequent_run:
                 # Boxjs does not provide "document" object support
                 if b"document[" in request.file_contents:
-                    self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document[' seen in the file contents. Do not run {BOXJS}.")
                 if actual_script and b"document." in actual_script:
-                    self.log.debug("'document.' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document.' seen in the file contents. Do not run {BOXJS}.")
                 else:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(BOXJS, boxjs_args, responses), daemon=True))
             else:
-                self.log.debug("Do not run Box.js on subsequent runs.")
-            tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
-        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
+                self.log.debug(f"Do not run {BOXJS} on subsequent runs.")
+            tool_threads.append(Thread(target=self._run_tool, args=(MALWAREJAIL, malware_jail_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
 
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
 
         # 1. If it is enabled in the submission parameter
         if enable_synchrony:
-            tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
             has_synchrony_run = True
         else:
             for yara_rule in listdir("./yara"):
@@ -498,7 +510,7 @@ class JsJaws(ServiceBase):
                 matches = rules.match(file_path)
                 # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
                 if matches:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
                     has_synchrony_run = True
                     break
 
@@ -515,11 +527,11 @@ class JsJaws(ServiceBase):
             with open(self.boxjs_analysis_log, "r") as f:
                 boxjs_output = f.readlines()
 
-        malware_jail_output = responses.get("MalwareJail", [])
+        malware_jail_output = responses.get(MALWAREJAIL, [])
         jsxray_output: Dict[Any] = {}
         try:
-            if len(responses.get("JS-X-Ray", [])) > 0:
-                jsxray_output = loads(responses["JS-X-Ray"][0])
+            if len(responses.get(JS_X_RAY, [])) > 0:
+                jsxray_output = loads(responses[JS_X_RAY][0])
         except JSONDecodeError:
             pass
 
@@ -558,12 +570,12 @@ class JsJaws(ServiceBase):
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True)
+            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
         # TODO: Do something with the Synchrony output
-        _ = responses.get("Synchrony")
+        _ = responses.get(SYNCHRONY)
 
         self._extract_synchrony(request.result)
 
@@ -1286,7 +1298,7 @@ class JsJaws(ServiceBase):
             mlwr_jail_out = {
                 "name": self.malware_jail_output,
                 "path": self.malware_jail_output_path,
-                "description": "Malware Jail Output",
+                "description": f"{MALWAREJAIL} Output",
                 "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
@@ -1296,7 +1308,7 @@ class JsJaws(ServiceBase):
             boxjs_analysis_log = {
                 "name": "boxjs_analysis_log.log",
                 "path": self.boxjs_analysis_log,
-                "description": "Box.js Output",
+                "description": f"{BOXJS} Output",
                 "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
@@ -1377,7 +1389,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         if path.exists(self.boxjs_iocs):
-            ioc_result_section = ResultSection("IOCs extracted by Box.js")
+            ioc_result_section = ResultSection(f"IOCs extracted by {BOXJS}")
             with open(self.boxjs_iocs, "r") as f:
                 file_contents = f.read()
 
@@ -1385,7 +1397,7 @@ class JsJaws(ServiceBase):
             try:
                 ioc_json = loads(file_contents)
             except JSONDecodeError as e:
-                self.log.warning(f"Failed to json.load() Box.js's IOC JSON due to {e}")
+                self.log.warning(f"Failed to json.load() {BOXJS}'s IOC JSON due to {e}")
 
             commands = set()
             file_writes = set()
@@ -1557,7 +1569,7 @@ class JsJaws(ServiceBase):
         """
         if not path.exists(self.cleaned_with_synchrony_path):
             return
-        deobfuscated_with_synchrony_res = ResultTextSection("The file was deobfuscated/cleaned by Synchrony")
+        deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
         deobfuscated_with_synchrony_res.set_heuristic(8)
         result.add_section(deobfuscated_with_synchrony_res)
@@ -1565,7 +1577,7 @@ class JsJaws(ServiceBase):
         artifact = {
             "name": self.cleaned_with_synchrony,
             "path": self.cleaned_with_synchrony_path,
-            "description": "File deobfuscated with Synchrony",
+            "description": f"File deobfuscated with {SYNCHRONY}",
             "to_be_extracted": True,
         }
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
@@ -1597,7 +1609,7 @@ class JsJaws(ServiceBase):
         return cmd
 
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
-        malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
+        malware_jail_res_sec = ResultTableSection(f"{MALWAREJAIL} extracted the following IOCs")
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -1701,10 +1713,39 @@ class JsJaws(ServiceBase):
         try:
             # Stream stdout to resp rather than waiting for process to finish
             with Popen(args=args, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
-                for line in p.stdout:
+                # https://docs.python.org/3/library/os.html#os.set_blocking
+                # A Unix-specific method for setting the readline command to be non-blocking
+                set_blocking(p.stdout.fileno(), False)
+
+                log_time = time()
+
+                # IF the process is still alive, p.poll() will return None, as opposed to 0 if the process as terminated
+                while p.poll() is None:
+
+                    # This call is now non-blocking, thanks to set_blocking
+                    line = p.stdout.readline()
+
+                    # MalwareJail is the only tool where we use stdout to determine if the
+                    # process is stuck in a loop
+                    # If we haven't seen a new log line within a certain time period, it
+                    # is assumed that the process is stuck in an infinite loop and we should exit.
+                    if not line and tool_name == MALWAREJAIL and time() - log_time > self.new_stdout_wait_time:
+                        elapsed_time = round(time() - start_time)
+                        self.log.debug(f"{MALWAREJAIL} did not generate stdout in {self.new_stdout_wait_time}s, terminating to avoid infinite loops. Time elapsed: {elapsed_time}s")
+                        # We need this for the antisandbox_timeout signature
+                        resp[tool_name].append(f"Script execution timed out after {elapsed_time}s.")
+                        p.terminate()
+                        return
+
+                    if not line:
+                        continue
+
+                    log_time = time()
+
                     resp[tool_name].append(line)
                     if len(resp[tool_name]) > self.stdout_limit:
                         self.log.warning(f"{tool_name} generated more than {self.stdout_limit} lines of output. Time elapsed: {round(time() - start_time)}s")
+                        p.terminate()
                         return
         except TimeoutExpired:
             pass

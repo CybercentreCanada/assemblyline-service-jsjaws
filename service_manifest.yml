@@ -105,6 +105,11 @@ submission_params:
     type: bool
     value: false
 
+  - default: 10
+    name: new_stdout_wait_time
+    type: int
+    value: 10
+
   # Synchrony parameters
   - default: false
     name: enable_synchrony

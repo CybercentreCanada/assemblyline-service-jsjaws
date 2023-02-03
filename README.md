@@ -49,6 +49,7 @@ MalwareJail parameters:
   on this extraction.
 * `log_errors`: Setting this parameter to true will insert a log of the exception into exception-catching clauses within a script. This is useful for debugging.
 * `override_eval`: Setting this parameter to true will use indirect links to `eval` calls. This is key when scoped variables are used. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#direct_and_indirect_eval for more information. Use wisely.
+* `new_stdout_wait_time`: The amount of time to wait for new output from the stdout of the MalwareJail tool, default value is 10 seconds. There have been samples that employ infinite loops to prevent analysis, and we should abort if this happens.
 
 Synchrony parameters:
 * `enable_synchrony`: Synchrony will most likely extract a "cleaned" file given any JavaScript file, which adds load
