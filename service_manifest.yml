@@ -174,6 +174,12 @@ heuristics:
     filetype: '*'
     description: Sample consists of a long single line of code
 
+  - heur_id: 11
+    name: Time Waster
+    score: 1
+    filetype: '*'
+    description: Sample uses common time-wasting techniques
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

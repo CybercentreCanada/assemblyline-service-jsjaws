@@ -1,8 +1,44 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1031,
+    "score": 1021,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Common library used: clean_libs/underscore1.13.6.js",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 4,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Embedded code was found in common library",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 11,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "This sample uses common time-wasting techniques",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": null,
@@ -16,29 +52,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tvar unescapeMap = invert(escapeMap)\n\t\tvar _unescape = createEscaper(unescapeMap)\n\t\t  unescape: _unescape,",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "unescape": 10
-          },
-          "signatures": {
-            "unescape": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: Unescape",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in e826df2ff2104f8fe4e968ce85ea3530f03236d28e3af0efe6f3dd4e28b4fb85: object Error...",
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in b810dbb154f0e3d11700a9427feb1f86f5672353de86f7e9054f7ead1130ef60: object Error...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -79,68 +93,15 @@
         "tags": {},
         "title_text": "Signature: SuspiciousFunctionCall",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "View extracted file filtered_lib.js for details.",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 4,
-          "score": 1000,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "\t\tAn unsafe statement was found: Function",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {},
-        "title_text": "JS-X-Ray IOCs Detected",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "filtered_lib.js",
-        "sha256": "b810dbb154f0e3d11700a9427feb1f86f5672353de86f7e9054f7ead1130ef60"
-      }
-    ],
+    "extracted": [],
     "supplementary": []
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "unescape"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -158,6 +119,11 @@
       {
         "attack_ids": [],
         "heur_id": 4,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 11,
         "signatures": []
       }
     ],
