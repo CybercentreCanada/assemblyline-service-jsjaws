@@ -87,6 +87,31 @@ AT_ELSE_REGEX = b"@else\s*"
 AT_END_REGEX = b"\/\*@end\s*"
 JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
+# Time-waster method structure, commonly found in Gootloader
+
+# function blah1(blah2, blah3, blah4, blah5) {
+#   blah6=blah7;
+#    while(blah6<(blah2*blah8)) {
+#       blah6 = blah6 + blah7;
+#   }
+# }
+WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
+
+# function blah1() {
+#   blah2(blah3);
+#   blah4 = blah5;
+#   while(blah6 = blah7) {
+#       try{
+#           blah8[blah9](blah9);
+#       } catch(blah10){
+#           blah8[1272242] = blah11;
+#       }
+#       blah9++
+#   }
+# }
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10}\)\s*{\s*try\s*{\s*[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*[(a-zA-Z0-9]{2,10}\[\d{5,}\]\s*=\s*[(a-zA-Z0-9]{2,10};\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
+TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
+
 # Signature Constants
 TRANSLATED_SCORE = {
     0: 10,  # Informational (0-24% hit rate)
@@ -106,6 +131,9 @@ FP_DOMAINS = ["ModuleJob.run", ".zip"]
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
 OBFUSCATOR_IO = "obfuscator.io"
+
+# Global flag that the sample was embedded within a third party library
+embedded_code_in_lib = None
 
 
 class JsJaws(ServiceBase):
@@ -132,8 +160,6 @@ class JsJaws(ServiceBase):
         self.boxjs_resources: Optional[str] = None
         self.boxjs_analysis_log: Optional[str] = None
         self.boxjs_snippets: Optional[str] = None
-        self.filtered_lib: Optional[str] = None
-        self.filtered_lib_path: Optional[str] = None
         self.cleaned_with_synchrony: Optional[str] = None
         self.cleaned_with_synchrony_path: Optional[str] = None
         self.stdout_limit: Optional[int] = None
@@ -160,11 +186,24 @@ class JsJaws(ServiceBase):
         self.log.debug("JsJaws service ended")
 
     def execute(self, request: ServiceRequest) -> None:
+        global embedded_code_in_lib
+
         # Reset per sample
         self.doc_write_hashes = set()
+        embedded_code_in_lib = None
 
         file_path = request.file_path
         file_content = request.file_contents
+
+        try:
+            filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
+            if filtered_file_path and filtered_file_content:
+                self.log.debug(f"Extracted malicious code from a third-party library: {lib_path}")
+                file_path = filtered_file_path
+                file_content = filtered_file_content
+                embedded_code_in_lib = lib_path
+        except UnicodeDecodeError:
+            pass
 
         # This is a VBScript method of setting an environment variable:
         #
@@ -217,8 +256,6 @@ class JsJaws(ServiceBase):
         self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
         self.boxjs_analysis_log = path.join(self.boxjs_output_dir, "analysis.log")
         self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
-        self.filtered_lib = "filtered_lib.js"
-        self.filtered_lib_path = path.join(self.working_directory, self.filtered_lib)
         self.cleaned_with_synchrony = f"{request.sha256}.cleaned"
         self.cleaned_with_synchrony_path = path.join(self.working_directory, self.cleaned_with_synchrony)
 
@@ -243,6 +280,13 @@ class JsJaws(ServiceBase):
         # Reset per gauntlet run
         self.artifact_list = []
         request.result = Result()
+
+        if embedded_code_in_lib:
+            embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
+            embedded_code_in_lib_res_sec.add_line(f"Common library used: {embedded_code_in_lib}")
+            embedded_code_in_lib_res_sec.set_heuristic(4)
+            request.result.add_section(embedded_code_in_lib_res_sec)
+
         if not subsequent_run:
             file_type = request.file_type
         else:
@@ -267,10 +311,25 @@ class JsJaws(ServiceBase):
                 f.write(file_content)
                 file_path = f.name
 
+        # If the method uses a common time-waster structure, set tool timeout to a small number
+        is_time_waster = False
+        for time_waster_regex in TIME_WASTER_REGEXES:
+            time_waster_match = re.search(time_waster_regex, file_content)
+            if time_waster_match:
+                is_time_waster = True
+                time_waster_res_sec = ResultTextSection("This sample uses common time-wasting techniques")
+                time_waster_res_sec.set_heuristic(11)
+                request.result.add_section(time_waster_res_sec)
+                break
+
         # Grabbing service level configuration variables and submission variables
         download_payload = request.get_param("download_payload")
         allow_download_from_internet = self.config.get("allow_download_from_internet", False)
-        tool_timeout = request.get_param("tool_timeout")
+        if not is_time_waster:
+            tool_timeout = request.get_param("tool_timeout")
+        else:
+            # Arbitrary small tool timeout
+            tool_timeout = 5
         browser_selected = request.get_param("browser")
         log_errors = request.get_param("log_errors")
         wscript_only = request.get_param("wscript_only")
@@ -487,10 +546,7 @@ class JsJaws(ServiceBase):
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
-        try:
-            self._extract_filtered_code(request.result, file_content.decode())
-        except UnicodeDecodeError:
-            pass
+
         if add_supplementary:
             self._extract_supplementary(malware_jail_output)
 
@@ -1112,7 +1168,7 @@ class JsJaws(ServiceBase):
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
             new_passwords = set()
-            # If the line including "password" was written to the DOM later than when the actual password was, we 
+            # If the line including "password" was written to the DOM later than when the actual password was, we
             # should look in the file contents for it
             visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
             for line in visible_text:
@@ -1651,7 +1707,8 @@ class JsJaws(ServiceBase):
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
-    def _extract_filtered_code(self, result: Result, file_contents: str):
+    def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
+        file_contents = file_contents.decode()
         common_libs = {
             # URL/FILE: REGEX
             "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
@@ -1670,14 +1727,16 @@ class JsJaws(ServiceBase):
                 if not self.service_attributes.docker_config.allow_internet_access:
                     continue
                 if len(regex_match.regs) > 1:
-                    resp = get(lib_path % regex_match.group(1), timeout=15)
+                    lib_path = lib_path % regex_match.group(1)
+                    resp = get(lib_path, timeout=15)
                 else:
                     resp = get(lib_path, timeout=15)
 
                 path_contents = resp.text
             else:
                 if len(regex_match.regs) > 1:
-                    path_contents = open(lib_path % regex_match.group(1), "r").read()
+                    lib_path = lib_path % regex_match.group(1)
+                    path_contents = open(lib_path, "r").read()
                 else:
                     path_contents = open(lib_path, "r").read()
 
@@ -1706,21 +1765,15 @@ class JsJaws(ServiceBase):
                         dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
 
             if len(diff) > 0:
-                embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
-                embedded_code_in_lib_res_sec.add_line(f"View extracted file {self.filtered_lib} for details.")
-                embedded_code_in_lib_res_sec.set_heuristic(4)
-                result.add_section(embedded_code_in_lib_res_sec)
-                with open(self.filtered_lib_path, "w") as f:
-                    for line in diff:
-                        f.write(f"{line}\n")
-                artifact = {
-                    "name": self.filtered_lib,
-                    "path": self.filtered_lib_path,
-                    "description": "JavaScript embedded within common library",
-                    "to_be_extracted": True,
-                }
-                self.log.debug(f"Adding extracted file: {self.filtered_lib}")
-                self.artifact_list.append(artifact)
+                new_file_contents = b""
+                for line in diff:
+                    new_file_contents += f"{line}\n".encode()
+                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                    f.write(new_file_contents)
+                    file_path = f.name
+                return file_path, new_file_contents, lib_path
+
+        return None, None, None
 
     @staticmethod
     def _compare_lines(line_1: str, line_2: str) -> bool:
