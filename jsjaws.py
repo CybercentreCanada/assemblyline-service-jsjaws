@@ -95,7 +95,7 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 #       blah6 = blah6 + blah7;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
+WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
 
 # function blah1() {
 #   blah2(blah3);
@@ -143,6 +143,11 @@ MALWAREJAIL = "MalwareJail"
 BOXJS = "Box.js"
 JS_X_RAY = "JS-X-Ray"
 SYNCHRONY = "Synchrony"
+
+# If a sample is writing unique content every run, we should implement
+# a limit to number of runs
+GAUNTLET_RUN_LIMIT = 3
+number_of_gauntlet_runs = 0
 
 
 class JsJaws(ServiceBase):
@@ -198,10 +203,12 @@ class JsJaws(ServiceBase):
 
     def execute(self, request: ServiceRequest) -> None:
         global embedded_code_in_lib
+        global number_of_gauntlet_runs
 
         # Reset per sample
         self.doc_write_hashes = set()
         embedded_code_in_lib = None
+        number_of_gauntlet_runs = 0
 
         file_path = request.file_path
         file_content = request.file_contents
@@ -288,6 +295,14 @@ class JsJaws(ServiceBase):
         :param subsequent_run: A flag indicating if this is not the initial gauntlet run
         :return: None
         """
+        global number_of_gauntlet_runs
+
+        if number_of_gauntlet_runs > GAUNTLET_RUN_LIMIT:
+            self.log.debug("Sample keeps writing unique content to disk for each gauntlet run, we probably have what we need already...")
+            return
+
+        number_of_gauntlet_runs += 1
+
         # Reset per gauntlet run
         self.artifact_list = []
         request.result = Result()
@@ -488,7 +503,7 @@ class JsJaws(ServiceBase):
                 # Boxjs does not provide "document" object support
                 if b"document[" in request.file_contents:
                     self.log.debug(f"'document[' seen in the file contents. Do not run {BOXJS}.")
-                if actual_script and b"document." in actual_script:
+                elif actual_script and b"document." in actual_script:
                     self.log.debug(f"'document.' seen in the file contents. Do not run {BOXJS}.")
                 else:
                     tool_threads.append(Thread(target=self._run_tool, args=(BOXJS, boxjs_args, responses), daemon=True))
@@ -1218,7 +1233,7 @@ class JsJaws(ServiceBase):
             out.write(total_dom_contents)
             total_dom_path = out.name
 
-        self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
+        self.log.debug(f"There were elements written to the DOM. Time to run the gauntlet again (Run #{number_of_gauntlet_runs})!")
         self.run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
 
     def _extract_urls(self, result: Result) -> None:
@@ -1634,7 +1649,7 @@ class JsJaws(ServiceBase):
                     exception_lines.append(exception_line)
                 if not exception_lines:
                     continue
-                exception_blurb = "\n".join(exception_lines)
+                exception_blurb = truncate("\n".join(exception_lines), 1000)
                 if self.config.get("raise_malware_jail_exc", False):
                     raise Exception("Exception occurred in MalwareJail\n" + exception_blurb)
                 else:
