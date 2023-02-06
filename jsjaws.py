@@ -116,7 +116,7 @@ TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGE
 VBS_GRAB_VARS_REGEX = b"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
 VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
 VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
-JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())new\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>\w+)\)\)?;(\s*})?"
+JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
 JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
 VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":/.-]+)\s*\)?"
 
@@ -867,6 +867,11 @@ class JsJaws(ServiceBase):
         vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
         js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
         vb_and_js_scripts = vb_scripts and js_scripts
+        vb_and_js_section = None
+
+        if vb_and_js_scripts:
+            heur = Heuristic(12)
+            vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         for script in scripts:
             # Make sure there is actually a body to the script
@@ -921,6 +926,16 @@ class JsJaws(ServiceBase):
 
                     if function_call and len(function_call.regs) > 1:
                         func_args = function_call.group("func_args").decode()
+
+                        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
+                        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
+                        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
+                            # Move heuristic to this IOC section so that the score is associated with the tag
+                            url_sec.set_heuristic(12)
+                            vb_and_js_section.set_heuristic(None)
+                            vb_and_js_section.add_subsection(url_sec)
+                            url_sec.heuristic.add_signature_id("suspicious_url_found")
+
                         vbscript_fn_conversion = f"{function_varname}({func_args})\n"
                         js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
                 continue
@@ -939,6 +954,15 @@ class JsJaws(ServiceBase):
                         fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
                         if fn_reassignment and len(fn_reassignment.regs) > 1:
                             function_varname = fn_reassignment.group("new_name").decode()
+
+                    url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
+                    extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
+                    if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
+                        # Move heuristic to this IOC section so that the score is associated with the tag
+                        url_sec.set_heuristic(12)
+                        vb_and_js_section.set_heuristic(None)
+                        vb_and_js_section.add_subsection(url_sec)
+                        url_sec.heuristic.add_signature_id("suspicious_url_found")
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
