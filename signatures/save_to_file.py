@@ -68,3 +68,31 @@ class WritesArchive(Signature):
             },
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class CopyFile(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="copy_file",
+            description="JavaScript uses the FileSystemObject to copy a file",
+            indicators=[".CopyFile"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
+class OverwriteRunDll(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="overwrite_rundll",
+            description="JavaScript uses the FileSystemObject to overwrite rundll32.exe",
+            indicators=[".CopyFile", "rundll32.exe"],
+            severity=3
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)

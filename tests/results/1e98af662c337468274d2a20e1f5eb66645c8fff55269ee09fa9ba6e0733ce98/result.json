@@ -47,12 +47,12 @@
     ],
     "supplementary": [
       {
-        "name": "temp_javascript.js",
-        "sha256": "433890ef5dc0f4b8af291eea912a2369550c177873052b53de79232fde994cae"
-      },
-      {
         "name": "temp_css.css",
         "sha256": "7f1cd9bb980c4fcaefb23d5cb926814c1a99b12792311157d12d52cfc7630fe0"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "fc2a7594fc6f1322c594f97ace9b4ad499f7eaacda69dd3f6a3d9030fc045abb"
       }
     ]
   },
