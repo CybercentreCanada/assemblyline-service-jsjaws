@@ -143,6 +143,8 @@ OBFUSCATOR_IO = "obfuscator.io"
 # Global flag that the sample was embedded within a third party library
 embedded_code_in_lib = None
 
+EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -524,6 +526,17 @@ class JsJaws(ServiceBase):
                 boxjs_output = f.readlines()
 
         malware_jail_output = responses.get("MalwareJail", [])
+        if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
+            responses["MalwareJail"] = [EXITED_DUE_TO_STDOUT_LIMIT]
+            tool_timeout = malware_jail_output[-1] + 5
+            self.log.debug(f"Running MalwareJail again with a timeout of {tool_timeout}s")
+            timeout_arg_index = malware_jail_args.index("-t")
+            malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
+            malware_jail_thr = Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True)
+            malware_jail_thr.start()
+            malware_jail_thr.join(timeout=tool_timeout)
+            malware_jail_output = responses.get("MalwareJail", [])
+
         jsxray_output: Dict[Any] = {}
         try:
             if len(responses.get("JS-X-Ray", [])) > 0:
@@ -810,6 +823,8 @@ class JsJaws(ServiceBase):
                     # JavaScript does not like when there are newlines when setting attributes
                     if isinstance(attr_val, str) and "\n" in attr_val:
                         attr_val = attr_val.replace("\n", "")
+                    elif attr_id == "class" and isinstance(attr_val, list) and len(attr_val) == 1:
+                        attr_val = attr_val[0]
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
             # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
@@ -1802,6 +1817,12 @@ class JsJaws(ServiceBase):
         args: List[str],
         resp: Dict[str, Any],
     ) -> None:
+        # We are on a second attempt here
+        if resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]:
+            do_not_terminate = True
+        else:
+            do_not_terminate = False
+
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
         resp[tool_name] = []
@@ -1811,7 +1832,12 @@ class JsJaws(ServiceBase):
                 for line in p.stdout:
                     resp[tool_name].append(line)
                     if len(resp[tool_name]) > self.stdout_limit:
-                        self.log.warning(f"{tool_name} generated more than {self.stdout_limit} lines of output. Time elapsed: {round(time() - start_time)}s")
+                        stdout_limit_reached_time = round(time() - start_time)
+                        self.log.warning(f"{tool_name} generated more than {self.stdout_limit} lines of output. Time elapsed: {stdout_limit_reached_time}s")
+                        if not do_not_terminate:
+                            p.terminate()
+                            resp[tool_name].append(EXITED_DUE_TO_STDOUT_LIMIT)
+                            resp[tool_name].append(stdout_limit_reached_time)
                         return
         except TimeoutExpired:
             pass
