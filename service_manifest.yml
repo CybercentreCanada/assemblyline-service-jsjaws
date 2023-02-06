@@ -180,6 +180,14 @@ heuristics:
     filetype: '*'
     description: Sample uses common time-wasting techniques
 
+  - heur_id: 12
+    name: Visual Basic and JavaScript
+    score: 1
+    filetype: '*'
+    description: Sample uses a combination of both Visual Basic and JavaScript
+    signature_score_map:
+      suspicious_url_found: 500
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

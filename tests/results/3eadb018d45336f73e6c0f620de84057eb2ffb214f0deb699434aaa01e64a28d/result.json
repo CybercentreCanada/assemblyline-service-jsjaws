@@ -1,8 +1,53 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 632,
+    "score": 1132,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 500,
+          "score_map": {},
+          "signatures": {
+            "suspicious_url_found": 1
+          }
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "finetuning-digital.com"
+              ],
+              "uri": [
+                "https://finetuning-digital.com/wrule/01.gif"
+              ],
+              "uri_path": [
+                "/wrule/01.gif"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found being passed between Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": null,
@@ -272,6 +317,13 @@
         "signatures": [
           "runs_shell_application"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": [
+          "suspicious_url_found"
+        ]
       }
     ],
     "tags": {
@@ -287,6 +339,13 @@
           "heur_id": 2,
           "signatures": [],
           "value": "1.pn"
+        },
+        {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "finetuning-digital.com"
         },
         {
           "heur_id": 2,
@@ -306,6 +365,13 @@
       ],
       "network.static.uri": [
         {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "https://finetuning-digital.com/wrule/01.gif"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://finetuning-digital.com/wrule/01.gif"
@@ -322,6 +388,13 @@
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "/wrule/01.gif"
+        },
         {
           "heur_id": 2,
           "signatures": [],

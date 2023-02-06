@@ -1,8 +1,53 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 632,
+    "score": 1132,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 500,
+          "score_map": {},
+          "signatures": {
+            "suspicious_url_found": 1
+          }
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "139.99.117.17"
+              ],
+              "uri": [
+                "http://139.99.117.17/68597.dat"
+              ],
+              "uri_path": [
+                "/68597.dat"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found being passed between Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": null,
@@ -273,6 +318,13 @@
         "signatures": [
           "runs_shell_application"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": [
+          "suspicious_url_found"
+        ]
       }
     ],
     "tags": {
@@ -292,6 +344,13 @@
       ],
       "network.static.ip": [
         {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "139.99.117.17"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "139.99.117.17"
@@ -303,6 +362,13 @@
         }
       ],
       "network.static.uri": [
+        {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "http://139.99.117.17/68597.dat"
+        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -320,6 +386,13 @@
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 12,
+          "signatures": [
+            "suspicious_url_found"
+          ],
+          "value": "/68597.dat"
+        },
         {
           "heur_id": 2,
           "signatures": [],
