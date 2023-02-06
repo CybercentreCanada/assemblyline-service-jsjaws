@@ -95,7 +95,7 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 #       blah6 = blah6 + blah7;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
+WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
 
 # function blah1() {
 #   blah2(blah3);
@@ -476,7 +476,7 @@ class JsJaws(ServiceBase):
                 # Boxjs does not provide "document" object support
                 if b"document[" in request.file_contents:
                     self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
-                if actual_script and b"document." in actual_script:
+                elif actual_script and b"document." in actual_script:
                     self.log.debug("'document.' seen in the file contents. Do not run Box.js.")
                 else:
                     tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
