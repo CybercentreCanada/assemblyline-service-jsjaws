@@ -1088,6 +1088,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         wscript_extraction = open(self.extracted_wscript_path, "a+")
+        wscript_extraction.write("REM Batch extracted by Assemblyline\n")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
             wscript_shell_run = re.search(re.compile(WSCRIPT_SHELL_REGEX), line)
