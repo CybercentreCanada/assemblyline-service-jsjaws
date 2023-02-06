@@ -864,6 +864,10 @@ class JsJaws(ServiceBase):
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
 
+        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
+        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
+        vb_and_js_scripts = vb_scripts and js_scripts
+
         for script in scripts:
             # Make sure there is actually a body to the script
             body = script.string
@@ -926,14 +930,15 @@ class JsJaws(ServiceBase):
                 # that the body of the element is Javascript
                 is_script_body = True
 
-                # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
-                new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
-                if new_fn and len(new_fn.regs) > 3:
-                    function_varname = new_fn.group("function_varname").decode()
-                    # Check for reassignment
-                    fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
-                    if fn_reassignment and len(fn_reassignment.regs) > 1:
-                        function_varname = fn_reassignment.group("new_name").decode()
+                if vb_and_js_scripts:
+                    # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
+                    new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
+                    if new_fn and len(new_fn.regs) > 3:
+                        function_varname = new_fn.group("function_varname").decode()
+                        # Check for reassignment
+                        fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
+                        if fn_reassignment and len(fn_reassignment.regs) > 1:
+                            function_varname = fn_reassignment.group("new_name").decode()
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
