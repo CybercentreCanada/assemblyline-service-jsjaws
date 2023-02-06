@@ -1088,13 +1088,20 @@ class JsJaws(ServiceBase):
         :param result: A Result object containing the service results
         :return: None
         """
+        comment_added = False
+
         wscript_extraction = open(self.extracted_wscript_path, "a+")
-        wscript_extraction.write("REM Batch extracted by Assemblyline\n")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
             wscript_shell_run = re.search(re.compile(WSCRIPT_SHELL_REGEX), line)
             # Script was run
             if wscript_shell_run:
+
+                # We only want to do this once
+                if not comment_added:
+                    wscript_extraction.write("REM Batch extracted by Assemblyline\n")
+                    comment_added = True
+
                 cmd = wscript_shell_run.group(1)
                 # This is a byproduct of the sandbox using WScript.Shell.Run
                 for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
