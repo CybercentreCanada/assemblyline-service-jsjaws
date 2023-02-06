@@ -113,10 +113,12 @@ WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
 # These regular are used for converting simple VBScript to JavaScript so that we can run it all in JsJaws
-VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:\s+Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
-VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\']+),\s*(?P<type>[\w\"\']+)"
-JS_NEW_FUNCTION_REGEX = b"var\s+(?P<function_varname>\w+)\s*=\s*new\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>\w+)\);"
-VBS_FUNCTION_CALL = b"%s\s+(?P<func_args>[\"\'].+[\"\']+)"
+VBS_GRAB_VARS_REGEX = b"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
+VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
+VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
+JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())new\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>\w+)\)\)?;(\s*})?"
+JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
+VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":/.-]+)\s*\)?"
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -874,6 +876,20 @@ class JsJaws(ServiceBase):
             if script.get("language", "").lower() in ["vbscript"]:
                 # This code is used for converting simple VBScript to JavaScript
 
+                # First, look for any static variables being assigned
+                static_vars = re.findall(VBS_GRAB_VARS_REGEX, body.encode(), re.IGNORECASE)
+                if static_vars:
+                    vbscript_conversion = ""
+                    for variable_declaration in static_vars:
+                        if len(variable_declaration) == 2:
+                            variable_name, variable_value = variable_declaration
+                            if b"\\" in variable_value:
+                                variable_value = variable_value.replace(b"\\", b"\\\\")
+                            vbscript_conversion += f"var {variable_name.decode()} = {variable_value.decode()};\n"
+
+                    if vbscript_conversion:
+                        js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
                 # Look for WScript Shell usage in VBScript code
                 wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body.encode(), re.IGNORECASE)
                 if wscript_name and len(wscript_name.regs) > 1:
@@ -914,6 +930,10 @@ class JsJaws(ServiceBase):
                 new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
                 if new_fn and len(new_fn.regs) > 3:
                     function_varname = new_fn.group("function_varname").decode()
+                    # Check for reassignment
+                    fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
+                    if fn_reassignment and len(fn_reassignment.regs) > 1:
+                        function_varname = fn_reassignment.group("new_name").decode()
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
