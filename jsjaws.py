@@ -526,7 +526,7 @@ class JsJaws(ServiceBase):
                 boxjs_output = f.readlines()
 
         malware_jail_output = responses.get("MalwareJail", [])
-        if malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
+        if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
             responses["MalwareJail"] = [EXITED_DUE_TO_STDOUT_LIMIT]
             tool_timeout = malware_jail_output[-1] + 5
             self.log.debug(f"Running MalwareJail again with a timeout of {tool_timeout}s")
