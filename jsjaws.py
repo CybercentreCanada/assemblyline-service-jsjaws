@@ -53,43 +53,140 @@ from signatures.abstracts import Signature
 from tools import tinycss2_helper
 
 # Execution constants
-WSCRIPT_SHELL = "wscript.shell"
+
+# Default value for the maximum number of files found in the "payload" folder that MalwareJail creates, to be extracted
+MAX_PAYLOAD_FILES_EXTRACTED = 50
+
+# The SHA256 representation of the "Resource Not Found" response from MalwareJail that occurs when we pass the --h404 arg
+RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
+
+# The string used in file contents to separate code dynamically created by JsJaws and the original script
+DIVIDING_COMMENT = "// This comment was created by JsJaws"
+
+# Static path to the system safelist file
+SAFELIST_PATH = "al_config/system_safelist.yaml"
+
+# We do not want to dynamically add these attributes to HTML elements
+SAFELISTED_ATTRS_TO_POP = {
+    "link": ["href"],
+    "svg": ["xmlns"],
+}
+
+# Signature score translations
+TRANSLATED_SCORE = {
+    0: 10,  # Informational (0-24% hit rate)
+    1: 100,  # On the road to being suspicious (25-34% hit rate)
+    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
+    3: 500,  # Definitely Suspicious (45-50% hit rate)
+    4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
+    5: 1000,  # Malware (95-100% hit rate)
+}
+
+# Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
+STDOUT_LIMIT = 10000
+
+# These are commonly found strings in MalwareJail output that should not be flagged as domains
+FP_DOMAINS = ["ModuleJob.run", ".zip"]
+
+# Strings indicative of a PE
+PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
+
+# Enumerations
+OBFUSCATOR_IO = "obfuscator.io"
+MALWARE_JAIL = "MalwareJail"
+JS_X_RAY = "JS-X-Ray"
+BOX_JS = "Box.js"
+SYNCHRONY = "Synchrony"
+EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
+
+# Regular Expressions
 
 # Examples:
 # WScript.Shell[99].Run(do the thing)
 # Shell.Application[99].ShellExecute(do the thing)
 WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|ShellExecute)\((.*)\)"
 
-MAX_PAYLOAD_FILES_EXTRACTED = 50
-RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
+# Example:
+# /*!
+#  * jQuery JavaScript Library v1.5
 JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
+
+# Example:
+# /**
+# * Maplace.js
+# *
+# * Copyright (c) 2013 Daniele Moraschi
+# * Licensed under the MIT license
+# * For all details and documentation:
+# * http://maplacejs.com
+# *
+# * @version  0.2.7
 MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version  ([\d\.]+)\n"
+
+# Example:
+# /*
+# Copyright (c) 2011 Sencha Inc. - Author: Nicolas Garcia Belmonte (http://philogb.github.com/)
 COMBO_REGEX = (
     r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 )
+
+# Example:
+# //     Underscore.js 1.13.6
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
+
+# Example:
+# (function(){d3 = {version: "1.29.5"}; // semver
 D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
 
-MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
+# Example:
+# [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
+MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
+
+# Example:
+# data:image/png;base64,iVBORw0KGgoAAAAN
 APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
-DIVIDING_COMMENT = "// This comment was created by JsJaws"
-SAFELIST_PATH = "al_config/system_safelist.yaml"
+
+# Example:
+# const element99_jsjaws =
 ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
-SAFELISTED_ATTRS_TO_POP = {
-    "link": ["href"],
-    "svg": ["xmlns"],
-}
+
+# Example:
+# wscript_shell_object_env("test") = "Hello World!";
 VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+
+# Example:
+# Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
+# badinputhere
+# SyntaxError: Unexpected end of input
 INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 
 # JScript conditional comments
 # Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
+
+# Example:
+# /*@cc_on
 AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+
+# Example:
+# @*/
 AT_REGEX = b"@\*\/"
+
+# Example:
+# /*@if (@_jscript_version >= 7)
 AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+
+# Example:
+# @elif (@_jscript_version >= 7)
 AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+
+# Example:
+# @else
 AT_ELSE_REGEX = b"@else\s*"
+
+# Example:
+# /*@end
 AT_END_REGEX = b"\/\*@end\s*"
+
 JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
 # Time-waster method structure, commonly found in Gootloader
@@ -115,40 +212,51 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)
 #   }
 # }
 WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10}\)\s*{\s*try\s*{\s*[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*[(a-zA-Z0-9]{2,10}\[\d{5,}\]\s*=\s*[(a-zA-Z0-9]{2,10};\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
+
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
 # These regular are used for converting simple VBScript to JavaScript so that we can run it all in JsJaws
-VBS_GRAB_VARS_REGEX = b"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
-VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
-VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
-JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
-JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
-VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":/.-]+)\s*\)?"
 
-# Signature Constants
-TRANSLATED_SCORE = {
-    0: 10,  # Informational (0-24% hit rate)
-    1: 100,  # On the road to being suspicious (25-34% hit rate)
-    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
-    3: 500,  # Definitely Suspicious (45-50% hit rate)
-    4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
-    5: 1000,  # Malware (95-100% hit rate)
-}
+# Example:
+# blah = "blahblah"
+VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
 
-# Default cap of 10k lines of stdout from tools
-STDOUT_LIMIT = 10000
+# Examples:
+# Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
+# or
+# Dim blah
+# Set blah = CreateObject("wscript.shell")
+VBS_WSCRIPT_SHELL_REGEX = "Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
 
-# These are commonly found strings in MalwareJail output that should not be flagged as domains
-FP_DOMAINS = ["ModuleJob.run", ".zip"]
+# Example:
+# WshShell.RegWrite "blah\blah\blah\blah\blah", varname, "REG_SZ"
+VBS_WSCRIPT_REG_WRITE_REGEX = "%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
 
-PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
+# Examples:
+# blah "http://blah.com/evil.exe"
+# or
+# Call blah(varname)
+VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":\/.-]+)\s*\)?"
 
-OBFUSCATOR_IO = "obfuscator.io"
+# Examples:
+# var blah = Function("blah", varname);
+# or
+# var blah = new Function("blah", varnamey);
+# or
+# function blah(thing1, thing2)
+# {
+# 	return(new Function(thing1, thing2));
+# }
+JS_NEW_FUNCTION_REGEX = "(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
 
-# Global flag that the sample was embedded within a third party library
+# Example:
+# var new_blah = blah("blah", thing2);
+JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
+
+# Globals
+
+# Flag that the sample was embedded within a third party library
 embedded_code_in_lib = None
-
-EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 
 
 class JsJaws(ServiceBase):
@@ -224,7 +332,7 @@ class JsJaws(ServiceBase):
         #
         # var wscript_shell_object = CreateObject("WScript.Shell")
         # var wscript_shell_object_env = wscript_shell_object.Environment("USER")
-        # wscript_shell_object_env("test") = "Hello World!"
+        # wscript_shell_object_env("test") = "Hello World!";
         #
         # The above code is also valid in JavaScript when we are not intercepting the
         # WScript.Shell object. However, since we are doing so, the act of
@@ -490,22 +598,22 @@ class JsJaws(ServiceBase):
             if not subsequent_run:
                 # Boxjs does not provide "document" object support
                 if b"document[" in request.file_contents:
-                    self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document[' seen in the file contents. Do not run {BOX_JS}.")
                 elif actual_script and b"document." in actual_script:
-                    self.log.debug("'document.' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document.' seen in the file contents. Do not run {BOX_JS}.")
                 else:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             else:
-                self.log.debug("Do not run Box.js on subsequent runs.")
-            tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
-        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
+                self.log.debug(f"Do not run {BOX_JS} on subsequent runs.")
+            tool_threads.append(Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
 
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
 
         # 1. If it is enabled in the submission parameter
         if enable_synchrony:
-            tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
             has_synchrony_run = True
         else:
             for yara_rule in listdir("./yara"):
@@ -513,7 +621,7 @@ class JsJaws(ServiceBase):
                 matches = rules.match(file_path)
                 # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
                 if matches:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
                     has_synchrony_run = True
                     break
 
@@ -530,22 +638,22 @@ class JsJaws(ServiceBase):
             with open(self.boxjs_analysis_log, "r") as f:
                 boxjs_output = f.readlines()
 
-        malware_jail_output = responses.get("MalwareJail", [])
+        malware_jail_output = responses.get(MALWARE_JAIL, [])
         if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses["MalwareJail"] = [EXITED_DUE_TO_STDOUT_LIMIT]
+            responses[MALWARE_JAIL] = [EXITED_DUE_TO_STDOUT_LIMIT]
             tool_timeout = malware_jail_output[-1] + 5
-            self.log.debug(f"Running MalwareJail again with a timeout of {tool_timeout}s")
+            self.log.debug(f"Running {MALWARE_JAIL} again with a timeout of {tool_timeout}s")
             timeout_arg_index = malware_jail_args.index("-t")
             malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            malware_jail_thr = Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True)
+            malware_jail_thr = Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
             malware_jail_thr.start()
             malware_jail_thr.join(timeout=tool_timeout)
-            malware_jail_output = responses.get("MalwareJail", [])
+            malware_jail_output = responses.get(MALWARE_JAIL, [])
 
         jsxray_output: Dict[Any] = {}
         try:
-            if len(responses.get("JS-X-Ray", [])) > 0:
-                jsxray_output = loads(responses["JS-X-Ray"][0])
+            if len(responses.get(JS_X_RAY, [])) > 0:
+                jsxray_output = loads(responses[JS_X_RAY][0])
         except JSONDecodeError:
             pass
 
@@ -584,12 +692,12 @@ class JsJaws(ServiceBase):
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True)
+            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
         # TODO: Do something with the Synchrony output
-        _ = responses.get("Synchrony")
+        _ = responses.get(SYNCHRONY)
 
         self._extract_synchrony(request.result)
 
@@ -884,6 +992,7 @@ class JsJaws(ServiceBase):
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
 
+        # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
         vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
         js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
         vb_and_js_scripts = vb_scripts and js_scripts
@@ -906,58 +1015,19 @@ class JsJaws(ServiceBase):
                 # This code is used for converting simple VBScript to JavaScript
 
                 # First, look for any static variables being assigned
-                static_vars = re.findall(VBS_GRAB_VARS_REGEX, body.encode(), re.IGNORECASE)
-                if static_vars:
-                    vbscript_conversion = ""
-                    for variable_declaration in static_vars:
-                        if len(variable_declaration) == 2:
-                            variable_name, variable_value = variable_declaration
-                            if b"\\" in variable_value:
-                                variable_value = variable_value.replace(b"\\", b"\\\\")
-                            vbscript_conversion += f"var {variable_name.decode()} = {variable_value.decode()};\n"
-
-                    if vbscript_conversion:
-                        js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+                js_content, aggregated_js_script = self._convert_vb_static_variables(body, js_content, aggregated_js_script)
 
                 # Look for WScript Shell usage in VBScript code
-                wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body.encode(), re.IGNORECASE)
-                if wscript_name and len(wscript_name.regs) > 1:
-                    wscript_varname = wscript_name.group("varname").decode()
-                    vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');\n"
+                wscript_varname, js_content, aggregated_js_script = self._convert_vb_wscript_shell_declaration(body, js_content, aggregated_js_script)
 
+                # Use this clause to convert simple WScript.Shell actions
+                if wscript_varname:
                     # Look for WScript RegWrite usage in VBScript code
-                    regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname.encode(), body.encode(), re.IGNORECASE)
-                    if regwrite and len(regwrite.regs) > 3:
-                        key_varname = regwrite.group('key').decode()
-
-                        # Preserve escaped backslashes in the new file
-                        if "\\" in key_varname:
-                            key_varname = key_varname.replace("\\", "\\\\")
-
-                        content_varname = regwrite.group('content').decode()
-                        type_varname = regwrite.group('type').decode()
-                        vbscript_conversion += f"{wscript_varname}.RegWrite({key_varname}, {content_varname}, {type_varname});\n"
-
-                    js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+                    js_content, aggregated_js_script = self._convert_vb_regwrite(wscript_varname, body, js_content, aggregated_js_script)
 
                 # If a Function is used in JavaScript, but attempted to be run in VBScript
                 if function_varname and function_varname in body:
-                    function_call = re.search(VBS_FUNCTION_CALL % function_varname.encode(), body.encode(), re.IGNORECASE)
-
-                    if function_call and len(function_call.regs) > 1:
-                        func_args = function_call.group("func_args").decode()
-
-                        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
-                        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
-                        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
-                            # Move heuristic to this IOC section so that the score is associated with the tag
-                            url_sec.set_heuristic(12)
-                            vb_and_js_section.set_heuristic(None)
-                            vb_and_js_section.add_subsection(url_sec)
-                            url_sec.heuristic.add_signature_id("suspicious_url_found")
-
-                        vbscript_fn_conversion = f"{function_varname}({func_args})\n"
-                        js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
+                    js_content, aggregated_js_script = self._convert_vb_function_call(function_varname, body, vb_and_js_section, js_content, aggregated_js_script)
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
@@ -967,22 +1037,9 @@ class JsJaws(ServiceBase):
 
                 if vb_and_js_scripts:
                     # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
-                    new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
-                    if new_fn and len(new_fn.regs) > 3:
-                        function_varname = new_fn.group("function_varname").decode()
-                        # Check for reassignment
-                        fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
-                        if fn_reassignment and len(fn_reassignment.regs) > 1:
-                            function_varname = fn_reassignment.group("new_name").decode()
+                    function_varname = self._find_js_function_declaration(body)
 
-                    url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
-                    extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
-                    if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
-                        # Move heuristic to this IOC section so that the score is associated with the tag
-                        url_sec.set_heuristic(12)
-                        vb_and_js_section.set_heuristic(None)
-                        vb_and_js_section.add_subsection(url_sec)
-                        url_sec.heuristic.add_signature_id("suspicious_url_found")
+                    self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
@@ -1430,7 +1487,7 @@ class JsJaws(ServiceBase):
             boxjs_analysis_log = {
                 "name": "boxjs_analysis_log.log",
                 "path": self.boxjs_analysis_log,
-                "description": "Box.js Output",
+                "description": f"{BOX_JS} Output",
                 "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
@@ -1511,7 +1568,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         if path.exists(self.boxjs_iocs):
-            ioc_result_section = ResultSection("IOCs extracted by Box.js")
+            ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
             with open(self.boxjs_iocs, "r") as f:
                 file_contents = f.read()
 
@@ -1519,7 +1576,7 @@ class JsJaws(ServiceBase):
             try:
                 ioc_json = loads(file_contents)
             except JSONDecodeError as e:
-                self.log.warning(f"Failed to json.load() Box.js's IOC JSON due to {e}")
+                self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
 
             commands = set()
             file_writes = set()
@@ -1622,7 +1679,7 @@ class JsJaws(ServiceBase):
         :param request: The ServiceRequest object
         :return: A boolean flag representing that we should run Synchrony
         """
-        jsxray_iocs_result_section = ResultTextSection("JS-X-Ray IOCs Detected")
+        jsxray_iocs_result_section = ResultTextSection(f"{JS_X_RAY} IOCs Detected")
         warnings: List[Dict[str, Any]] = output.get("warnings", [])
         signature = None
         run_synchrony = False
@@ -1691,7 +1748,7 @@ class JsJaws(ServiceBase):
         """
         if not path.exists(self.cleaned_with_synchrony_path):
             return
-        deobfuscated_with_synchrony_res = ResultTextSection("The file was deobfuscated/cleaned by Synchrony")
+        deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
         deobfuscated_with_synchrony_res.set_heuristic(8)
         result.add_section(deobfuscated_with_synchrony_res)
@@ -1699,7 +1756,7 @@ class JsJaws(ServiceBase):
         artifact = {
             "name": self.cleaned_with_synchrony,
             "path": self.cleaned_with_synchrony_path,
-            "description": "File deobfuscated with Synchrony",
+            "description": f"File deobfuscated with {SYNCHRONY}",
             "to_be_extracted": True,
         }
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
@@ -1731,7 +1788,7 @@ class JsJaws(ServiceBase):
         return cmd
 
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
-        malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
+        malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -1758,9 +1815,9 @@ class JsJaws(ServiceBase):
                     continue
                 exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
-                    raise Exception("Exception occurred in MalwareJail\n" + exception_blurb)
+                    raise Exception(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
                 else:
-                    self.log.warning("Exception occurred in MalwareJail\n" + exception_blurb)
+                    self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
 
                 # Check if there is an unexpected end of input that we could remedy
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
@@ -1943,3 +2000,126 @@ class JsJaws(ServiceBase):
         line_2 = line_2.strip()
 
         return line_1 == line_2
+
+
+    def _convert_vb_static_variables(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for variable declaration, and converts them to JavaScript
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        static_vars = re.findall(VBS_GRAB_VARS_REGEX, body, re.IGNORECASE)
+        if static_vars:
+            vbscript_conversion = ""
+            for variable_declaration in static_vars:
+                if len(variable_declaration) == 2:
+                    variable_name, variable_value = variable_declaration
+                    if b"\\" in variable_value:
+                        variable_value = variable_value.replace(b"\\", b"\\\\")
+                    vbscript_conversion += f"var {variable_name} = {variable_value};\n"
+
+            if vbscript_conversion:
+                js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+        return js_content, aggregated_js_script
+
+    def _convert_vb_wscript_shell_declaration(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[Optional[str], bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for a WScript.Shell declaration, and converts it to JavaScript
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the variable name of the declared WScript.Shell, file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        wscript_varname = None
+        wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body, re.IGNORECASE)
+        if wscript_name and len(wscript_name.regs) > 1:
+            wscript_varname = wscript_name.group("varname")
+            vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');"
+
+            js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
+        return wscript_varname, js_content, aggregated_js_script
+
+    def _convert_vb_regwrite(self, wscript_varname: str, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for RegWrite usage with the previously created WScript.Shell variable, and converts it to JavaScript
+        :param wscript_varname: The variable name of the declared WScript.Shell
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname, body, re.IGNORECASE)
+        if regwrite and len(regwrite.regs) > 3:
+            key_varname = regwrite.group('key')
+
+            # Preserve escaped backslashes in the new file
+            if "\\" in key_varname:
+                key_varname = key_varname.replace("\\", "\\\\")
+
+            content_varname = regwrite.group('content')
+            type_varname = regwrite.group('type')
+            vbscript_conversion = f"{wscript_varname}.RegWrite({key_varname}, {content_varname}, {type_varname});\n"
+
+            js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
+        return js_content, aggregated_js_script
+
+    def _find_js_function_declaration(self, body: str) -> Optional[str]:
+        """
+        This method looks in JavaScript scripts for a new Function being declared,
+        and possibly reassigned to another variable
+        :param body: The JavaScript script body to be looked through
+        :return: The name of the variable pointing at the new Function
+        """
+        function_varname = None
+        new_fn = re.search(JS_NEW_FUNCTION_REGEX, body, re.IGNORECASE)
+        if new_fn and len(new_fn.regs) > 3:
+            function_varname = new_fn.group("function_varname")
+
+            # Check for reassignment
+            fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname, body, re.IGNORECASE)
+            if fn_reassignment and len(fn_reassignment.regs) > 1:
+                function_varname = fn_reassignment.group("new_name")
+        return function_varname
+
+    def _look_for_iocs_between_vb_and_js(self, body: str, vb_and_js_section: ResultTextSection) -> None:
+        """
+        This method looks for network IOCs (specifically URIs) being used in script bodies
+        :param body: The script body to be looked through
+        :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature
+        :return None:
+        """
+        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
+        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
+        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
+            # Move heuristic to this IOC section so that the score is associated with the tag
+            url_sec.set_heuristic(12)
+            vb_and_js_section.set_heuristic(None)
+            vb_and_js_section.add_subsection(url_sec)
+            url_sec.heuristic.add_signature_id("suspicious_url_found")
+
+
+    def _convert_vb_function_call(self, function_varname: str, body: str, vb_and_js_section: ResultTextSection, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for Function calls where the Function was
+        declared in a previous JavaScript script (see _find_js_function_declaration)
+        :param function_varname: The name of the variable pointing at the new Function
+        :param body: The JavaScript script body to be looked through
+        :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        function_call = re.search(VBS_FUNCTION_CALL % function_varname, body, re.IGNORECASE)
+
+        if function_call and len(function_call.regs) > 1:
+            self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
+
+            func_args = function_call.group("func_args")
+            vbscript_fn_conversion = f"{function_varname}({func_args})\n"
+            js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
+
+        return js_content, aggregated_js_script
