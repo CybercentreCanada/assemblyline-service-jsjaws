@@ -62,34 +62,96 @@ WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|Shel
 
 MAX_PAYLOAD_FILES_EXTRACTED = 50
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
+
+# Example:
+# /*!
+#  * jQuery JavaScript Library v1.5
 JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
+
+# Example:
+# /**
+# * Maplace.js
+# *
+# * Copyright (c) 2013 Daniele Moraschi
+# * Licensed under the MIT license
+# * For all details and documentation:
+# * http://maplacejs.com
+# *
+# * @version  0.2.7
 MAPLACE_REGEX = r"\/\*\*\n\* Maplace\.js\n[\n\r*\sa-zA-Z0-9\(\):\/\.@]+?@version  ([\d\.]+)\n"
+
+# Example:
+# /*
+# Copyright (c) 2011 Sencha Inc. - Author: Nicolas Garcia Belmonte (http://philogb.github.com/)
 COMBO_REGEX = (
     r"\/\*\nCopyright \(c\) 2011 Sencha Inc\. \- Author: Nicolas Garcia Belmonte \(http:\/\/philogb\.github\.com\/\)"
 )
+
+# Example:
+# //     Underscore.js 1.13.6
 UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
+
+# Example:
+# (function(){d3 = {version: "1.29.5"}; // semver
 D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
 
-MALWARE_JAIL_TIME_STAMP = re.compile(r"\[(.+)\] ")
+# Example:
+# [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
+MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
+
+# Example:
+# data:image/png;base64,iVBORw0KGgoAAAAN
 APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
+
 DIVIDING_COMMENT = "// This comment was created by JsJaws"
 SAFELIST_PATH = "al_config/system_safelist.yaml"
+
+# Example:
+# const element99_jsjaws =
 ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
+
 SAFELISTED_ATTRS_TO_POP = {
     "link": ["href"],
     "svg": ["xmlns"],
 }
+
+# Example:
+# wscript_shell_object_env("test") = "Hello World!";
 VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+
+# Example:
+# Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
+# badinputhere
+# SyntaxError: Unexpected end of input
 INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 
 # JScript conditional comments
 # Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
+
+# Example:
+# /*@cc_on
 AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+
+# Example:
+# @*/
 AT_REGEX = b"@\*\/"
+
+# Example:
+# /*@if (@_jscript_version >= 7)
 AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+
+# Example:
+# @elif (@_jscript_version >= 7)
 AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+
+# Example:
+# @else
 AT_ELSE_REGEX = b"@else\s*"
+
+# Example:
+# /*@end
 AT_END_REGEX = b"\/\*@end\s*"
+
 JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
 # Time-waster method structure, commonly found in Gootloader
@@ -115,15 +177,46 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)
 #   }
 # }
 WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10}\)\s*{\s*try\s*{\s*[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*[(a-zA-Z0-9]{2,10}\[\d{5,}\]\s*=\s*[(a-zA-Z0-9]{2,10};\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
+
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
 # These regular are used for converting simple VBScript to JavaScript so that we can run it all in JsJaws
+
+# Example:
+# blah = "blahblah"
 VBS_GRAB_VARS_REGEX = b"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
+
+# Examples:
+# Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
+# or
+# Dim blah
+# Set blah = CreateObject("wscript.shell")
 VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
+
+# Example:
+# WshShell.RegWrite "blah\blah\blah\blah\blah", varname, "REG_SZ"
 VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
+
+# Examples:
+# blah "http://blah.com/evil.exe"
+# or
+# Call blah(varname)
+VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":\/.-]+)\s*\)?"
+
+# Examples:
+# var blah = Function("blah", varname);
+# or
+# var blah = new Function("blah", varnamey);
+# or
+# function blah(thing1, thing2)
+# {
+# 	return(new Function(thing1, thing2));
+# }
 JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
+
+# Example:
+# var new_blah = blah("blah", thing2);
 JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
-VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":/.-]+)\s*\)?"
 
 # Signature Constants
 TRANSLATED_SCORE = {
@@ -224,7 +317,7 @@ class JsJaws(ServiceBase):
         #
         # var wscript_shell_object = CreateObject("WScript.Shell")
         # var wscript_shell_object_env = wscript_shell_object.Environment("USER")
-        # wscript_shell_object_env("test") = "Hello World!"
+        # wscript_shell_object_env("test") = "Hello World!";
         #
         # The above code is also valid in JavaScript when we are not intercepting the
         # WScript.Shell object. However, since we are doing so, the act of
