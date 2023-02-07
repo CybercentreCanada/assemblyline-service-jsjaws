@@ -85,9 +85,6 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
 STDOUT_LIMIT = 10000
 
-# These are commonly found strings in MalwareJail output that should not be flagged as domains
-FP_DOMAINS = ["ModuleJob.run", ".zip"]
-
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
