@@ -1798,11 +1798,6 @@ class JsJaws(ServiceBase):
             if len(log_line) > 10000:
                 log_line = truncate(log_line, 10000)
 
-            # Remove domains that are most likely false positives in MalwareJail output
-            if any(fp_domain in log_line for fp_domain in FP_DOMAINS):
-                for fp_domain in FP_DOMAINS:
-                    log_line = log_line.replace(fp_domain, "<replaced>")
-
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
 
             if log_line.startswith("Exception occurred in "):
