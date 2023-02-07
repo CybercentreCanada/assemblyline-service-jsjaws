@@ -53,15 +53,58 @@ from signatures.abstracts import Signature
 from tools import tinycss2_helper
 
 # Execution constants
-WSCRIPT_SHELL = "wscript.shell"
+
+# Default value for the maximum number of files found in the "payload" folder that MalwareJail creates, to be extracted
+MAX_PAYLOAD_FILES_EXTRACTED = 50
+
+# The SHA256 representation of the "Resource Not Found" response from MalwareJail that occurs when we pass the --h404 arg
+RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
+
+# The string used in file contents to separate code dynamically created by JsJaws and the original script
+DIVIDING_COMMENT = "// This comment was created by JsJaws"
+
+# Static path to the system safelist file
+SAFELIST_PATH = "al_config/system_safelist.yaml"
+
+# We do not want to dynamically add these attributes to HTML elements
+SAFELISTED_ATTRS_TO_POP = {
+    "link": ["href"],
+    "svg": ["xmlns"],
+}
+
+# Signature score translations
+TRANSLATED_SCORE = {
+    0: 10,  # Informational (0-24% hit rate)
+    1: 100,  # On the road to being suspicious (25-34% hit rate)
+    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
+    3: 500,  # Definitely Suspicious (45-50% hit rate)
+    4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
+    5: 1000,  # Malware (95-100% hit rate)
+}
+
+# Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
+STDOUT_LIMIT = 10000
+
+# These are commonly found strings in MalwareJail output that should not be flagged as domains
+FP_DOMAINS = ["ModuleJob.run", ".zip"]
+
+# Strings indicative of a PE
+PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
+
+# Enumerations
+OBFUSCATOR_IO = "obfuscator.io"
+MALWARE_JAIL = "MalwareJail"
+JS_X_RAY = "JS-X-Ray"
+BOX_JS = "Box.js"
+SYNCHRONY = "Synchrony"
+EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
+
+# Regular Expressions
 
 # Examples:
 # WScript.Shell[99].Run(do the thing)
 # Shell.Application[99].ShellExecute(do the thing)
 WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|ShellExecute)\((.*)\)"
-
-MAX_PAYLOAD_FILES_EXTRACTED = 50
-RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 
 # Example:
 # /*!
@@ -103,17 +146,9 @@ MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
 # data:image/png;base64,iVBORw0KGgoAAAAN
 APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
 
-DIVIDING_COMMENT = "// This comment was created by JsJaws"
-SAFELIST_PATH = "al_config/system_safelist.yaml"
-
 # Example:
 # const element99_jsjaws =
 ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
-
-SAFELISTED_ATTRS_TO_POP = {
-    "link": ["href"],
-    "svg": ["xmlns"],
-}
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
@@ -218,30 +253,10 @@ JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=
 # var new_blah = blah("blah", thing2);
 JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
 
-# Signature Constants
-TRANSLATED_SCORE = {
-    0: 10,  # Informational (0-24% hit rate)
-    1: 100,  # On the road to being suspicious (25-34% hit rate)
-    2: 250,  # Wow this file could be suspicious (35-44% hit rate)
-    3: 500,  # Definitely Suspicious (45-50% hit rate)
-    4: 750,  # Highly Suspicious, on the road to being malware (51-94% hit rate)
-    5: 1000,  # Malware (95-100% hit rate)
-}
+# Globals
 
-# Default cap of 10k lines of stdout from tools
-STDOUT_LIMIT = 10000
-
-# These are commonly found strings in MalwareJail output that should not be flagged as domains
-FP_DOMAINS = ["ModuleJob.run", ".zip"]
-
-PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
-
-OBFUSCATOR_IO = "obfuscator.io"
-
-# Global flag that the sample was embedded within a third party library
+# Flag that the sample was embedded within a third party library
 embedded_code_in_lib = None
-
-EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 
 
 class JsJaws(ServiceBase):
@@ -583,22 +598,22 @@ class JsJaws(ServiceBase):
             if not subsequent_run:
                 # Boxjs does not provide "document" object support
                 if b"document[" in request.file_contents:
-                    self.log.debug("'document[' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document[' seen in the file contents. Do not run {BOX_JS}.")
                 elif actual_script and b"document." in actual_script:
-                    self.log.debug("'document.' seen in the file contents. Do not run Box.js.")
+                    self.log.debug(f"'document.' seen in the file contents. Do not run {BOX_JS}.")
                 else:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Box.js", boxjs_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             else:
-                self.log.debug("Do not run Box.js on subsequent runs.")
-            tool_threads.append(Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True))
-        tool_threads.append(Thread(target=self._run_tool, args=("JS-X-Ray", jsxray_args, responses), daemon=True))
+                self.log.debug(f"Do not run {BOX_JS} on subsequent runs.")
+            tool_threads.append(Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
 
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
 
         # 1. If it is enabled in the submission parameter
         if enable_synchrony:
-            tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
             has_synchrony_run = True
         else:
             for yara_rule in listdir("./yara"):
@@ -606,7 +621,7 @@ class JsJaws(ServiceBase):
                 matches = rules.match(file_path)
                 # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
                 if matches:
-                    tool_threads.append(Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True))
+                    tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
                     has_synchrony_run = True
                     break
 
@@ -623,22 +638,22 @@ class JsJaws(ServiceBase):
             with open(self.boxjs_analysis_log, "r") as f:
                 boxjs_output = f.readlines()
 
-        malware_jail_output = responses.get("MalwareJail", [])
+        malware_jail_output = responses.get(MALWARE_JAIL, [])
         if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses["MalwareJail"] = [EXITED_DUE_TO_STDOUT_LIMIT]
+            responses[MALWARE_JAIL] = [EXITED_DUE_TO_STDOUT_LIMIT]
             tool_timeout = malware_jail_output[-1] + 5
-            self.log.debug(f"Running MalwareJail again with a timeout of {tool_timeout}s")
+            self.log.debug(f"Running {MALWARE_JAIL} again with a timeout of {tool_timeout}s")
             timeout_arg_index = malware_jail_args.index("-t")
             malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            malware_jail_thr = Thread(target=self._run_tool, args=("MalwareJail", malware_jail_args, responses), daemon=True)
+            malware_jail_thr = Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
             malware_jail_thr.start()
             malware_jail_thr.join(timeout=tool_timeout)
-            malware_jail_output = responses.get("MalwareJail", [])
+            malware_jail_output = responses.get(MALWARE_JAIL, [])
 
         jsxray_output: Dict[Any] = {}
         try:
-            if len(responses.get("JS-X-Ray", [])) > 0:
-                jsxray_output = loads(responses["JS-X-Ray"][0])
+            if len(responses.get(JS_X_RAY, [])) > 0:
+                jsxray_output = loads(responses[JS_X_RAY][0])
         except JSONDecodeError:
             pass
 
@@ -677,12 +692,12 @@ class JsJaws(ServiceBase):
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=("Synchrony", synchrony_args, responses), daemon=True)
+            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
         # TODO: Do something with the Synchrony output
-        _ = responses.get("Synchrony")
+        _ = responses.get(SYNCHRONY)
 
         self._extract_synchrony(request.result)
 
@@ -1523,7 +1538,7 @@ class JsJaws(ServiceBase):
             boxjs_analysis_log = {
                 "name": "boxjs_analysis_log.log",
                 "path": self.boxjs_analysis_log,
-                "description": "Box.js Output",
+                "description": f"{BOX_JS} Output",
                 "to_be_extracted": False,
             }
             self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
@@ -1604,7 +1619,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         if path.exists(self.boxjs_iocs):
-            ioc_result_section = ResultSection("IOCs extracted by Box.js")
+            ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
             with open(self.boxjs_iocs, "r") as f:
                 file_contents = f.read()
 
@@ -1612,7 +1627,7 @@ class JsJaws(ServiceBase):
             try:
                 ioc_json = loads(file_contents)
             except JSONDecodeError as e:
-                self.log.warning(f"Failed to json.load() Box.js's IOC JSON due to {e}")
+                self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
 
             commands = set()
             file_writes = set()
@@ -1715,7 +1730,7 @@ class JsJaws(ServiceBase):
         :param request: The ServiceRequest object
         :return: A boolean flag representing that we should run Synchrony
         """
-        jsxray_iocs_result_section = ResultTextSection("JS-X-Ray IOCs Detected")
+        jsxray_iocs_result_section = ResultTextSection(f"{JS_X_RAY} IOCs Detected")
         warnings: List[Dict[str, Any]] = output.get("warnings", [])
         signature = None
         run_synchrony = False
@@ -1784,7 +1799,7 @@ class JsJaws(ServiceBase):
         """
         if not path.exists(self.cleaned_with_synchrony_path):
             return
-        deobfuscated_with_synchrony_res = ResultTextSection("The file was deobfuscated/cleaned by Synchrony")
+        deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
         deobfuscated_with_synchrony_res.set_heuristic(8)
         result.add_section(deobfuscated_with_synchrony_res)
@@ -1792,7 +1807,7 @@ class JsJaws(ServiceBase):
         artifact = {
             "name": self.cleaned_with_synchrony,
             "path": self.cleaned_with_synchrony_path,
-            "description": "File deobfuscated with Synchrony",
+            "description": f"File deobfuscated with {SYNCHRONY}",
             "to_be_extracted": True,
         }
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
@@ -1824,7 +1839,7 @@ class JsJaws(ServiceBase):
         return cmd
 
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
-        malware_jail_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
+        malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -1851,9 +1866,9 @@ class JsJaws(ServiceBase):
                     continue
                 exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
-                    raise Exception("Exception occurred in MalwareJail\n" + exception_blurb)
+                    raise Exception(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
                 else:
-                    self.log.warning("Exception occurred in MalwareJail\n" + exception_blurb)
+                    self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
 
                 # Check if there is an unexpected end of input that we could remedy
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
