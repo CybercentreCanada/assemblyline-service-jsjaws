@@ -54,7 +54,12 @@ from tools import tinycss2_helper
 
 # Execution constants
 WSCRIPT_SHELL = "wscript.shell"
-WSCRIPT_SHELL_REGEX = r"(?i)(?:WScript.Shell\[\d+\]\.Run\()(.*)(?:\))"
+
+# Examples:
+# WScript.Shell[99].Run(do the thing)
+# Shell.Application[99].ShellExecute(do the thing)
+WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|ShellExecute)\((.*)\)"
+
 MAX_PAYLOAD_FILES_EXTRACTED = 50
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
@@ -1131,7 +1136,7 @@ class JsJaws(ServiceBase):
         wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         for line in output:
-            wscript_shell_run = re.search(re.compile(WSCRIPT_SHELL_REGEX), line)
+            wscript_shell_run = re.search(WSCRIPT_SHELL_REGEX, line, re.IGNORECASE)
             # Script was run
             if wscript_shell_run:
 
@@ -1145,6 +1150,13 @@ class JsJaws(ServiceBase):
                 for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
                     if item in cmd:
                         cmd = cmd.replace(item, "")
+
+                # Weird character encoding has brought us here
+                if any(item in cmd for item in ["®&", "?&", "\x05&"]):
+                    for item in ["®&", "?&", "\x05&"]:
+                        if item in cmd:
+                            cmd = cmd.replace(item, "\\")
+
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
                 # Let's try to extract IOCs from it
