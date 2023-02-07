@@ -219,24 +219,24 @@ TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGE
 
 # Example:
 # blah = "blahblah"
-VBS_GRAB_VARS_REGEX = b"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
+VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"\'].+[\"\'])"
 
 # Examples:
 # Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
 # or
 # Dim blah
 # Set blah = CreateObject("wscript.shell")
-VBS_WSCRIPT_SHELL_REGEX = b"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
+VBS_WSCRIPT_SHELL_REGEX = "Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"\']wscript\.shell[\"\']\)"
 
 # Example:
 # WshShell.RegWrite "blah\blah\blah\blah\blah", varname, "REG_SZ"
-VBS_WSCRIPT_REG_WRITE_REGEX = b"%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
+VBS_WSCRIPT_REG_WRITE_REGEX = "%s\.RegWrite\s+(?P<key>[\w\"\'\\\\]+),\s*(?P<content>[\w\"\'.()]+),\s*(?P<type>[\w\"\'.()]+)"
 
 # Examples:
 # blah "http://blah.com/evil.exe"
 # or
 # Call blah(varname)
-VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":\/.-]+)\s*\)?"
+VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":\/.-]+)\s*\)?"
 
 # Examples:
 # var blah = Function("blah", varname);
@@ -247,11 +247,11 @@ VBS_FUNCTION_CALL = b"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w\'\":\/.-]+)\s*\)?"
 # {
 # 	return(new Function(thing1, thing2));
 # }
-JS_NEW_FUNCTION_REGEX = b"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
+JS_NEW_FUNCTION_REGEX = "(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"\']+),\s*(?P<args>[\w.()\"\'\/&,\s]+)\)\)?;(\s*})?"
 
 # Example:
 # var new_blah = blah("blah", thing2);
-JS_NEW_FUNCTION_REASSIGN_REGEX = b"(?P<new_name>\w+)\s*=\s*%s"
+JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
 
 # Globals
 
@@ -992,6 +992,7 @@ class JsJaws(ServiceBase):
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
 
+        # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
         vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
         js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
         vb_and_js_scripts = vb_scripts and js_scripts
@@ -1014,58 +1015,19 @@ class JsJaws(ServiceBase):
                 # This code is used for converting simple VBScript to JavaScript
 
                 # First, look for any static variables being assigned
-                static_vars = re.findall(VBS_GRAB_VARS_REGEX, body.encode(), re.IGNORECASE)
-                if static_vars:
-                    vbscript_conversion = ""
-                    for variable_declaration in static_vars:
-                        if len(variable_declaration) == 2:
-                            variable_name, variable_value = variable_declaration
-                            if b"\\" in variable_value:
-                                variable_value = variable_value.replace(b"\\", b"\\\\")
-                            vbscript_conversion += f"var {variable_name.decode()} = {variable_value.decode()};\n"
-
-                    if vbscript_conversion:
-                        js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+                js_content, aggregated_js_script = self._convert_vb_static_variables(body, js_content, aggregated_js_script)
 
                 # Look for WScript Shell usage in VBScript code
-                wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body.encode(), re.IGNORECASE)
-                if wscript_name and len(wscript_name.regs) > 1:
-                    wscript_varname = wscript_name.group("varname").decode()
-                    vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');\n"
+                wscript_varname, js_content, aggregated_js_script = self._convert_vb_wscript_shell_declaration(body, js_content, aggregated_js_script)
 
+                # Use this clause to convert simple WScript.Shell actions
+                if wscript_varname:
                     # Look for WScript RegWrite usage in VBScript code
-                    regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname.encode(), body.encode(), re.IGNORECASE)
-                    if regwrite and len(regwrite.regs) > 3:
-                        key_varname = regwrite.group('key').decode()
-
-                        # Preserve escaped backslashes in the new file
-                        if "\\" in key_varname:
-                            key_varname = key_varname.replace("\\", "\\\\")
-
-                        content_varname = regwrite.group('content').decode()
-                        type_varname = regwrite.group('type').decode()
-                        vbscript_conversion += f"{wscript_varname}.RegWrite({key_varname}, {content_varname}, {type_varname});\n"
-
-                    js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+                    js_content, aggregated_js_script = self._convert_vb_regwrite(wscript_varname, body, js_content, aggregated_js_script)
 
                 # If a Function is used in JavaScript, but attempted to be run in VBScript
                 if function_varname and function_varname in body:
-                    function_call = re.search(VBS_FUNCTION_CALL % function_varname.encode(), body.encode(), re.IGNORECASE)
-
-                    if function_call and len(function_call.regs) > 1:
-                        func_args = function_call.group("func_args").decode()
-
-                        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
-                        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
-                        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
-                            # Move heuristic to this IOC section so that the score is associated with the tag
-                            url_sec.set_heuristic(12)
-                            vb_and_js_section.set_heuristic(None)
-                            vb_and_js_section.add_subsection(url_sec)
-                            url_sec.heuristic.add_signature_id("suspicious_url_found")
-
-                        vbscript_fn_conversion = f"{function_varname}({func_args})\n"
-                        js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
+                    js_content, aggregated_js_script = self._convert_vb_function_call(function_varname, body, vb_and_js_section, js_content, aggregated_js_script)
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
@@ -1075,22 +1037,9 @@ class JsJaws(ServiceBase):
 
                 if vb_and_js_scripts:
                     # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
-                    new_fn = re.search(JS_NEW_FUNCTION_REGEX, body.encode(), re.IGNORECASE)
-                    if new_fn and len(new_fn.regs) > 3:
-                        function_varname = new_fn.group("function_varname").decode()
-                        # Check for reassignment
-                        fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname.encode(), body.encode(), re.IGNORECASE)
-                        if fn_reassignment and len(fn_reassignment.regs) > 1:
-                            function_varname = fn_reassignment.group("new_name").decode()
+                    function_varname = self._find_js_function_declaration(body)
 
-                    url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
-                    extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
-                    if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
-                        # Move heuristic to this IOC section so that the score is associated with the tag
-                        url_sec.set_heuristic(12)
-                        vb_and_js_section.set_heuristic(None)
-                        vb_and_js_section.add_subsection(url_sec)
-                        url_sec.heuristic.add_signature_id("suspicious_url_found")
+                    self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
@@ -2051,3 +2000,126 @@ class JsJaws(ServiceBase):
         line_2 = line_2.strip()
 
         return line_1 == line_2
+
+
+    def _convert_vb_static_variables(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for variable declaration, and converts them to JavaScript
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        static_vars = re.findall(VBS_GRAB_VARS_REGEX, body, re.IGNORECASE)
+        if static_vars:
+            vbscript_conversion = ""
+            for variable_declaration in static_vars:
+                if len(variable_declaration) == 2:
+                    variable_name, variable_value = variable_declaration
+                    if b"\\" in variable_value:
+                        variable_value = variable_value.replace(b"\\", b"\\\\")
+                    vbscript_conversion += f"var {variable_name} = {variable_value};\n"
+
+            if vbscript_conversion:
+                js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+        return js_content, aggregated_js_script
+
+    def _convert_vb_wscript_shell_declaration(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[Optional[str], bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for a WScript.Shell declaration, and converts it to JavaScript
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the variable name of the declared WScript.Shell, file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        wscript_varname = None
+        wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body, re.IGNORECASE)
+        if wscript_name and len(wscript_name.regs) > 1:
+            wscript_varname = wscript_name.group("varname")
+            vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');"
+
+            js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
+        return wscript_varname, js_content, aggregated_js_script
+
+    def _convert_vb_regwrite(self, wscript_varname: str, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for RegWrite usage with the previously created WScript.Shell variable, and converts it to JavaScript
+        :param wscript_varname: The variable name of the declared WScript.Shell
+        :param body: The VisualBasic script body to be looked through
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname, body, re.IGNORECASE)
+        if regwrite and len(regwrite.regs) > 3:
+            key_varname = regwrite.group('key')
+
+            # Preserve escaped backslashes in the new file
+            if "\\" in key_varname:
+                key_varname = key_varname.replace("\\", "\\\\")
+
+            content_varname = regwrite.group('content')
+            type_varname = regwrite.group('type')
+            vbscript_conversion = f"{wscript_varname}.RegWrite({key_varname}, {content_varname}, {type_varname});\n"
+
+            js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)
+
+        return js_content, aggregated_js_script
+
+    def _find_js_function_declaration(self, body: str) -> Optional[str]:
+        """
+        This method looks in JavaScript scripts for a new Function being declared,
+        and possibly reassigned to another variable
+        :param body: The JavaScript script body to be looked through
+        :return: The name of the variable pointing at the new Function
+        """
+        function_varname = None
+        new_fn = re.search(JS_NEW_FUNCTION_REGEX, body, re.IGNORECASE)
+        if new_fn and len(new_fn.regs) > 3:
+            function_varname = new_fn.group("function_varname")
+
+            # Check for reassignment
+            fn_reassignment = re.search(JS_NEW_FUNCTION_REASSIGN_REGEX % function_varname, body, re.IGNORECASE)
+            if fn_reassignment and len(fn_reassignment.regs) > 1:
+                function_varname = fn_reassignment.group("new_name")
+        return function_varname
+
+    def _look_for_iocs_between_vb_and_js(self, body: str, vb_and_js_section: ResultTextSection) -> None:
+        """
+        This method looks for network IOCs (specifically URIs) being used in script bodies
+        :param body: The script body to be looked through
+        :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature
+        :return None:
+        """
+        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
+        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
+        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
+            # Move heuristic to this IOC section so that the score is associated with the tag
+            url_sec.set_heuristic(12)
+            vb_and_js_section.set_heuristic(None)
+            vb_and_js_section.add_subsection(url_sec)
+            url_sec.heuristic.add_signature_id("suspicious_url_found")
+
+
+    def _convert_vb_function_call(self, function_varname: str, body: str, vb_and_js_section: ResultTextSection, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        """
+        This method looks in VisualBasic scripts for Function calls where the Function was
+        declared in a previous JavaScript script (see _find_js_function_declaration)
+        :param function_varname: The name of the variable pointing at the new Function
+        :param body: The JavaScript script body to be looked through
+        :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
+        :param file_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        function_call = re.search(VBS_FUNCTION_CALL % function_varname, body, re.IGNORECASE)
+
+        if function_call and len(function_call.regs) > 1:
+            self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
+
+            func_args = function_call.group("func_args")
+            vbscript_fn_conversion = f"{function_varname}({func_args})\n"
+            js_content, aggregated_js_script = self.append_content(vbscript_fn_conversion, js_content, aggregated_js_script)
+
+        return js_content, aggregated_js_script
