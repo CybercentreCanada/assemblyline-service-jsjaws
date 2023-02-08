@@ -359,6 +359,7 @@ class JsJaws(ServiceBase):
             property_value = match.group("property_value").decode()
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
             return f"[{property_name}] = {property_value};".encode()
+
         new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
         if new_content != file_content:
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
