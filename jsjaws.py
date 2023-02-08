@@ -350,7 +350,7 @@ class JsJaws(ServiceBase):
             # We only want the last property assigned \(.+\), despite the regex capturing consecutive \(.+\)+
             if ")(" in property_name:
                 # Therefore split
-                split_property_name = match.group(0).split(b")(", -1)[1]
+                split_property_name = match.group(0).split(b")(")[-1]
                 another_match = re.search(VBSCRIPT_ENV_SETTING_REGEX, b"(" + split_property_name)
                 if another_match:
                     property_name = another_match.group("property_name").decode()
