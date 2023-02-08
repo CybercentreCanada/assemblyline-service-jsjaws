@@ -152,7 +152,7 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
-VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]+)\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
@@ -343,11 +343,22 @@ class JsJaws(ServiceBase):
         # Therefore we are going to hunt for instances of this, and replace
         # it with an accurate JavaScript technique for setting variables.
         def log_and_replace(match):
-            group_1 = match.group(1).decode()
-            group_2 = match.group(2).decode()
-            self.log.debug(f"Replaced VBScript Env variable: ({truncate(group_1)}) = {truncate(group_2)};")
-            return f"[{group_1}] = {group_2};".encode()
+            if len(match.regs) != 3:
+                return
+            property_name = match.group("property_name").decode()
 
+            # We only want the last property assigned \(.+\), despite the regex capturing consecutive \(.+\)+
+            if ")(" in property_name:
+                # Therefore split
+                split_property_name = match.group(0).split(b")(", -1)[1]
+                another_match = re.search(VBSCRIPT_ENV_SETTING_REGEX, b"(" + split_property_name)
+                if another_match:
+                    property_name = another_match.group("property_name").decode()
+                    property_value = another_match.group("property_value").decode()
+
+            property_value = match.group("property_value").decode()
+            self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
+            return f"[{property_name}] = {property_value};".encode()
         new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
         if new_content != file_content:
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
