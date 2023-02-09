@@ -86,9 +86,6 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
 STDOUT_LIMIT = 10000
 
-# These are commonly found strings in MalwareJail output that should not be flagged as domains
-FP_DOMAINS = ["ModuleJob.run", ".zip"]
-
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
@@ -1801,11 +1798,6 @@ class JsJaws(ServiceBase):
                 log_line = line
             if len(log_line) > 10000:
                 log_line = truncate(log_line, 10000)
-
-            # Remove domains that are most likely false positives in MalwareJail output
-            if any(fp_domain in log_line for fp_domain in FP_DOMAINS):
-                for fp_domain in FP_DOMAINS:
-                    log_line = log_line.replace(fp_domain, "<replaced>")
 
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
 
