@@ -92,6 +92,9 @@ FP_DOMAINS = ["ModuleJob.run", ".zip"]
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
+# These character combinations have been seen in samples and are to be replaced with \\
+BACKSLASH_ENCODINGS = ["®&", "?&", "\x05&", "+&"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -1210,8 +1213,8 @@ class JsJaws(ServiceBase):
                         cmd = cmd.replace(item, "")
 
                 # Weird character encoding has brought us here
-                if any(item in cmd for item in ["®&", "?&", "\x05&"]):
-                    for item in ["®&", "?&", "\x05&"]:
+                if any(item in cmd for item in BACKSLASH_ENCODINGS):
+                    for item in BACKSLASH_ENCODINGS:
                         if item in cmd:
                             cmd = cmd.replace(item, "\\")
 
