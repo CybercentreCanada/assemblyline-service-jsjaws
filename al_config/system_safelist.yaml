@@ -1,0 +1,31 @@
+regex:
+  network.static.domain:
+  # GoogleAPIs
+  - .*\.googleapis\.com$
+  # GStatic
+  - .*\.gstatic\.com$
+  # jsDelivr
+  - cdn\.jsdelivr\.net$
+  # WWW
+  - www\.w3\.org$
+  # Microsoft Auth
+  - aadcdn\.msftauth\.net$
+  # Bootstrap
+  - getbootstrap\.com$
+  # Microsoft Auth
+  - aadcdn\.msftauth\.net$
+  network.static.uri:
+  # GoogleAPIs
+  - https?://.*\.googleapis\.com(?:$|/.*)
+  # GStatic
+  - https?://.*\.gstatic\.com(?:$|/.*)
+  # jsDelivr
+  - https?://cdn\.jsdelivr\.net(?:$|/.*)
+  # WWW
+  - https?://www\.w3\.org(?:$|/.*)
+  # Microsoft Auth
+  - https?://aadcdn\.msftauth\.net(?:$|/.*)
+  # Bootstrap
+  - https?://getbootstrap\.com(?:$|/.*)
+  # Microsoft Auth
+  - https?://aadcdn\.msftauth\.net(?:$|/.*)

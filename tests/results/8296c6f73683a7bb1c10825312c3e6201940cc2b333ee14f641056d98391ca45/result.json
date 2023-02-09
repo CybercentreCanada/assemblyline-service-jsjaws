@@ -1,0 +1,103 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 11,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttp://www.savethechildren.org",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://www.savethechildren.org"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.savethechildren.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.savethechildren.org\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.savethechildren.org"
+              ],
+              "uri": [
+                "http://www.savethechildren.org"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.savethechildren.org"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "http://www.savethechildren.org"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.savethechildren.org"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1021,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Suspicious declarations were detected in HTML stylesheets",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 7,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Suspicious CSS Usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[21]<a>.click(undefined)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file 019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned",
+        "sha256": "4d9f8f8f2c88dee123582d76e57ad4d80c770b83bd5e5cbcb9cf14b514be7dd5"
+      },
+      {
+        "name": "9f87bb2ecdffe788b912927cf0bcbe6791bb405f1fa3c079bb7bd76864589f9f",
+        "sha256": "9f87bb2ecdffe788b912927cf0bcbe6791bb405f1fa3c079bb7bd76864589f9f"
+      },
+      {
+        "name": "attachment.zip",
+        "sha256": "f5d5c69dd69e372cbd4f2b3f5a62dc237379a7cc37ab521402c8d6ff8d9514e3"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_css.css",
+        "sha256": "a7dca8914262c6efede3092981d3b5d1b475ba5ac58295559893669d386fbe03"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "c998c7fe21c4499a598d2583b4d827c07de06fe98531bf9792b4d80dad70589f"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 7,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
+      }
+    ],
+    "tags": {},
+    "temp_submission_data": {
+      "passwords": [
+        "4193",
+        ":",
+        "Document",
+        "Document password",
+        "password"
+      ]
+    }
+  }
+}

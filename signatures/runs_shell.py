@@ -4,6 +4,34 @@ These are all of the signatures related to running a shell command
 from signatures.abstracts import Signature
 
 
+class CreatesWshObject(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="creates_wsh_object",
+            description="JavaScript creates a new Windows Scripting Host Shell Object",
+            indicators=["new WScript.Shell"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
+class AccessWshEnv(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="access_wsh_env",
+            description="JavaScript accesses the WSH Environment",
+            indicators=["new WshEnvironment"],
+            severity=0
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
 class RunsShell(Signature):
     def __init__(self):
         super().__init__(
@@ -18,6 +46,19 @@ class RunsShell(Signature):
         self.check_indicators_in_list(output, match_all=True)
 
 
+class RunsShellApplication(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="runs_shell_application",
+            description="JavaScript runs code via shell application",
+            indicators=["Shell.Application", ".ShellExecute"],
+            severity=1
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
 class RunsExecutable(Signature):
     def __init__(self):
         super().__init__(
@@ -25,7 +66,7 @@ class RunsExecutable(Signature):
             name="runs_executable",
             description="JavaScript runs dropped executable",
             indicators=["WScript.Shell", ".Run", ".exe"],
-            severity=0,
+            severity=3,
             safelist=["cmd.exe"]
         )
 

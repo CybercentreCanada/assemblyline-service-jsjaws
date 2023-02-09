@@ -1,40 +1,43 @@
 {
-  "name": "malware-jail",
-  "version": "0.18.0",
-  "description": "Nodejs based Sandbox for malware analysis.",
-  "main": "jailme.js",
-  "author": {
-    "name": "Hynek Petrak",
-    "email": "hynek.petrak@gmail.com"
-  },
-  "bin": {
-    "jailme": "jailme.js"
-  },
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "dependencies": {
-    "entities": "^1.1.1",
-    "iconv-lite": "^0.4.13",
-    "minimist": "^1.2.0",
-    "sync-request": "^3.0.1",
-    "box-js": "^1.9.15",
-    "js-x-ray": "^3.2.0"
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/HynekPetrak/node-malware-jail.git"
-  },
-  "keywords": [
-    "node",
-    "malware",
-    "jail",
-    "sandbox",
-    "analysis"
-  ],
-  "files": [
-    "env/*",
-    "jailme.js"
-  ]
+    "name": "malware-jail",
+    "version": "0.18.0",
+    "description": "Nodejs based Sandbox for malware analysis.",
+    "main": "malwarejail/jailme.js",
+    "author": {
+        "name": "Hynek Petrak",
+        "email": "hynek.petrak@gmail.com"
+    },
+    "bin": {
+        "jailme": "malwarejail/jailme.js"
+    },
+    "engines": {
+        "node": ">=6.0.0"
+    },
+    "dependencies": {
+        "@nodesecure/js-x-ray": "^5.1.0",
+        "box-js": "^1.9.15",
+        "crypto-js": "^4.1.1",
+        "deobfuscator": "^2.4.1",
+        "entities": "^1.1.1",
+        "iconv-lite": "^0.4.13",
+        "log-timestamp": "0.3.0",
+        "minimist": "^1.2.0",
+        "sync-request": "^3.0.1"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/HynekPetrak/node-malware-jail.git"
+    },
+    "keywords": [
+        "node",
+        "malware",
+        "jail",
+        "sandbox",
+        "analysis"
+    ],
+    "files": [
+        "malwarejail/*"
+    ],
+    "type": "module"
 }

@@ -3,32 +3,38 @@ version: $SERVICE_TAG
 description: >
   Provides sandboxing for JavaScript.
 
-accepts: code/javascript
+accepts: code/javascript|code/html|code/hta|code/jscript|image/svg
 rejects: empty|metadata/.*
 
 stage: CORE
-category: Dynamic Analysis
+category: Static Analysis
 
 file_required: true
 timeout: 300
 disable_cache: false
 
-enabled: false
+enabled: true
 is_external: false
 licence_count: 0
+
+uses_temp_submission_data: true
 
 config:
   # Note that the Docker container must be allowed Internet access as well
   allow_download_from_internet: false
   # Maximum payload files extracted if deep scan is turned off
   max_payloads_extracted: 50
+  # Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
+  raise_malware_jail_exc: false
+  # The limit to number of stdout lines analyzed that werre captured from tools
+  total_stdout_limit: 10000
 
 submission_params:
   # Service-wide parameters
-  - default: 60
+  - default: 30
     name: tool_timeout
     type: int
-    value: 60
+    value: 30
 
   - default: false
     name: add_supplementary
@@ -44,6 +50,12 @@ submission_params:
     name: display_iocs
     type: bool
     value: true
+
+  # Set to "true" if you do not want the file to be executed via Box.js and MalwareJail
+  - default: false
+    name: static_analysis_only
+    type: bool
+    value: false
 
   # Box.js parameters
   - default: false
@@ -83,6 +95,22 @@ submission_params:
     type: bool
     value: false
 
+  - default: false
+    name: log_errors
+    type: bool
+    value: false
+
+  - default: false
+    name: override_eval
+    type: bool
+    value: false
+
+  # Synchrony parameters
+  - default: false
+    name: enable_synchrony
+    type: bool
+    value: false
+
 heuristics:
   - heur_id: 1
     name: Network Traffic Detected
@@ -103,10 +131,62 @@ heuristics:
     description: Suspicious activity was detected during execution.
 
   - heur_id: 4
-    name: Embedded Code in jQuery Library
+    name: Embedded Code in Common Library
+    score: 1000
+    filetype: '*'
+    description: Embedded code was discovered in a file posing as a common library
+
+  - heur_id: 5
+    name: Microsoft Support Diagnostic Tool found in location redirection
+    score: 500
+    filetype: '*'
+    description: This technique was widely seen as part of the Follina exploit
+
+  - heur_id: 6
+    name: Automatic location redirection
+    score: 10
+    filetype: '*'
+    description: Automatic redirection to another resource
+    signature_score_map:
+      obfuscator_io_url_redirect: 500
+
+  - heur_id: 7
+    name: Suspicious CSS Usage
+    score: 10
+    filetype: '*'
+    description: Suspicious declarations were detected in HTML stylesheets
+
+  - heur_id: 8
+    name: Obfuscated with Obfuscator.io
+    score: 1000
+    filetype: '*'
+    description: Sample was obfuscated with Obfuscator.io
+
+  - heur_id: 9
+    name: Button ShortCut usage
+    score: 100
+    filetype: '*'
+    description: Sample uses unusual Button ShortCut objects
+
+  - heur_id: 10
+    name: Long One-Liner
     score: 1
     filetype: '*'
-    description: Embedded code was discovered in a file posing as a jQuery library
+    description: Sample consists of a long single line of code
+
+  - heur_id: 11
+    name: Time Waster
+    score: 1
+    filetype: '*'
+    description: Sample uses common time-wasting techniques
+
+  - heur_id: 12
+    name: Visual Basic and JavaScript
+    score: 1
+    filetype: '*'
+    description: Sample uses a combination of both Visual Basic and JavaScript
+    signature_score_map:
+      suspicious_url_found: 500
 
 docker_config:
   allow_internet_access: true

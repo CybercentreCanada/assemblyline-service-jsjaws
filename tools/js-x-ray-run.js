@@ -1,11 +1,18 @@
-const { runASTAnalysis } = require("js-x-ray");
-const { readFileSync } = require("fs");
+import { runASTAnalysis } from "@nodesecure/js-x-ray";
+import { readFileSync } from "fs";
 
-var argv = require('minimist')(process.argv.slice(2), {
-    "boolean": true
-});
-file_path = argv._[0];
+const dividing_comment = process.argv[2];
+const file_path = process.argv[3];
 
-const str = readFileSync(file_path, "utf-8");
-const { warnings } = runASTAnalysis(str);
+const file_contents = readFileSync(file_path, "utf-8");
+
+// Splitting on an obvious differentiator from the code that dynamically creates elements and the original script
+const split_script = file_contents.split(dividing_comment)
+if (split_script.length == 2) {
+    var actual_script = split_script[1];
+} else {
+    var actual_script = split_script[0];
+}
+
+const { warnings } = runASTAnalysis(actual_script);
 console.log(JSON.stringify({"warnings": warnings}));

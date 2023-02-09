@@ -1,0 +1,91 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"fonts.googleapis.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css2?family=open+sans:wght@300;400;600&display=swap\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "fonts.googleapis.com"
+              ],
+              "uri": [
+                "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
+              ],
+              "uri_path": [
+                "/css2?family=open+sans:wght@300;400;600&display=swap"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "Element[27]<embed>",
+        "sha256": "2823b855fd79efac8f598671e9ffbe9e0837e28dba7bafc77d0f9d36cbed13a8"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_css.css",
+        "sha256": "13de6a2cd7aaa62234d5830ac73c7cfa3e249197abd40a530ce98f0d7855868d"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "51234db16399aa2d2fdc75c7208e7c6b2b3a0f354842ce4a8a1c0bb2ee728a5e"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "fonts.googleapis.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://fonts.googleapis.com/css2?family=open+sans:wght@300;400;600&display=swap"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/css2?family=open+sans:wght@300;400;600&display=swap"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

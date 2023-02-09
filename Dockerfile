@@ -5,10 +5,16 @@ ENV SERVICE_PATH jsjaws.JsJaws
 
 # Get required apt packages
 USER root
-RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
+RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 # Switch to assemblyline user
 USER assemblyline
+
+# Install python dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir --user --requirement requirements.txt && rm -rf ~/.cache/pip
 
 # Copy JsJaws service code
 WORKDIR /opt/al_service

@@ -1,0 +1,694 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 513,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tActiveXObject(System.Text.ASCIIEncoding)\n\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tActiveXObject(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)\n\n\t\tActiveXObject(System.Collections.ArrayList)\n\n\t\t\t\t\t\tvar aWMAt = ActiveXObject, VW_isIterat = window[\"eval\"](\"String.fromCharCode\")",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\t\t         var objWMI1Service = GetObject(eN_par + hP_u01 + nX_ADD + PZ_gen)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "get_object": 10
+          },
+          "signatures": {
+            "get_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: GetObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object": 10
+          },
+          "signatures": {
+            "auto_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AutomationObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object_winmgmts": 10
+          },
+          "signatures": {
+            "auto_object_winmgmts": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WinMgmtsAutoObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript accesses byte blob\n\t\tSystem.Text.ASCIIEncoding[23].GetByteCount_2(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJ...\n\t\tSystem.Text.ASCIIEncoding[23].GetBytes_4(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWx...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "gets_bytes": 10
+          },
+          "signatures": {
+            "gets_bytes": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: GetBytes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[24]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[24].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[24]\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "base64_decoding": 10
+          },
+          "signatures": {
+            "base64_decoding": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Base64Decoding",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\t\t\tchars = chars.reverse()\n\t\t\t\t\t\ttemp = temp.reverse()",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "obfuscation": 10
+          },
+          "signatures": {
+            "obfuscation": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Obfuscation",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t\t\t\t\tvar c = chars[i].charCodeAt(0)\n\t\t= VW_isIterat(((chars[i].charCodeAt(0) - 32 + this.key) % 94) + 32)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_char_codes": 10
+          },
+          "signatures": {
+            "suspicious_char_codes": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[25]\n\n\t\tSystem.IO.MemoryStream[25].write(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,1...\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[26].Deserialize_2(System.IO.MemoryStr...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "memory_stream": 10
+          },
+          "signatures": {
+            "memory_stream": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: MemoryStream",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[31].send()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[17](C:)\n\n\t\tDriveObject[17](C:).name = (string) 'C:'\n\n\t\tnew Collection[18]([?  DriveObject {?    id: 17,?    _name: 'DriveObject[17](C:)',?    _availablespa...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "drive_object": 10
+          },
+          "signatures": {
+            "drive_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: DriveObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[16]\n\n\t\tScripting.FileSystemObject[16].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\tScripting.FileSystemObject[16].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "file_system_object": 100
+          },
+          "signatures": {
+            "file_system_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: FileSystemObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tScripting.FileSystemObject[16].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "get_folder": 10
+          },
+          "signatures": {
+            "get_folder": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: GetFolder",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses the FileSystemObject to discover the special folder\n\t\tScripting.FileSystemObject[16].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "get_special_folder": 10
+          },
+          "signatures": {
+            "get_special_folder": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: GetSpecialFolder",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript accesses the WSH Environment\n\t\tnew WshEnvironment[20](PROCESS)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "access_wsh_env": 10
+          },
+          "signatures": {
+            "access_wsh_env": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AccessWshEnv",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tescienndpeDetsarnPkeT...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tesrvseredPonectSactre...\n\t\t\t\t\treturn eval(u0117AcrossUnrecognized(\"n(wes nehclabaSsbucAocnuItTdUoCTtSirgnt(ih.sts,rt ih.sek)y.)...\n\t\t\t\t\treturn eval(spechelperToolsGroupId(\"en(I wSRgurtutcMertsa(reihts.s,rtht .siyek.))Sotirt(gn)\"))\n\t\t\t         window.eval(tope)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t         var colItems = objWMI1Service.ExecQuery(el_las + di_Set + hc_fet + Or_pre + vE_fon, null, ...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "wmi": 250
+          },
+          "signatures": {
+            "wmi": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WMI",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"paknavy-gov-pk.downld.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "paknavy-gov-pk.downld.net"
+              ],
+              "uri": [
+                "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
+              ],
+              "uri_path": [
+                "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/\", \"method\": \"get\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "paknavy-gov-pk.downld.net"
+              ],
+              "uri": [
+                "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
+              ],
+              "uri_path": [
+                "/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn unsafe statement was found: eval\n\t\tAn unsafe statement was found: eval\n\t\tAn unsafe statement was found: eval\n\t\tAn unsafe statement was found: eval",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "wmis.json",
+        "sha256": "3062fc5545a64d009bc4cfacaa9883c332a3e55ea40bd3591f5061a487dbddd8"
+      },
+      {
+        "name": "System.Security.Cryptography.FromBase64Transform[24]",
+        "sha256": "c0b868745f84c07649b847e37ad0c98746cf857602415c667bf3025523aecf02"
+      }
+    ],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "get_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "auto_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "auto_object_winmgmts"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "gets_bytes"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "base64_decoding"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "obfuscation"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_char_codes"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "memory_stream"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "drive_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "file_system_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "get_folder"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "get_special_folder"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "access_wsh_env"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_process"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "wmi"
+        ]
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "paknavy-gov-pk.downld.net"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "paknavy-gov-pk.downld.net"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/14578/1/6277/3/1/1/1856303893/fra9ancdjiaq12rcbuahxveak5kmltaitupzdqrd/files-1f77d26e/1/"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
