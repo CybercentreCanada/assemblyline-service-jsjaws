@@ -88,9 +88,6 @@ STDOUT_LIMIT = 10000
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
-# These character combinations have been seen in samples and are to be replaced with \\
-BACKSLASH_ENCODINGS = ["®&", "?&", "\x05&", "+&"]
-
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -936,6 +933,9 @@ class JsJaws(ServiceBase):
                                     f"document.body.appendChild({random_element_varname});\n"
             # Only set innertext field if there is a value to set it to
             if element_value:
+                # Escape backslashes since they are handled differently in Python strings than in HTML
+                if "\\" in element_value:
+                    element_value = element_value.replace("\\", "\\\\")
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
@@ -1219,12 +1219,6 @@ class JsJaws(ServiceBase):
                 for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
                     if item in cmd:
                         cmd = cmd.replace(item, "")
-
-                # Weird character encoding has brought us here
-                if any(item in cmd for item in BACKSLASH_ENCODINGS):
-                    for item in BACKSLASH_ENCODINGS:
-                        if item in cmd:
-                            cmd = cmd.replace(item, "\\")
 
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
