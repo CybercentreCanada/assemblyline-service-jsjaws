@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"example.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}]",
+        "body": "[{\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
