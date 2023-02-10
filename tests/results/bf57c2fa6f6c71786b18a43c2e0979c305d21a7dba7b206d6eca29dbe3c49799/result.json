@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1551,
+    "score": 2051,
     "sections": [
       {
         "auto_collapse": false,
@@ -144,6 +144,34 @@
       },
       {
         "auto_collapse": false,
+        "body": "Redirection to:\nhttp://example.com/?search",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 500,
+          "score_map": {},
+          "signatures": {
+            "obfuscator_io_url_redirect": 1
+          }
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://example.com/?search"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -254,6 +282,13 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 6,
+        "signatures": [
+          "obfuscator_io_url_redirect"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 7,
         "signatures": []
       },
@@ -263,7 +298,17 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.uri": [
+        {
+          "heur_id": 6,
+          "signatures": [
+            "obfuscator_io_url_redirect"
+          ],
+          "value": "http://example.com/?search"
+        }
+      ]
+    },
     "temp_submission_data": {
       "passwords": [
         "\t\tDocument Password:",
