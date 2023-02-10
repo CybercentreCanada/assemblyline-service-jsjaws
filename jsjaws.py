@@ -936,6 +936,9 @@ class JsJaws(ServiceBase):
                                     f"document.body.appendChild({random_element_varname});\n"
             # Only set innertext field if there is a value to set it to
             if element_value:
+                # Escape backslashes since they are handled differently in Python strings than in HTML
+                if "\\" in element_value:
+                    element_value = element_value.replace("\\", "\\\\")
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
