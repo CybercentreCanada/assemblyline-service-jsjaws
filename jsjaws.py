@@ -150,7 +150,7 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
-VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]+)\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]{2,})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
