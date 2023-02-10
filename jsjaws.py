@@ -1841,7 +1841,7 @@ class JsJaws(ServiceBase):
                         self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
 
 
-            if log_line.startswith("location.href = "):
+            if any(log_line.startswith(item) for item in ["location.href = ", "location.replace(", "location.assign("]):
 
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
