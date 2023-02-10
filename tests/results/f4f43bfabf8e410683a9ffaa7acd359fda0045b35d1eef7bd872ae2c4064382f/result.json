@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 550,
+    "score": 560,
     "sections": [
       {
         "auto_collapse": false,
@@ -145,6 +145,32 @@
         "tags": {},
         "title_text": "Signature: WritesArchive",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttp://example.com/?search",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://example.com/?search"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -205,9 +231,22 @@
         "signatures": [
           "writes_archive"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.uri": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "http://example.com/?search"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }
