@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 513,
+    "score": 503,
     "sections": [
       {
         "auto_collapse": false,
@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript accesses byte blob\n\t\tSystem.Text.ASCIIEncoding[23].GetByteCount_2(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJ...\n\t\tSystem.Text.ASCIIEncoding[23].GetBytes_4(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWx...",
+        "body": "JavaScript accesses byte blob\n\t\tSystem.Text.ASCIIEncoding[22].GetByteCount_2(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJ...\n\t\tSystem.Text.ASCIIEncoding[22].GetBytes_4(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWx...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[24]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[24].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[24]\n",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[23]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[23].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[23]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -192,7 +192,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[25]\n\n\t\tSystem.IO.MemoryStream[25].write(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,1...\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[26].Deserialize_2(System.IO.MemoryStr...",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[24]\n\n\t\tSystem.IO.MemoryStream[24].write(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,1...\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[25].Deserialize_2(System.IO.MemoryStr...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -214,7 +214,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[31].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[30].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -324,28 +324,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript accesses the WSH Environment\n\t\tnew WshEnvironment[20](PROCESS)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "access_wsh_env": 10
-          },
-          "signatures": {
-            "access_wsh_env": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: AccessWshEnv",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -368,7 +346,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tnew AutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tescienndpeDetsarnPkeT...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tesrvseredPonectSactre...\n\t\t\t\t\treturn eval(u0117AcrossUnrecognized(\"n(wes nehclabaSsbucAocnuItTdUoCTtSirgnt(ih.sts,rt ih.sek)y.)...\n\t\t\t\t\treturn eval(spechelperToolsGroupId(\"en(I wSRgurtutcMertsa(reihts.s,rtht .siyek.))Sotirt(gn)\"))\n\t\t\t         window.eval(tope)",
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tescienndpeDetsarnPkeT...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tesrvseredPonectSactre...\n\t\t\t\t\treturn eval(u0117AcrossUnrecognized(\"n(wes nehclabaSsbucAocnuItTdUoCTtSirgnt(ih.sts,rt ih.sek)y.)...\n\t\t\t\t\treturn eval(spechelperToolsGroupId(\"en(I wSRgurtutcMertsa(reihts.s,rtht .siyek.))Sotirt(gn)\"))\n\t\t\t         window.eval(tope)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -390,7 +368,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[21](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t         var colItems = objWMI1Service.ExecQuery(el_las + di_Set + hc_fet + Or_pre + vE_fon, null, ...",
+        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t         var colItems = objWMI1Service.ExecQuery(el_las + di_Set + hc_fet + Or_pre + vE_fon, null, ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -501,7 +479,7 @@
         "sha256": "3062fc5545a64d009bc4cfacaa9883c332a3e55ea40bd3591f5061a487dbddd8"
       },
       {
-        "name": "System.Security.Cryptography.FromBase64Transform[24]",
+        "name": "System.Security.Cryptography.FromBase64Transform[23]",
         "sha256": "c0b868745f84c07649b847e37ad0c98746cf857602415c667bf3025523aecf02"
       }
     ],
@@ -620,13 +598,6 @@
         "heur_id": 3,
         "signatures": [
           "get_special_folder"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "access_wsh_env"
         ]
       },
       {

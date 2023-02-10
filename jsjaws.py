@@ -86,9 +86,6 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
 STDOUT_LIMIT = 10000
 
-# These are commonly found strings in MalwareJail output that should not be flagged as domains
-FP_DOMAINS = ["ModuleJob.run", ".zip"]
-
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
@@ -153,7 +150,7 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
-VBSCRIPT_ENV_SETTING_REGEX = b"\(([^\)\.]+)\)\s*=\s*([^>=;\.]+);"
+VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]+)\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
@@ -344,10 +341,22 @@ class JsJaws(ServiceBase):
         # Therefore we are going to hunt for instances of this, and replace
         # it with an accurate JavaScript technique for setting variables.
         def log_and_replace(match):
-            group_1 = match.group(1).decode()
-            group_2 = match.group(2).decode()
-            self.log.debug(f"Replaced VBScript Env variable: ({truncate(group_1)}) = {truncate(group_2)};")
-            return f"[{group_1}] = {group_2};".encode()
+            if len(match.regs) != 3:
+                return
+            property_name = match.group("property_name").decode()
+
+            # We only want the last property assigned \(.+\), despite the regex capturing consecutive \(.+\)+
+            if ")(" in property_name:
+                # Therefore split
+                split_property_name = match.group(0).split(b")(")[-1]
+                another_match = re.search(VBSCRIPT_ENV_SETTING_REGEX, b"(" + split_property_name)
+                if another_match:
+                    property_name = another_match.group("property_name").decode()
+                    property_value = another_match.group("property_value").decode()
+
+            property_value = match.group("property_value").decode()
+            self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
+            return f"[{property_name}] = {property_value};".encode()
 
         new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
         if new_content != file_content:
@@ -925,6 +934,9 @@ class JsJaws(ServiceBase):
                                     f"document.body.appendChild({random_element_varname});\n"
             # Only set innertext field if there is a value to set it to
             if element_value:
+                # Escape backslashes since they are handled differently in Python strings than in HTML
+                if "\\" in element_value:
+                    element_value = element_value.replace("\\", "\\\\")
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
@@ -1208,12 +1220,6 @@ class JsJaws(ServiceBase):
                 for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
                     if item in cmd:
                         cmd = cmd.replace(item, "")
-
-                # Weird character encoding has brought us here
-                if any(item in cmd for item in ["®&", "?&", "\x05&"]):
-                    for item in ["®&", "?&", "\x05&"]:
-                        if item in cmd:
-                            cmd = cmd.replace(item, "\\")
 
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
@@ -1799,11 +1805,6 @@ class JsJaws(ServiceBase):
             if len(log_line) > 10000:
                 log_line = truncate(log_line, 10000)
 
-            # Remove domains that are most likely false positives in MalwareJail output
-            if any(fp_domain in log_line for fp_domain in FP_DOMAINS):
-                for fp_domain in FP_DOMAINS:
-                    log_line = log_line.replace(fp_domain, "<replaced>")
-
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
 
             if log_line.startswith("Exception occurred in "):
@@ -1835,7 +1836,7 @@ class JsJaws(ServiceBase):
                         self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
 
 
-            if log_line.startswith("location.href = "):
+            if any(log_line.startswith(item) for item in ["location.href = ", "location.replace(", "location.assign("]):
 
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
