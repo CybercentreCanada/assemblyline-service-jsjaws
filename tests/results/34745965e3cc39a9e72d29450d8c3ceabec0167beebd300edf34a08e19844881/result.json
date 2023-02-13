@@ -1,0 +1,171 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 21,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttps://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttps://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"awin1.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"hlsllc.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"na4docucheck.nightsky.tk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/cread.php?awinmid=16328&awinaffid=421225&ued=https:\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "awin1.com",
+                "hlsllc.com",
+                "na4docucheck.nightsky.tk"
+              ],
+              "uri": [
+                "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+              ],
+              "uri_path": [
+                "/cread.php?awinmid=16328&awinaffid=421225&ued=https:"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "652f266d6c7e9403e7169915f2b577db13d3e75e429faf83879f9b374e5cc89a",
+        "sha256": "652f266d6c7e9403e7169915f2b577db13d3e75e429faf83879f9b374e5cc89a"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "1856ba1f67a1c71d32f420c7bd48c0122b10a512d519858d4477207a093ea9aa"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "awin1.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hlsllc.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "na4docucheck.nightsky.tk"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+        },
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://awin1.com/cread.php?awinmid=16328&awinaffid=421225&ued=https://na4docucheck.nightsky.tk/?username=bball@hlsllc.com"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/cread.php?awinmid=16328&awinaffid=421225&ued=https:"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
