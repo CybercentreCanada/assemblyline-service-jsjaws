@@ -1662,24 +1662,24 @@ class JsJaws(ServiceBase):
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
         if uri_match:
-            urls_result_section.add_tag("network.static.uri", safe_url)
+            urls_result_section.add_tag("network.dynamic.uri", safe_url)
             # Extract domain
             domain_match = re.search(DOMAIN_REGEX, safe_url)
             if domain_match:
                 domain = domain_match.group(0)
-                urls_result_section.add_tag("network.static.domain", domain)
+                urls_result_section.add_tag("network.dynamic.domain", domain)
             # Extract IP
             ip_match = re.search(IP_REGEX, safe_url)
             if ip_match:
                 ip = ip_match.group(0)
-                urls_result_section.add_tag("network.static.ip", ip)
+                urls_result_section.add_tag("network.dynamic.ip", ip)
             # Extract URI path
             if "//" in safe_url:
                 safe_url = safe_url.split("//")[1]
             uri_path_match = re.search(URI_PATH, safe_url)
             if uri_path_match:
                 uri_path = uri_path_match.group(0)
-                urls_result_section.add_tag("network.static.uri_path", uri_path)
+                urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
         else:
             # Might as well tag this while we're here
             urls_result_section.add_tag("file.string.extracted", safe_url)
