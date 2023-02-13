@@ -1248,7 +1248,7 @@ class JsJaws(ServiceBase):
                         wscript_res_sec.set_heuristic(13)
 
                     # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
-                    if any(ps1 in cmd.lower() for ps1 in POWERSHELL_VARIATIONS):
+                    if any(cmd.lower().strip().startswith(ps1) for ps1 in POWERSHELL_VARIATIONS):
                         wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
 
         wscript_extraction.close()
