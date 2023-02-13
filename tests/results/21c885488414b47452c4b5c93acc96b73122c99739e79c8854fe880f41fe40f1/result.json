@@ -436,7 +436,7 @@
         },
         "tags": {
           "network": {
-            "static": {
+            "dynamic": {
               "domain": [
                 "paknavy-gov-pk.downld.net"
               ],
@@ -623,24 +623,35 @@
       }
     ],
     "tags": {
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "paknavy-gov-pk.downld.net"
-        },
+      "network.dynamic.domain": [
         {
           "heur_id": 1,
           "signatures": [],
           "value": "paknavy-gov-pk.downld.net"
         }
       ],
-      "network.static.uri": [
+      "network.dynamic.uri": [
         {
           "heur_id": 1,
           "signatures": [],
           "value": "https://paknavy-gov-pk.downld.net/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
-        },
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "paknavy-gov-pk.downld.net"
+        }
+      ],
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -648,11 +659,6 @@
         }
       ],
       "network.static.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/14578/1/6277/3/1/1/1856303893/Fra9anCDjiaq12rCbUAhXveAk5kMltaItuPZDQRd/files-1f77d26e/1/"
-        },
         {
           "heur_id": 2,
           "signatures": [],

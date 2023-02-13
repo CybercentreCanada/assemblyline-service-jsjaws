@@ -146,7 +146,7 @@
         },
         "tags": {
           "network": {
-            "static": {
+            "dynamic": {
               "domain": [
                 "dce42.shrubs.emptyisland.pics"
               ],
@@ -231,24 +231,35 @@
       }
     ],
     "tags": {
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "dce42.shrubs.emptyisland.pics"
-        },
+      "network.dynamic.domain": [
         {
           "heur_id": 1,
           "signatures": [],
           "value": "dce42.shrubs.emptyisland.pics"
         }
       ],
-      "network.static.uri": [
+      "network.dynamic.uri": [
         {
           "heur_id": 1,
           "signatures": [],
           "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-        },
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/subscribeEvent"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "dce42.shrubs.emptyisland.pics"
+        }
+      ],
+      "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
@@ -256,11 +267,6 @@
         }
       ],
       "network.static.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/subscribeEvent"
-        },
         {
           "heur_id": 2,
           "signatures": [],

@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tElement[21]<a>.click(undefined)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tAnchor[22].click(undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
