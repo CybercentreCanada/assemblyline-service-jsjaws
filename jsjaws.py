@@ -869,6 +869,10 @@ class JsJaws(ServiceBase):
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
 
+        # We need this flag since we are now creating most HTML elements dynamically,
+        # and there is a chance that an HTML file has no JavaScript to be run.
+        is_script_body = False
+
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
         set_of_variable_names = set()
@@ -993,13 +997,14 @@ class JsJaws(ServiceBase):
             else:
                 js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
 
+            for onerror in element.get_attribute_list("onerror"):
+                if onerror:
+                    is_script_body = True
+                    js_content, aggregated_js_script = self.append_content(onerror, js_content, aggregated_js_script)
+
         if js_content and not insert_above_divider:
             # Add a break that is obvious for JS-X-Ray to differentiate
             js_content, aggregated_js_script = self.append_content(DIVIDING_COMMENT, js_content, aggregated_js_script)
-
-        # We need this flag since we are now creating most HTML elements dynamically,
-        # and there is a chance that an HTML file has no JavaScript to be run.
-        is_script_body = False
 
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
