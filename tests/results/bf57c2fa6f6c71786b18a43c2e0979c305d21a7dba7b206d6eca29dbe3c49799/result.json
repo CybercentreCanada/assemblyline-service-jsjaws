@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2051,
+    "score": 2061,
     "sections": [
       {
         "auto_collapse": false,
@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,11,0,8,0,3,147,89,85,229,6,95,68,85,138,3,0,0,40,11,0,18,0,28,0,100,111,99,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,11,0,8,0,3,147,89,85,229,6,95,68,85,138,3,0,0,40,11,0,18,0,28,0,100,111,99,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\tnew Blob(129,235, [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -172,6 +172,32 @@
       },
       {
         "auto_collapse": false,
+        "body": "Redirection to:\nhttp://example.com/?search",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://example.com/?search"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -225,6 +251,10 @@
       {
         "name": "attachment.zip",
         "sha256": "568f1ebd9c616164eaaec8ad7807f0fc600a5101ea99b441f91d559e3b419afc"
+      },
+      {
+        "name": "Blob[31]",
+        "sha256": "db1dd90124ebd28a35e591dff072f3bd1429cf4092b9e850d3e6ee879457a954"
       }
     ],
     "supplementary": [
@@ -289,6 +319,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 7,
         "signatures": []
       },
@@ -305,6 +340,11 @@
           "signatures": [
             "obfuscator_io_url_redirect"
           ],
+          "value": "http://example.com/?search"
+        },
+        {
+          "heur_id": 6,
+          "signatures": [],
           "value": "http://example.com/?search"
         }
       ]
