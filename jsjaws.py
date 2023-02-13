@@ -88,6 +88,9 @@ STDOUT_LIMIT = 10000
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
+# Variations of PowerShell found in WScript Shell commands
+POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -1209,6 +1212,8 @@ class JsJaws(ServiceBase):
 
         wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
+        pre_rows = 0
+        post_rows = 0
         for line in output:
             wscript_shell_run = re.search(WSCRIPT_SHELL_REGEX, line, re.IGNORECASE)
             # Script was run
@@ -1228,7 +1233,24 @@ class JsJaws(ServiceBase):
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
                 # Let's try to extract IOCs from it
+
+                if wscript_res_sec.body:
+                    pre_rows = len(wscript_res_sec.section_body.body)
+
                 extract_iocs_from_text_blob(line, wscript_res_sec, is_network_static=True)
+
+                if wscript_res_sec.body:
+                    post_rows = len(wscript_res_sec.body)
+
+                # If an IOC was added, raise a heuristic
+                if pre_rows < post_rows:
+                    if wscript_res_sec.heuristic is None:
+                        wscript_res_sec.set_heuristic(13)
+
+                    # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
+                    if any(ps1 in cmd.lower() for ps1 in POWERSHELL_VARIATIONS):
+                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
+
         wscript_extraction.close()
 
         if path.getsize(self.extracted_wscript_path) > 0:

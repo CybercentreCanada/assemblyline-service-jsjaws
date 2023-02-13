@@ -188,6 +188,14 @@ heuristics:
     signature_score_map:
       suspicious_url_found: 500
 
+  - heur_id: 13
+    name: WScript Shell uses IOCs
+    score: 1
+    filetype: '*'
+    description: Sample uses a WScript Shell to manipulate network calls
+    signature_score_map:
+      wscript_pwsh_url: 500
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
