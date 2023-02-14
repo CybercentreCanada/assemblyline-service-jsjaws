@@ -909,6 +909,10 @@ class JsJaws(ServiceBase):
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
 
+            # If the element id attribute is specifically set to an empty string, mock the varname
+            if element_id == "":
+                element_id = f"element{idx}"
+
             # If the proposed element ID already exists, then mock one
             if element_id in set_of_variable_names:
                 proposed_element_id = element_id
