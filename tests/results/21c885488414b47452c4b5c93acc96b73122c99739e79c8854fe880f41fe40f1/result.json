@@ -236,7 +236,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[17](C:)\n\n\t\tDriveObject[17](C:).name = (string) 'C:'\n\n\t\tnew Collection[18]([?  DriveObject {?    id: 17,?    _name: 'DriveObject[17](C:)',?    _availablespa...",
+        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[17](C:)\n\n\t\tDriveObject[17](C:).name = (string) 'C:'\n\n\t\tnew Collection[18]([?  {?    id: 17,?    _name: 'DriveObject[17](C:)',?    _availablespace: '',?    ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
