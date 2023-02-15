@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[15].setRequestHeader(Upgrade-Insecure-Requests, 1)\n",
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[14].setRequestHeader(Upgrade-Insecure-Requests, 1)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,

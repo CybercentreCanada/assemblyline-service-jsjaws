@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
+        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript accesses byte blob\n\t\tSystem.Text.ASCIIEncoding[22].GetByteCount_2(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJ...\n\t\tSystem.Text.ASCIIEncoding[22].GetBytes_4(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWx...",
+        "body": "JavaScript accesses byte blob\n\t\tSystem.Text.ASCIIEncoding[21].GetByteCount_2(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJ...\n\t\tSystem.Text.ASCIIEncoding[21].GetBytes_4(AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWx...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[23]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[23].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[23]\n",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[22]\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[22].TransformFinalBlock(65,65,69,65,65,65,68,47,47,...\n\t\tSaving: System.Security.Cryptography.FromBase64Transform[22]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -192,7 +192,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[24]\n\n\t\tSystem.IO.MemoryStream[24].write(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,1...\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[25].Deserialize_2(System.IO.MemoryStr...",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[23]\n\n\t\tSystem.IO.MemoryStream[23].write(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,1...\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[24].Deserialize_2(System.IO.MemoryStr...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -214,7 +214,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[30].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[29].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -236,7 +236,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[17](C:)\n\n\t\tDriveObject[17](C:).name = (string) 'C:'\n\n\t\tnew Collection[18]([?  {?    id: 17,?    _name: 'DriveObject[17](C:)',?    _availablespace: '',?    ...",
+        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[16](C:)\n\n\t\tDriveObject[16](C:).name = (string) 'C:'\n\n\t\tnew Collection[17]([?  {?    id: 16,?    _name: 'DriveObject[16](C:)',?    _availablespace: '',?    ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -258,7 +258,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[16]\n\n\t\tScripting.FileSystemObject[16].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\tScripting.FileSystemObject[16].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[15]\n\n\t\tScripting.FileSystemObject[15].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\tScripting.FileSystemObject[15].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -280,7 +280,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tScripting.FileSystemObject[16].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
+        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tScripting.FileSystemObject[15].GetFolder(C:\\WINDOWS\\\\Microsoft.NET\\Framework\\) => C:\\WINDOWS\\Microso...\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -302,7 +302,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses the FileSystemObject to discover the special folder\n\t\tScripting.FileSystemObject[16].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
+        "body": "JavaScript uses the FileSystemObject to discover the special folder\n\t\tScripting.FileSystemObject[15].GetSpecialFolder(0) => C:\\WINDOWS\\\n\n\t\t\t             var folds = FSO.GetFolder(FSO.GetSpecialFolder(0) + oZ_img + zH_rwk + tq_con + VE_x2F ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -324,7 +324,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -346,7 +346,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tnew AutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tescienndpeDetsarnPkeT...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tesrvseredPonectSactre...\n\t\t\t\t\treturn eval(u0117AcrossUnrecognized(\"n(wes nehclabaSsbucAocnuItTdUoCTtSirgnt(ih.sts,rt ih.sek)y.)...\n\t\t\t\t\treturn eval(spechelperToolsGroupId(\"en(I wSRgurtutcMertsa(reihts.s,rtht .siyek.))Sotirt(gn)\"))\n\t\t\t         window.eval(tope)",
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tnew AutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tescienndpeDetsarnPkeT...\n\t\t\t\t\treturn eval(text_decorationEqualityPlayers(\"()ngriStto).y)kes.hi tr,sts.hi(tesrvseredPonectSactre...\n\t\t\t\t\treturn eval(u0117AcrossUnrecognized(\"n(wes nehclabaSsbucAocnuItTdUoCTtSirgnt(ih.sts,rt ih.sek)y.)...\n\t\t\t\t\treturn eval(spechelperToolsGroupId(\"en(I wSRgurtutcMertsa(reihts.s,rtht .siyek.))Sotirt(gn)\"))\n\t\t\t         window.eval(tope)",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -368,7 +368,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[20](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t         var colItems = objWMI1Service.ExecQuery(el_las + di_Set + hc_fet + Or_pre + vE_fon, null, ...",
+        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[19](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select displayName, pro...\n\t\t\t         var colItems = objWMI1Service.ExecQuery(el_las + di_Set + hc_fet + Or_pre + vE_fon, null, ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -479,7 +479,7 @@
         "sha256": "3062fc5545a64d009bc4cfacaa9883c332a3e55ea40bd3591f5061a487dbddd8"
       },
       {
-        "name": "System.Security.Cryptography.FromBase64Transform[23]",
+        "name": "System.Security.Cryptography.FromBase64Transform[22]",
         "sha256": "c0b868745f84c07649b847e37ad0c98746cf857602415c667bf3025523aecf02"
       }
     ],
