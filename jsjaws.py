@@ -98,6 +98,7 @@ JS_X_RAY = "JS-X-Ray"
 BOX_JS = "Box.js"
 SYNCHRONY = "Synchrony"
 EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
+TEMP_JS_FILENAME = "temp_javascript.js"
 
 # Regular Expressions
 
@@ -438,6 +439,16 @@ class JsJaws(ServiceBase):
 
         if file_path is None:
             return
+
+        if embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
+            artifact = {
+                "name": TEMP_JS_FILENAME,
+                "path": file_path,
+                "description": "Extracted JavaScript",
+                "to_be_extracted": False,
+            }
+            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
+            self.artifact_list.append(artifact)
 
         # If the file starts or ends with null bytes, let's strip them out
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
@@ -784,12 +795,12 @@ class JsJaws(ServiceBase):
         if aggregated_js_script:
             aggregated_js_script.close()
             artifact = {
-                "name": "temp_javascript.js",
+                "name": TEMP_JS_FILENAME,
                 "path": aggregated_js_script.name,
                 "description": "Extracted JavaScript",
                 "to_be_extracted": False,
             }
-            self.log.debug("Adding extracted JavaScript: temp_javascript.js")
+            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
             self.artifact_list.append(artifact)
             js_script_name = aggregated_js_script.name
 
