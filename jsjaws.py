@@ -60,6 +60,9 @@ MAX_PAYLOAD_FILES_EXTRACTED = 50
 # The SHA256 representation of the "Resource Not Found" response from MalwareJail that occurs when we pass the --h404 arg
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 
+# The SHA256 representation when MalwareJail creates a fake file when _download is set to "No"
+FAKE_FILE_CONTENT = "5110232a47fc52354ed061b5e29979f4497ab2d3a3a402ad74f194acedfddad0"
+
 # The string used in file contents to separate code dynamically created by JsJaws and the original script
 DIVIDING_COMMENT = "// This comment was created by JsJaws"
 
@@ -483,6 +486,7 @@ class JsJaws(ServiceBase):
         extract_function_calls = request.get_param("extract_function_calls")
         extract_eval_calls = request.get_param("extract_eval_calls")
         override_eval = request.get_param("override_eval")
+        file_always_exists = request.get_param("file_always_exists")
         add_supplementary = request.get_param("add_supplementary")
         static_signatures = request.get_param("static_signatures")
         no_shell_error = request.get_param("no_shell_error")
@@ -542,8 +546,8 @@ class JsJaws(ServiceBase):
             malware_jail_args.append("--t404")
         # As a default, the sandbox will simulate all network call responses with a 404 Not Found
         else:
-            # --h404   ... on download return always HTTP/404
-            malware_jail_args.append("--h404")
+            # Fake the download otherwise
+            pass
 
         # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
         #                        error by default to pretend that the distribution sites are down, so that the
@@ -574,6 +578,9 @@ class JsJaws(ServiceBase):
         # If we want to override the eval method to facilitate error logging and safe function execution, but to also use indirect eval execution, use the following sandbox sequence
         if override_eval:
             malware_jail_args.extend(["-e", "sandbox_sequence_with_eval"])
+
+        if file_always_exists:
+            malware_jail_args.append("--filealwaysexists")
 
         jsxray_args = ["node", self.path_to_jsxray, f"{DIVIDING_COMMENT}\n"]
 
@@ -1334,7 +1341,7 @@ class JsJaws(ServiceBase):
             ]:
                 continue
             extracted_sha = get_sha256_for_file(extracted)
-            if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256]:
+            if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256, FAKE_FILE_CONTENT]:
                 extracted_count += 1
                 if not deep_scan and extracted_count > max_payloads_extracted:
                     self.log.debug(f"The maximum number of payloads {max_payloads_extracted} were extracted.")
