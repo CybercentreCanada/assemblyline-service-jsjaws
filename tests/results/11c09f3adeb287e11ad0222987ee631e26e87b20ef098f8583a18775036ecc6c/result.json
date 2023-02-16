@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[18]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -59,7 +59,7 @@
   "files": {
     "extracted": [
       {
-        "name": "WScript.Shell[18]",
+        "name": "WScript.Shell[17]",
         "sha256": "9c84ce182d6eff60ad2d0fc85ee88e3fccd217ab8dab54e0d4a4b69aa11c8080"
       }
     ],

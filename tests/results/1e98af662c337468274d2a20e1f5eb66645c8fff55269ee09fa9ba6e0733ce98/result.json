@@ -41,7 +41,11 @@
   "files": {
     "extracted": [
       {
-        "name": "Element[27]<embed>",
+        "name": "HTMLImageElement[22]",
+        "sha256": "c1f17888996e5e7d57018655703764ec4aadffb9ee7b627f40504ba5eab531e5"
+      },
+      {
+        "name": "HTMLEmbedElement[26]",
         "sha256": "c9d18e2d8379ac4e6c8e24ca1215a3812f0cb6e81bb676b4858fac717b192640"
       }
     ],
@@ -52,7 +56,7 @@
       },
       {
         "name": "temp_javascript.js",
-        "sha256": "fc2a7594fc6f1322c594f97ace9b4ad499f7eaacda69dd3f6a3d9030fc045abb"
+        "sha256": "8849947e7d0ae11b169c2e26830e515d3c89062a7ccf63e2027797d42a915bda"
       }
     ]
   },

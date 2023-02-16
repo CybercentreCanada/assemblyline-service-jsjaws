@@ -962,7 +962,7 @@ class JsJaws(ServiceBase):
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
-                create_element_script += f"{random_element_varname}.innertext = \"{element_value}\";\n"
+                create_element_script += f"{random_element_varname}.innerText = \"{element_value}\";\n"
             for attr_id, attr_val in element.attrs.items():
                 if attr_id != "id":
                     # Escape double quotes since we are wrapping the value in double quotes
@@ -1890,7 +1890,7 @@ class JsJaws(ServiceBase):
                     # We need to recover the non-truncated content from the sandbox_dump.json file
                     with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
                         data = load(f)
-                        location_href = data["location"]["_props"]["href"]
+                        location_href = data["Location"]["_props"]["href"]
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)
