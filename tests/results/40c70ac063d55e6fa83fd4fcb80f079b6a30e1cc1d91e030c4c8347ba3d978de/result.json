@@ -98,7 +98,12 @@
   },
   "files": {
     "extracted": [],
-    "supplementary": []
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "8048d4ebad7b0b965181e93f74dba7229e4130b90b860b50102bd0b77019f033"
+      }
+    ]
   },
   "results": {
     "heuristics": [

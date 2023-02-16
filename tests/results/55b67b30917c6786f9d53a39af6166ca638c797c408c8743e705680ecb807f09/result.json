@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[49].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[42].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tButton[39].click(anonymous)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[34].click(anonymous)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -150,7 +150,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"blah.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -169,7 +169,6 @@
                 "liftca.org",
                 "logo.clearbit.com",
                 "ip.seeip.org",
-                "blah.com",
                 "api.telegram.org",
                 "ia801500.us.archive.org"
               ],
@@ -246,7 +245,7 @@
       },
       {
         "name": "temp_javascript.js",
-        "sha256": "7a8924cac9f0ef728ed9cab7322589cb00f39e6bfa4a9f987da134935e7d665c"
+        "sha256": "c00545ed004b3da6595d3a7c3d0048b0a2bd30c34e2e74e07b2e68b090f7f459"
       }
     ]
   },
@@ -314,11 +313,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "api.telegram.org"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "blah.com"
         },
         {
           "heur_id": 2,

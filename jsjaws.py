@@ -89,6 +89,9 @@ STDOUT_LIMIT = 10000
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
+# Variations of PowerShell found in WScript Shell commands
+POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -96,6 +99,7 @@ JS_X_RAY = "JS-X-Ray"
 BOX_JS = "Box.js"
 SYNCHRONY = "Synchrony"
 EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
+TEMP_JS_FILENAME = "temp_javascript.js"
 
 # Regular Expressions
 
@@ -150,7 +154,7 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
-VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]+)\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]{2,})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
@@ -436,6 +440,16 @@ class JsJaws(ServiceBase):
 
         if file_path is None:
             return
+
+        if embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
+            artifact = {
+                "name": TEMP_JS_FILENAME,
+                "path": file_path,
+                "description": "Extracted JavaScript",
+                "to_be_extracted": False,
+            }
+            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
+            self.artifact_list.append(artifact)
 
         # If the file starts or ends with null bytes, let's strip them out
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
@@ -782,12 +796,12 @@ class JsJaws(ServiceBase):
         if aggregated_js_script:
             aggregated_js_script.close()
             artifact = {
-                "name": "temp_javascript.js",
+                "name": TEMP_JS_FILENAME,
                 "path": aggregated_js_script.name,
                 "description": "Extracted JavaScript",
                 "to_be_extracted": False,
             }
-            self.log.debug("Adding extracted JavaScript: temp_javascript.js")
+            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
             self.artifact_list.append(artifact)
             js_script_name = aggregated_js_script.name
 
@@ -870,6 +884,10 @@ class JsJaws(ServiceBase):
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
 
+        # We need this flag since we are now creating most HTML elements dynamically,
+        # and there is a chance that an HTML file has no JavaScript to be run.
+        is_script_body = False
+
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
         set_of_variable_names = set()
@@ -901,6 +919,10 @@ class JsJaws(ServiceBase):
 
             # If the element does not have an ID, mock one
             element_id = element.attrs.get("id", f"element{idx}")
+
+            # If the element id attribute is specifically set to an empty string, mock the varname
+            if element_id == "":
+                element_id = f"element{idx}"
 
             # If the proposed element ID already exists, then mock one
             if element_id in set_of_variable_names:
@@ -940,7 +962,7 @@ class JsJaws(ServiceBase):
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
-                create_element_script += f"{random_element_varname}.innertext = \"{element_value}\";\n"
+                create_element_script += f"{random_element_varname}.innerText = \"{element_value}\";\n"
             for attr_id, attr_val in element.attrs.items():
                 if attr_id != "id":
                     # Escape double quotes since we are wrapping the value in double quotes
@@ -994,13 +1016,14 @@ class JsJaws(ServiceBase):
             else:
                 js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
 
+            for onerror in element.get_attribute_list("onerror"):
+                if onerror:
+                    is_script_body = True
+                    js_content, aggregated_js_script = self.append_content(onerror, js_content, aggregated_js_script)
+
         if js_content and not insert_above_divider:
             # Add a break that is obvious for JS-X-Ray to differentiate
             js_content, aggregated_js_script = self.append_content(DIVIDING_COMMENT, js_content, aggregated_js_script)
-
-        # We need this flag since we are now creating most HTML elements dynamically,
-        # and there is a chance that an HTML file has no JavaScript to be run.
-        is_script_body = False
 
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
@@ -1205,6 +1228,8 @@ class JsJaws(ServiceBase):
 
         wscript_extraction = open(self.extracted_wscript_path, "a+")
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
+        pre_rows = 0
+        post_rows = 0
         for line in output:
             wscript_shell_run = re.search(WSCRIPT_SHELL_REGEX, line, re.IGNORECASE)
             # Script was run
@@ -1224,7 +1249,24 @@ class JsJaws(ServiceBase):
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
                 # Let's try to extract IOCs from it
+
+                if wscript_res_sec.body:
+                    pre_rows = len(wscript_res_sec.section_body.body)
+
                 extract_iocs_from_text_blob(line, wscript_res_sec, is_network_static=True)
+
+                if wscript_res_sec.body:
+                    post_rows = len(wscript_res_sec.body)
+
+                # If an IOC was added, raise a heuristic
+                if pre_rows < post_rows:
+                    if wscript_res_sec.heuristic is None:
+                        wscript_res_sec.set_heuristic(13)
+
+                    # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
+                    if any(cmd.lower().strip().startswith(ps1) for ps1 in POWERSHELL_VARIATIONS):
+                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
+
         wscript_extraction.close()
 
         if path.getsize(self.extracted_wscript_path) > 0:
@@ -1657,24 +1699,24 @@ class JsJaws(ServiceBase):
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
         if uri_match:
-            urls_result_section.add_tag("network.static.uri", safe_url)
+            urls_result_section.add_tag("network.dynamic.uri", safe_url)
             # Extract domain
             domain_match = re.search(DOMAIN_REGEX, safe_url)
             if domain_match:
                 domain = domain_match.group(0)
-                urls_result_section.add_tag("network.static.domain", domain)
+                urls_result_section.add_tag("network.dynamic.domain", domain)
             # Extract IP
             ip_match = re.search(IP_REGEX, safe_url)
             if ip_match:
                 ip = ip_match.group(0)
-                urls_result_section.add_tag("network.static.ip", ip)
+                urls_result_section.add_tag("network.dynamic.ip", ip)
             # Extract URI path
             if "//" in safe_url:
                 safe_url = safe_url.split("//")[1]
             uri_path_match = re.search(URI_PATH, safe_url)
             if uri_path_match:
                 uri_path = uri_path_match.group(0)
-                urls_result_section.add_tag("network.static.uri_path", uri_path)
+                urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
         else:
             # Might as well tag this while we're here
             urls_result_section.add_tag("file.string.extracted", safe_url)
@@ -1848,7 +1890,7 @@ class JsJaws(ServiceBase):
                     # We need to recover the non-truncated content from the sandbox_dump.json file
                     with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
                         data = load(f)
-                        location_href = data["location"]["_props"]["href"]
+                        location_href = data["Location"]["_props"]["href"]
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)

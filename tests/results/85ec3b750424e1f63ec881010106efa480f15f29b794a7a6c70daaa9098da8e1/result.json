@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[16].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[15].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -106,7 +106,7 @@
         },
         "tags": {
           "network": {
-            "static": {
+            "dynamic": {
               "domain": [
                 "acehphonnajaya.com"
               ],
@@ -138,7 +138,7 @@
         },
         "tags": {
           "network": {
-            "static": {
+            "dynamic": {
               "domain": [
                 "acehphonnajaya.com"
               ],
@@ -193,19 +193,45 @@
       }
     ],
     "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,
-          "signatures": [],
-          "value": "acehphonnajaya.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "acehphonnajaya.com"
-        },
-        {
-          "heur_id": 1,
           "signatures": [],
           "value": "acehphonnajaya.com"
         }
@@ -215,31 +241,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://acehphonnajaya.com/css/ke.msi"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://acehphonnajaya.com/css/ke.msi"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://acehphonnajaya.com/css/ke.msi"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
-          "signatures": [],
-          "value": "/css/ke.msi"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/css/ke.msi"
-        },
-        {
-          "heur_id": 1,
           "signatures": [],
           "value": "/css/ke.msi"
         }

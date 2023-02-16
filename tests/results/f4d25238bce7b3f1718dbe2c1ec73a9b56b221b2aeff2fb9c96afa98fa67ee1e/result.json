@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[16]\n\n\t\tSystem.IO.MemoryStream[16].WriteByte()\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[17].Deserialize_2(System.IO.MemoryStr...",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[15]\n\n\t\tSystem.IO.MemoryStream[15].WriteByte()\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[16].Deserialize_2(System.IO.MemoryStr...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -125,7 +125,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[20]",
+        "name": "Blob[19]",
         "sha256": "8dd215ea8ccd6b5402a1bcac46dfee5e9297aa38b9bce8ef0ba225a5ed47a848"
       }
     ],
