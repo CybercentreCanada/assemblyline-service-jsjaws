@@ -430,7 +430,7 @@ class JsJaws(ServiceBase):
             file_type = file_type_details["type"]
 
         css_path = None
-        if file_type in ["code/html", "code/hta"]:
+        if file_type in ["code/html", "code/hta", "code/wsf"]:
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
         elif file_type == "image/svg":
             file_path, file_content, _ = self.extract_using_soup(request, file_content)
@@ -893,6 +893,10 @@ class JsJaws(ServiceBase):
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
             if element.name in ["html", "head", "meta", "style", "body", "script", "param"]:
+                continue
+
+            # If the file is code/wsf, skip the job element
+            elif element.name in ["job"] and request.file_type == "code/wsf":
                 continue
 
             # If an element has an attribute that is safelisted, don't include it when we create the element
