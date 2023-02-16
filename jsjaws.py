@@ -140,6 +140,24 @@ UNDERSCORE_REGEX = r"\/\/     Underscore.js ([\d\.]+)\n"
 D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
 
 # Example:
+# /**
+#  * @license
+#  * Lodash <https://lodash.com/>
+#  * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+#  * Released under MIT license <https://lodash.com/license>
+#  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+#  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+#  */
+# ;(function() {
+
+#   /** Used as a safe reference for `undefined` in pre-ES5 environments. */
+#   var undefined;
+
+#   /** Used as the semantic version number. */
+#   var VERSION = '4.17.21';
+LODASH_REGEX = r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-]+var VERSION = '([\d.]+)';"
+
+# Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
 MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
 
@@ -1966,6 +1984,7 @@ class JsJaws(ServiceBase):
             "clean_libs/combo.js": COMBO_REGEX,
             "clean_libs/underscore%s.js": UNDERSCORE_REGEX,
             "clean_libs/d3_v%s.js": D3_REGEX,
+            "clean_libs/lodash%s.js": LODASH_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
