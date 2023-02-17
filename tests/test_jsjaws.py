@@ -191,6 +191,7 @@ def dummy_request_class_instance(dummy_task_class):
             "static_analysis_only": False,
             "enable_synchrony": False,
             "override_eval": False,
+            "file_always_exists": False,
         }
 
         def __init__(self):
@@ -339,6 +340,7 @@ class TestJsJaws:
             "display_iocs": False,
             "log_errors": False,
             "override_eval": False,
+            "file_always_exists": False,
             "static_analysis_only": False,
             "enable_synchrony": False,
         }
@@ -412,6 +414,7 @@ class TestJsJaws:
         service_request.task.service_config["log_errors"] = True
         service_request.task.service_config["enable_synchrony"] = True
         service_request.task.service_config["static_analysis_only"] = True
+        service_request.task.service_config["file_always_exists"] = True
         mocker.patch("jsjaws.Popen", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 

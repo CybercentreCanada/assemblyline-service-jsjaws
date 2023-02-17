@@ -1,0 +1,360 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 72,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tMSXML2.XMLHTTP[14].onreadystatechange = (function) 'function() {if(rdpe5oF1.readyState===4) {var oRB...\n\t\tMSXML2.XMLHTTP[14].onreadystatechange.get() => (function) 'function() {if(rdpe5oF1.readyState===4) {...\n\t\tActiveXObject(ADODB.Stream)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "get_object": 10
+          },
+          "signatures": {
+            "get_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: GetObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject\n\t\tnew AutomationObject[16](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n\n\t\tWin32_Process class object requested, inheriting to AutomationObject...\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object": 10
+          },
+          "signatures": {
+            "auto_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AutomationObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tnew AutomationObject[16](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object_winmgmts": 10
+          },
+          "signatures": {
+            "auto_object_winmgmts": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WinMgmtsAutoObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t'sTKiQmbpdFLJpEZLd0bI5SeLNkQQp0dcxVY0FGRtFmcn9mcQxFX6MEIyMDbisiIsRmIrIib1JnIoUGdhVmcD5iYwVGd4UnSrtTK...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "obfuscation": 10
+          },
+          "signatures": {
+            "obfuscation": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Obfuscation",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[15].SaveToFile(C:/ProgramData/wJPBCKy.HoGKdJI, 2)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n\n\t\tnew AutomationObject[16](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"jzobkk.open\"}, {\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/tscw3rcg.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/tscw3rcg.dll\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "jzobkk.open",
+                "gkjdepok.org"
+              ],
+              "uri": [
+                "http://gkjdepok.org/crtfc/tscw3rcg.dll"
+              ],
+              "uri_path": [
+                "/crtfc/tscw3rcg.dll"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\", \"method\": \"GET\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "gkjdepok.org"
+              ],
+              "uri": [
+                "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+              ],
+              "uri_path": [
+                "/crtfc/TsCw3rCG.dll"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "5800ac9e016d0b9571f11193c217f869d6c14ea01cb0d204357610c2347f1920"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "get_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "auto_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "auto_object_winmgmts"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "obfuscation"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_process"
+        ]
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "gkjdepok.org"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/crtfc/TsCw3rCG.dll"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "gkjdepok.org"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "jzobkk.open"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://gkjdepok.org/crtfc/tscw3rcg.dll"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/crtfc/tscw3rcg.dll"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
