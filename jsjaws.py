@@ -646,10 +646,10 @@ class JsJaws(ServiceBase):
             # Box.js cannot handle being run more than once on a sample. Oh well!
             if not subsequent_run:
                 # Boxjs does not provide "document" object support
-                if b"document[" in request.file_contents:
-                    self.log.debug(f"'document[' seen in the file contents. Do not run {BOX_JS}.")
+                if b"document[" in request.file_contents or b"document." in request.file_contents:
+                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
                 elif actual_script and b"document." in actual_script:
-                    self.log.debug(f"'document.' seen in the file contents. Do not run {BOX_JS}.")
+                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
                 else:
                     tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             else:
@@ -1417,10 +1417,14 @@ class JsJaws(ServiceBase):
         doc_write = False
         content_to_write_list = []
         for line in self._parse_malwarejail_output(output):
+
+            # The document.write has been seen and the following lines are the content
             if doc_write:
                 written_content = line.split("] => '", 1)[1].strip()[:-1]
                 content_to_write_list.append(written_content)
                 doc_write = False
+
+            # The content from a document write is going to start on the next line if there is a match here
             if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
                 doc_write = True
 
