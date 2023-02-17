@@ -275,10 +275,17 @@ JS_NEW_FUNCTION_REGEX = "(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\
 # var new_blah = blah("blah", thing2);
 JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
 
+# Example:
+# document.write(unescape("blah"))
+DOM_WRITE_UNESCAPE_REGEX = "document\.write\(unescape\("
+
 # Globals
 
 # Flag that the sample was embedded within a third party library
 embedded_code_in_lib = None
+
+# Flag that the sample contains a single script that writes unescaped values to the DOM
+single_script_with_unescape = False
 
 
 class JsJaws(ServiceBase):
@@ -332,10 +339,12 @@ class JsJaws(ServiceBase):
 
     def execute(self, request: ServiceRequest) -> None:
         global embedded_code_in_lib
+        global single_script_with_unescape
 
         # Reset per sample
         self.doc_write_hashes = set()
         embedded_code_in_lib = None
+        single_script_with_unescape = False
 
         file_path = request.file_path
         file_content = request.file_contents
@@ -470,6 +479,10 @@ class JsJaws(ServiceBase):
             }
             self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
             self.artifact_list.append(artifact)
+
+        if single_script_with_unescape:
+            heur = Heuristic(14)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         # If the file starts or ends with null bytes, let's strip them out
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
@@ -905,8 +918,21 @@ class JsJaws(ServiceBase):
         :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
+        global single_script_with_unescape
+
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
+
+        # If the soup consists of a single script element, let's dive in a little
+        # deeper to see if this file is suspicious
+        soup_body_contents = soup.body.contents
+        if soup_body_contents == [] and len(scripts) == 1:
+            script_contents_list = scripts[0].contents
+            script_contents = script_contents_list[0] if script_contents_list else ""
+            # If there is a large obfuscated variable value
+            if len(script_contents) > 100000 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
+                self.log.debug("A single script was found that contained large contents and a document.write(unescape())...")
+                single_script_with_unescape = True
 
         # We need this flag since we are now creating most HTML elements dynamically,
         # and there is a chance that an HTML file has no JavaScript to be run.

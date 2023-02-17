@@ -201,6 +201,12 @@ heuristics:
     signature_score_map:
       wscript_pwsh_url: 500
 
+  - heur_id: 14
+    name: Single script writes suspicious value
+    score: 500
+    filetype: 'code/ht*'
+    description: Single script tag with unescaped value written to DOM
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
