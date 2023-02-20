@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 541,
+    "score": 542,
     "sections": [
       {
         "auto_collapse": false,
@@ -170,6 +170,38 @@
         },
         "title_text": "IOCs extracted from WScript",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://abc.xyz/img/bg-cropped.jpg\", \"method\": \"get\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "abc.xyz"
+              ],
+              "uri": [
+                "https://abc.xyz/img/bg-cropped.jpg"
+              ],
+              "uri_path": [
+                "/img/bg-cropped.jpg"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -189,6 +221,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -231,6 +268,27 @@
       }
     ],
     "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "abc.xyz"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://abc.xyz/img/bg-cropped.jpg"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/img/bg-cropped.jpg"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,
