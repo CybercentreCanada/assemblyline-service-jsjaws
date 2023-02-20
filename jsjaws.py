@@ -2167,8 +2167,8 @@ class JsJaws(ServiceBase):
             for variable_declaration in static_vars:
                 if len(variable_declaration) == 2:
                     variable_name, variable_value = variable_declaration
-                    if b"\\" in variable_value:
-                        variable_value = variable_value.replace(b"\\", b"\\\\")
+                    if "\\" in variable_value:
+                        variable_value = variable_value.replace("\\", "\\\\")
                     vbscript_conversion += f"var {variable_name} = {variable_value};\n"
 
             if vbscript_conversion:
