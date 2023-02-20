@@ -14,7 +14,7 @@ from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 import tempfile
 from threading import Thread
-from time import time
+from time import sleep, time
 from tinycss2 import parse_stylesheet
 from typing import Any, Dict, List, Optional, Set, Tuple
 from yaml import safe_load as yaml_safe_load
@@ -213,14 +213,24 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 
 # Time-waster method structure, commonly found in Gootloader
 
+# Examples:
 # function blah1(blah2, blah3, blah4, blah5) {
 #   blah6=blah7;
 #    while(blah6<(blah2*blah8)) {
 #       blah6 = blah6 + blah7;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)\s*{\s*\w{2,10}\s*=\s*\w{2,10};\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\w{2,10}\)\)\s*{\s*\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*;\s*}\s*}"
+# or
+# function blah1(blah2, blah3, blah4) {
+#   blah5=blah6;
+#   blah7=blah8;
+#    while(blah7<(blah2*(blah9))) {
+#       blah7++;
+#   }
+# }
+WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)\s*{(?:\s*\w{2,10}\s*=\s*\w{2,10};)+\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\(?\w{2,10}\)?\)\)\s*{\s*(?:\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*|\w{2,10}\+\+);\s*}\s*}"
 
+# Examples:
 # function blah1() {
 #   blah2(blah3);
 #   blah4 = blah5;
@@ -233,7 +243,21 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)
 #       blah9++
 #   }
 # }
-WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10}\)\s*{\s*try\s*{\s*[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*[(a-zA-Z0-9]{2,10}\[\d{5,}\]\s*=\s*[(a-zA-Z0-9]{2,10};\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
+# or
+# function blah1() {
+#   blah2(blah3);
+#   blah4 = blah5;
+#   while(blah6) {
+#       try{
+#           blah7=blah8[blah9](blah9);
+#       } catch(blah10){
+#           blah11=1272242;
+#           blah8[blah11] = blah12;
+#       }
+#       blah9++
+#   }
+# }
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*(?:=\s*[(a-zA-Z0-9]{2,10})?\)\s*{\s*try\s*{\s*(?:[(a-zA-Z0-9]{2,10}=)?[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*(?:[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\s*=\s*[(a-zA-Z0-9]{2,10};|[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*)+\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
 
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
@@ -496,6 +520,7 @@ class JsJaws(ServiceBase):
         for time_waster_regex in TIME_WASTER_REGEXES:
             time_waster_match = re.search(time_waster_regex, file_content)
             if time_waster_match:
+                self.log.debug("This sample uses common time-wasting techniques")
                 is_time_waster = True
                 time_waster_res_sec = ResultTextSection("This sample uses common time-wasting techniques")
                 time_waster_res_sec.set_heuristic(11)
@@ -693,6 +718,8 @@ class JsJaws(ServiceBase):
             thr.join(timeout=tool_timeout)
             if thr.is_alive():
                 self.log.debug("A tool did not finish. Look at previous logs...")
+                # Give the tool a chance to clean up after to the tool timeout
+                sleep(3)
 
         boxjs_output: List[str] = []
         if path.exists(self.boxjs_analysis_log):
@@ -929,8 +956,8 @@ class JsJaws(ServiceBase):
         if soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
             script_contents = script_contents_list[0] if script_contents_list else ""
-            # If there is a large obfuscated variable value
-            if len(script_contents) > 100000 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
+            # If there is a large obfuscated variable value and an unescaped value is written to the DOM
+            if len(script_contents) > 2500 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
                 self.log.debug("A single script was found that contained large contents and a document.write(unescape())...")
                 single_script_with_unescape = True
 
@@ -1557,6 +1584,10 @@ class JsJaws(ServiceBase):
         if urls_rows:
             [urls_result_section.add_row(urls_row) for urls_row in urls_rows]
             urls_result_section.set_heuristic(1)
+
+            if single_script_with_unescape:
+                urls_result_section.heuristic.add_signature_id("single_script_url")
+
             result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
