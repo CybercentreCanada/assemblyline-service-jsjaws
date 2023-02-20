@@ -209,6 +209,12 @@ heuristics:
     filetype: 'code/ht*'
     description: Single script tag with unescaped value written to DOM
 
+  - heur_id: 15
+    name: Nested document.write calls
+    score: 1
+    filetype: '*'
+    description: Multiple rounds of tool runs were required due to nested document.write calls
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
