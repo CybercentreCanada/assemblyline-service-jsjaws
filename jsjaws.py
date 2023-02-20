@@ -312,6 +312,9 @@ embedded_code_in_lib = None
 # Flag that the sample contains a single script that writes unescaped values to the DOM
 single_script_with_unescape = False
 
+# A variable to keep track of the number of times that we run the gauntlet
+gauntlet_runs = 0
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -365,11 +368,13 @@ class JsJaws(ServiceBase):
     def execute(self, request: ServiceRequest) -> None:
         global embedded_code_in_lib
         global single_script_with_unescape
+        global gauntlet_runs
 
         # Reset per sample
         self.doc_write_hashes = set()
         embedded_code_in_lib = None
         single_script_with_unescape = False
+        gauntlet_runs = 0
 
         file_path = request.file_path
         file_content = request.file_contents
@@ -468,6 +473,9 @@ class JsJaws(ServiceBase):
         :param subsequent_run: A flag indicating if this is not the initial gauntlet run
         :return: None
         """
+        global gauntlet_runs
+        gauntlet_runs += 1
+
         # Reset per gauntlet run
         self.artifact_list = []
         request.result = Result()
@@ -954,12 +962,12 @@ class JsJaws(ServiceBase):
         # If the soup consists of a single script element, let's dive in a little
         # deeper to see if this file is suspicious
         soup_body_contents = soup.body.contents
-        if soup_body_contents == [] and len(scripts) == 1:
+        if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
             script_contents = script_contents_list[0] if script_contents_list else ""
-            # If there is a large obfuscated variable value and an unescaped value is written to the DOM
-            if len(script_contents) > 2500 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
-                self.log.debug("A single script was found that contained large contents and a document.write(unescape())...")
+            # An unescaped value of decent length is written to the DOM
+            if len(script_contents) > 250 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
+                self.log.debug("A single script was found that used document.write(unescape())...")
                 single_script_with_unescape = True
 
         # We need this flag since we are now creating most HTML elements dynamically,
@@ -971,11 +979,15 @@ class JsJaws(ServiceBase):
         set_of_variable_names = set()
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
-            if element.name in ["html", "head", "meta", "style", "body", "script", "param"]:
+            if element.name in ["html", "head", "meta", "style", "body", "param"]:
                 continue
 
             # If the file is code/wsf, skip the job element
             elif element.name in ["job"] and request.file_type == "code/wsf":
+                continue
+
+            # If there is a script element that just points at a src, we want it!
+            elif element.name in ["script"] and element.string is not None:
                 continue
 
             # If an element has an attribute that is safelisted, don't include it when we create the element
@@ -1490,6 +1502,10 @@ class JsJaws(ServiceBase):
         if doc_write_hash in self.doc_write_hashes:
             # To avoid recursive gauntlet runs, perform this check
             self.log.debug("No new content written to the DOM...")
+
+            if gauntlet_runs >= 3:
+                heur = Heuristic(15)
+                _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
             return
 
         self.doc_write_hashes.add(doc_write_hash)
