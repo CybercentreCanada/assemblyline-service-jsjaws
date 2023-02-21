@@ -94,6 +94,9 @@ PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 # Variations of PowerShell found in WScript Shell commands
 POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
 
+# Variations of Command Prompt found in WScript Shell commands
+COMMAND_VARIATIONS = ["cmd", "cmd.exe"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -108,7 +111,7 @@ TEMP_JS_FILENAME = "temp_javascript.js"
 # Examples:
 # WScript.Shell[99].Run(do the thing)
 # Shell.Application[99].ShellExecute(do the thing)
-WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|ShellExecute)\((.*)\)"
+WSCRIPT_SHELL_REGEX = "(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|ShellExecute|Exec)\((.*)\)"
 
 # Example:
 # /*!
@@ -1065,36 +1068,32 @@ class JsJaws(ServiceBase):
                     create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
             # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
-            # Buttons with ShortCut commands are very interesting as per:
-            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/button-parameter
+            # Objects with ShortCut commands are very interesting as per:
             # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/shortcut
             if element.name == "object":
-                is_button = False
                 is_shortcut = False
                 command = None
                 # We need to handle <param> tags accordingly
                 for descendant in element.descendants:
                     if descendant and descendant.name == "param":
                         if all(item in descendant.attrs for item in ["name", "value"]):
-                            name = descendant.attrs["name"]
+                            name = descendant.attrs["name"].lower()
                             value = descendant.attrs["value"]
-                            if name == "Button":
-                                is_button = True
-                            elif name == "Command" and value == "ShortCut":
+                            if name == "command" and value.lower() == "shortcut":
                                 is_shortcut = True
-                            elif name == "Item1":
+                            elif name == "item1":
                                 command_args = value.split(",")
                                 if not command_args[0].strip():
                                     # This is the default when loaded on Windows
                                     command_args[0] = "cmd.exe"
                                 command = " ".join(command_args)
-                if is_button and is_shortcut and command:
+                if is_shortcut and command:
                     # JavaScript does not like when there are newlines when setting attributes
                     if isinstance(command, str) and "\n" in command:
                         command = command.replace("\n", "")
                     if '"' in command:
                         command = command.replace('"', '\\"')
-                    # Button ShortCuts have a click method that we must instantiate.
+                    # ShortCuts have a click method that we must instantiate.
                     create_element_script += f"{random_element_varname}.click = function() {{ ws = new WScript_Shell(); ws.exec(\"{command}\")}};\n"
 
                     heur = Heuristic(9)
@@ -1342,7 +1341,8 @@ class JsJaws(ServiceBase):
                 if wscript_res_sec.body:
                     pre_rows = len(wscript_res_sec.section_body.body)
 
-                extract_iocs_from_text_blob(line, wscript_res_sec, is_network_static=True)
+                # These IOC tags should be dynamic because the WScript Shell faked running a command
+                extract_iocs_from_text_blob(line, wscript_res_sec)
 
                 if wscript_res_sec.body:
                     post_rows = len(wscript_res_sec.body)
@@ -1355,6 +1355,9 @@ class JsJaws(ServiceBase):
                     # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
                     if any(cmd.lower().strip().startswith(ps1) for ps1 in POWERSHELL_VARIATIONS):
                         wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
+                    # If Wscript.Shell uses CMD AND an IOC was found, this is suspicious
+                    elif any(cmd.lower().strip().startswith(cp) for cp in COMMAND_VARIATIONS):
+                        wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url")
 
         wscript_extraction.close()
 
