@@ -10,7 +10,7 @@ class Sleep(Signature):
             heuristic_id=3,
             name="sleep",
             description="JavaScript attempts to sleep",
-            indicators=["WScript.Sleep", ".setTimeout("],
+            indicators=["WScript.Sleep", ".setTimeout(", ".setInterval("],
             severity=0
         )
 

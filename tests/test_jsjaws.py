@@ -453,6 +453,7 @@ class TestJsJaws:
         jsjaws_class_instance.doc_write_hashes = set()
         jsjaws_class_instance.stdout_limit = 10000
         jsjaws_class_instance.boxjs_analysis_log = "blah"
+        jsjaws_class_instance.gauntlet_runs = 0
         root_dir = os.path.dirname(os.path.abspath(__file__))
 
         jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
@@ -491,6 +492,7 @@ class TestJsJaws:
 
         jsjaws_class_instance.doc_write_hashes = set()
         jsjaws_class_instance.stdout_limit = 10000
+        jsjaws_class_instance.gauntlet_runs = 0
 
         output = [
             "[2022-10-18T20:12:49.924Z] document[15].write(content) 0 bytes",
@@ -507,6 +509,7 @@ class TestJsJaws:
 
         dummy_request_class_instance.temp_submission_data = {}
         jsjaws_class_instance.doc_write_hashes = set()
+        jsjaws_class_instance.gauntlet_runs = 0
 
         jsjaws_class_instance.boxjs_analysis_log = "blah"
         root_dir = os.path.dirname(os.path.abspath(__file__))

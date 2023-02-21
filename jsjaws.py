@@ -312,9 +312,6 @@ embedded_code_in_lib = None
 # Flag that the sample contains a single script that writes unescaped values to the DOM
 single_script_with_unescape = False
 
-# A variable to keep track of the number of times that we run the gauntlet
-gauntlet_runs = 0
-
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -346,6 +343,7 @@ class JsJaws(ServiceBase):
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.doc_write_hashes: Optional[Set[str]] = None
+        self.gauntlet_runs: Optional[int] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -368,13 +366,12 @@ class JsJaws(ServiceBase):
     def execute(self, request: ServiceRequest) -> None:
         global embedded_code_in_lib
         global single_script_with_unescape
-        global gauntlet_runs
 
         # Reset per sample
         self.doc_write_hashes = set()
         embedded_code_in_lib = None
         single_script_with_unescape = False
-        gauntlet_runs = 0
+        self.gauntlet_runs = 0
 
         file_path = request.file_path
         file_content = request.file_contents
@@ -473,8 +470,7 @@ class JsJaws(ServiceBase):
         :param subsequent_run: A flag indicating if this is not the initial gauntlet run
         :return: None
         """
-        global gauntlet_runs
-        gauntlet_runs += 1
+        self.gauntlet_runs += 1
 
         # Reset per gauntlet run
         self.artifact_list = []
@@ -987,7 +983,7 @@ class JsJaws(ServiceBase):
                 continue
 
             # If there is a script element that just points at a src, we want it!
-            elif element.name in ["script"] and element.string is not None:
+            elif element.name in ["script"] and element.string is not None and element.string.strip():
                 continue
 
             # If an element has an attribute that is safelisted, don't include it when we create the element
@@ -1503,7 +1499,7 @@ class JsJaws(ServiceBase):
             # To avoid recursive gauntlet runs, perform this check
             self.log.debug("No new content written to the DOM...")
 
-            if gauntlet_runs >= 3:
+            if self.gauntlet_runs >= 3:
                 heur = Heuristic(15)
                 _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
             return
@@ -1982,7 +1978,6 @@ class JsJaws(ServiceBase):
 
                         self.log.debug("There was an unexpected end of input, run the gauntlet again with the amended content!")
                         self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
-
 
             if any(log_line.startswith(item) for item in ["location.href = ", "location.replace(", "location.assign("]):
 
