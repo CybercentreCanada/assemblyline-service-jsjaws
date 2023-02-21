@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1543,
+    "score": 1554,
     "sections": [
       {
         "auto_collapse": false,
@@ -122,7 +122,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "Redirection to:\nhttps://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'",
+        "body": "JavaScript attempts to sleep\n\t\twindow[6].setInterval(function _0x42b2a3(_0x216b8d){var _0x544d02={'zmhqO':function(_0x29989c){retur...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "sleep": 10
+          },
+          "signatures": {
+            "sleep": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttps://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -140,7 +162,7 @@
           "network": {
             "static": {
               "uri": [
-                "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'"
+                "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
               ]
             }
           }
@@ -194,6 +216,44 @@
           }
         },
         "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "cdnjs.cloudflare.com",
+                "ip.seeip.org",
+                "api.telegram.org"
+              ],
+              "uri": [
+                "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js",
+                "https://ip.seeip.org/geoip",
+                "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
+              ],
+              "uri_path": [
+                "/ajax/libs/zepto/1.2.0/zepto.min.js",
+                "/geoip",
+                "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
         "zeroize_on_tag_safe": false
       },
       {
@@ -256,6 +316,11 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 2,
         "signatures": []
       },
@@ -294,6 +359,13 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "sleep"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 6,
         "signatures": [
           "obfuscator_io_url_redirect"
@@ -311,6 +383,57 @@
       }
     ],
     "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "api.telegram.org"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "cdnjs.cloudflare.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "ip.seeip.org"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://ip.seeip.org/geoip"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/ajax/libs/zepto/1.2.0/zepto.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/geoip"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,
@@ -362,16 +485,16 @@
           "value": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"
         },
         {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
-        },
-        {
           "heur_id": 6,
           "signatures": [
             "obfuscator_io_url_redirect"
           ],
-          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3'"
+          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
         },
         {
           "heur_id": 2,
