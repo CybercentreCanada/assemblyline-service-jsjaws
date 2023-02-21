@@ -203,6 +203,7 @@ heuristics:
     signature_score_map:
       wscript_pwsh_url: 500
       wscript_cmd_url: 500
+      wscript_curl_url: 500
 
   - heur_id: 14
     name: Single script writes suspicious value
