@@ -41,18 +41,18 @@
   "files": {
     "extracted": [
       {
-        "name": "HTMLImageElement[22]",
+        "name": "HTMLImageElement[23]",
         "sha256": "c1f17888996e5e7d57018655703764ec4aadffb9ee7b627f40504ba5eab531e5"
       },
       {
-        "name": "HTMLEmbedElement[26]",
+        "name": "HTMLEmbedElement[27]",
         "sha256": "c9d18e2d8379ac4e6c8e24ca1215a3812f0cb6e81bb676b4858fac717b192640"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "64d88a8a8c4658775de2e921d47c23e23721451f5a7d4895549da2807e1c7d43"
+        "sha256": "34197d3d0daa8f5d970e4ad55aa98d7cf1e809495040104b2b30e3f0e510cd6b"
       },
       {
         "name": "temp_css.css",
