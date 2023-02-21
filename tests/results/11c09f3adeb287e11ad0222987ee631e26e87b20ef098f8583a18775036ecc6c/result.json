@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Sample uses unusual Button ShortCut objects",
+        "body": "Sample uses unusual ShortCut objects",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -18,7 +18,7 @@
           "signatures": {}
         },
         "tags": {},
-        "title_text": "Button ShortCut usage",
+        "title_text": "ShortCut usage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -58,6 +58,10 @@
   },
   "files": {
     "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "9c5c55b28f2b8268fcc20c7a952286f4d1920454e69fdc76e6a9b8588bea089b"
+      },
       {
         "name": "WScript.Shell[17]",
         "sha256": "9c84ce182d6eff60ad2d0fc85ee88e3fccd217ab8dab54e0d4a4b69aa11c8080"

@@ -170,10 +170,10 @@ heuristics:
     description: Sample was obfuscated with Obfuscator.io
 
   - heur_id: 9
-    name: Button ShortCut usage
+    name: ShortCut usage
     score: 100
     filetype: '*'
-    description: Sample uses unusual Button ShortCut objects
+    description: Sample uses unusual ShortCut objects
 
   - heur_id: 10
     name: Long One-Liner
@@ -202,6 +202,7 @@ heuristics:
     description: Sample uses a WScript Shell to manipulate network calls
     signature_score_map:
       wscript_pwsh_url: 500
+      wscript_cmd_url: 500
 
   - heur_id: 14
     name: Single script writes suspicious value
