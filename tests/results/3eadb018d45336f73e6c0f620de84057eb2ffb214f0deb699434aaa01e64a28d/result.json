@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1133,
+    "score": 1632,
     "sections": [
       {
         "auto_collapse": false,
@@ -213,9 +213,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 13,
-          "score": 1,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "wscript_curl_url": 1
+          }
         },
         "tags": {
           "network": {
@@ -334,7 +336,9 @@
       {
         "attack_ids": [],
         "heur_id": 13,
-        "signatures": []
+        "signatures": [
+          "wscript_curl_url"
+        ]
       }
     ],
     "tags": {
@@ -348,21 +352,27 @@
       "network.dynamic.domain": [
         {
           "heur_id": 13,
-          "signatures": [],
+          "signatures": [
+            "wscript_curl_url"
+          ],
           "value": "finetuning-digital.com"
         }
       ],
       "network.dynamic.uri": [
         {
           "heur_id": 13,
-          "signatures": [],
+          "signatures": [
+            "wscript_curl_url"
+          ],
           "value": "https://finetuning-digital.com/wrule/01.gif"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 13,
-          "signatures": [],
+          "signatures": [
+            "wscript_curl_url"
+          ],
           "value": "/wrule/01.gif"
         }
       ],
