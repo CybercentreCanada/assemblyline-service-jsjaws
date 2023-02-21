@@ -981,7 +981,7 @@ class JsJaws(ServiceBase):
         set_of_variable_names = set()
         for index, element in enumerate(elements):
             # We don't want these elements dynamically created
-            if element.name in ["html", "head", "meta", "style", "body", "param"]:
+            if element.name in ["head", "meta", "style", "body", "param"]:
                 continue
 
             # If the file is code/wsf, skip the job element
@@ -1034,6 +1034,10 @@ class JsJaws(ServiceBase):
             else:
                 # JavaScript variables cannot have hyphens in their names
                 random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
+
+                # If the random_element_varname starts with a number, prepend that with a string
+                if random_element_varname[0].isdigit():
+                    random_element_varname = "jsjaws_" + random_element_varname
             # We cannot trust the text value of these elements, since it contains all nested items within it...
             if element.name in ["div", "p", "svg"]:
                 # If the element contains a script child, and the element's string is the same as the script child's, set value to None
@@ -1051,7 +1055,8 @@ class JsJaws(ServiceBase):
                                     f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
                                     f"document.body.appendChild({random_element_varname});\n"
             # Only set innertext field if there is a value to set it to
-            if element_value:
+            # We do not want to set the innerText field for an html element though...
+            if element_value and element.name not in ["html"]:
                 # Escape backslashes since they are handled differently in Python strings than in HTML
                 if "\\" in element_value:
                     element_value = element_value.replace("\\", "\\\\")
