@@ -2026,22 +2026,21 @@ class JsJaws(ServiceBase):
                         self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
 
                 # Check if there was a reference error after multiple DOM writes
-                if self.gauntlet_runs > 1:
-                    match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
-                    if match:
-                        missing_ref = match.group(1).decode()
-                        self.log.debug(f"There was a reference error when accessing '{missing_ref}'")
+                match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
+                if match:
+                    missing_ref = match.group(1).decode()
+                    self.log.debug(f"There was a reference error when accessing '{missing_ref}'")
 
-                        if self.script_with_source_and_no_body:
-                            heur = Heuristic(16)
-                            script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
-                            url_sec = ResultTableSection("Possible script sources that are required for execution")
-                            for script_src in self.script_sources:
-                                url_sec.add_row(TableRow(**{"url": script_src}))
-                                self._tag_uri(script_src, url_sec)
+                    if self.script_with_source_and_no_body:
+                        heur = Heuristic(16)
+                        script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+                        url_sec = ResultTableSection("Possible script sources that are required for execution")
+                        for script_src in self.script_sources:
+                            url_sec.add_row(TableRow(**{"url": script_src}))
+                            self._tag_uri(script_src, url_sec)
 
-                            if url_sec.body:
-                                script_source_res.add_subsection(url_sec)
+                        if url_sec.body:
+                            script_source_res.add_subsection(url_sec)
 
             if any(log_line.startswith(item) for item in ["location.href = ", "location.replace(", "location.assign("]):
 
