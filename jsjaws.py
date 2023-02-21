@@ -188,6 +188,12 @@ VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]{2,})\)\s*
 # SyntaxError: Unexpected end of input
 INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 
+# Example:
+# Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
+# missingfunction()
+# ReferenceError: missingfunction is not defined
+REFERENCE_NOT_DEFINED_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\\n.+\\n\^\\nReferenceError: (.+) is not defined"
+
 # JScript conditional comments
 # Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
 
@@ -349,6 +355,8 @@ class JsJaws(ServiceBase):
         self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.doc_write_hashes: Optional[Set[str]] = None
         self.gauntlet_runs: Optional[int] = None
+        self.script_sources: Optional[Set[str]] = None
+        self.script_with_source_and_no_body: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -377,6 +385,8 @@ class JsJaws(ServiceBase):
         embedded_code_in_lib = None
         single_script_with_unescape = False
         self.gauntlet_runs = 0
+        self.script_sources = set()
+        self.script_with_source_and_no_body = False
 
         file_path = request.file_path
         file_content = request.file_contents
@@ -480,6 +490,7 @@ class JsJaws(ServiceBase):
         # Reset per gauntlet run
         self.artifact_list = []
         request.result = Result()
+        self.script_with_source_and_no_body = False
 
         if embedded_code_in_lib:
             embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
@@ -1135,12 +1146,18 @@ class JsJaws(ServiceBase):
             vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         for script in scripts:
+            # Get the script source, if it exists, and add it to the set
+            source_added = False
+            if script.get("src") and script["src"] not in self.script_sources:
+                self.script_sources.add(script["src"])
+                source_added = True
+
             # Make sure there is actually a body to the script
-            body = script.string
-            if body is None:
-                continue
-            body = str(body).strip()  # Remove whitespace
-            if len(body) <= 2:  # We can treat 2 character scripts as empty
+            body = script.string if script.string is None else str(script.string).strip()
+
+            if body is None or len(body) <= 2:
+                if source_added:
+                    self.script_with_source_and_no_body = True
                 continue
 
             if script.get("language", "").lower() in ["vbscript"]:
@@ -1995,6 +2012,24 @@ class JsJaws(ServiceBase):
 
                         self.log.debug("There was an unexpected end of input, run the gauntlet again with the amended content!")
                         self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+
+                # Check if there was a reference error after multiple DOM writes
+                if self.gauntlet_runs > 1:
+                    match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
+                    if match:
+                        missing_ref = match.group(1).decode()
+                        self.log.debug(f"There was a reference error when accessing '{missing_ref}'")
+
+                        if self.script_with_source_and_no_body:
+                            heur = Heuristic(16)
+                            script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+                            url_sec = ResultTableSection("Possible script sources that are required for execution")
+                            for script_src in self.script_sources:
+                                url_sec.add_row(TableRow(**{"url": script_src}))
+                                self._tag_uri(script_src, url_sec)
+
+                            if url_sec.body:
+                                script_source_res.add_subsection(url_sec)
 
             if any(log_line.startswith(item) for item in ["location.href = ", "location.replace(", "location.assign("]):
 
