@@ -1,0 +1,283 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 613,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses unusual ShortCut objects",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 9,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "ShortCut usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "165.22.160.25"
+              ],
+              "uri": [
+                "http://165.22.160.25/w9edb/160223"
+              ],
+              "uri_path": [
+                "/w9edb/160223"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {},
+          "signatures": {
+            "wscript_cmd_url": 1
+          }
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "ip": [
+                "165.22.160.25"
+              ],
+              "uri": [
+                "http://165.22.160.25/w9edb/160223"
+              ],
+              "uri_path": [
+                "/w9edb/160223"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn encoded literal was found: 0d0a093c21444f43545950452048544d4c3e0d0a093c212d2d5b6966206c742049452037205d3e3c68746d6c206c616e673d...",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "file": {
+            "string": {
+              "extracted": [
+                "0d0a093c21444f43545950452048544d4c3e0d0a093c212d2d5b6966206c742049452037205d3e3c68746d6c206c616e673d..."
+              ]
+            }
+          }
+        },
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "6610d1fecfa9c5a4cb9735600aad3357f6b1f71b52fbc02a0d7e4e4359de8c6a"
+      },
+      {
+        "name": "WScript.Shell[16]",
+        "sha256": "dadc6389750719833f12f18c8b447a17d9ab744ff7c50c0c38b6d70f9ccebae5"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "ab065b7b6a6ca2434e729012db815b6c8b49063cc8863e4ae633be88a3ceda23"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 9,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_cmd_url"
+        ]
+      }
+    ],
+    "tags": {
+      "file.string.extracted": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "0d0a093c21444f43545950452048544d4c3e0d0a093c212d2d5b6966206c742049452037205d3e3c68746d6c206c616e673d..."
+        }
+      ],
+      "network.dynamic.ip": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "165.22.160.25"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "http://165.22.160.25/w9edb/160223"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "/w9edb/160223"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "165.22.160.25"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://165.22.160.25/w9edb/160223"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/w9edb/160223"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

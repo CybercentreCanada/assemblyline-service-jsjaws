@@ -155,7 +155,7 @@
         },
         "tags": {
           "network": {
-            "static": {
+            "dynamic": {
               "domain": [
                 "transfer.sh"
               ],
@@ -273,6 +273,13 @@
           "heur_id": 1,
           "signatures": [],
           "value": "abc.xyz"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "transfer.sh"
         }
       ],
       "network.dynamic.uri": [
@@ -280,9 +287,23 @@
           "heur_id": 1,
           "signatures": [],
           "value": "https://abc.xyz/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "https://transfer.sh/get/vpihmi/invoice.pdf"
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "/get/vpihmi/invoice.pdf"
+        },
         {
           "heur_id": 1,
           "signatures": [],
@@ -299,13 +320,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "transfer.sh"
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_pwsh_url"
-          ],
-          "value": "transfer.sh"
         }
       ],
       "network.static.uri": [
@@ -318,26 +332,12 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://transfer.sh/get/vpihmi/invoice.pdf"
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_pwsh_url"
-          ],
-          "value": "https://transfer.sh/get/vpihmi/invoice.pdf"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/get/vpihmi/invoice.pdf"
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_pwsh_url"
-          ],
           "value": "/get/vpihmi/invoice.pdf"
         },
         {
