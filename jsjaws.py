@@ -1169,6 +1169,10 @@ class JsJaws(ServiceBase):
 
                     self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
 
+                # If the body does not end with a semi-colon, add one
+                if body.rstrip()[-1] != ";":
+                    body = body + ";"
+
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
         if soup.body:
