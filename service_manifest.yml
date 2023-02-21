@@ -216,6 +216,8 @@ heuristics:
     score: 1
     filetype: '*'
     description: Multiple rounds of tool runs were required due to nested document.write calls
+    signature_score_map:
+      multi_write_3rd_party_script: 500
 
   - heur_id: 16
     name: Third-party script(s) required
