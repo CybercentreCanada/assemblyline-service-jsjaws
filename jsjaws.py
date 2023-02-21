@@ -97,6 +97,9 @@ POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
 # Variations of Command Prompt found in WScript Shell commands
 COMMAND_VARIATIONS = ["cmd", "cmd.exe"]
 
+# Variations of cURL found in WScript Shell commands
+CURL_VARIATIONS = ["curl", "curl.exe"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -1358,6 +1361,9 @@ class JsJaws(ServiceBase):
                     # If Wscript.Shell uses CMD AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(cp) for cp in COMMAND_VARIATIONS):
                         wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url")
+                    # If Wscript.Shell uses cURL AND an IOC was found, this is suspicious
+                    elif any(cmd.lower().strip().startswith(curl) for curl in CURL_VARIATIONS):
+                        wscript_res_sec.heuristic.add_signature_id("wscript_curl_url")
 
         wscript_extraction.close()
 

