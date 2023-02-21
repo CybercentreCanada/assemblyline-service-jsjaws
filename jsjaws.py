@@ -1536,7 +1536,19 @@ class JsJaws(ServiceBase):
 
             if self.gauntlet_runs >= 3:
                 heur = Heuristic(15)
-                _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+                heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+                if self.gauntlet_runs >= 5 and self.script_with_source_and_no_body:
+                    url_sec = ResultTableSection("Script sources that were found in nested DOM writes")
+                    for script_src in self.script_sources:
+                        url_sec.add_row(TableRow(**{"url": script_src}))
+                        self._tag_uri(script_src, url_sec)
+
+                    if url_sec.body:
+                        heur15_res_sec.set_heuristic(None)
+                        url_sec.set_heuristic(15)
+                        url_sec.heuristic.add_signature_id("multi_write_3rd_party_script")
+                        heur15_res_sec.add_subsection(url_sec)
             return
 
         self.doc_write_hashes.add(doc_write_hash)
