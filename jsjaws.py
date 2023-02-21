@@ -969,6 +969,9 @@ class JsJaws(ServiceBase):
         """
         global single_script_with_unescape
 
+        # A list of methods to run when a form is submitted, after the DOM is loaded
+        onsubmits: List[str] = list()
+
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
 
@@ -1129,6 +1132,15 @@ class JsJaws(ServiceBase):
                     is_script_body = True
                     js_content, aggregated_js_script = self.append_content(onerror, js_content, aggregated_js_script)
 
+            for onsubmit in element.get_attribute_list("onsubmit"):
+                if onsubmit:
+                    is_script_body = True
+
+                    if onsubmit.startswith("return "):
+                        onsubmit = onsubmit.replace("return ", "")
+
+                    onsubmits.append(onsubmit)
+
         if js_content and not insert_above_divider:
             # Add a break that is obvious for JS-X-Ray to differentiate
             js_content, aggregated_js_script = self.append_content(DIVIDING_COMMENT, js_content, aggregated_js_script)
@@ -1208,6 +1220,9 @@ class JsJaws(ServiceBase):
                 if onload:
                     is_script_body = True
                     js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
+
+        for onsubmit in onsubmits:
+            js_content, aggregated_js_script = self.append_content(onsubmit, js_content, aggregated_js_script)
 
         if aggregated_js_script is None or not is_script_body:
             return None, js_content
