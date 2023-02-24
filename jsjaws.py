@@ -1357,6 +1357,7 @@ class JsJaws(ServiceBase):
         :param result: A Result object containing the service results
         :return: None
         """
+        self.log.debug("Extract WScript commands...")
         comment_added = False
 
         wscript_extraction = open(self.extracted_wscript_path, "a+")
@@ -1428,6 +1429,7 @@ class JsJaws(ServiceBase):
         :param deep_scan: A boolean representing if the user has requested a deep scan
         :return: None
         """
+        self.log.debug("Extracting payloads...")
         unique_shas = {sample_sha256}
         max_payloads_extracted = self.config.get("max_payloads_extracted", MAX_PAYLOAD_FILES_EXTRACTED)
         extracted_count = 0
@@ -1616,6 +1618,7 @@ class JsJaws(ServiceBase):
         :param result: A Result object containing the service results
         :return: None
         """
+        self.log.debug("Extracting URLs...")
         if not path.exists(self.malware_jail_urls_json_path) and not path.exists(self.boxjs_iocs):
             return
 
@@ -1780,6 +1783,7 @@ class JsJaws(ServiceBase):
         :param result: A Result object containing the service results
         :return: None
         """
+        self.log.debug(f"Extracting IOCs from {BOX_JS} output...")
         if path.exists(self.boxjs_iocs):
             ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
             with open(self.boxjs_iocs, "r") as f:
@@ -2001,6 +2005,7 @@ class JsJaws(ServiceBase):
         return cmd
 
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
+        self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
@@ -2008,8 +2013,8 @@ class JsJaws(ServiceBase):
                 log_line = split_line[1]
             else:
                 log_line = line
-            if len(log_line) > 10000:
-                log_line = truncate(log_line, 10000)
+            if len(log_line) > 5000 and not request.deep_scan:
+                log_line = truncate(log_line, 5000)
 
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
 
