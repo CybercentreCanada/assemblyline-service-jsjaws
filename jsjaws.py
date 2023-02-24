@@ -2012,7 +2012,7 @@ class JsJaws(ServiceBase):
                 log_line = split_line[1]
             else:
                 log_line = line
-            if len(log_line) > 5000:
+            if len(log_line) > 5000 and not request.deep_scan:
                 log_line = truncate(log_line, 5000)
 
             extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
