@@ -1161,7 +1161,7 @@ class JsJaws(ServiceBase):
         for script in scripts:
             # Get the script source, if it exists, and add it to the set
             source_added = False
-            if script.get("src") and script["src"] not in self.script_sources:
+            if script.get("src") and script["src"] not in self.script_sources and re.match(FULL_URI, script["src"]):
                 self.script_sources.add(script["src"])
                 source_added = True
 
@@ -2073,6 +2073,8 @@ class JsJaws(ServiceBase):
                         script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
                         for script_src in self.script_sources:
+                            if is_tag_safelisted(script_src, ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                                continue
                             url_sec.add_row(TableRow(**{"url": script_src}))
                             self._tag_uri(script_src, url_sec)
 
