@@ -1634,6 +1634,8 @@ class JsJaws(ServiceBase):
                 for item in urls_json:
                     if len(item["url"]) > 500:
                         item["url"] = truncate(item["url"], 500)
+                    if is_tag_safelisted(item["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                        continue
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
@@ -1650,6 +1652,8 @@ class JsJaws(ServiceBase):
                     value = ioc["value"]
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_rows):
+                            continue
+                        elif is_tag_safelisted(value["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
                         if dumps(item) not in items_seen:
@@ -1867,6 +1871,8 @@ class JsJaws(ServiceBase):
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
         if uri_match:
+            if is_tag_safelisted(safe_url, ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                return
             urls_result_section.add_tag("network.dynamic.uri", safe_url)
             # Extract domain
             domain_match = re.search(DOMAIN_REGEX, safe_url)
@@ -2016,7 +2022,7 @@ class JsJaws(ServiceBase):
             if len(log_line) > 5000 and not request.deep_scan:
                 log_line = truncate(log_line, 5000)
 
-            extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True)
+            extract_iocs_from_text_blob(log_line, malware_jail_res_sec, enforce_domain_char_max=True, is_network_static=True, safelist=self.safelist)
 
             if log_line.startswith("Exception occurred in "):
                 exception_lines = []

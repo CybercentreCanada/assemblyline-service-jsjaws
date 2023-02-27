@@ -4,8 +4,6 @@ regex:
   - .*\.googleapis\.com$
   # GStatic
   - .*\.gstatic\.com$
-  # jsDelivr
-  - cdn\.jsdelivr\.net$
   # WWW
   - www\.w3\.org$
   # Microsoft Auth
@@ -14,13 +12,15 @@ regex:
   - getbootstrap\.com$
   # Microsoft Auth
   - aadcdn\.msftauth\.net$
+  # jQuery
+  - code\.jquery\.com$
+  # FontAwesome
+  - use\.fontawesome\.com$
   network.static.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
   # GStatic
   - https?://.*\.gstatic\.com(?:$|/.*)
-  # jsDelivr
-  - https?://cdn\.jsdelivr\.net(?:$|/.*)
   # WWW
   - https?://www\.w3\.org(?:$|/.*)
   # Microsoft Auth
@@ -29,3 +29,37 @@ regex:
   - https?://getbootstrap\.com(?:$|/.*)
   # Microsoft Auth
   - https?://aadcdn\.msftauth\.net(?:$|/.*)
+  # jQuery
+  - https?://code\.jquery\.com(?:$|/.*)
+  # FontAwesome
+  - https?://use\.fontawesome\.com(?:$|/.*)
+  network.dynamic.domain:
+  # GoogleAPIs
+  - .*\.googleapis\.com$
+  # GStatic
+  - .*\.gstatic\.com$
+  # WWW
+  - www\.w3\.org$
+  # Bootstrap
+  - getbootstrap\.com$
+  # Microsoft Auth
+  - aadcdn\.msftauth\.net$
+  # jQuery
+  - code\.jquery\.com$
+  # FontAwesome
+  - use\.fontawesome\.com$
+  network.dynamic.uri:
+  # GoogleAPIs
+  - https?://.*\.googleapis\.com(?:$|/.*)
+  # GStatic
+  - https?://.*\.gstatic\.com(?:$|/.*)
+  # WWW
+  - https?://www\.w3\.org(?:$|/.*)
+  # Bootstrap
+  - https?://getbootstrap\.com(?:$|/.*)
+  # Microsoft Auth
+  - https?://aadcdn\.msftauth\.net(?:$|/.*)
+  # jQuery
+  - https?://code\.jquery\.com(?:$|/.*)
+  # FontAwesome
+  - https?://use\.fontawesome\.com(?:$|/.*)
