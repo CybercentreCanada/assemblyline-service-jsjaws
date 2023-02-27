@@ -877,7 +877,7 @@ class JsJaws(ServiceBase):
 
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
-            css_script_name = self._extract_css_using_soup(soup, request)
+            css_script_name, aggregated_js_script, js_content = self._extract_css_using_soup(soup, request, aggregated_js_script, js_content)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -1229,12 +1229,14 @@ class JsJaws(ServiceBase):
 
         return aggregated_js_script, js_content
 
-    def _extract_css_using_soup(self, soup: BeautifulSoup, request: ServiceRequest) -> str:
+    def _extract_css_using_soup(self, soup: BeautifulSoup, request: ServiceRequest, aggregated_js_script: tempfile.NamedTemporaryFile, js_content: bytes) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
-        This method extracts CSS from BeautifulSoup enumeration
+        This method extracts CSS and possibly JS from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
         :param request: The ServiceRequest object
-        :return: The name of the CSS script
+        :param aggregated_js_script: The NamedTemporaryFile object of the JS script
+        :param js_content: The file content of the NamedTemporaryFile of the JS script
+        :return: A tuple of the name of the CSS script, the JavaScript file that was written and the contents of the file that was written
         """
         self.log.debug("Extracting CSS from soup...")
 
@@ -1253,6 +1255,14 @@ class JsJaws(ServiceBase):
 
                 css_content, aggregated_css_script = self.append_content(body, css_content, aggregated_css_script)
 
+                # If has been observed that BeautifulSoup has difficulty parsing CSS,
+                # and JavaScript can be embedded within a Style element. Therefore, try to extract and aggregate!
+                file_type_details = self.identify.fileinfo(aggregated_css_script.name)
+                file_type = file_type_details["type"]
+                if file_type in ["code/html", "code/hta", "image/svg"]:
+                    css_body_soup = BeautifulSoup(body, features="html5lib")
+                    aggregated_js_script, js_content = self._extract_js_using_soup(css_body_soup, aggregated_js_script, js_content, request, insert_above_divider=True)
+
                 # Parse CSS to JSON
                 qualified_rules = parse_stylesheet(body, skip_comments=True, skip_whitespace=True)
                 for qualified_rule in qualified_rules:
@@ -1270,7 +1280,7 @@ class JsJaws(ServiceBase):
                         style_json[prelude_name] = output
 
             if aggregated_css_script is None:
-                return None
+                return None, aggregated_js_script, js_content
 
             aggregated_css_script.close()
 
@@ -1321,7 +1331,7 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Could not parse CSS due to {e}.")
             css_script_name = None
 
-        return css_script_name
+        return css_script_name, aggregated_js_script, js_content
 
     def _extract_visible_text_using_soup(self, dom_content) -> List[str]:
         """
