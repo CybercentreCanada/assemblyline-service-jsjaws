@@ -5,7 +5,7 @@ from signatures.abstracts import Signature
 
 
 # List of commands used to save a file to disk
-save_commands = ["SaveToFile", "msSaveOrOpenBlob(", "saveAs(", "new File("]
+save_commands = ["saveToFile", "msSaveOrOpenBlob(", "saveAs(", "new File("]
 
 
 class SaveToFile(Signature):

