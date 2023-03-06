@@ -91,6 +91,10 @@ STDOUT_LIMIT = 10000
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
+# Strings related to Character Data delimiters in markup languages
+CDATA_START = "<![CDATA["
+CDATA_END = "]]>"
+
 # Variations of PowerShell found in WScript Shell commands
 POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
 
@@ -505,7 +509,7 @@ class JsJaws(ServiceBase):
             file_type = file_type_details["type"]
 
         css_path = None
-        if file_type in ["code/html", "code/hta", "code/wsf"]:
+        if file_type in ["code/html", "code/hta", "code/wsf", "code/wsc"]:
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
         elif file_type == "image/svg":
             file_path, file_content, _ = self.extract_using_soup(request, file_content)
@@ -1001,6 +1005,10 @@ class JsJaws(ServiceBase):
             elif element.name in ["job"] and request.file_type == "code/wsf":
                 continue
 
+            # If the file is code/wsc, skip the component element
+            elif element.name in ["component"] and request.file_type == "code/wsc":
+                continue
+
             # If there is a script element that just points at a src, we want it!
             elif element.name in ["script"] and element.string is not None and element.string.strip():
                 continue
@@ -1076,6 +1084,8 @@ class JsJaws(ServiceBase):
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
+                if element_value.startswith(CDATA_START) and element_value.endswith(CDATA_END):
+                    element_value = element_value[9:-3]
                 create_element_script += f"{random_element_varname}.innerText = \"{element_value}\";\n"
             for attr_id, attr_val in element.attrs.items():
                 if attr_id != "id":
@@ -1201,6 +1211,9 @@ class JsJaws(ServiceBase):
                     function_varname = self._find_js_function_declaration(body)
 
                     self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
+
+                if body.startswith(CDATA_START) and body.endswith(CDATA_END):
+                    body = body[9:-3]
 
                 # If the body does not end with a semi-colon, add one
                 if body.rstrip()[-1] != ";":
