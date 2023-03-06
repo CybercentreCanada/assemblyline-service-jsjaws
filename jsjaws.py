@@ -91,6 +91,10 @@ STDOUT_LIMIT = 10000
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
+# Strings related to Character Data delimiters in markup languages
+CDATA_START = "<![CDATA["
+CDATA_END = "]]>"
+
 # Variations of PowerShell found in WScript Shell commands
 POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
 
@@ -1080,7 +1084,7 @@ class JsJaws(ServiceBase):
                 # Escape double quotes since we are wrapping the value in double quotes
                 if '"' in element_value:
                     element_value = element_value.replace('"', '\\"')
-                if element_value.startswith("<![CDATA[") and element_value.endswith("]]>"):
+                if element_value.startswith(CDATA_START) and element_value.endswith(CDATA_END):
                     element_value = element_value[9:-3]
                 create_element_script += f"{random_element_varname}.innerText = \"{element_value}\";\n"
             for attr_id, attr_val in element.attrs.items():
@@ -1208,7 +1212,7 @@ class JsJaws(ServiceBase):
 
                     self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
 
-                if body.startswith("<![CDATA[") and body.endswith("]]>"):
+                if body.startswith(CDATA_START) and body.endswith(CDATA_END):
                     body = body[9:-3]
 
                 # If the body does not end with a semi-colon, add one
