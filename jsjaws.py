@@ -980,7 +980,9 @@ class JsJaws(ServiceBase):
 
         # If the soup consists of a single script element, let's dive in a little
         # deeper to see if this file is suspicious
-        soup_body_contents = soup.body.contents
+        soup_body_contents = []
+        if soup.body:
+            soup_body_contents = soup.body.contents
         if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
             script_contents = script_contents_list[0] if script_contents_list else ""
