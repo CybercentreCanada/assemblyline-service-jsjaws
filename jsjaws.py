@@ -1075,8 +1075,19 @@ class JsJaws(ServiceBase):
             # Create an element and set the innertext
             # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
             create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
-                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
-                                    f"document.body.appendChild({random_element_varname});\n"
+                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n"
+
+            # Based on the parent, we want to append the child correctly
+            if element.parent and element.parent.name not in ['[document]', "html", "body", 'head']:
+                parent_id = element.parent.attrs.get("id")
+                if parent_id and parent_id in set_of_variable_names:
+                    # If the parent has already been created and we have the id, append this element to the parent
+                    create_element_script += f"document.getElementById(\"{parent_id}\").appendChild({random_element_varname});\n"
+                else:
+                    create_element_script += f"document.body.appendChild({random_element_varname});\n"
+            else:
+                create_element_script += f"document.body.appendChild({random_element_varname});\n"
+
             # Only set innertext field if there is a value to set it to
             # We do not want to set the innerText field for an html element though...
             if element_value and element.name not in ["html"]:
