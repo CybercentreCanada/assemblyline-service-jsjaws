@@ -601,11 +601,8 @@ class JsJaws(ServiceBase):
             f"{tool_timeout * 1000}",
         ]
 
-        # Pass the file name minus the .cart extension (if it exists) to MalwareJail
+        # Pass the file name to MalwareJail
         filename = path.basename(request.task.file_name)
-        if filename.endswith(".cart"):
-            filename = filename.replace(".cart", "")
-
         malware_jail_args.extend(["-f", filename])
 
         # If a CSS file path was extracted from the HTML/HTA, pass it to MalwareJail
