@@ -587,6 +587,7 @@ class JsJaws(ServiceBase):
         # -b id    ... browser type, use -b list for possible values (Possible -b values:
         # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
         # -t msecs - limits execution time by "msecs" milliseconds, by default 60 seconds.
+        # -f filename ... the value of the script full name property to be set
         malware_jail_args = [
             "node",
             self.path_to_jailme_js,
@@ -599,6 +600,13 @@ class JsJaws(ServiceBase):
             "-t",
             f"{tool_timeout * 1000}",
         ]
+
+        # Pass the file name minus the .cart extension (if it exists) to MalwareJail
+        filename = path.basename(request.task.file_name)
+        if filename.endswith(".cart"):
+            filename = filename.replace(".cart", "")
+
+        malware_jail_args.extend(["-f", filename])
 
         # If a CSS file path was extracted from the HTML/HTA, pass it to MalwareJail
         if css_path:
