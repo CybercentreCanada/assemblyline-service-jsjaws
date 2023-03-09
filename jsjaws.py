@@ -588,6 +588,7 @@ class JsJaws(ServiceBase):
         # -b id    ... browser type, use -b list for possible values (Possible -b values:
         # [ 'IE11_W10', 'IE8', 'IE7', 'iPhone', 'Firefox', 'Chrome' ])
         # -t msecs - limits execution time by "msecs" milliseconds, by default 60 seconds.
+        # -f filename ... the value of the script full name property to be set
         malware_jail_args = [
             "node",
             self.path_to_jailme_js,
@@ -600,6 +601,10 @@ class JsJaws(ServiceBase):
             "-t",
             f"{tool_timeout * 1000}",
         ]
+
+        # Pass the file name to MalwareJail
+        filename = path.basename(request.task.file_name)
+        malware_jail_args.extend(["-f", filename])
 
         # If a CSS file path was extracted from the HTML/HTA, pass it to MalwareJail
         if css_path:
@@ -981,7 +986,9 @@ class JsJaws(ServiceBase):
 
         # If the soup consists of a single script element, let's dive in a little
         # deeper to see if this file is suspicious
-        soup_body_contents = soup.body.contents
+        soup_body_contents = []
+        if soup.body:
+            soup_body_contents = soup.body.contents
         if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
             script_contents = script_contents_list[0] if script_contents_list else ""
@@ -1074,8 +1081,19 @@ class JsJaws(ServiceBase):
             # Create an element and set the innertext
             # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
             create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
-                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n" \
-                                    f"document.body.appendChild({random_element_varname});\n"
+                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n"
+
+            # Based on the parent, we want to append the child correctly
+            if element.parent and element.parent.name not in ['[document]', "html", "body", 'head']:
+                parent_id = element.parent.attrs.get("id")
+                if parent_id and parent_id in set_of_variable_names:
+                    # If the parent has already been created and we have the id, append this element to the parent
+                    create_element_script += f"document.getElementById(\"{parent_id}\").appendChild({random_element_varname});\n"
+                else:
+                    create_element_script += f"document.body.appendChild({random_element_varname});\n"
+            else:
+                create_element_script += f"document.body.appendChild({random_element_varname});\n"
+
             # Only set innertext field if there is a value to set it to
             # We do not want to set the innerText field for an html element though...
             if element_value and element.name not in ["html"]:

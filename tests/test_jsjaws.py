@@ -169,6 +169,7 @@ def dummy_task_class():
         def __init__(self):
             self.supplementary = []
             self.extracted = []
+            self.file_name = "blah.js"
     yield DummyTask
 
 
