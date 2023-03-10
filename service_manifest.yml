@@ -120,7 +120,7 @@ heuristics:
   - heur_id: 1
     name: Network Traffic Detected
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Malware Sandbox Tool(s) detected network traffic.
     signature_score_map:
       single_script_url: 500
@@ -128,31 +128,31 @@ heuristics:
   - heur_id: 2
     name: IOC(s) Extracted
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: At least one IOC has been extracted.
 
   - heur_id: 3
     name: Suspicious Activity Detected
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Suspicious activity was detected during execution.
 
   - heur_id: 4
     name: Embedded Code in Common Library
     score: 1000
-    filetype: '*'
+    filetype: '.*'
     description: Embedded code was discovered in a file posing as a common library
 
   - heur_id: 5
     name: Microsoft Support Diagnostic Tool found in location redirection
     score: 500
-    filetype: '*'
+    filetype: '.*'
     description: This technique was widely seen as part of the Follina exploit
 
   - heur_id: 6
     name: Automatic location redirection
     score: 10
-    filetype: '*'
+    filetype: '.*'
     description: Automatic redirection to another resource
     signature_score_map:
       obfuscator_io_url_redirect: 500
@@ -160,37 +160,37 @@ heuristics:
   - heur_id: 7
     name: Suspicious CSS Usage
     score: 10
-    filetype: '*'
+    filetype: '.*'
     description: Suspicious declarations were detected in HTML stylesheets
 
   - heur_id: 8
     name: Obfuscated with Obfuscator.io
     score: 1000
-    filetype: '*'
+    filetype: '.*'
     description: Sample was obfuscated with Obfuscator.io
 
   - heur_id: 9
     name: ShortCut usage
     score: 100
-    filetype: '*'
+    filetype: '.*'
     description: Sample uses unusual ShortCut objects
 
   - heur_id: 10
     name: Long One-Liner
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Sample consists of a long single line of code
 
   - heur_id: 11
     name: Time Waster
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Sample uses common time-wasting techniques
 
   - heur_id: 12
     name: Visual Basic and JavaScript
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Sample uses a combination of both Visual Basic and JavaScript
     signature_score_map:
       suspicious_url_found: 500
@@ -198,7 +198,7 @@ heuristics:
   - heur_id: 13
     name: WScript Shell uses IOCs
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Sample uses a WScript Shell to manipulate network calls
     signature_score_map:
       wscript_pwsh_url: 500
@@ -208,13 +208,13 @@ heuristics:
   - heur_id: 14
     name: Single script writes suspicious value
     score: 500
-    filetype: 'code/ht*'
+    filetype: 'code/ht.*'
     description: Single script tag with unescaped value written to DOM
 
   - heur_id: 15
     name: Nested document.write calls
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Multiple rounds of tool runs were required due to nested document.write calls
     signature_score_map:
       multi_write_3rd_party_script: 500
@@ -222,7 +222,7 @@ heuristics:
   - heur_id: 16
     name: Third-party script(s) required
     score: 1
-    filetype: '*'
+    filetype: '.*'
     description: Reference error caused by requirement of suspicious third party script(s)
 
 docker_config:
