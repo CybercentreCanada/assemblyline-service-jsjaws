@@ -564,7 +564,7 @@ class JsJaws(ServiceBase):
         download_payload = request.get_param("download_payload")
         allow_download_from_internet = self.config.get("allow_download_from_internet", False)
         if not is_time_waster:
-            tool_timeout = request.get_param("tool_timeout")
+            tool_timeout = int(request.get_param("tool_timeout"))
         else:
             # Arbitrary small tool timeout
             tool_timeout = 5
