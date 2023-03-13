@@ -173,7 +173,7 @@ D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
 #   /** Used as the semantic version number. */
 #   var VERSION = '4.17.21';
 LODASH_REGEX = \
-    r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-]+var VERSION = '([\d.]+)';"
+    r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-=+]+var VERSION = '([\d.]+)';"
 
 # Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
@@ -252,7 +252,7 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 #       blah7++;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)\s*{(?:\s*\w{2,10}\s*=\s*\w{2,10};)+\s*while\s*\(\w{2,10}\s*<\s*\(\w{2,10}\s*\*\s*\(?\w{2,10}\)?\)\)\s*{\s*(?:\w{2,10}\s*=\s*\w{2,10}\s*\+\s*\w{2,10}\s*|\w{2,10}\+\+);\s*}\s*}"
+WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)\s*{(?:\s*\w{2,15}\s*=\s*\w{2,15};)+\s*while\s*\(\w{2,15}\s*<\s*\(\w{2,15}\s*\*\s*\(?\w{2,15}\)?\)\)\s*{\s*(?:\w{2,15}\s*=\s*\w{2,15}\s*\+\s*\w{2,15}\s*|\w{2,15}\+\+);\s*}\s*}"
 
 # Examples:
 # function blah1() {
@@ -281,7 +281,7 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,10}\s*\((?:\w{2,10}(?:,\s*)?){1,5}\)
 #       blah9++
 #   }
 # }
-WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s*[a-zA-Z0-9]{2,10}\(\)\s*{\s*[(a-zA-Z0-9]{2,10}\([(a-zA-Z0-9]{2,10}\);\s*[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*while\s*\([(a-zA-Z0-9]{2,10}\s*(?:=\s*[(a-zA-Z0-9]{2,10})?\)\s*{\s*try\s*{\s*(?:[(a-zA-Z0-9]{2,10}=)?[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\([(a-zA-Z0-9]{2,10}\);\s*}\s*catch\s*\([(a-zA-Z0-9]{2,10}\)\s*{\s*(?:[(a-zA-Z0-9]{2,10}\[[(a-zA-Z0-9]{2,10}\]\s*=\s*[(a-zA-Z0-9]{2,10};|[(a-zA-Z0-9]{2,10}\s*=\s*[(a-zA-Z0-9]{2,10};\s*)+\s*}\s*[(a-zA-Z0-9]{2,10}\+\+\s*}\s*}"
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s+\w{2,15}\(\)\s*{\s*\w{2,15}\(\w{2,15}\);\s*\w{2,15}\s*=\s*\w{2,15};\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{\s*try\s*{\s*(?:\w{2,15}=)?\w{2,15}\[\w{2,15}\]\(\w{2,15}\);\s*}\s*catch\s*\(\w{2,15}\)\s*{\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+\s*}\s*\w{2,15}\+\+\s*}\s*}"
 
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 

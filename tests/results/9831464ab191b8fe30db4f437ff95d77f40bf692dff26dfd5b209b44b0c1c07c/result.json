@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].Drives => Drives\n\n\t\tScripting.FileSystemObject[14].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].Drives => Drives\n\n\t\tScripting.FileSystemObject[14].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -214,7 +214,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tnew Schedule.Service[17]()\n\n\t\tSchedule.Service[17].Connect()\n\n\t\tSchedule.Service[17].GetFolder(\"\\\")\n\n\t\tSchedule.Service[17].NewTask(0)\n",
+        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tWScript.CreateObject(\"Schedule.service\")\n\n\t\tnew Schedule.Service[17]()\n\n\t\tSchedule.Service[17].Connect()\n\n\t\tSchedule.Service[17].GetFolder(\"\\\")\n\n\t\tSchedule.Service[17].NewTask(0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
