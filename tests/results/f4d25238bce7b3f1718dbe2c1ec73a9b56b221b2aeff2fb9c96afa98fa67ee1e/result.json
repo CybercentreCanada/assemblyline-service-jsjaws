@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[15]\n\n\t\tSystem.IO.MemoryStream[15].WriteByte()\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.Binaryformatter[16].Deserialize_2(System.IO.MemoryStr...",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tnew System.IO.MemoryStream[10]()\n\n\t\tSystem.IO.MemoryStream[10].WriteByte()\n\n\t\tSystem.IO.MemoryStream[10].Position = 0\n\n\t\tSystem.IO.MemoryStream[10].toString()\n\n\t\t> System.IO.MemoryStream[10]\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[11].Deserialize_2(System.IO.MemoryStr...\n\t\tnew Delegate[13](System.IO.MemoryStream[10], undefined)(System.IO.MemoryStream[10])\n\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).toString()\n\n\t\t> Delegate[13](System.IO.MemoryStream[10], undefined)\n\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).0 => [0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0...\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).DynamicInvoke([0, 1, 0, 0, 0, 255, 255, 255, 255...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[9]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -125,7 +125,7 @@
   "files": {
     "extracted": [
       {
-        "name": "Blob[19]",
+        "name": "Blob[14]",
         "sha256": "8dd215ea8ccd6b5402a1bcac46dfee5e9297aa38b9bce8ef0ba225a5ed47a848"
       }
     ],

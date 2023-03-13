@@ -58,7 +58,8 @@ from tools import tinycss2_helper
 # Default value for the maximum number of files found in the "payload" folder that MalwareJail creates, to be extracted
 MAX_PAYLOAD_FILES_EXTRACTED = 50
 
-# The SHA256 representation of the "Resource Not Found" response from MalwareJail that occurs when we pass the --h404 arg
+# The SHA256 representation of the "Resource Not Found" response from MalwareJail that occurs
+# when we pass the --h404 arg
 RESOURCE_NOT_FOUND_SHA256 = "85658525ce99a2b0887f16b8a88d7acf4ae84649fa05217caf026859721ba04a"
 
 # The SHA256 representation when MalwareJail creates a fake file when _download is set to "No"
@@ -104,6 +105,9 @@ COMMAND_VARIATIONS = ["cmd", "cmd.exe"]
 
 # Variations of cURL found in WScript Shell commands
 CURL_VARIATIONS = ["curl", "curl.exe"]
+
+# WshShell is a protected term because it is used as a module class name in MalwareJail
+WSHSHELL = "WshShell"
 
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
@@ -169,7 +173,8 @@ D3_REGEX = r"\(function\(\)\{d3 = \{version: \"(1.29.5)\"\}; \/\/ semver"
 
 #   /** Used as the semantic version number. */
 #   var VERSION = '4.17.21';
-LODASH_REGEX = r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-]+var VERSION = '([\d.]+)';"
+LODASH_REGEX = \
+    r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-]+var VERSION = '([\d.]+)';"
 
 # Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
@@ -185,19 +190,22 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
-VBSCRIPT_ENV_SETTING_REGEX = b"\((?P<property_name>[\w\d\s()\'\"+\\\\]{2,})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+VBSCRIPT_ENV_SETTING_REGEX = \
+    b"\((?P<property_name>[\w\d\s()\'\"+\\\\]{2,})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
 # badinputhere
 # SyntaxError: Unexpected end of input
-INVALID_END_OF_INPUT_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
+INVALID_END_OF_INPUT_REGEX = \
+    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 
 # Example:
 # Exception occurred in aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: object blahblah:123
 # missingfunction()
 # ReferenceError: missingfunction is not defined
-REFERENCE_NOT_DEFINED_REGEX = b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\\n.+\\n\^\\nReferenceError: (.+) is not defined"
+REFERENCE_NOT_DEFINED_REGEX = \
+    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\\n.+\\n\^\\nReferenceError: (.+) is not defined"
 
 # JScript conditional comments
 # Inspired by https://github.com/HynekPetrak/malware-jail/blob/master/jailme.js#L310:L315
@@ -458,7 +466,7 @@ class JsJaws(ServiceBase):
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
-        self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
+        self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
         self.extracted_wscript = "extracted_wscript.bat"
         self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
@@ -768,6 +776,31 @@ class JsJaws(ServiceBase):
             malware_jail_thr.start()
             malware_jail_thr.join(timeout=tool_timeout)
             malware_jail_output = responses.get(MALWARE_JAIL, [])
+
+        # Find the log line when the sample was executed in MalwareJail, and the lines after that are the output that we want.
+        start_idx = len(malware_jail_output)
+        end_idx = 0
+        for idx, line in enumerate(malware_jail_output):
+            if "==> Executing malware file(s). =========================================" in line:
+                start_idx = idx
+                break
+            elif idx > 1000:
+                # There's no way MalwareJail would output 1000 lines before executing the malware, right?!
+                break
+
+        for idx, line in reversed(list(enumerate(malware_jail_output))):
+            if "==> Cleaning up sandbox." in line:
+                # We want to include the line above
+                end_idx = idx + 1
+                break
+            elif idx > 1000:
+                # There's no way MalwareJail would output 1000 lines after cleaning up the sandbox, right?!
+                break
+
+        if start_idx < len(malware_jail_output) - 1 and end_idx > 0:
+            malware_jail_output = malware_jail_output[start_idx:end_idx]
+        elif start_idx < len(malware_jail_output) - 1:
+            malware_jail_output = malware_jail_output[start_idx:]
 
         jsxray_output: Dict[Any] = {}
         try:
@@ -1145,7 +1178,7 @@ class JsJaws(ServiceBase):
                     if '"' in command:
                         command = command.replace('"', '\\"')
                     # ShortCuts have a click method that we must instantiate.
-                    create_element_script += f"{random_element_varname}.click = function() {{ ws = new WScript_Shell(); ws.exec(\"{command}\")}};\n"
+                    create_element_script += f"{random_element_varname}.click = function() {{ ws = new {WSHSHELL}(); ws.exec(\"{command}\")}};\n"
 
                     heur = Heuristic(9)
                     _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
@@ -1233,6 +1266,8 @@ class JsJaws(ServiceBase):
 
                 if body.startswith(CDATA_START) and body.endswith(CDATA_END):
                     body = body[9:-3]
+                if WSHSHELL in body:
+                    body = body.replace(WSHSHELL, WSHSHELL.lower())
 
                 # If the body does not end with a semi-colon, add one
                 if body.rstrip()[-1] != ";":
@@ -1417,9 +1452,23 @@ class JsJaws(ServiceBase):
 
                 cmd = wscript_shell_run.group(1)
                 # This is a byproduct of the sandbox using WScript.Shell.Run
-                for item in [", 0, undefined", ", 1, 0", ", 0, false"]:
-                    if item in cmd:
-                        cmd = cmd.replace(item, "")
+                # https://ss64.com/vb/run.html
+                # intWindowStyle = (optional) any integer from 0-10. 0 is a hacker favourite (hide the window and activate another
+                # window), although we have seen 1 before (activate and display the window)
+                # bWaitOnReturn = boolean
+                for intWindowStyle in range(12):
+                    for bWaitOnReturn in ["undefined", "false", "true", "0", "1"]:
+                        # Since intWindowsStyle is optional, add a clause here
+                        if intWindowStyle == 11:
+                            item = f", {bWaitOnReturn}"
+                        else:
+                            item = f", {intWindowStyle}, {bWaitOnReturn}"
+                        if cmd.endswith(item):
+                            cmd = cmd.replace(item, "")
+
+                # This is a byproduct of using ProxyGenerator for WScript
+                if cmd.startswith('"') and cmd.endswith('"'):
+                    cmd = cmd[1:-1]
 
                 # Write command to file
                 wscript_extraction.write(cmd + "\n")
@@ -2315,6 +2364,10 @@ class JsJaws(ServiceBase):
         wscript_name = re.search(VBS_WSCRIPT_SHELL_REGEX, body, re.IGNORECASE)
         if wscript_name and len(wscript_name.regs) > 1:
             wscript_varname = wscript_name.group("varname")
+
+            if wscript_varname == WSHSHELL:
+                wscript_varname = wscript_varname.lower()
+
             vbscript_conversion = f"var {wscript_varname} = new ActiveXObject('WScript.Shell');"
 
             js_content, aggregated_js_script = self.append_content(vbscript_conversion, js_content, aggregated_js_script)

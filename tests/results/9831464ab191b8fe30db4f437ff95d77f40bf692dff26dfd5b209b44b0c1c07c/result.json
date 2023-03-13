@@ -38,7 +38,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[15].setRequestHeader(User-Agent, mozilla firefox)\n",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[10].send()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[10].setRequestHeader(\"User-Agent\", \"mozilla firefox\")\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -60,29 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[19](C:)\n\n\t\tDriveObject[19](C:).name = (string) 'C:'\n\n\t\tnew Collection[20]([?  {?    id: 19,?    _name: 'DriveObject[19](C:)',?    _availablespace: '',?    ...",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "drive_object": 10
-          },
-          "signatures": {
-            "drive_object": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: DriveObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(%TEMP%) => C:\\Users\\User\\AppData\\Local\\Temp\n",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].expandenvironmentstrings(\"%TEMP%\")\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tnew Scripting.FileSystemObject[18]\n\n\t\tScripting.FileSystemObject[18].CreateFolder(C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].Drives => Drives\n\n\t\tScripting.FileSystemObject[14].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tSchedule.Service[22].GetFolder(\\) => \\\n",
+        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tSchedule.Service[17].GetFolder(\"\\\")\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -148,7 +148,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -170,7 +170,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudio...",
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[12].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -192,7 +192,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudio...",
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[12].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -214,7 +214,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tnew Schedule.Service[22]\n\n\t\tSchedule.Service[22].Connect(undefined, undefined, undefined, undefined)\n\n\t\tSchedule.Service[22].GetFolder(\\) => \\\n\n\t\tSchedule.Service[22].NewTask(0)\n",
+        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tnew Schedule.Service[17]()\n\n\t\tSchedule.Service[17].Connect()\n\n\t\tSchedule.Service[17].GetFolder(\"\\\")\n\n\t\tSchedule.Service[17].NewTask(0)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -355,14 +355,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "prepare_network_request"
+          "network_request"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "drive_object"
+          "prepare_network_request"
         ]
       },
       {
