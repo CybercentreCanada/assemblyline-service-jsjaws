@@ -2172,7 +2172,32 @@ class JsJaws(ServiceBase):
                     # We need to recover the non-truncated content from the sandbox_dump.json file
                     with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
                         data = load(f)
-                        location_href = data["Location"]["_props"]["href"]
+                        location_pointer = data["Location"]
+                        if "$ref" in location_pointer:
+                            location_pointer = location_pointer["$ref"]
+                            # Let's clean this up so that we can access the correct reference
+                            # Could look like this "$[\"ret\"][\"contentDocument\"][\"_parentNode\"][\"_location\"]"
+                            if location_pointer.startswith("$"):
+                                location_pointer = location_pointer[1:]
+
+                            if location_pointer.startswith("[\"") and location_pointer.endswith("\"]"):
+                                location_pointer = location_pointer[2:-2]
+
+                            if "\"][\"" in location_pointer:
+                                location_pointer = location_pointer.split("\"][\"")
+
+                            if not isinstance(location_pointer, list):
+                                location_pointer = [location_pointer]
+
+                            for key in location_pointer:
+                                if key not in data:
+                                    self.log.debug("There is an error in accessing referenced objects!")
+                                    return
+                                data = data[key]
+
+                            location_href = data["_props"]["href"]
+                        else:
+                            location_href = location_pointer["_props"]["href"]
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)
