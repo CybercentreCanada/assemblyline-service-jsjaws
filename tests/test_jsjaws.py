@@ -375,7 +375,7 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
-        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/malwarejail/config_wscript_only.json")
+        assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
         assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
         assert jsjaws_class_instance.extracted_wscript_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript

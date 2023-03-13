@@ -31,10 +31,12 @@
     },
     "keywords": [
         "node",
-        "malware",
-        "jail",
+        "malware-jail",
         "sandbox",
-        "analysis"
+        "analysis",
+        "js-x-ray",
+        "box-js",
+        "wscript"
     ],
     "files": [
         "malwarejail/*"

