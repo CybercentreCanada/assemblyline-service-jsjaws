@@ -991,7 +991,7 @@ class JsJaws(ServiceBase):
                 self.artifact_list.append(artifact)
 
                 # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
-                file_info = self.identify.ident(embedded_file_content, len(embedded_file_content), embed_path)
+                file_info = self.identify.fileinfo(embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     soup = BeautifulSoup(embedded_file_content, features="html5lib")
                     aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider=True)
