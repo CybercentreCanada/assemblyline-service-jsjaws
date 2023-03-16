@@ -1,7 +1,7 @@
 from base64 import b64decode
 from binascii import Error as BinasciiError
 from bs4 import BeautifulSoup
-from bs4.element import Comment
+from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
@@ -382,13 +382,13 @@ class JsJaws(ServiceBase):
             with open(SAFELIST_PATH, "r") as f:
                 self.safelist = yaml_safe_load(f)
 
-        self.log.debug("JsJaws service started")
         self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
 
-    def stop(self) -> None:
-        self.log.debug("JsJaws service ended")
-
-    def execute(self, request: ServiceRequest) -> None:
+    def _reset_execution_variables(self) -> None:
+        """
+        This method resets variables that are expected to return to their default values when a new sample is received.
+        :return: None
+        """
         global embedded_code_in_lib
         global single_script_with_unescape
 
@@ -400,9 +400,24 @@ class JsJaws(ServiceBase):
         self.script_sources = set()
         self.script_with_source_and_no_body = False
 
-        file_path = request.file_path
-        file_content = request.file_contents
+    def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
+        """
+        This method resets variables that are expected to return to their default values when a gauntlet run begins.
+        :return: None
+        """
+        # Reset per gauntlet run
+        self.artifact_list = []
+        request.result = Result()
+        self.script_with_source_and_no_body = False
 
+    def _handle_filtered_code(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        This method handles filtering code from third-party libraries, or not!
+        :param file_path: The path of the file
+        :param file_content: The content of the file
+        :return: A tuple of the file path and the file content
+        """
+        global embedded_code_in_lib
         try:
             filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
             if filtered_file_path and filtered_file_content:
@@ -413,21 +428,37 @@ class JsJaws(ServiceBase):
         except UnicodeDecodeError:
             pass
 
-        # This is a VBScript method of setting an environment variable:
-        #
-        # var wscript_shell_object = CreateObject("WScript.Shell")
-        # var wscript_shell_object_env = wscript_shell_object.Environment("USER")
-        # wscript_shell_object_env("test") = "Hello World!";
-        #
-        # The above code is also valid in JavaScript when we are not intercepting the
-        # WScript.Shell object. However, since we are doing so, the act of
-        # setting the environment variable using round brackets is not possible and will
-        # result in an "ReferenceError: Invalid left-hand side in assignment"
-        # error.
-        #
-        # Therefore we are going to hunt for instances of this, and replace
-        # it with an accurate JavaScript technique for setting variables.
-        def log_and_replace(match):
+        return file_path, file_content
+
+    def _handle_vbscript_env_variables(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        This is a VBScript method of setting an environment variable:
+
+        var wscript_shell_object = CreateObject("WScript.Shell")
+        var wscript_shell_object_env = wscript_shell_object.Environment("USER")
+        wscript_shell_object_env("test") = "Hello World!";
+
+        The above code is also valid in JavaScript when we are not intercepting the
+        WScript.Shell object. However, since we are doing so, the act of
+        setting the environment variable using round brackets is not possible and will
+        result in an "ReferenceError: Invalid left-hand side in assignment"
+        error.
+
+        Therefore we are going to hunt for instances of this, and replace
+        it with an accurate JavaScript technique for setting variables.
+
+        :param file_path: The path of the file
+        :param file_content: The content of the file
+        :return: A tuple of the file path and the file content
+        """
+
+        def log_and_replace(match) -> bytes:
+            """
+            This nested method looks for matches of the VBSCRIPT_ENV_SETTING_REGEX regular
+            expression, logs the match for debugging purposes, then replaces it
+            :param match: The regular expression match
+            :return: The value to replace the match
+            """
             if len(match.regs) != 3:
                 return
             property_name = match.group("property_name").decode()
@@ -451,6 +482,17 @@ class JsJaws(ServiceBase):
                 file_content = new_content
                 f.write(file_content)
                 file_path = f.name
+
+        return file_path, file_content
+
+    def execute(self, request: ServiceRequest) -> None:
+        file_path = request.file_path
+        file_content = request.file_contents
+
+        # Initial setup per sample
+        self._reset_execution_variables()
+        file_path, file_content = self._handle_filtered_code(file_path, file_content)
+        file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -486,69 +528,41 @@ class JsJaws(ServiceBase):
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
 
-        self.run_the_gauntlet(request, file_path, file_content)
+        self._run_the_gauntlet(request, file_path, file_content)
 
-    def run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+    @staticmethod
+    def _raise_embedded_code_in_lib(request: ServiceRequest) -> None:
         """
-        Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
+        This method adds a section to the result that indicates that embedded code was found in a common library
         :param request: The ServiceRequest object
-        :param file_path: The path of the file to use as we traverse this iteration of the gauntlet
-        :param file_content: The content of the file to use as we traverse this iteration of the gauntlet
-        :param subsequent_run: A flag indicating if this is not the initial gauntlet run
         :return: None
         """
-        self.gauntlet_runs += 1
+        embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
+        embedded_code_in_lib_res_sec.add_line(f"Common library used: {embedded_code_in_lib}")
+        embedded_code_in_lib_res_sec.set_heuristic(4)
+        request.result.add_section(embedded_code_in_lib_res_sec)
 
-        # Reset per gauntlet run
-        self.artifact_list = []
-        request.result = Result()
-        self.script_with_source_and_no_body = False
-
-        if embedded_code_in_lib:
-            embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
-            embedded_code_in_lib_res_sec.add_line(f"Common library used: {embedded_code_in_lib}")
-            embedded_code_in_lib_res_sec.set_heuristic(4)
-            request.result.add_section(embedded_code_in_lib_res_sec)
-
-        if not subsequent_run:
-            file_type = request.file_type
-        else:
-            file_type_details = self.identify.fileinfo(file_path)
-            file_type = file_type_details["type"]
-
-        css_path = None
-        if file_type in ["code/html", "code/hta", "code/wsf", "code/wsc"]:
-            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
-        elif file_type == "image/svg":
-            file_path, file_content, _ = self.extract_using_soup(request, file_content)
-        elif file_type == "code/jscript":
-            file_path, file_content = self.extract_js_from_jscript(request, file_content)
-
-        if file_path is None:
-            return
-
-        if embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
-            artifact = {
-                "name": TEMP_JS_FILENAME,
-                "path": file_path,
-                "description": "Extracted JavaScript",
-                "to_be_extracted": False,
-            }
-            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
-            self.artifact_list.append(artifact)
-
-        if single_script_with_unescape:
-            heur = Heuristic(14)
-            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
-
-        # If the file starts or ends with null bytes, let's strip them out
+    def _strip_null_bytes(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        If the file starts or ends with null bytes, let's strip them out
+        :param file_path: The path of the file
+        :param file_content: The content of the file
+        :return: A tuple of the file path and the file content
+        """
         if file_content.startswith(b"\x00") or file_content.endswith(b"\x00"):
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 file_content = file_content[:].strip(b"\x00")
                 f.write(file_content)
                 file_path = f.name
+        return file_path, file_content
 
-        # If the method uses a common time-waster structure, set tool timeout to a small number
+    def _is_time_waster(self, file_content: bytes, request: ServiceRequest) -> bool:
+        """
+        If the method uses a common time-waster structure, set tool timeout to a small number
+        :param file_content: The content of the file
+        :param request: The ServiceRequest object
+        :return: A flag indicating if the file is a time waster or not
+        """
         is_time_waster = False
         for time_waster_regex in TIME_WASTER_REGEXES:
             time_waster_match = re.search(time_waster_regex, file_content)
@@ -559,36 +573,46 @@ class JsJaws(ServiceBase):
                 time_waster_res_sec.set_heuristic(11)
                 request.result.add_section(time_waster_res_sec)
                 break
+        return is_time_waster
 
-        # Grabbing service level configuration variables and submission variables
-        download_payload = request.get_param("download_payload")
-        allow_download_from_internet = self.config.get("allow_download_from_internet", False)
-        if not is_time_waster:
-            tool_timeout = int(request.get_param("tool_timeout"))
-        else:
-            # Arbitrary small tool timeout
-            tool_timeout = 5
-        browser_selected = request.get_param("browser")
-        log_errors = request.get_param("log_errors")
-        wscript_only = request.get_param("wscript_only")
-        throw_http_exc = request.get_param("throw_http_exc")
-        extract_function_calls = request.get_param("extract_function_calls")
-        extract_eval_calls = request.get_param("extract_eval_calls")
-        override_eval = request.get_param("override_eval")
-        file_always_exists = request.get_param("file_always_exists")
-        add_supplementary = request.get_param("add_supplementary")
-        static_signatures = request.get_param("static_signatures")
-        no_shell_error = request.get_param("no_shell_error")
-        display_iocs = request.get_param("display_iocs")
-        static_analysis_only = request.get_param("static_analysis_only")
-        enable_synchrony = request.get_param("enable_synchrony")
-
+    def _setup_boxjs_args(self, request: ServiceRequest, tool_timeout: int) -> List[str]:
+        """
+        This method sets up the Box.js arguments which will be used to run the tool
+        :param request: The ServiceRequest object
+        :param tool_timeout: The time that the tool with run for
+        :return: A list of arguments used for running Box.js
+        """
         # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --no-kill              Do not kill the application when runtime errors occur
         # --output-dir           The location on disk to write the results files and folders to (defaults to the
         #                        current directory)
         # --timeout              The script will timeout after this many seconds (default 10)
         boxjs_args = [self.path_to_boxjs, "--loglevel", "debug", "--no-kill", "--output-dir", self.working_directory, "--timeout", str(tool_timeout)]
+
+        no_shell_error = request.get_param("no_shell_error")
+        # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
+        #                        error by default to pretend that the distribution sites are down, so that the
+        #                        script will attempt to poll every site)
+        if no_shell_error:
+            boxjs_args.append("--no-shell-error")
+
+        return boxjs_args
+
+    def _setup_malware_jail_args(self, request: ServiceRequest, tool_timeout: int, css_path: Optional[str]) -> List[str]:
+        """
+        This method sets up the Malware Jail arguments which will be used to run the tool
+        :param request: The ServiceRequest object
+        :param tool_timeout: The time that the tool with run for
+        :param css_path: The path to the parsed stylesheet
+        :return: A list of arguments used for running Malware Jail
+        """
+        browser_selected = request.get_param("browser")
+        log_errors = request.get_param("log_errors")
+        wscript_only = request.get_param("wscript_only")
+        extract_function_calls = request.get_param("extract_function_calls")
+        extract_eval_calls = request.get_param("extract_eval_calls")
+        override_eval = request.get_param("override_eval")
+        file_always_exists = request.get_param("file_always_exists")
 
         # -s odir  ... output directory for generated files (malware payload)
         # -o ofile ... name of the file where sandbox shall be dumped at the end
@@ -617,38 +641,6 @@ class JsJaws(ServiceBase):
         if css_path:
             malware_jail_args.append(f"--stylesheet={css_path}")
 
-        # If the Assemblyline environment is allowing service containers to reach the Internet,
-        # then allow_download_from_internet service variable needs to be set to true
-
-        # If the user has requested the sample to download any payload from the Internet, and
-        # the service is allowed to reach the Internet, then add the following flag
-        if allow_download_from_internet and download_payload:
-            # --down   ... allow downloading malware payloads from remote servers
-            malware_jail_args.append("--down=y")
-            # --download             Actually download the payloads
-            boxjs_args.append("--download")
-        # If the user has requested the sample to download any payload from the Internet, and
-        # the service is NOT allowed to reach the Internet, then add a ResultSection letting
-        # them know and simulate all network call responses with a 404 Not Found
-        elif not allow_download_from_internet and download_payload:
-            request.result.add_section(ResultSection("Internet Access is disabled."))
-            # --h404   ... on download return always HTTP/404
-            malware_jail_args.append("--h404")
-        # By selecting the throw_http_exc flag, the sandbox will throw an error in every
-        # network call. This is useful for attempting different code execution paths.
-        elif throw_http_exc:
-            malware_jail_args.append("--t404")
-        # As a default, the sandbox will simulate all network call responses with a 404 Not Found
-        else:
-            # Fake the download otherwise
-            pass
-
-        # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
-        #                        error by default to pretend that the distribution sites are down, so that the
-        #                        script will attempt to poll every site)
-        if no_shell_error:
-            boxjs_args.append("--no-shell-error")
-
         # Files that each represent a Function Call can be noisy and not particularly useful
         # This flag turns on this extraction
         if request.deep_scan or extract_function_calls:
@@ -676,107 +668,80 @@ class JsJaws(ServiceBase):
         if file_always_exists:
             malware_jail_args.append("--filealwaysexists")
 
+        return malware_jail_args
+
+    def _setup_tool_args(self, request: ServiceRequest, tool_timeout: int, css_path: Optional[str]) -> Tuple[List[str], List[str], List[str], List[str]]:
+        """
+        This method sets up the tool arguments which will be used to run tools
+        :param request: The ServiceRequest object
+        :param tool_timeout: The time that the tool with run for
+        :param css_path: The path to the parsed stylesheet
+        :return: A tuple consisting of lists of arguments used for several tools
+        """
+        # Grabbing service level configuration variables and submission variables
+        download_payload = request.get_param("download_payload")
+        allow_download_from_internet = self.config.get("allow_download_from_internet", False)
+        throw_http_exc = request.get_param("throw_http_exc")
+
+        boxjs_args = self._setup_boxjs_args(request, tool_timeout)
+
+        malware_jail_args = self._setup_malware_jail_args(request, tool_timeout, css_path)
+
         jsxray_args = ["node", self.path_to_jsxray, f"{DIVIDING_COMMENT}\n"]
 
         synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
-        # Don't forget the sample!
-        malware_jail_args.append(file_path)
-        jsxray_args.append(file_path)
+        # If the Assemblyline environment is allowing service containers to reach the Internet,
+        # then allow_download_from_internet service variable needs to be set to true
 
-        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony/Box.js and
-        # check if script is a long one-liner
+        # If the user has requested the sample to download any payload from the Internet, and
+        # the service is allowed to reach the Internet, then add the following flag
+        if allow_download_from_internet and download_payload:
+            # --down   ... allow downloading malware payloads from remote servers
+            malware_jail_args.append("--down=y")
+            # --download             Actually download the payloads
+            boxjs_args.append("--download")
+        # If the user has requested the sample to download any payload from the Internet, and
+        # the service is NOT allowed to reach the Internet, then add a ResultSection letting
+        # them know and simulate all network call responses with a 404 Not Found
+        elif not allow_download_from_internet and download_payload:
+            request.result.add_section(ResultSection("Internet Access is disabled."))
+            # --h404   ... on download return always HTTP/404
+            malware_jail_args.append("--h404")
+        # By selecting the throw_http_exc flag, the sandbox will throw an error in every
+        # network call. This is useful for attempting different code execution paths.
+        elif throw_http_exc:
+            malware_jail_args.append("--t404")
+        # As a default, the sandbox will simulate all network call responses with a 404 Not Found
+        else:
+            # Fake the download otherwise
+            pass
+
+        return boxjs_args, malware_jail_args, jsxray_args, synchrony_args
+
+    @staticmethod
+    def _is_single_line(file_content: bytes) -> bool:
+        """
+        This method is used for determining if the file contents are a single line
+        :param file_content: The content of the file
+        :return: A flag indicating if the file content is a single line
+        """
         one_liner_hit = False
-        actual_script = None
-        if f"{DIVIDING_COMMENT}\n".encode() in file_content:
-            _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
-            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                t.write(actual_script)
-                synchrony_args.append(t.name)
-                # Box.js cannot handle the document object, therefore we need to pass it the split file
-                boxjs_args.append(t.name)
+        is_single_line = len(list(filter(lambda item: item != b"", file_content.split(b"\n")))) == 1
 
-            is_single_line = len(list(filter(lambda item: item != b"", actual_script.split(b"\n")))) == 1
+        # Arbitrary suspicous length of a file
+        if is_single_line and len(file_content) > 5000:
+            one_liner_hit = True
 
-            # Arbitrary suspicous length of a file
-            if is_single_line and len(actual_script) > 5000:
-                one_liner_hit = True
-        else:
-            synchrony_args.append(file_path)
-            boxjs_args.append(file_path)
+        return one_liner_hit
 
-            is_single_line = len(list(filter(lambda item: item != b"", file_content.split(b"\n")))) == 1
-
-            # Arbitrary suspicous length of a file
-            if is_single_line and len(file_content) > 5000:
-                one_liner_hit = True
-
-        if one_liner_hit:
-            heur = Heuristic(10)
-            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
-
-        tool_threads: List[Thread] = []
-        responses: Dict[str, List[str]] = {}
-        if not static_analysis_only:
-            # Box.js cannot handle being run more than once on a sample. Oh well!
-            if not subsequent_run:
-                # Boxjs does not provide "document" object support
-                if b"document[" in request.file_contents or b"document." in request.file_contents:
-                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
-                elif actual_script and b"document." in actual_script:
-                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
-                else:
-                    tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
-            else:
-                self.log.debug(f"Do not run {BOX_JS} on subsequent runs.")
-            tool_threads.append(Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True))
-        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
-
-        # There are three ways that Synchrony will run.
-        has_synchrony_run = False
-
-        # 1. If it is enabled in the submission parameter
-        if enable_synchrony:
-            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
-            has_synchrony_run = True
-        else:
-            for yara_rule in listdir("./yara"):
-                rules = yara_compile(filepath=path.join("./yara", yara_rule))
-                matches = rules.match(file_path)
-                # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
-                if matches:
-                    tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
-                    has_synchrony_run = True
-                    break
-
-        for thr in tool_threads:
-            thr.start()
-
-        for thr in tool_threads:
-            thr.join(timeout=tool_timeout)
-            if thr.is_alive():
-                self.log.debug("A tool did not finish. Look at previous logs...")
-                # Give the tool a chance to clean up after to the tool timeout
-                sleep(3)
-
-        boxjs_output: List[str] = []
-        if path.exists(self.boxjs_analysis_log):
-            with open(self.boxjs_analysis_log, "r") as f:
-                boxjs_output = f.readlines()
-
-        malware_jail_output = responses.get(MALWARE_JAIL, [])
-        if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses[MALWARE_JAIL] = [EXITED_DUE_TO_STDOUT_LIMIT]
-            tool_timeout = malware_jail_output[-1] + 5
-            self.log.debug(f"Running {MALWARE_JAIL} again with a timeout of {tool_timeout}s")
-            timeout_arg_index = malware_jail_args.index("-t")
-            malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            malware_jail_thr = Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
-            malware_jail_thr.start()
-            malware_jail_thr.join(timeout=tool_timeout)
-            malware_jail_output = responses.get(MALWARE_JAIL, [])
-
-        # Find the log line when the sample was executed in MalwareJail, and the lines after that are the output that we want.
+    @staticmethod
+    def _trim_malware_jail_output(malware_jail_output: List[str]) -> List[str]:
+        """
+        Find the log line when the sample was executed in MalwareJail, and the lines after that are the output that we want.
+        :param malware_jail_output: A list of strings that make up the stdout output from Malware Jail
+        :return: A potentially modified list of strings that make up the stdout output from Malware Jail
+        """
         start_idx = len(malware_jail_output)
         end_idx = 0
         for idx, line in enumerate(malware_jail_output):
@@ -801,12 +766,210 @@ class JsJaws(ServiceBase):
         elif start_idx < len(malware_jail_output) - 1:
             malware_jail_output = malware_jail_output[start_idx:]
 
-        jsxray_output: Dict[Any] = {}
+        return malware_jail_output
+
+    def _handle_malware_jail_stdout_limit(self, malware_jail_output: List[str],  malware_jail_args: List[str], responses: Dict[str, List[str]]) -> List[str]:
+        """
+        This method handles if the MalwareJail exits early due to the stdout limit being surpassed
+        :param malware_jail_output: A list of strings that make up the stdout output from Malware Jail
+        :param malware_jail_args: A list of arguments used for running Malware Jail
+        :param responses: A dictionary used to contain the stdout from a tool
+        :return: A list of strings that make up the stdout output from Malware Jail
+        """
+        if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
+            responses[MALWARE_JAIL] = [EXITED_DUE_TO_STDOUT_LIMIT]
+            tool_timeout = malware_jail_output[-1] + 5
+            self.log.debug(f"Running {MALWARE_JAIL} again with a timeout of {tool_timeout}s")
+            timeout_arg_index = malware_jail_args.index("-t")
+            malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
+            malware_jail_thr = Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
+            malware_jail_thr.start()
+            malware_jail_thr.join(timeout=tool_timeout)
+            malware_jail_output = responses.get(MALWARE_JAIL, [])
+
+        return malware_jail_output
+
+    def _handle_boxjs_output(self) -> List[str]:
+        """
+        This method handles retrieving the Box.js output
+        :return: The a list of strings that make up the analysis log from Box.js
+        """
+        boxjs_output: List[str] = []
+        if path.exists(self.boxjs_analysis_log):
+            with open(self.boxjs_analysis_log, "r") as f:
+                boxjs_output = f.readlines()
+        return boxjs_output
+
+    def _handle_malware_jail_output(self, responses: Dict[str, List[str]], malware_jail_args: List[str]) -> List[str]:
+        """
+        This method handles the Malware Jail output
+        :param responses: A dictionary used to contain the stdout from a tool
+        :param malware_jail_args: A list of arguments used for running Malware Jail
+        :return: A list of strings that make up the stdout output from Malware Jail
+        """
+        malware_jail_output = responses.get(MALWARE_JAIL, [])
+        malware_jail_output = self._handle_malware_jail_stdout_limit(malware_jail_output, malware_jail_args, responses)
+        malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
+        return malware_jail_output
+
+    @staticmethod
+    def _handle_jsxray_output(responses) -> Dict[str, Any]:
+        """
+        This method handles JS-X-Ray output
+        :param responses: A dictionary used to contain the stdout from a tool
+        :return: A dictionary that make up the output from JS-X-Ray
+        """
+        jsxray_output: Dict[str, Any] = {}
         try:
             if len(responses.get(JS_X_RAY, [])) > 0:
                 jsxray_output = loads(responses[JS_X_RAY][0])
         except JSONDecodeError:
             pass
+        return jsxray_output
+
+    def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+        """
+        Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
+        :param request: The ServiceRequest object
+        :param file_path: The path of the file to use as we traverse this iteration of the gauntlet
+        :param file_content: The content of the file to use as we traverse this iteration of the gauntlet
+        :param subsequent_run: A flag indicating if this is not the initial gauntlet run
+        :return: None
+        """
+        # Each time that we run through the gauntlet, increment this count
+        self.gauntlet_runs += 1
+
+        # Initial setup per gauntlet run
+        self._reset_gauntlet_variables(request)
+
+        # If there is embedded code in a common library, handle accordingly
+        if embedded_code_in_lib:
+            self._raise_embedded_code_in_lib(request)
+
+        # Determine the file type to be used for this gauntlet run
+        if not subsequent_run:
+            file_type = request.file_type
+        else:
+            file_type_details = self.identify.fileinfo(file_path)
+            file_type = file_type_details["type"]
+
+        # Based on the file type, send to the proper extraction method
+        css_path = None
+        if file_type in ["code/html", "code/hta", "code/wsf", "code/wsc"]:
+            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
+        elif file_type == "image/svg":
+            file_path, file_content, _ = self.extract_using_soup(request, file_content)
+        elif file_type == "code/jscript":
+            file_path, file_content = self.extract_js_from_jscript(file_content)
+
+        # If at this point the file path is None, there is nothing to analyze and we can go home
+        if file_path is None:
+            return
+
+        # If we did manage to extract embedded code from a common library, add the extracted file as an artifact
+        if embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
+            artifact = {
+                "name": TEMP_JS_FILENAME,
+                "path": file_path,
+                "description": "Extracted JavaScript",
+                "to_be_extracted": False,
+            }
+            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
+            self.artifact_list.append(artifact)
+
+        # If the file consists of a single script with an unescape call, this is worth reporting
+        if single_script_with_unescape:
+            heur = Heuristic(14)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+        # We don't want files that have leading or trailing null bytes as this can affect execution
+        file_path, file_content = self._strip_null_bytes(file_path, file_content)
+
+        # Time is of the essence!
+        if not self._is_time_waster(file_content, request):
+            tool_timeout = int(request.get_param("tool_timeout"))
+        else:
+            # Arbitrary small tool timeout
+            tool_timeout = 5
+
+        # Let's get all of the arguments needs to run the tools
+        boxjs_args, malware_jail_args, jsxray_args, synchrony_args = self._setup_tool_args(request, tool_timeout, css_path)
+
+        # Don't forget the sample!
+        malware_jail_args.append(file_path)
+        jsxray_args.append(file_path)
+
+        # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony/Box.js and
+        # check if script is a long one-liner
+        one_liner_hit = False
+        actual_script = None
+        if f"{DIVIDING_COMMENT}\n".encode() in file_content:
+            _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                t.write(actual_script)
+                synchrony_args.append(t.name)
+                # Box.js cannot handle the document object, therefore we need to pass it the split file
+                boxjs_args.append(t.name)
+
+            one_liner_hit = self._is_single_line(actual_script)
+        else:
+            synchrony_args.append(file_path)
+            boxjs_args.append(file_path)
+
+            one_liner_hit = self._is_single_line(file_content)
+
+        if one_liner_hit:
+            heur = Heuristic(10)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+        tool_threads: List[Thread] = []
+        responses: Dict[str, List[str]] = {}
+        if not request.get_param("static_analysis_only"):
+            # Box.js cannot handle being run more than once on a sample. Oh well!
+            if not subsequent_run:
+                # Boxjs does not provide "document" object support
+                if b"document[" in request.file_contents or b"document." in request.file_contents:
+                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
+                elif actual_script and b"document." in actual_script:
+                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
+                else:
+                    tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
+            else:
+                self.log.debug(f"Do not run {BOX_JS} on subsequent runs.")
+            tool_threads.append(Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True))
+        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+
+        # There are three ways that Synchrony will run.
+        has_synchrony_run = False
+
+        # 1. If it is enabled in the submission parameter
+        if request.get_param("enable_synchrony"):
+            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+            has_synchrony_run = True
+        else:
+            for yara_rule in listdir("./yara"):
+                rules = yara_compile(filepath=path.join("./yara", yara_rule))
+                matches = rules.match(file_path)
+                # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
+                if matches:
+                    tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+                    has_synchrony_run = True
+                    break
+
+        for thr in tool_threads:
+            thr.start()
+
+        for thr in tool_threads:
+            thr.join(timeout=tool_timeout)
+            if thr.is_alive():
+                self.log.debug("A tool did not finish. Look at previous logs...")
+                # Give the tool a chance to clean up after to the tool timeout
+                sleep(3)
+
+        # Handle each tools' output
+        boxjs_output = self._handle_boxjs_output()
+        malware_jail_output = self._handle_malware_jail_output(responses, malware_jail_args)
+        jsxray_output = self._handle_jsxray_output(responses)
 
         # ==================================================================
         # Magic Section
@@ -815,7 +978,7 @@ class JsJaws(ServiceBase):
         # We are running signatures based on the output observed from dynamic execution
         # (boxjs_output and malware_jail_output)
         # as well as the file contents themselves (static analysis)
-        if static_signatures:
+        if request.get_param("static_signatures"):
             static_file_lines = []
             for line in safe_str(file_content).split("\n"):
                 if ";" in line:
@@ -829,6 +992,8 @@ class JsJaws(ServiceBase):
             total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
 
         total_output = total_output[: self.stdout_limit]
+
+        display_iocs = request.get_param("display_iocs")
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
@@ -837,7 +1002,7 @@ class JsJaws(ServiceBase):
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
 
-        if add_supplementary:
+        if request.get_param("add_supplementary"):
             self._extract_supplementary(malware_jail_output)
 
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
@@ -936,16 +1101,15 @@ class JsJaws(ServiceBase):
             return js_script_name, js_content, css_script_name
         return js_script_name, initial_file_content, css_script_name
 
-    def extract_js_from_jscript(self, request: ServiceRequest, file_content: bytes) -> Tuple[str, bytes]:
+    def extract_js_from_jscript(self, file_content: bytes) -> Tuple[str, bytes]:
         """
         This method extracts JavaScript from JScript
-        :param request: The ServiceRequest object
         :param initial_file_content: The contents of the initial file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
         """
         def log_and_replace_jscript(match):
             group_0 = match.group(0).decode()
-            self.log.debug(f"Removed JScript conditional comment: (group_0)")
+            self.log.debug(f"Removed JScript conditional comment: {group_0}")
             return b""
 
         for regex in JSCRIPT_REGEXES:
@@ -998,6 +1162,426 @@ class JsJaws(ServiceBase):
 
         return aggregated_js_script, js_content
 
+    def _is_single_script_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+        """
+        This method checks if the file content is a single script that is made up of a
+        large "unescape" call
+        :param soup: The BeautifulSoup object
+        :param scripts: A list of Script soup elements
+        :return: None
+        """
+        global single_script_with_unescape
+
+        # If the soup consists of a single script element, let's dive in a little
+        # deeper to see if this file is suspicious
+        soup_body_contents = []
+        if soup.body:
+            soup_body_contents = soup.body.contents
+
+        if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
+            script_contents_list = scripts[0].contents
+            script_contents = script_contents_list[0] if script_contents_list else ""
+            # An unescaped value of decent length is written to the DOM
+            if len(script_contents) > 250 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
+                self.log.debug("A single script was found that used document.write(unescape())...")
+                single_script_with_unescape = True
+
+    def _skip_element(self, element: PageElement, file_type: str) -> bool:
+        """
+        This method is used for determining if we should dynamically create an element
+        :param element: The BeautifulSoup element
+        :param file_type: The type of the file that the element is a part of
+        :return: A flag indicating if we should skip creating the element
+        """
+        # We don't want these elements dynamically created
+        if element.name in ["head", "meta", "style", "body", "param"]:
+            return True
+
+        # If the file is code/wsf, skip the job element
+        elif element.name in ["job"] and file_type == "code/wsf":
+            return True
+
+        # If the file is code/wsc, skip the component element
+        elif element.name in ["component"] and file_type == "code/wsc":
+            return True
+
+        # If there is a script element that just points at a src, we want it!
+        elif element.name in ["script"] and element.string is not None and element.string.strip():
+            return True
+
+        elif self._skip_embed_element(element):
+            return True
+
+        return False
+
+    def _remove_safelisted_element_attrs(self, element: PageElement) -> PageElement:
+        """
+        If an element has an attribute that is safelisted, don't include it when we create the element
+        :param element: The BeautifulSoup element
+        :return: A potentially modified BeautifulSoup element
+        """
+        if element.name in SAFELISTED_ATTRS_TO_POP:
+            for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
+                if is_tag_safelisted(element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist):
+                    element.attrs.pop(attr)
+        return element
+
+    @staticmethod
+    def _skip_embed_element(element: PageElement) -> bool:
+        """
+        This method is used for determining if we should dynamically create an embedded element which could be created elsewhere
+        :param element: The BeautifulSoup element
+        :return: A flag indicating if we should skip creating the element
+        """
+        # To avoid duplicate of embed extraction, check if embed matches criteria used in the extract_embeds_using_soup method
+        if element.name == "embed":
+            src = element.attrs.get("src")
+            if src and re.match(APPENDCHILD_BASE64_REGEX, src):
+                return True
+        return False
+
+    @staticmethod
+    def _determine_last_index(index: int, insert_above_divider: bool, js_content: bytes) -> int:
+        """
+        If we are inserting an element above the divider, we should grab the last index used and add to that...
+        Find last occurrence of "element{}_jsjaws ="" in the js_content
+        :param index: The index of the element in the list of all elements
+        :param insert_above_divider: A flag indicating if we are inserting above the divider
+        :param js_content: The file content of the NamedTemporaryFile
+        :return: The last index used
+        """
+        if insert_above_divider:
+            matches = re.findall(ELEMENT_INDEX_REGEX, js_content)
+            last_used_index = int(matches[-1])
+            idx = index + last_used_index + 1
+        else:
+            idx = index
+
+        return idx
+
+    @staticmethod
+    def _determine_element_id(element: PageElement, idx: int, set_of_variable_names: Set[str]) -> str:
+        """
+        This method determines the element id of the element, and will create one if
+        the "id" field is not set
+        :param element: The BeautifulSoup element
+        :param idx: The last index used
+        :param set_of_variable_names: A set containing all variable names
+        :return: The element id
+        """
+        # If the element does not have an ID, mock one
+        element_id = element.attrs.get("id", f"element{idx}")
+
+        # If the element id attribute is specifically set to an empty string, mock the varname
+        if element_id == "":
+            element_id = f"element{idx}"
+
+        # If the proposed element ID already exists, then mock one
+        if element_id in set_of_variable_names:
+            proposed_element_id = element_id
+            while element_id in set_of_variable_names:
+                element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
+
+        return element_id
+
+    @staticmethod
+    def _determine_element_varname(element: PageElement, element_id: str) -> str:
+        """
+        This method determines the name of the variable representing the element
+        :param element: The BeautifulSoup element
+        :param element_id: The element id
+        :return: The name of the variable
+        """
+        # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
+        if element.name == "object":
+            # We cannot assign a random element variable name to object tag elements
+            random_element_varname = element_id
+        else:
+            # JavaScript variables cannot have hyphens in their names
+            random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
+
+            # If the random_element_varname starts with a number, prepend that with a string
+            if random_element_varname[0].isdigit():
+                random_element_varname = "jsjaws_" + random_element_varname
+        return random_element_varname
+
+
+    @staticmethod
+    def _determine_element_value(element: PageElement) -> str:
+        """
+        This method determines the value of an element
+        :param element: The BeautifulSoup element
+        :return: The element value
+        """
+        # We cannot trust the text value of these elements, since it contains all nested items within it...
+        if element.name in ["div", "p", "svg"]:
+            # If the element contains a script child, and the element's string is the same as the script child's, set value to None
+            if element.next and element.next.name == "script" and element.string == element.next.string:
+                element_value = None
+            elif element.string is not None:
+                element_value = element.string.strip().replace("\n", "")
+            else:
+                element_value = None
+        else:
+            element_value = element.text.strip().replace("\n", "")
+
+        return element_value
+
+    @staticmethod
+    def _initialize_create_element_script(random_element_varname: str, element: PageElement, element_id: str) -> str:
+        """
+        This method sets up the initial script used for dynamically creating elements
+        :param random_element_varname: The name of the variable
+        :param element: The BeautifulSoup element
+        :param element_id: The element id
+        :return: The script used for creating elements
+        """
+        # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
+        create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
+                                f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n"
+        return create_element_script
+
+    @staticmethod
+    def _append_element_script(element: PageElement, set_of_variable_names: Set[str], random_element_varname: str) -> str:
+        """
+        This method adds script that appends the element
+        :param element: The BeautifulSoup element
+        :param set_of_variable_names: A set containing all variable names
+        :param random_element_varname: The name of the variable
+        :return: The script used for appending elements
+        """
+        # Based on the parent, we want to append the child correctly
+        if element.parent and element.parent.name not in ['[document]', "html", "body", 'head']:
+            parent_id = element.parent.attrs.get("id")
+            if parent_id and parent_id in set_of_variable_names:
+                # If the parent has already been created and we have the id, append this element to the parent
+                return f"document.getElementById(\"{parent_id}\").appendChild({random_element_varname});\n"
+
+        return f"document.body.appendChild({random_element_varname});\n"
+
+    def _set_element_innertext_script(self, element: PageElement, random_element_varname: str) -> str:
+        """
+        This method sets the element value to the innerText attribute of the element
+        :param element: The BeautifulSoup element
+        :param random_element_varname: The name of the variable
+        :return: The script used for setting the innerText attribute of an element
+        """
+        element_value = self._determine_element_value(element)
+
+        # Only set innerText field if there is a value to set it to
+        # We do not want to set the innerText field for an html element though...
+        if element_value and element.name not in ["html"]:
+            # Escape backslashes since they are handled differently in Python strings than in HTML
+            if "\\" in element_value:
+                element_value = element_value.replace("\\", "\\\\")
+            # Escape double quotes since we are wrapping the value in double quotes
+            if '"' in element_value:
+                element_value = element_value.replace('"', '\\"')
+            if element_value.startswith(CDATA_START) and element_value.endswith(CDATA_END):
+                element_value = element_value[9:-3]
+
+            return f"{random_element_varname}.innerText = \"{element_value}\";\n"
+
+        return ""
+
+    @staticmethod
+    def _set_element_attribute_script(attr_id: str, attr_val: str, random_element_varname: str) -> str:
+        """
+        This method sets an element attribute via script
+        :param attr_id: The ID of the attribute
+        :param attr_val: The value of the attribute
+        :param random_element_varname: The name of the variable
+        :return: The script used for setting an element's attribute
+        """
+        if attr_id != "id":
+            # Escape double quotes since we are wrapping the value in double quotes
+            if '"' in attr_val:
+                attr_val = attr_val.replace('"', '\\"')
+            # JavaScript does not like when there are newlines when setting attributes
+            if isinstance(attr_val, str) and "\n" in attr_val:
+                attr_val = attr_val.replace("\n", "")
+            elif attr_id == "class" and isinstance(attr_val, list) and len(attr_val) == 1:
+                attr_val = attr_val[0]
+
+            return f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
+
+        return ""
+
+    @staticmethod
+    def _handle_object_elements(element: PageElement, request: ServiceRequest, random_element_varname: str) -> str:
+        """
+        This method handles "object" elements and could return a script that clicks the object
+        :param element: The BeautifulSoup element
+        :param request: The ServiceRequest object
+        :param random_element_varname: The name of the variable
+        :return: The script used for clicking the object
+        """
+        # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
+        # Objects with ShortCut commands are very interesting as per:
+        # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/shortcut
+        if element.name == "object":
+            is_shortcut = False
+            command = None
+            # We need to handle <param> tags accordingly
+            for descendant in element.descendants:
+                if descendant and descendant.name == "param":
+                    if all(item in descendant.attrs for item in ["name", "value"]):
+                        name = descendant.attrs["name"].lower()
+                        value = descendant.attrs["value"]
+                        if name == "command" and value.lower() == "shortcut":
+                            is_shortcut = True
+                        elif name == "item1":
+                            command_args = value.split(",")
+                            if not command_args[0].strip():
+                                # This is the default when loaded on Windows
+                                command_args[0] = "cmd.exe"
+                            command = " ".join(command_args)
+            if is_shortcut and command:
+                # JavaScript does not like when there are newlines when setting attributes
+                if isinstance(command, str) and "\n" in command:
+                    command = command.replace("\n", "")
+                if '"' in command:
+                    command = command.replace('"', '\\"')
+
+                heur = Heuristic(9)
+                _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+                # ShortCuts have a click method that we must instantiate.
+                return f"{random_element_varname}.click = function() {{ ws = new {WSHSHELL}(); ws.exec(\"{command}\")}};\n"
+
+        return ""
+
+    def _setup_create_element_script(self, element: PageElement, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest) -> str:
+        """
+        This method sets up the script that creates elements dynamically
+        :param element: The BeautifulSoup element
+        :param element_id: The element id
+        :param set_of_variable_names: A set containing all variable names
+        :param request: The ServiceRequest object
+        :return: The script that creates elements dynamically
+        """
+        # First get the name of the variable
+        random_element_varname = self._determine_element_varname(element, element_id)
+
+        # Initialize the script
+        create_element_script = self._initialize_create_element_script(random_element_varname, element, element_id)
+
+        # Add the code to the script that appends the element
+        create_element_script += self._append_element_script(element, set_of_variable_names, random_element_varname)
+
+        # Set the innerText attribute of the element to the element value
+        create_element_script += self._set_element_innertext_script(element, random_element_varname)
+
+        # Set the other attributes of the element
+        for attr_id, attr_val in element.attrs.items():
+            create_element_script += self._set_element_attribute_script(attr_id, attr_val, random_element_varname)
+
+        # Handle specific elements that are "object" types
+        create_element_script += self._handle_object_elements(element, request, random_element_varname)
+
+        return create_element_script
+
+    @staticmethod
+    def _is_vb_and_js_scripts(scripts: ResultSet[PageElement], request: ServiceRequest) -> Tuple[bool, Optional[ResultTextSection]]:
+        """
+        This method determines if there is a combination of VisualBasic and JavaScript scripts
+        :param scripts: A list of Script soup elements
+        :param request: The ServiceRequest object
+        :return: A tuple containing a flag indicating if both VisualBasic and JavaScript scripts exist,
+                 and a possible result section
+        """
+        # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
+        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
+        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
+        vb_and_js_scripts = vb_scripts and js_scripts
+
+        if vb_and_js_scripts:
+            heur = Heuristic(12)
+            vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+        else:
+            vb_and_js_section = None
+
+        return vb_and_js_scripts, vb_and_js_section
+
+    def _is_script_source(self, script: PageElement) -> bool:
+        """
+        This method the script source, if it exists, and adds it to the set
+        :param script: The Script soup element
+        :return: A flag indicating if a script source was added
+        """
+        source_added = False
+        if script.get("src") and script["src"] not in self.script_sources and re.match(FULL_URI, script["src"]):
+            self.script_sources.add(script["src"])
+            source_added = True
+
+        return source_added
+
+    def _handle_vbscript(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], function_varname: Optional[str], vb_and_js_section: Optional[ResultTextSection]) -> Tuple[bytes, Optional[tempfile.NamedTemporaryFile]]:
+        """
+        This method handles VisualBasic scripts
+        :param body: The VisualBasic script body to be looked through
+        :param js_content: The file content of the NamedTemporaryFile
+        :param aggregated_script: The NamedTemporaryFile object
+        :param function_varname: The name of the variable pointing at the new Function
+        :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        # This code is used for converting simple VBScript to JavaScript
+
+        # First, look for any static variables being assigned
+        js_content, aggregated_js_script = self._convert_vb_static_variables(body, js_content, aggregated_js_script)
+
+        # Look for WScript Shell usage in VBScript code
+        wscript_varname, js_content, aggregated_js_script = self._convert_vb_wscript_shell_declaration(body, js_content, aggregated_js_script)
+
+        # Use this clause to convert simple WScript.Shell actions
+        if wscript_varname:
+            # Look for WScript RegWrite usage in VBScript code
+            js_content, aggregated_js_script = self._convert_vb_regwrite(wscript_varname, body, js_content, aggregated_js_script)
+
+        # If a Function is used in JavaScript, but attempted to be run in VBScript
+        if function_varname and function_varname in body:
+            js_content, aggregated_js_script = self._convert_vb_function_call(function_varname, body, vb_and_js_section, js_content, aggregated_js_script)
+
+        return js_content, aggregated_js_script
+
+    @staticmethod
+    def _modify_javascript_body(body: str) -> str:
+        """
+        This method modifies the body of the JavaScript
+        :param body: The contents of the script
+        :return: The modified body of the script
+        """
+        if body.startswith(CDATA_START) and body.endswith(CDATA_END):
+            body = body[9:-3]
+        if WSHSHELL in body:
+            body = body.replace(WSHSHELL, WSHSHELL.lower())
+
+        # If the body does not end with a semi-colon, add one
+        if body.rstrip()[-1] != ";":
+            body = body + ";"
+
+        return body
+
+    @staticmethod
+    def _handle_onevent_attributes(is_script_body: bool, element: PageElement, onevents: List[str]) -> Tuple[bool, List[str]]:
+        """
+        This method
+        """
+        # Look for elements with the on<event> attributes and add their script bodies to the aggregated js script
+        for event in ["error", "pageshow", "load", "submit"]:
+            for onevent in element.get_attribute_list(f"on{event}"):
+                if onevent:
+                    is_script_body = True
+
+                    if onevent.startswith("return "):
+                        onevent = onevent.replace("return ", "")
+
+                    if onevent not in onevents:
+                        onevents.append(onevent)
+
+        return is_script_body, onevents
+
     def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", request: Optional[ServiceRequest] = None, insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
@@ -1008,26 +1592,14 @@ class JsJaws(ServiceBase):
         :param insert_above_divider: A flag indicating if we have more code that is going to be programmatically created
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
-        global single_script_with_unescape
 
         # A list of methods to run when a form is submitted, after the DOM is loaded
-        onsubmits: List[str] = list()
+        onevents: List[str] = list()
 
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
 
-        # If the soup consists of a single script element, let's dive in a little
-        # deeper to see if this file is suspicious
-        soup_body_contents = []
-        if soup.body:
-            soup_body_contents = soup.body.contents
-        if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
-            script_contents_list = scripts[0].contents
-            script_contents = script_contents_list[0] if script_contents_list else ""
-            # An unescaped value of decent length is written to the DOM
-            if len(script_contents) > 250 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
-                self.log.debug("A single script was found that used document.write(unescape())...")
-                single_script_with_unescape = True
+        self._is_single_script_with_unescape(soup, scripts)
 
         # We need this flag since we are now creating most HTML elements dynamically,
         # and there is a chance that an HTML file has no JavaScript to be run.
@@ -1035,171 +1607,32 @@ class JsJaws(ServiceBase):
 
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
-        set_of_variable_names = set()
+
+        # This will hold all variable names, to ensure we avoid variable name collision
+        set_of_variable_names: Set[str] = set()
         for index, element in enumerate(elements):
-            # We don't want these elements dynamically created
-            if element.name in ["head", "meta", "style", "body", "param"]:
+
+            # Don't add an element to the script if it matches certain criteria
+            if self._skip_element(element, request.file_type):
                 continue
 
-            # If the file is code/wsf, skip the job element
-            elif element.name in ["job"] and request.file_type == "code/wsf":
-                continue
+            # Massage the element attributes
+            element = self._remove_safelisted_element_attrs(element)
 
-            # If the file is code/wsc, skip the component element
-            elif element.name in ["component"] and request.file_type == "code/wsc":
-                continue
-
-            # If there is a script element that just points at a src, we want it!
-            elif element.name in ["script"] and element.string is not None and element.string.strip():
-                continue
-
-            # If an element has an attribute that is safelisted, don't include it when we create the element
-            if element.name in SAFELISTED_ATTRS_TO_POP:
-                for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
-                    if is_tag_safelisted(element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist):
-                        element.attrs.pop(attr)
-
-            # To avoid duplicate of embed extraction, check if embed matches criteria used in the extract_embeds_using_soup method
-            if element.name == "embed":
-                src = element.attrs.get("src")
-                if src and re.match(APPENDCHILD_BASE64_REGEX, src):
-                    continue
-
-            # If we are inserting an element above the divider, we should grab the last index used and add to that...
-            # Find last occurrence of "element{}_jsjaws ="" in the js_content
-            if insert_above_divider:
-                matches = re.findall(ELEMENT_INDEX_REGEX, js_content)
-                last_used_index = int(matches[-1])
-                idx = index + last_used_index + 1
-            else:
-                idx = index
-
-            # If the element does not have an ID, mock one
-            element_id = element.attrs.get("id", f"element{idx}")
-
-            # If the element id attribute is specifically set to an empty string, mock the varname
-            if element_id == "":
-                element_id = f"element{idx}"
-
-            # If the proposed element ID already exists, then mock one
-            if element_id in set_of_variable_names:
-                proposed_element_id = element_id
-                while element_id in set_of_variable_names:
-                    element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
+            # Get the last index and use it to determine the element id
+            idx = self._determine_last_index(index, insert_above_divider, js_content)
+            element_id = self._determine_element_id(element, idx, set_of_variable_names)
             set_of_variable_names.add(element_id)
 
-            # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
-            if element.name == "object":
-                # We cannot assign a random element variable name to object tag elements
-                random_element_varname = element_id
-            else:
-                # JavaScript variables cannot have hyphens in their names
-                random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
-
-                # If the random_element_varname starts with a number, prepend that with a string
-                if random_element_varname[0].isdigit():
-                    random_element_varname = "jsjaws_" + random_element_varname
-            # We cannot trust the text value of these elements, since it contains all nested items within it...
-            if element.name in ["div", "p", "svg"]:
-                # If the element contains a script child, and the element's string is the same as the script child's, set value to None
-                if element.next and element.next.name == "script" and element.string == element.next.string:
-                    element_value = None
-                elif element.string is not None:
-                    element_value = element.string.strip().replace("\n", "")
-                else:
-                    element_value = None
-            else:
-                element_value = element.text.strip().replace("\n", "")
-            # Create an element and set the innertext
-            # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
-            create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
-                                    f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n"
-
-            # Based on the parent, we want to append the child correctly
-            if element.parent and element.parent.name not in ['[document]', "html", "body", 'head']:
-                parent_id = element.parent.attrs.get("id")
-                if parent_id and parent_id in set_of_variable_names:
-                    # If the parent has already been created and we have the id, append this element to the parent
-                    create_element_script += f"document.getElementById(\"{parent_id}\").appendChild({random_element_varname});\n"
-                else:
-                    create_element_script += f"document.body.appendChild({random_element_varname});\n"
-            else:
-                create_element_script += f"document.body.appendChild({random_element_varname});\n"
-
-            # Only set innertext field if there is a value to set it to
-            # We do not want to set the innerText field for an html element though...
-            if element_value and element.name not in ["html"]:
-                # Escape backslashes since they are handled differently in Python strings than in HTML
-                if "\\" in element_value:
-                    element_value = element_value.replace("\\", "\\\\")
-                # Escape double quotes since we are wrapping the value in double quotes
-                if '"' in element_value:
-                    element_value = element_value.replace('"', '\\"')
-                if element_value.startswith(CDATA_START) and element_value.endswith(CDATA_END):
-                    element_value = element_value[9:-3]
-                create_element_script += f"{random_element_varname}.innerText = \"{element_value}\";\n"
-            for attr_id, attr_val in element.attrs.items():
-                if attr_id != "id":
-                    # Escape double quotes since we are wrapping the value in double quotes
-                    if '"' in attr_val:
-                        attr_val = attr_val.replace('"', '\\"')
-                    # JavaScript does not like when there are newlines when setting attributes
-                    if isinstance(attr_val, str) and "\n" in attr_val:
-                        attr_val = attr_val.replace("\n", "")
-                    elif attr_id == "class" and isinstance(attr_val, list) and len(attr_val) == 1:
-                        attr_val = attr_val[0]
-                    create_element_script += f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
-
-            # <param> tags are equally as special as <object> tags https://developer.mozilla.org/en-US/docs/Web/HTML/Element/param
-            # Objects with ShortCut commands are very interesting as per:
-            # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/htmlhelp/shortcut
-            if element.name == "object":
-                is_shortcut = False
-                command = None
-                # We need to handle <param> tags accordingly
-                for descendant in element.descendants:
-                    if descendant and descendant.name == "param":
-                        if all(item in descendant.attrs for item in ["name", "value"]):
-                            name = descendant.attrs["name"].lower()
-                            value = descendant.attrs["value"]
-                            if name == "command" and value.lower() == "shortcut":
-                                is_shortcut = True
-                            elif name == "item1":
-                                command_args = value.split(",")
-                                if not command_args[0].strip():
-                                    # This is the default when loaded on Windows
-                                    command_args[0] = "cmd.exe"
-                                command = " ".join(command_args)
-                if is_shortcut and command:
-                    # JavaScript does not like when there are newlines when setting attributes
-                    if isinstance(command, str) and "\n" in command:
-                        command = command.replace("\n", "")
-                    if '"' in command:
-                        command = command.replace('"', '\\"')
-                    # ShortCuts have a click method that we must instantiate.
-                    create_element_script += f"{random_element_varname}.click = function() {{ ws = new {WSHSHELL}(); ws.exec(\"{command}\")}};\n"
-
-                    heur = Heuristic(9)
-                    _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+            # This is the $$$ section
+            create_element_script = self._setup_create_element_script(element, element_id, set_of_variable_names, request)
 
             if insert_above_divider:
                 js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
             else:
                 js_content, aggregated_js_script = self.append_content(create_element_script, js_content, aggregated_js_script)
 
-            for onerror in element.get_attribute_list("onerror"):
-                if onerror:
-                    is_script_body = True
-                    js_content, aggregated_js_script = self.append_content(onerror, js_content, aggregated_js_script)
-
-            for onsubmit in element.get_attribute_list("onsubmit"):
-                if onsubmit:
-                    is_script_body = True
-
-                    if onsubmit.startswith("return "):
-                        onsubmit = onsubmit.replace("return ", "")
-
-                    onsubmits.append(onsubmit)
+            is_script_body, onevents, = self._handle_onevent_attributes(is_script_body, element, onevents)
 
         if js_content and not insert_above_divider:
             # Add a break that is obvious for JS-X-Ray to differentiate
@@ -1208,22 +1641,10 @@ class JsJaws(ServiceBase):
         # Used for passed Function between VBScript and JavaScript
         function_varname = None
 
-        # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
-        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
-        vb_and_js_scripts = vb_scripts and js_scripts
-        vb_and_js_section = None
-
-        if vb_and_js_scripts:
-            heur = Heuristic(12)
-            vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+        vb_and_js_scripts, vb_and_js_section = self._is_vb_and_js_scripts(scripts, request)
 
         for script in scripts:
-            # Get the script source, if it exists, and add it to the set
-            source_added = False
-            if script.get("src") and script["src"] not in self.script_sources and re.match(FULL_URI, script["src"]):
-                self.script_sources.add(script["src"])
-                source_added = True
+            source_added = self._is_script_source(script)
 
             # Make sure there is actually a body to the script
             body = script.string if script.string is None else str(script.string).strip()
@@ -1234,22 +1655,7 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("language", "").lower() in ["vbscript"]:
-                # This code is used for converting simple VBScript to JavaScript
-
-                # First, look for any static variables being assigned
-                js_content, aggregated_js_script = self._convert_vb_static_variables(body, js_content, aggregated_js_script)
-
-                # Look for WScript Shell usage in VBScript code
-                wscript_varname, js_content, aggregated_js_script = self._convert_vb_wscript_shell_declaration(body, js_content, aggregated_js_script)
-
-                # Use this clause to convert simple WScript.Shell actions
-                if wscript_varname:
-                    # Look for WScript RegWrite usage in VBScript code
-                    js_content, aggregated_js_script = self._convert_vb_regwrite(wscript_varname, body, js_content, aggregated_js_script)
-
-                # If a Function is used in JavaScript, but attempted to be run in VBScript
-                if function_varname and function_varname in body:
-                    js_content, aggregated_js_script = self._convert_vb_function_call(function_varname, body, vb_and_js_section, js_content, aggregated_js_script)
+                js_content, aggregated_js_script = self._handle_vbscript(body, js_content, aggregated_js_script, function_varname, vb_and_js_section)
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
@@ -1263,31 +1669,15 @@ class JsJaws(ServiceBase):
 
                     self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
 
-                if body.startswith(CDATA_START) and body.endswith(CDATA_END):
-                    body = body[9:-3]
-                if WSHSHELL in body:
-                    body = body.replace(WSHSHELL, WSHSHELL.lower())
-
-                # If the body does not end with a semi-colon, add one
-                if body.rstrip()[-1] != ";":
-                    body = body + ";"
+                body = self._modify_javascript_body(body)
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
 
         if soup.body:
-            for line in soup.body.get_attribute_list("onpageshow"):
-                if line:
-                    is_script_body = True
-                    js_content, aggregated_js_script = self.append_content(line, js_content, aggregated_js_script)
+            is_script_body, onevents = self._handle_onevent_attributes(is_script_body, soup.body, onevents)
 
-        if soup.body:
-            for onload in soup.body.get_attribute_list("onload"):
-                if onload:
-                    is_script_body = True
-                    js_content, aggregated_js_script = self.append_content(onload, js_content, aggregated_js_script)
-
-        for onsubmit in onsubmits:
-            js_content, aggregated_js_script = self.append_content(onsubmit, js_content, aggregated_js_script)
+        for onevent in onevents:
+            js_content, aggregated_js_script = self.append_content(onevent, js_content, aggregated_js_script)
 
         if aggregated_js_script is None or not is_script_body:
             return None, js_content
@@ -1698,7 +2088,7 @@ class JsJaws(ServiceBase):
             total_dom_path = out.name
 
         self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
-        self.run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
+        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
 
     def _extract_urls(self, result: Result) -> None:
         """
@@ -2139,7 +2529,7 @@ class JsJaws(ServiceBase):
                             amended_content_path = out.name
 
                         self.log.debug("There was an unexpected end of input, run the gauntlet again with the amended content!")
-                        self.run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+                        self._run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
 
                 # Check if there was a reference error after multiple DOM writes
                 match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
@@ -2237,6 +2627,13 @@ class JsJaws(ServiceBase):
         args: List[str],
         resp: Dict[str, Any],
     ) -> None:
+        """
+        This method runs a tool and appends the stdout from that tool to the dictionary
+        :param tool_name: The name of the tool to be run
+        :param args: A list of arguments to use to run the tool
+        :param resp: A dictionary used to contain the stdout from a tool
+        :return: None
+        """
         # We are on a second attempt here
         if resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]:
             do_not_terminate = True
@@ -2403,7 +2800,7 @@ class JsJaws(ServiceBase):
         This method looks in VisualBasic scripts for RegWrite usage with the previously created WScript.Shell variable, and converts it to JavaScript
         :param wscript_varname: The variable name of the declared WScript.Shell
         :param body: The VisualBasic script body to be looked through
-        :param file_content: The file content of the NamedTemporaryFile
+        :param js_content: The file content of the NamedTemporaryFile
         :param aggregated_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
