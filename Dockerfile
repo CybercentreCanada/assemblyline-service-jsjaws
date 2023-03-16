@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y curl
 
 # Here is the NVM alternative
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-RUN source ~/.profile
+RUN . ~/.profile
 # We are going to pin this version
 RUN nvm install 19.1
 
