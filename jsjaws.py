@@ -2043,6 +2043,11 @@ class JsJaws(ServiceBase):
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
+            elif kind in ["suspicious-literal", "short-identifiers"]:
+                # We don't care about these warnings
+                continue
+            else:
+                jsxray_iocs_result_section.add_line(f"\t\t{kind}:{val}")
 
         if jsxray_iocs_result_section.body and len(jsxray_iocs_result_section.body) > 0:
             jsxray_iocs_result_section.set_heuristic(2)
