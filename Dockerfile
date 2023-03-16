@@ -5,12 +5,20 @@ ENV SERVICE_PATH jsjaws.JsJaws
 
 # Get required apt packages
 USER root
-RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
-RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl xz-utils
+
+WORKDIR /usr/local
+RUN dir -s
+RUN curl https://nodejs.org/dist/v19.1.0/node-v19.1.0-linux-x64.tar.xz --output node-v19.1.0-linux-x64.tar.xz
+RUN dir -s
+RUN tar -xJf node-v19.1.0-linux-x64.tar.xz --strip 1
+RUN which node
+RUN node --version
 
 # Switch to assemblyline user
 USER assemblyline
+
+WORKDIR /opt/al_service
 
 # Install python dependencies
 COPY requirements.txt requirements.txt
