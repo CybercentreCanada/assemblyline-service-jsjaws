@@ -19,12 +19,12 @@ RUN mkdir -p $NVM_DIR
 ENV NODE_VERSION 19.1.0
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 
-# Switch to assemblyline user
-USER assemblyline
-
 SHELL ["/bin/bash", "--login" , "-c"]
 RUN nvm install $NODE_VERSION
 SHELL ["/bin/sh", "-c"]
+
+# Switch to assemblyline user
+USER assemblyline
 ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 
