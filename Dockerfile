@@ -16,11 +16,12 @@ RUN apt-get update && apt-get install -y curl
 ENV NVM_DIR /home/assemblyline/.nvm
 RUN mkdir -p $NVM_DIR
 
+ENV NODE_VERSION 19.1.0
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
 # Switch to assemblyline user
 USER assemblyline
 
-ENV NODE_VERSION 19.1.0
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 SHELL ["/bin/bash", "--login" , "-c"]
 RUN nvm install $NODE_VERSION
 SHELL ["/bin/sh", "-c"]
