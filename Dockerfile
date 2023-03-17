@@ -17,10 +17,13 @@ SHELL ["/bin/bash", "--login", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 # We are going to pin this version
 RUN nvm install 19.1
+# Node version as root
 RUN node --version
 
 # Switch to assemblyline user
 USER assemblyline
+# Node version as user
+RUN node --version
 
 # Install python dependencies
 COPY requirements.txt requirements.txt
