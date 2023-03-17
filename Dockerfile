@@ -5,7 +5,7 @@ ENV SERVICE_PATH jsjaws.JsJaws
 
 # Get required apt packages
 USER root
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl xz-utils
 
 WORKDIR /usr/local
 RUN dir -s
