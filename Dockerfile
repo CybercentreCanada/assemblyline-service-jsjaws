@@ -6,8 +6,18 @@ ENV SERVICE_PATH jsjaws.JsJaws
 # Get required apt packages
 USER root
 RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
-RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+
+# This route via the nodesource PPA works great, until the URI goes down...
+# RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
+# RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+# RUN node --version
+
+# Here is the NVM alternative
+SHELL ["/bin/bash", "--login", "-c"]
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+# We are going to pin this version
+RUN nvm install 19.1
+RUN node --version
 
 # Switch to assemblyline user
 USER assemblyline
