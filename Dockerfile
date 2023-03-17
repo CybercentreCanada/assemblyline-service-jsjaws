@@ -7,10 +7,9 @@ ENV SERVICE_PATH jsjaws.JsJaws
 USER root
 RUN apt-get update && apt-get install -y curl
 
-ENV NODE_VERSION 19.1.0
 WORKDIR /usr/local
-RUN curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
-RUN tar xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
+RUN curl https://nodejs.org/dist/v19.1.0/node-v19.1.0-linux-x64.tar.xz --output node-v19.1.0-linux-x64.tar.xz
+RUN tar -xJf node-v19.1.0-linux-x64.tar.xz --strip 1
 RUN which node
 RUN node --version
 
