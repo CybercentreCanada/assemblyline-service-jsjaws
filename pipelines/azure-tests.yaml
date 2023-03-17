@@ -57,8 +57,8 @@ jobs:
           if [[ -f "$(pwd)/pkglist.txt" ]]; then
             grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
           fi
-          export NVM_DIR=/home/assemblyline/.nvm
-          mkdir -p $NVM_DIR
+          export NVM_DIR=~/.nvm
+          sudo mkdir -p $NVM_DIR
           export NODE_VERSION=19.1.0
           curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
           /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
