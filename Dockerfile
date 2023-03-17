@@ -8,6 +8,7 @@ USER root
 RUN apt-get update && apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
 RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+RUN node --version
 
 # Switch to assemblyline user
 USER assemblyline
