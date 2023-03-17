@@ -59,7 +59,8 @@ jobs:
             grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
           fi
           export NODE_VERSION=19.1.0
-          cd /usr/local && curl -o- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz   | tar xJf - --strip 1
+          cd /usr/local
+          sudo curl -o- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz   | tar xJf - --strip 1
           which node
           node --version
           cd $(pwd)
