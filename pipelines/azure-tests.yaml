@@ -62,7 +62,7 @@ jobs:
           export NODE_VERSION=19.1.0
           cd /usr/local
           sudo curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
-          sudo tar xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
+          sudo tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
           which node
           node --version
           cd $currdir

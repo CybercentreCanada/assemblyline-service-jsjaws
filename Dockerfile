@@ -8,7 +8,9 @@ USER root
 RUN apt-get update && apt-get install -y curl
 
 WORKDIR /usr/local
+RUN dir -s
 RUN curl https://nodejs.org/dist/v19.1.0/node-v19.1.0-linux-x64.tar.xz --output node-v19.1.0-linux-x64.tar.xz
+RUN dir -s
 RUN tar -xJf node-v19.1.0-linux-x64.tar.xz --strip 1
 RUN which node
 RUN node --version
