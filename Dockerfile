@@ -15,17 +15,19 @@ RUN apt-get update && apt-get install -y curl
 # Switch to assemblyline user
 USER assemblyline
 
+ENV NVM_DIR /home/assemblyline/.nvm
+ENV NODE_VERSION 19.1
+
 # Here is the NVM alternative
 SHELL ["/bin/bash", "--login", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-# We are going to pin this version
-RUN nvm install 19.1
-# Node version as root
-RUN node --version
-
 # Set back to default shell
 SHELL ["/bin/sh", "-c"]
-
+# We are going to pin this version
+RUN nvm install $NODE_VERSION
+# Set the correct paths
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 # Node version as user
 RUN node --version
 
