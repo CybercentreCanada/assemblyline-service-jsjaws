@@ -23,7 +23,6 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh 
 RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
 ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
-RUN node --version
 
 # Install python dependencies
 COPY requirements.txt requirements.txt

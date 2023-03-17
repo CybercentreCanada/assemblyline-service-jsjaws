@@ -51,6 +51,7 @@ jobs:
         fetchDepth: 1
         path: $(samples_location)
       - script: |
+          set -x # echo on
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           sudo apt-get update
           sudo apt-get install -y libfuzzy-dev libfuzzy2 curl
@@ -64,6 +65,7 @@ jobs:
           /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
           export NODE_PATH=$NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
           export PATH=$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+          which node
           node --version
 
           cd tools && npm install && cd ..
