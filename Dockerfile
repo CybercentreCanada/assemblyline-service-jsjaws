@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y curl
 # RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 # RUN node --version
 
+# Switch to assemblyline user
+USER assemblyline
+
 # Here is the NVM alternative
 SHELL ["/bin/bash", "--login", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
@@ -20,8 +23,9 @@ RUN nvm install 19.1
 # Node version as root
 RUN node --version
 
-# Switch to assemblyline user
-USER assemblyline
+# Set back to default shell
+SHELL ["/bin/sh", "-c"]
+
 # Node version as user
 RUN node --version
 
