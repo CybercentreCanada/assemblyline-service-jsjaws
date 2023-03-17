@@ -12,15 +12,18 @@ RUN apt-get update && apt-get install -y curl
 # RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 # RUN node --version
 
-# Switch to assemblyline user
-USER assemblyline
-
 # Here is the NVM alternative
 ENV NVM_DIR /home/assemblyline/.nvm
 RUN mkdir -p $NVM_DIR
+
+# Switch to assemblyline user
+USER assemblyline
+
 ENV NODE_VERSION 19.1.0
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
+SHELL ["/bin/bash", "--login" , "-c"]
+RUN nvm install $NODE_VERSION
+SHELL ["/bin/sh", "-c"]
 ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 
