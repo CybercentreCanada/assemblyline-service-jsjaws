@@ -57,8 +57,15 @@ jobs:
           if [[ -f "$(pwd)/pkglist.txt" ]]; then
             grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
           fi
-          curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh && sudo bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
-          sudo apt-get install -y nodejs
+          export NVM_DIR=/home/assemblyline/.nvm
+          mkdir -p $NVM_DIR
+          export NODE_VERSION=19.1.0
+          curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+          /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
+          export NODE_PATH=$NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
+          export PATH=$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+          node --version
+
           cd tools && npm install && cd ..
           sudo rm -rf /var/lib/apt/lists/*
           sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
