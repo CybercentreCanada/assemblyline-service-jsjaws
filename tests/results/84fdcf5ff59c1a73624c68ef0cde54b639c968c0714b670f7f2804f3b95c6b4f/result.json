@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1531,
+    "score": 1532,
     "sections": [
       {
         "auto_collapse": false,
@@ -130,6 +130,24 @@
       },
       {
         "auto_collapse": false,
+        "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_format": "TEXT",
+        "classification": "TLP:W",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file 84fdcf5ff59c1a73624c68ef0cde54b639c968c0714b670f7f2804f3b95c6b4f.cleaned for details.",
         "body_format": "TEXT",
         "classification": "TLP:W",
@@ -172,6 +190,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
