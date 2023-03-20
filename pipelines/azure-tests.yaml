@@ -59,14 +59,12 @@ jobs:
           if [[ -f "$(pwd)/pkglist.txt" ]]; then
             grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
           fi
-          export NODE_VERSION=19.1.0
+          # Pinning to this version of Node
+          export NODE_VERSION=19.7.0
           cd /usr/local
           sudo curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
           sudo tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
-          which node
-          node --version
           cd $currdir
-          which node
           node --version
           cd tools && npm install && cd ..
           sudo rm -rf /var/lib/apt/lists/*

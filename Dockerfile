@@ -5,14 +5,16 @@ ENV SERVICE_PATH jsjaws.JsJaws
 
 # Get required apt packages
 USER root
+# We need to install xz-utils in the Dockerfile and not in the azure-tests.yaml pipeline
+# because the tests run on an Ubuntu image whereas the service container is based on a
+# Debian image.
 RUN apt-get update && apt-get install -y curl xz-utils
 
 WORKDIR /usr/local
-RUN dir -s
-RUN curl https://nodejs.org/dist/v19.1.0/node-v19.1.0-linux-x64.tar.xz --output node-v19.1.0-linux-x64.tar.xz
-RUN dir -s
-RUN tar -xJf node-v19.1.0-linux-x64.tar.xz --strip 1
-RUN which node
+# Pinning to this version of Node
+ARG NODE_VERSION=19.7.0
+RUN curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
+RUN tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
 RUN node --version
 
 # Switch to assemblyline user
