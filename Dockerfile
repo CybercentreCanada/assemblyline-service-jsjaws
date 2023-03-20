@@ -5,12 +5,22 @@ ENV SERVICE_PATH jsjaws.JsJaws
 
 # Get required apt packages
 USER root
-RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_19.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh && rm /tmp/nodesource_setup.sh
-RUN apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+# We need to install xz-utils in the Dockerfile and not in the azure-tests.yaml pipeline
+# because the tests run on an Ubuntu image whereas the service container is based on a
+# Debian image.
+RUN apt-get update && apt-get install -y curl xz-utils
+
+WORKDIR /usr/local
+# Pinning to this version of Node
+ARG NODE_VERSION=19.7.0
+RUN curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
+RUN tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
+RUN node --version
 
 # Switch to assemblyline user
 USER assemblyline
+
+WORKDIR /opt/al_service
 
 # Install python dependencies
 COPY requirements.txt requirements.txt
