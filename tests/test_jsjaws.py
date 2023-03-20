@@ -809,7 +809,7 @@ class TestJsJaws:
         dummy_request_class_instance.result = Result()
         correct_res_sec = ResultSection(
             "JS-X-Ray IOCs Detected",
-            body="\t\tAn unsafe statement was found: blah\n\t\tAn encoded literal was "
+            body="\t\tblah:blah\n\t\tAn unsafe statement was found: blah\n\t\tAn encoded literal was "
             "found: blah\n\t\tObfuscated code was found that was obfuscated by: "
             "blah",
             tags={"file.string.extracted": ["blah"]},
