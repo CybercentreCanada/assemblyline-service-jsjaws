@@ -225,6 +225,12 @@ heuristics:
     filetype: '.*'
     description: Reference error caused by requirement of suspicious third party script(s)
 
+  - heur_id: 17
+    name: Malformed JavaScript found in visible text
+    score: 1
+    filetype: '.*'
+    description: JavaScript code is found in the visible text of an HTML document, indicating malformation
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

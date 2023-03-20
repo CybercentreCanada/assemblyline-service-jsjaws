@@ -893,6 +893,11 @@ class JsJaws(ServiceBase):
             heur = Heuristic(14)
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
+        # If the HTML file has visible text that is most likely JavaScript
+        if self.malformed_javascript:
+            heur = Heuristic(17)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
 
