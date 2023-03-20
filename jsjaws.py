@@ -100,10 +100,13 @@ CDATA_END = "]]>"
 POWERSHELL_VARIATIONS = ["pwsh", "powershell"]
 
 # Variations of Command Prompt found in WScript Shell commands
-COMMAND_VARIATIONS = ["cmd", "cmd.exe"]
+COMMAND_VARIATIONS = ["cmd"]
 
 # Variations of cURL found in WScript Shell commands
-CURL_VARIATIONS = ["curl", "curl.exe"]
+CURL_VARIATIONS = ["curl"]
+
+# Variations of bitsadmin found in WScript Shell commands
+BITSADMIN_VARIATIONS = ["bitsadmin"]
 
 # WshShell is a protected term because it is used as a module class name in MalwareJail
 WSHSHELL = "WshShell"
@@ -1886,6 +1889,9 @@ class JsJaws(ServiceBase):
                     # If Wscript.Shell uses cURL AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(curl) for curl in CURL_VARIATIONS):
                         wscript_res_sec.heuristic.add_signature_id("wscript_curl_url")
+                    # If Wscript.Shell uses bitsadmin AND an IOC was found, this is suspicious
+                    elif any(cmd.lower().strip().startswith(bitsadmin) for bitsadmin in BITSADMIN_VARIATIONS):
+                        wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url")
 
         wscript_extraction.close()
 
