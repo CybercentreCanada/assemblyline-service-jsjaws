@@ -325,7 +325,11 @@ JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
 
 # Example:
 # document.write(unescape("blah"))
-DOM_WRITE_UNESCAPE_REGEX = "document\.write\(unescape\("
+DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
+
+# Example:
+# document.write(atob(val));
+DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
 
 # Globals
 
@@ -369,6 +373,8 @@ class JsJaws(ServiceBase):
         self.gauntlet_runs: Optional[int] = None
         self.script_sources: Optional[Set[str]] = None
         self.script_with_source_and_no_body: Optional[bool] = None
+        self.scripts: Set[str] = set()
+        self.malformed_javascript: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -398,7 +404,9 @@ class JsJaws(ServiceBase):
         single_script_with_unescape = False
         self.gauntlet_runs = 0
         self.script_sources = set()
+        self.scripts = set()
         self.script_with_source_and_no_body = False
+        self.malformed_javascript = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -861,6 +869,9 @@ class JsJaws(ServiceBase):
             file_path, file_content, _ = self.extract_using_soup(request, file_content)
         elif file_type == "code/jscript":
             file_path, file_content = self.extract_js_from_jscript(file_content)
+        # This case is if the file is invalid HTML or something similar
+        elif file_type == "text/plain" and file_type_details["mime"] == "text/html":
+            file_path, file_content, css_path = self.extract_using_soup(request, file_content)
 
         # If at this point the file path is None, there is nothing to analyze and we can go home
         if file_path is None:
@@ -1181,10 +1192,11 @@ class JsJaws(ServiceBase):
         if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
             script_contents = script_contents_list[0] if script_contents_list else ""
-            # An unescaped value of decent length is written to the DOM
-            if len(script_contents) > 250 and re.search(DOM_WRITE_UNESCAPE_REGEX, script_contents, re.IGNORECASE):
-                self.log.debug("A single script was found that used document.write(unescape())...")
-                single_script_with_unescape = True
+            for regex in [DOM_WRITE_UNESCAPE_REGEX, DOM_WRITE_ATOB_REGEX]:
+                # An unescaped value of decent length is written to the DOM
+                if len(script_contents) > 250 and re.search(regex, script_contents, re.IGNORECASE):
+                    self.log.debug(f"A single script was found that used {regex}...")
+                    single_script_with_unescape = True
 
     def _skip_element(self, element: PageElement, file_type: str) -> bool:
         """
@@ -1394,6 +1406,12 @@ class JsJaws(ServiceBase):
         :return: The script used for setting an element's attribute
         """
         if attr_id != "id":
+
+            # Please don't put double quotes in attributes people!
+            attr_id = attr_id.replace("\"", "")
+            if not attr_id:
+                return ""
+
             # Escape double quotes since we are wrapping the value in double quotes
             if '"' in attr_val:
                 attr_val = attr_val.replace('"', '\\"')
@@ -1557,6 +1575,10 @@ class JsJaws(ServiceBase):
         if WSHSHELL in body:
             body = body.replace(WSHSHELL, WSHSHELL.lower())
 
+        # Looks like we have some malformed JavaScript, let's try to fix it up
+        if body.rstrip()[-1] == "=":
+            body = body + "\"\""
+
         # If the body does not end with a semi-colon, add one
         if body.rstrip()[-1] != ";":
             body = body + ";"
@@ -1582,6 +1604,78 @@ class JsJaws(ServiceBase):
 
         return is_script_body, onevents
 
+    def _handle_misparsed_soup(self, body: str, aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes, request: ServiceRequest) -> Tuple[str, Optional[tempfile.NamedTemporaryFile], bytes]:
+        """
+        If there is a malformed JavaScript script and another "script body" starts with an already seen script,
+        this is most likely a parsing issue and we are going to slice the already seen script out
+        :param body: The body of the script that we will determine if it is mis-parsed
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :param request: An instance of the ServiceRequest object
+        :return: A tuple of the JavaScript file that was written,
+                 the contents of the file that was written and the correct script body
+        """
+
+        if self.malformed_javascript and any(body.startswith(body_script) and body != body_script for body_script in self.scripts):
+            for body_script in self.scripts.copy():
+                if body.startswith(body_script) and body != body_script:
+                    start_idx = body.rfind(body_script) + len(body_script)
+                    remainder = body[start_idx:]
+                    # Mis-parsed remainder of body, to be extracted
+                    try:
+                        misparsed_soup = BeautifulSoup(remainder, features="html5lib")
+                    except Exception:
+                        # Swing and a miss
+                        break
+
+                    # We want to add this code above the divider because it is auto-generated
+                    aggregated_js_script, js_content = self._extract_js_using_soup(misparsed_soup, aggregated_js_script, js_content, request, insert_above_divider=True)
+
+                    body = body_script
+
+        else:
+            self.scripts.add(body)
+
+        return aggregated_js_script, js_content, body
+
+    def _handle_malformed_javascript(self, visible_texts: ResultSet[PageElement], aggregated_js_script: Optional[tempfile.NamedTemporaryFile], js_content: bytes) -> Tuple[Optional[tempfile.NamedTemporaryFile], bytes]:
+        """
+        This is a workaround for broken scripts that we still want to run. Odds are this won't create
+        valid JavaScript, but odds are the initial JavaScript wasn't valid in the first place, so we're just going to
+        append the commented out the code and try again.
+        :param visible_texts:
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :return: A tuple of the JavaScript file that was written and the contents of the file that was written
+        """
+
+        for visible_text in visible_texts:
+            malformed_javascript = visible_text.string.strip()
+
+            # Writing the malformed javascript to a file so that we can use Identify's fileinfo
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                out.write(malformed_javascript.encode())
+                malformed_path = out.name
+            file_type_details = self.identify.fileinfo(malformed_path)
+            file_type = file_type_details["type"]
+
+            if file_type == "text/javascript" or "document.write" in malformed_javascript:
+                self.malformed_javascript = True
+
+                # Commenting it out so that it doesn't actually run
+                commented_out_malformed_javascript = f"/*\n{malformed_javascript}\n*/"
+                js_content, aggregated_js_script = self.append_content(commented_out_malformed_javascript, js_content, aggregated_js_script)
+
+                if file_type != "text/javascript":
+                    for regex in [DOM_WRITE_UNESCAPE_REGEX, DOM_WRITE_ATOB_REGEX]:
+                        dom_write_match = re.search(regex, malformed_javascript, re.IGNORECASE)
+                        if dom_write_match:
+                            self.log.debug(f"Malformed JavaScript was found using {regex}...")
+                            js_content, aggregated_js_script = self.append_content(dom_write_match.group(1), js_content, aggregated_js_script)
+                else:
+                    self.log.debug(f"Should we add '{malformed_javascript}' to the JavaScript file uncommented?")
+        return js_content, aggregated_js_script
+
     def _extract_js_using_soup(self, soup: BeautifulSoup, aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, js_content: bytes = b"", request: Optional[ServiceRequest] = None, insert_above_divider: bool = False) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
@@ -1598,6 +1692,7 @@ class JsJaws(ServiceBase):
 
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
+        visible_texts = self._extract_visible_text_from_soup(soup)
 
         self._is_single_script_with_unescape(soup, scripts)
 
@@ -1659,6 +1754,8 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
+                aggregated_js_script, js_content, body = self._handle_misparsed_soup(body, aggregated_js_script, js_content, request)
+
                 # If there is no "type" attribute specified in a script element, then the default assumption is
                 # that the body of the element is Javascript
                 is_script_body = True
@@ -1672,6 +1769,8 @@ class JsJaws(ServiceBase):
                 body = self._modify_javascript_body(body)
 
                 js_content, aggregated_js_script = self.append_content(body, js_content, aggregated_js_script)
+
+        js_content, aggregated_js_script = self._handle_malformed_javascript(visible_texts, aggregated_js_script, js_content)
 
         if soup.body:
             is_script_body, onevents = self._handle_onevent_attributes(is_script_body, soup.body, onevents)
@@ -1788,19 +1887,13 @@ class JsJaws(ServiceBase):
 
         return css_script_name, aggregated_js_script, js_content
 
-    def _extract_visible_text_using_soup(self, dom_content) -> List[str]:
+    def _extract_visible_text_from_soup(self, soup: BeautifulSoup) -> List[str]:
         """
-        This method extracts visible text from the HTML page
+        This method extracts visible text from the HTML page, given soup object
         :param dom_content: The content of written to the DOM
         :return: A list of visible text that was written to the DOM
         """
         self.log.debug("Extracting visible text from soup...")
-
-        try:
-            soup = BeautifulSoup(dom_content, features="html5lib")
-        except Exception:
-            # If the written text is not an HTML document, return it
-            return [dom_content]
 
         # Extract password from visible text, taken from https://stackoverflow.com/a/1983219
         def tag_visible(element):
@@ -1812,6 +1905,20 @@ class JsJaws(ServiceBase):
 
         visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
         return visible_texts
+
+    def _extract_visible_text_using_soup(self, dom_content) -> List[str]:
+        """
+        This method extracts visible text from the HTML page, given DOM content
+        :param dom_content: The content of written to the DOM
+        :return: A list of visible text that was written to the DOM
+        """
+        try:
+            soup = BeautifulSoup(dom_content, features="html5lib")
+        except Exception:
+            # If the written text is not an HTML document, return it
+            return [dom_content]
+
+        return self._extract_visible_text_from_soup(soup)
 
     def _extract_wscript(self, output: List[str], result: Result) -> None:
         """
