@@ -660,6 +660,10 @@ class JsJaws(ServiceBase):
         # Files that each represent a Eval Call can be noisy and not particularly useful
         # This flag turns on this extraction
         if request.deep_scan or extract_eval_calls:
+            # If we want to extract eval calls, we need to use this sandbox sequence
+            if not override_eval:
+                malware_jail_args.extend(["-e", "sandbox_sequence_with_eval"])
+
             malware_jail_args.append("--extractevals")
 
         # By default, detonation takes place within a sandboxed browser. This option allows
