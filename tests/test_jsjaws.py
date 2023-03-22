@@ -788,8 +788,8 @@ class TestJsJaws:
         jsjaws_class_instance._extract_boxjs_iocs(res)
         assert check_section_equality(res.sections[0], correct_res_sec)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": "cmd_0.txt",
-            "path": path.join(jsjaws_class_instance.working_directory, "cmd_0.txt"),
+            "name": "cmd_0.bat",
+            "path": path.join(jsjaws_class_instance.working_directory, "cmd_0.bat"),
             "description": "Command Extracted",
             "to_be_extracted": True,
         }
