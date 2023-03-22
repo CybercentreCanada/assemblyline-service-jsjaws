@@ -61,10 +61,6 @@
       {
         "name": "extracted_wscript.bat",
         "sha256": "9c5c55b28f2b8268fcc20c7a952286f4d1920454e69fdc76e6a9b8588bea089b"
-      },
-      {
-        "name": "WScript.Shell[13]",
-        "sha256": "9c84ce182d6eff60ad2d0fc85ee88e3fccd217ab8dab54e0d4a4b69aa11c8080"
       }
     ],
     "supplementary": [
