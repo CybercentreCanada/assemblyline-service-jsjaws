@@ -1964,22 +1964,39 @@ class JsJaws(ServiceBase):
                 # intWindowStyle = (optional) any integer from 0-10. 0 is a hacker favourite (hide the window and activate another
                 # window), although we have seen 1 before (activate and display the window)
                 # bWaitOnReturn = boolean
-                for intWindowStyle in range(12):
-                    for bWaitOnReturn in ["undefined", "false", "true", "0", "1"]:
-                        # Since intWindowsStyle is optional, add a clause here
-                        if intWindowStyle == 11:
-                            item = f", {bWaitOnReturn}"
-                        else:
-                            item = f", {intWindowStyle}, {bWaitOnReturn}"
-                        if cmd.endswith(item):
-                            cmd = cmd.replace(item, "")
+                if ".run" in line.lower():
+                    for intWindowStyle in range(12):
+                        for bWaitOnReturn in ["undefined", "false", "true", "0", "1"]:
+                            # Since intWindowsStyle is optional, add a clause here
+                            if intWindowStyle == 11:
+                                item = f", {bWaitOnReturn}"
+                            else:
+                                item = f", {intWindowStyle}, {bWaitOnReturn}"
+                            if cmd.endswith(item):
+                                cmd = cmd.replace(item, "")
+
+                # Shell.Application's ShellExecute lists the cmd in a comma-delimited list. So we need to handle accordingly.
+                elif ".shellexecute" in line.lower():
+                    # https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+                    for nCmdShow in range(12):
+                        # https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea#parameters
+                        for lpOperation in ["edit", "expore", "find", "open", "print", "runas"]:
+                            # Since nCmdShow is optional, add a clause here
+                            if nCmdShow == 11:
+                                item = f", \"{lpOperation}\""
+                            else:
+                                item = f", \"{lpOperation}\", {nCmdShow}"
+                            if cmd.endswith(item):
+                                cmd = cmd.replace(item, "")
+
+                    cmd = " ".join(cmd.split('", "'))
 
                 # This is a byproduct of using ProxyGenerator for WScript
                 if cmd.startswith('"') and cmd.endswith('"'):
                     cmd = cmd[1:-1]
 
                 # Write command to file
-                wscript_extraction.write(cmd + "\n")
+                wscript_extraction.write(cmd.strip() + "\n")
                 # Let's try to extract IOCs from it
 
                 if wscript_res_sec.body:
@@ -2400,39 +2417,49 @@ class JsJaws(ServiceBase):
             except JSONDecodeError as e:
                 self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
 
-            commands = set()
+            commands = list()
             file_writes = set()
             file_reads = set()
             cmd_count = 0
+            comment_added = False
             for ioc in ioc_json:
                 type = ioc["type"]
                 value = ioc["value"]
                 if type == "Run" and "command" in value:
-                    commands.add(value["command"])
-                    cmd_file_name = f"cmd_{cmd_count}.txt"
+                    if value["command"] not in commands:
+                        commands.append(value["command"].strip())
+                    cmd_file_name = f"cmd_{cmd_count}.bat"
                     cmd_file_path = path.join(self.working_directory, cmd_file_name)
-                    with open(cmd_file_path, "w") as f:
-                        f.write(value["command"])
-                    self.artifact_list.append(
-                        {
-                            "name": cmd_file_name,
-                            "path": cmd_file_path,
-                            "description": "Command Extracted",
-                            "to_be_extracted": True,
-                        }
-                    )
-                    self.log.debug(f"Adding extracted file: {cmd_file_name}")
+                    with open(cmd_file_path, "a+") as f:
+
+                        # We only want to do this once
+                        if not comment_added:
+                            f.write("REM Batch extracted by Assemblyline\n")
+                            comment_added = True
+
+                        f.write(value["command"] + "\n")
+
                     cmd_count += 1
                 elif type == "FileWrite" and "file" in value:
                     file_writes.add(value["file"])
                 elif type == "FileRead" and "file" in value:
                     file_reads.add(value["file"])
             if commands:
+                self.artifact_list.append(
+                    {
+                        "name": cmd_file_name,
+                        "path": cmd_file_path,
+                        "description": "Command Extracted",
+                        "to_be_extracted": True,
+                    }
+                )
+                self.log.debug(f"Adding extracted file: {cmd_file_name}")
+
                 cmd_result_section = ResultTextSection(
                     "The script ran the following commands", parent=ioc_result_section
                 )
-                cmd_result_section.add_lines(list(commands))
-                [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in list(commands)]
+                cmd_result_section.add_lines(commands)
+                [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in commands]
                 cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
                 extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, is_network_static=True)
                 if cmd_iocs_result_section.body:
