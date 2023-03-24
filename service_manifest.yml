@@ -232,6 +232,12 @@ heuristics:
     filetype: '.*'
     description: JavaScript code is found in the visible text of an HTML document, indicating malformation
 
+  - heur_id: 18
+    name: Programmatically created script(s) with external source
+    score: 1
+    filetype: '.*'
+    description: Script(s) with an external source were programatically created by the sample.
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
