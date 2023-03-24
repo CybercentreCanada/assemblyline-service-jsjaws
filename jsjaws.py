@@ -111,6 +111,10 @@ BITSADMIN_VARIATIONS = ["bitsadmin"]
 # WshShell is a protected term because it is used as a module class name in MalwareJail
 WSHSHELL = "WshShell"
 
+# HTMLScriptElement-related constants that will be used for seeking output in MalwareJail
+HTMLSCRIPTELEMENT = "HTMLScriptElement"
+HTMLSCRIPTELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -333,6 +337,10 @@ DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
 # Example:
 # document.write(atob(val));
 DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
+
+# Example
+# HTMLScriptElement[9].src was set to a URI 'http://blah.com'
+HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_SRC_SET_TO_URI} '(.+)'"
 
 # Globals
 
@@ -2646,6 +2654,7 @@ class JsJaws(ServiceBase):
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
+        dynamic_scripts_with_source: List[str] = []
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -2770,6 +2779,26 @@ class JsJaws(ServiceBase):
                     res.add_tag("network.static.uri", location_href)
                 res.add_line("Redirection to:")
                 res.add_line(location_href)
+
+            # Check if programatically created script with src set is found
+            if all(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLSCRIPTELEMENT_SRC_SET_TO_URI]):
+                uri_match = re.search(HTMLSCRIPTELEMENT_SRC_REGEX, log_line, re.IGNORECASE)
+                if len(uri_match.regs) == 2:
+                    uri_src = uri_match.group(1)
+                else:
+                    continue
+                # self.script_sources are script sources that are not programatically created (or at least, written to the DOM via code)
+                if uri_src not in self.script_sources:
+                    dynamic_scripts_with_source.append(uri_src)
+
+        if dynamic_scripts_with_source:
+            heur = Heuristic(18)
+            dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur, parent=request.result)
+            for script_src in dynamic_scripts_with_source:
+                if is_tag_safelisted(script_src, ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                    continue
+                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+                self._tag_uri(script_src, dynamic_script_source_res)
 
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
