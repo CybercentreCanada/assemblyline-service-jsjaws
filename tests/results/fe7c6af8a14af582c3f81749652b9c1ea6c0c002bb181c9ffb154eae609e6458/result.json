@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -40,7 +40,7 @@
         "auto_collapse": false,
         "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -62,7 +62,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an AutomationObject\n\t\tAutomationObject[21](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -84,7 +84,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tAutomationObject[21](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -106,7 +106,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t'sTKiQmbpdFLJpEZLd0bI5SeLNkQQp0dcxVY0FGRtFmcn9mcQxFX6MEIyMDbisiIsRmIrIib1JnIoUGdhVmcD5iYwVGd4UnSrtTK...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -128,7 +128,7 @@
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[10].send()\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -150,7 +150,7 @@
         "auto_collapse": false,
         "body": "JavaScript writes data to disk\n\t\tADODB.Stream[12].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\n\t\tADODB.Stream[17].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -172,7 +172,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n\n\t\tAutomationObject[21](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -194,7 +194,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"jzobkk.open\"}, {\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/tscw3rcg.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/tscw3rcg.dll\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -227,7 +227,7 @@
         "auto_collapse": false,
         "body": "[{\"url\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\", \"method\": \"GET\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

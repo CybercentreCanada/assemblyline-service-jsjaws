@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -40,7 +40,7 @@
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[10].send()\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -62,7 +62,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"acehphonnajaya.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://acehphonnajaya.com/css/ke.msi\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css/ke.msi\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -94,7 +94,7 @@
         "auto_collapse": false,
         "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -126,7 +126,7 @@
         "auto_collapse": false,
         "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
