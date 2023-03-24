@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Suspicious declarations were detected in HTML stylesheets",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -25,7 +25,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -36,7 +36,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,11,0,8,0,3,147,89,85,229,6,95,68,85,138,3,0,0,40,11,0,18,0,28,0,100,111,99,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\tnew Blob(129,235, [object Object])\n\n\t\t}return new Blob(_0x1936d3,{'type':_0x39e099(0x12c)})\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -58,7 +58,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -80,7 +80,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses a common base64 method for decoding characters\n\t\t_0x1f8499=atob(_0x1f8499)\n\t\tfunction b64toBlob(_0x390b80,_0x699e80){var _0x39e099=a0_0x3e7c,_0x1936d3=[],_0x5e2f86=atob(_0x390b8...\n\t\tvar _0x362cf0=_0xa80909[_0x1de451(0x136)],_0x46e8a=b64toBlob(_0x362cf0,0x200)",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -102,7 +102,7 @@
         "auto_collapse": false,
         "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -124,7 +124,7 @@
         "auto_collapse": false,
         "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -146,7 +146,7 @@
         "auto_collapse": false,
         "body": "Redirection to:\nhttp://example.com/?search",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -174,7 +174,7 @@
         "auto_collapse": false,
         "body": "Redirection to:\nhttp://example.com/?search",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -200,7 +200,7 @@
         "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -218,7 +218,7 @@
         "auto_collapse": false,
         "body": "View extracted file bf57c2fa6f6c71786b18a43c2e0979c305d21a7dba7b206d6eca29dbe3c49799.cleaned for details.",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -25,7 +25,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -36,7 +36,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -58,7 +58,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses unescape() to decode an encoded string\n\t\treturn e},random:Un,now:Wn,escape:$n,unescape:Cn,templateSettings:Kn,template:function(n,r,t){!r&&t&...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -80,7 +80,7 @@
         "auto_collapse": false,
         "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[9].setRequestHeader(\"Upgrade-Insecure-Requests\", \"1\")\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -102,7 +102,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"dce42.shrubs.emptyisland.pics\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dce42.shrubs.emptyisland.pics/subscribeevent\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/subscribeevent\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -134,7 +134,7 @@
         "auto_collapse": false,
         "body": "[{\"url\": \"https://dce42.shrubs.emptyisland.pics/subscribeEvent\", \"method\": \"POST\", \"request_headers\": \"1\", \"request_body\": \"GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -166,7 +166,7 @@
         "auto_collapse": false,
         "body": "\t\tAn unsafe statement was found: Function",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -184,7 +184,7 @@
         "auto_collapse": false,
         "body": "View extracted file 59eaf90e91b13fcb16f228d304ff863edab9665579c80b9a870447d476195d6c.cleaned for details.",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
