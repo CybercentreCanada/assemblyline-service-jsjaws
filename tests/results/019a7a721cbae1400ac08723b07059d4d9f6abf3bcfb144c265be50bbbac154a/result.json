@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Suspicious declarations were detected in HTML stylesheets",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -25,7 +25,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -36,7 +36,7 @@
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[16].click(undefined)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -58,7 +58,7 @@
         "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -76,7 +76,7 @@
         "auto_collapse": false,
         "body": "View extracted file 019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned for details.",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

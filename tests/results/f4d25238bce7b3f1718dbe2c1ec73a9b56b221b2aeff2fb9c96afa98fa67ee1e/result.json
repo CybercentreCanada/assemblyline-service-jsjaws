@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -25,7 +25,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -36,7 +36,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tActiveXObject(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)\n\n\t\tActiveXObject(System.Collections.ArrayList)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -58,7 +58,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,116,101,109,46,68,101,108...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -80,7 +80,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tWScript.CreateObject(\"System.IO.MemoryStream\")\n\n\t\tnew System.IO.MemoryStream[10]()\n\n\t\tSystem.IO.MemoryStream[10].WriteByte()\n\n\t\tSystem.IO.MemoryStream[10].Position = 0\n\n\t\tSystem.IO.MemoryStream[10].toString()\n\n\t\t> System.IO.MemoryStream[10]\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[11].Deserialize_2(System.IO.MemoryStr...\n\t\tnew Delegate[13](System.IO.MemoryStream[10], undefined)(System.IO.MemoryStream[10])\n\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).toString()\n\n\t\t> Delegate[13](System.IO.MemoryStream[10], undefined)\n\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).0 => [0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0...\n\t\tDelegate[13](System.IO.MemoryStream[10], undefined).DynamicInvoke([0, 1, 0, 0, 0, 255, 255, 255, 255...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -102,7 +102,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[9]()\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],

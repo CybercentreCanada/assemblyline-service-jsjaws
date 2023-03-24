@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -18,7 +18,7 @@
         "auto_collapse": false,
         "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\treturn s.split(\"\").reverse().join(\"\")",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],

@@ -7,7 +7,7 @@
         "auto_collapse": false,
         "body": "Common library used: clean_libs/maplace0.2.7.js",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -25,7 +25,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
           "attack_ids": [],
@@ -43,7 +43,7 @@
         "auto_collapse": false,
         "body": null,
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
         "tags": {},
@@ -54,7 +54,7 @@
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 8048d4ebad7b0b965181e93f74dba7229e4130b90b860b50102bd0b77019f033: object Error...",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
@@ -76,7 +76,7 @@
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tcotton0 is evaluated using a suspicious pattern",
         "body_format": "TEXT",
-        "classification": "TLP:W",
+        "classification": "TLP:C",
         "depth": 1,
         "heuristic": {
           "attack_ids": [],
