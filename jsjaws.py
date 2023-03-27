@@ -1,56 +1,46 @@
+import re
+import tempfile
 from base64 import b64decode
 from binascii import Error as BinasciiError
-from bs4 import BeautifulSoup
-from bs4.element import Comment, PageElement, ResultSet
-from dateutil.parser import parse as dtparse
 from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
-import re
-from requests import get
 from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
-import tempfile
 from threading import Thread
 from time import sleep, time
-from tinycss2 import parse_stylesheet
 from typing import Any, Dict, List, Optional, Set, Tuple
-from yaml import safe_load as yaml_safe_load
-from yara import compile as yara_compile
 
+import signatures
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
-from assemblyline_v4_service.common.utils import (
-    PASSWORD_WORDS,
-    extract_passwords,
-)
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.api import ServiceAPIError
 from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.dynamic_service_helper import (
-    OntologyResults,
-    extract_iocs_from_text_blob,
-    URL_REGEX,
-)
+    URL_REGEX, OntologyResults, extract_iocs_from_text_blob)
 from assemblyline_v4_service.common.request import ServiceRequest
-from assemblyline_v4_service.common.result import (
-    Heuristic,
-    Result,
-    ResultSection,
-    ResultTableSection,
-    ResultTextSection,
-    TableRow,
-)
+from assemblyline_v4_service.common.result import (Heuristic, Result,
+                                                   ResultSection,
+                                                   ResultTableSection,
+                                                   ResultTextSection, TableRow)
 from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
-
-import signatures
+from assemblyline_v4_service.common.utils import (PASSWORD_WORDS,
+                                                  extract_passwords)
+from bs4 import BeautifulSoup
+from bs4.element import Comment, PageElement, ResultSet
+from dateutil.parser import parse as dtparse
+from requests import get
 from signatures.abstracts import Signature
+from tinycss2 import parse_stylesheet
 from tools import tinycss2_helper
+from yaml import safe_load as yaml_safe_load
+from yara import compile as yara_compile
 
 # Execution constants
 
@@ -872,6 +862,7 @@ class JsJaws(ServiceBase):
         # Determine the file type to be used for this gauntlet run
         if not subsequent_run:
             file_type = request.file_type
+            file_type_details = dict(mime=None)
         else:
             file_type_details = self.identify.fileinfo(file_path)
             file_type = file_type_details["type"]
