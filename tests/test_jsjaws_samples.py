@@ -1,6 +1,7 @@
 import os
-import pytest
 import time
+
+import pytest
 from assemblyline.common.importing import load_module_by_path
 from assemblyline_v4_service.testing.helper import TestHelper
 
