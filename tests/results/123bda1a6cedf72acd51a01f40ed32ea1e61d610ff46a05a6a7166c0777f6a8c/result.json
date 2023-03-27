@@ -1,0 +1,251 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 23,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WinHTTP.WinHTTPRequest.5.1\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[10].send()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"permissions.default.camera\"}, {\"ioc_type\": \"domain\", \"ioc\": \"toolkit.telemetry.pioneer\"}, {\"ioc_type\": \"domain\", \"ioc\": \"centarial.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://centarial.com/documento.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/documento.php\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "google.com",
+                "permissions.default.camera",
+                "toolkit.telemetry.pioneer",
+                "centarial.com"
+              ],
+              "uri": [
+                "https://google.com",
+                "http://centarial.com/documento.php"
+              ],
+              "uri_path": [
+                "/documento.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"http://centarial.com/documento.php\", \"method\": \"GET\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "centarial.com"
+              ],
+              "uri": [
+                "http://centarial.com/documento.php"
+              ],
+              "uri_path": [
+                "/documento.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn unsafe statement was found: Function",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
+        ]
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "centarial.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://centarial.com/documento.php"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/documento.php"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "centarial.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "google.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "permissions.default.camera"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "toolkit.telemetry.pioneer"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://centarial.com/documento.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://google.com"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/documento.php"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
