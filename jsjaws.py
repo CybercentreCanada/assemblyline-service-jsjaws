@@ -1346,7 +1346,10 @@ class JsJaws(ServiceBase):
             else:
                 element_value = None
         else:
-            element_value = element.text.strip().replace("\n", "")
+            if hasattr(element, "text"):
+                element_value = element.text.strip().replace("\n", "")
+            else:
+                element_value = ""
 
         return element_value
 
@@ -2853,6 +2856,7 @@ class JsJaws(ServiceBase):
             regex_match = re.match(regex, file_contents)
             if not regex_match:
                 continue
+            path_contents = None
             if lib_path.startswith("https"):
                 if not self.service_attributes.docker_config.allow_internet_access:
                     continue
@@ -2864,11 +2868,19 @@ class JsJaws(ServiceBase):
 
                 path_contents = resp.text
             else:
-                if len(regex_match.regs) > 1:
-                    lib_path = lib_path % regex_match.group(1)
-                    path_contents = open(lib_path, "r").read()
-                else:
-                    path_contents = open(lib_path, "r").read()
+                    if len(regex_match.regs) > 1:
+                        lib_path = lib_path % regex_match.group(1)
+
+                    if path.exists(lib_path):
+                        path_contents = open(lib_path, "r").read()
+                    else:
+                        self.log.warning(
+                            f"There was a regex hit for a clean library file '{lib_path}' but this "
+                            "file does not exist..."
+                        )
+
+            if not path_contents:
+                continue
 
             diff = list()
             clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
