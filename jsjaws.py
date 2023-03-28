@@ -173,6 +173,38 @@ LODASH_REGEX = \
     r"\/\*\*\n \* @license\n \* Lodash <https:\/\/lodash\.com\/>[\n\s*\w<:\/.>,&;(){}`\-=+]+var VERSION = '([\d.]+)';"
 
 # Example:
+#
+# /*
+# * Licensed to the Apache Software Foundation (ASF) under one
+# * or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information
+# * regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the
+# * "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *   http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing,
+# * software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# * KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations
+# * under the License.
+# */
+#
+# (function (global, factory) {
+#     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+#     typeof define === 'function' && define.amd ? define(['exports'], factory) :
+#     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.echarts = {}));
+# }(this, (function (exports) { 'use strict';
+CHARTVIEW_REGEX = r"\s*\/\*[\s\S]+?\*\/\s*\(function\s+\(global,\s*factory\)\s*\{\s*typeof\s+exports\s*===\s*'object'" \
+                  r"\s*&&\s*typeof\s*module\s*!==\s*'undefined'\s*\?\s*factory\(exports\)\s*:\s*typeof\s+define\s*===" \
+                  r"\s*'function'\s*&&\s*define\.amd\s*\?\s*define\(\['exports'\],\s*factory\)\s*:\s*\(global\s*=\s*" \
+                  r"typeof\s+globalThis\s*!==\s*'undefined'\s*\?\s*globalThis\s*:\s*global\s*\|\|\s*self,\s*factory" \
+                  r"\(global\.echarts\s*=\s*\{\}\)\);\s*\}\(this,\s*\(function\s*\(exports\)\s*\{\s*'use\s+strict';"
+
+# Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
 MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
 
@@ -2849,6 +2881,7 @@ class JsJaws(ServiceBase):
             "clean_libs/underscore%s.js": UNDERSCORE_REGEX,
             "clean_libs/d3_v%s.js": D3_REGEX,
             "clean_libs/lodash%s.js": LODASH_REGEX,
+            "clean_libs/chartview.js": CHARTVIEW_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
@@ -2895,6 +2928,10 @@ class JsJaws(ServiceBase):
                 dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
                 if self._compare_lines(item, dirty_file_line_to_compare):
                     pass
+                # Python has difficulty with decoding .. and ..., so skip it!
+                # (the malicious lines are not in the clean files anyways)
+                elif ".." in item:
+                    continue
                 else:
                     while not self._compare_lines(item, dirty_file_line_to_compare):
                         diff.append(dirty_file_line_to_compare)
