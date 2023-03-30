@@ -2797,7 +2797,11 @@ class JsJaws(ServiceBase):
 
                             location_href = data["_props"]["href"]
                         else:
-                            location_href = location_pointer["_props"]["href"]
+                            location_href = location_pointer["_props"].get("href")
+
+                # It is possible for the location_href to be assigned an empty dictionary by MalwareJail, or to be unset
+                if not location_href:
+                    continue
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)
