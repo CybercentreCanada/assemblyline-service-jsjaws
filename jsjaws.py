@@ -364,9 +364,10 @@ DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
 HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_SRC_SET_TO_URI} '(.+)'"
 
-# Example:
+# Examples:
 # <!--
-HTML_COMMENT_IN_JS = b"(^|\n)\s*\<\!\-\-\s*\n"
+# -->
+HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 
 # Globals
 
@@ -884,7 +885,7 @@ class JsJaws(ServiceBase):
         """
         def log_and_replace_html_comments(match):
             group_0 = match.group(0).decode().strip()
-            self.log.debug(f"Removed Synchrony buster token: {group_0}")
+            self.log.debug(f"Removed HTML comment: {group_0}")
             return b""
 
         file_content = re.sub(HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
