@@ -360,9 +360,14 @@ DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
 # document.write(atob(val));
 DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
 
-# Example
+# Example:
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
 HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_SRC_SET_TO_URI} '(.+)'"
+
+# Examples:
+# <!--
+# -->
+HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 
 # Globals
 
@@ -872,6 +877,20 @@ class JsJaws(ServiceBase):
             pass
         return jsxray_output
 
+    def _remove_html_comments(self, file_content: bytes) -> bytes:
+        """
+        This method removes HTML opening comment strings from JavaScript
+        :param file_content: The contents of the initial file to be read
+        :return: The potentially modified contents of the file
+        """
+        def log_and_replace_html_comments(match):
+            group_0 = match.group(0).decode().strip()
+            self.log.debug(f"Removed HTML comment: {group_0}")
+            return b""
+
+        file_content = re.sub(HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
+        return file_content
+
     def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
@@ -951,7 +970,6 @@ class JsJaws(ServiceBase):
 
         # Don't forget the sample!
         malware_jail_args.append(file_path)
-        jsxray_args.append(file_path)
 
         # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony/Box.js and
         # check if script is a long one-liner
@@ -959,16 +977,19 @@ class JsJaws(ServiceBase):
         actual_script = None
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
             _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            actual_script = self._remove_html_comments(actual_script)
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                 t.write(actual_script)
                 synchrony_args.append(t.name)
                 # Box.js cannot handle the document object, therefore we need to pass it the split file
                 boxjs_args.append(t.name)
+                jsxray_args.append(t.name)
 
             one_liner_hit = self._is_single_line(actual_script)
         else:
             synchrony_args.append(file_path)
             boxjs_args.append(file_path)
+            jsxray_args.append(file_path)
 
             one_liner_hit = self._is_single_line(file_content)
 
@@ -1158,7 +1179,7 @@ class JsJaws(ServiceBase):
     def extract_js_from_jscript(self, file_content: bytes) -> Tuple[str, bytes]:
         """
         This method extracts JavaScript from JScript
-        :param initial_file_content: The contents of the initial file to be read
+        :param file_content: The contents of the initial file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
         """
         def log_and_replace_jscript(match):
