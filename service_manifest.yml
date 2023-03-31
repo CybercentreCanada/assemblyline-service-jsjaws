@@ -183,9 +183,9 @@ heuristics:
 
   - heur_id: 11
     name: Time Waster
-    score: 1
+    score: 1000
     filetype: '.*'
-    description: Sample uses common time-wasting techniques
+    description: Sample uses common time-wasting techniques. Seen frequently in Gootloader.
 
   - heur_id: 12
     name: Visual Basic and JavaScript
