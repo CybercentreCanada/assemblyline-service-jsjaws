@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 10,
+    "score": 100,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\t\treturn(s.split(\"\").reverse().join(\"\"))",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[9].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQ...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -24,16 +24,16 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 10,
+          "score": 100,
           "score_map": {
-            "obfuscation": 10
+            "runs_shell_application": 100
           },
           "signatures": {
-            "obfuscation": 1
+            "runs_shell_application": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Obfuscation",
+        "title_text": "Signature: RunsShellApplication",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -41,22 +41,26 @@
   "files": {
     "extracted": [
       {
-        "name": "c1f17888996e5e7d57018655703764ec4aadffb9ee7b627f40504ba5eab531e5",
-        "sha256": "c1f17888996e5e7d57018655703764ec4aadffb9ee7b627f40504ba5eab531e5"
+        "name": "1e5b1a3b64bf42fa85133eef098c3462d0ec1547c64b3b34987af51dda388207",
+        "sha256": "1e5b1a3b64bf42fa85133eef098c3462d0ec1547c64b3b34987af51dda388207"
       },
       {
-        "name": "HTMLEmbedElement[22]",
-        "sha256": "c9d18e2d8379ac4e6c8e24ca1215a3812f0cb6e81bb676b4858fac717b192640"
+        "name": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00",
+        "sha256": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00"
+      },
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "b5d9b020c1e78665904d5e1f52162340e59952cbc11336507acdc6ac18fc15d3"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "34197d3d0daa8f5d970e4ad55aa98d7cf1e809495040104b2b30e3f0e510cd6b"
+        "sha256": "3b27c7c6eadb89d7ce7ade7ce3aef073229168443b6fd55c59b5a4af35c22f0d"
       },
       {
         "name": "temp_css.css",
-        "sha256": "7f1cd9bb980c4fcaefb23d5cb926814c1a99b12792311157d12d52cfc7630fe0"
+        "sha256": "4c8d28b64934f2ad37a54477c5f1664786748ee43843feaf1359ee366c528ce6"
       }
     ]
   },
@@ -66,7 +70,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "obfuscation"
+          "runs_shell_application"
         ]
       }
     ],

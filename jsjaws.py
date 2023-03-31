@@ -932,6 +932,7 @@ class JsJaws(ServiceBase):
 
         # If at this point the file path is None, there is nothing to analyze and we can go home
         if file_path is None:
+            self.log.debug("No JavaScript file to analyze...")
             return
 
         # If we did manage to extract embedded code from a common library, add the extracted file as an artifact
@@ -1206,34 +1207,48 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
         self.log.debug("Extracting embedded files from soup...")
+        embed_srcs: Set[str] = set()
 
         # https://www.w3schools.com/TAGS/tag_embed.asp
         # Grab all embed srcs with base64-encoded values and extract them
-        embeds = soup.findAll("embed")
+        embeds = soup.findAll(["embed", "a", "img"])
         for embed in embeds:
+            element_name = embed.name
             src = embed.attrs.get("src")
             if not src:
-                continue
+                src = embed.attrs.get("href")
+                if not src:
+                    continue
+
             matches = re.match(APPENDCHILD_BASE64_REGEX, src)
             if matches and len(matches.regs) == 2:
                 embedded_file_content = b64decode(matches.group(1).encode())
+
+                if embedded_file_content not in embed_srcs:
+                    embed_srcs.add(embedded_file_content)
+                else:
+                    continue
+
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                     t.write(embedded_file_content)
                     embed_path = t.name
-                artifact = {
-                    "name": get_sha256_for_file(embed_path),
-                    "path": embed_path,
-                    "description": "Base64-decoded Embed Tag Source",
-                    "to_be_extracted": True,
-                }
-                self.log.debug(f"Extracting decoded embed tag source {embed_path}")
-                self.artifact_list.append(artifact)
 
                 # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
                 file_info = self.identify.fileinfo(embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     soup = BeautifulSoup(embedded_file_content, features="html5lib")
                     aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider=True)
+                elif file_info["type"] in ["code/javascript"]:
+                    js_content, aggregated_js_script = self.append_content(embedded_file_content.decode(), js_content, aggregated_js_script)
+                else:
+                    artifact = {
+                        "name": get_sha256_for_file(embed_path),
+                        "path": embed_path,
+                        "description": f"Base64-decoded {element_name} Tag Source",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Extracting decoded {element_name} tag source {embed_path}")
+                    self.artifact_list.append(artifact)
 
         return aggregated_js_script, js_content
 
