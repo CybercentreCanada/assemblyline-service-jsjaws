@@ -259,12 +259,12 @@
     ],
     "supplementary": [
       {
-        "name": "temp_javascript.js",
-        "sha256": "69e410f6e32a9d7705e8a26101d0b8e4045e3e18c9500e5e9736ee43b00a1b37"
-      },
-      {
         "name": "temp_css.css",
         "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "bd5e94d3f9c819ec1527dc7fa2480ca7873132c20101f891dc111f474194ae7f"
       }
     ]
   },

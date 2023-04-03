@@ -51,12 +51,12 @@
     ],
     "supplementary": [
       {
-        "name": "temp_javascript.js",
-        "sha256": "34197d3d0daa8f5d970e4ad55aa98d7cf1e809495040104b2b30e3f0e510cd6b"
-      },
-      {
         "name": "temp_css.css",
         "sha256": "7f1cd9bb980c4fcaefb23d5cb926814c1a99b12792311157d12d52cfc7630fe0"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "99a13acfc2bacd1aeafe8eee1657308e1c700cb89e1b497b5e4d9a0fb0671e4b"
       }
     ]
   },

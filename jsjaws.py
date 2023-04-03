@@ -1472,25 +1472,27 @@ class JsJaws(ServiceBase):
         :param random_element_varname: The name of the variable
         :return: The script used for setting an element's attribute
         """
-        if attr_id != "id":
+        if attr_id == "id":
+            return ""
 
-            # Please don't put double quotes in attributes people!
-            attr_id = attr_id.replace("\"", "")
-            if not attr_id:
-                return ""
+        # Please don't put double quotes in attributes people!
+        attr_id = attr_id.replace("\"", "")
+        if not attr_id:
+            return ""
 
-            # Escape double quotes since we are wrapping the value in double quotes
-            if '"' in attr_val:
-                attr_val = attr_val.replace('"', '\\"')
-            # JavaScript does not like when there are newlines when setting attributes
-            if isinstance(attr_val, str) and "\n" in attr_val:
-                attr_val = attr_val.replace("\n", "")
-            elif attr_id == "class" and isinstance(attr_val, list) and len(attr_val) == 1:
-                attr_val = attr_val[0]
+        # JavaScript does not like when there are newlines when setting attributes
+        if isinstance(attr_val, str) and "\n" in attr_val:
+            attr_val = attr_val.replace("\n", "")
+        elif isinstance(attr_val, list) and attr_id == "class" and len(attr_val) == 1:
+            attr_val = attr_val[0]
+        elif isinstance(attr_val, list):
+            attr_val = " ".join(attr_val)
 
-            return f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
+        # Escape double quotes since we are wrapping the value in double quotes
+        if '"' in attr_val:
+            attr_val = attr_val.replace('"', '\\"')
 
-        return ""
+        return f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
     @staticmethod
     def _handle_object_elements(element: PageElement, request: ServiceRequest, random_element_varname: str) -> str:
