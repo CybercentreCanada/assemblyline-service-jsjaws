@@ -45,12 +45,12 @@
         "sha256": "1e5b1a3b64bf42fa85133eef098c3462d0ec1547c64b3b34987af51dda388207"
       },
       {
-        "name": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00",
-        "sha256": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00"
+        "name": "extracted_wscript.bat",
+        "sha256": "34702536fb73d2209b22c7d39426370cb72caca9dadaf73bd4673d409f183156"
       },
       {
-        "name": "extracted_wscript.bat",
-        "sha256": "b5d9b020c1e78665904d5e1f52162340e59952cbc11336507acdc6ac18fc15d3"
+        "name": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00",
+        "sha256": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00"
       }
     ],
     "supplementary": [

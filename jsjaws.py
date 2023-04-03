@@ -2032,7 +2032,7 @@ class JsJaws(ServiceBase):
 
                 # We only want to do this once
                 if not comment_added:
-                    wscript_extraction.write("REM Batch extracted by Assemblyline\n")
+                    wscript_extraction.write("REM Batch extracted by Assemblyline\r\n")
                     comment_added = True
 
                 cmd = wscript_shell_run.group(1)
@@ -2073,7 +2073,7 @@ class JsJaws(ServiceBase):
                     cmd = cmd[1:-1]
 
                 # Write command to file
-                wscript_extraction.write(cmd.strip() + "\n")
+                wscript_extraction.write(cmd.strip() + "\r\n")
                 # Let's try to extract IOCs from it
 
                 if wscript_res_sec.body:
@@ -2511,10 +2511,10 @@ class JsJaws(ServiceBase):
 
                         # We only want to do this once
                         if not comment_added:
-                            f.write("REM Batch extracted by Assemblyline\n")
+                            f.write("REM Batch extracted by Assemblyline\r\n")
                             comment_added = True
 
-                        f.write(value["command"] + "\n")
+                        f.write(value["command"] + "\r\n")
 
                     cmd_count += 1
                 elif type == "FileWrite" and "file" in value:
