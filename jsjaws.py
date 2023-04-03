@@ -920,10 +920,8 @@ class JsJaws(ServiceBase):
 
         # Based on the file type, send to the proper extraction method
         css_path = None
-        if file_type in ["code/html", "code/hta", "code/wsf", "code/wsc"]:
+        if file_type in ["code/html", "code/hta", "code/wsf", "code/wsc", "image/svg"]:
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
-        elif file_type == "image/svg":
-            file_path, file_content, _ = self.extract_using_soup(request, file_content)
         elif file_type == "code/jscript":
             file_path, file_content = self.extract_js_from_jscript(file_content)
         # This case is if the file is invalid HTML or something similar
@@ -932,6 +930,7 @@ class JsJaws(ServiceBase):
 
         # If at this point the file path is None, there is nothing to analyze and we can go home
         if file_path is None:
+            self.log.debug("No JavaScript file to analyze...")
             return
 
         # If we did manage to extract embedded code from a common library, add the extracted file as an artifact
@@ -1098,63 +1097,64 @@ class JsJaws(ServiceBase):
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(self.artifact_list, request)
 
-    def append_content(self, content: str, file_content: bytes, aggregated_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+    def append_content(self, content: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
         """
         This method appends contents to a NamedTemporaryFile
         :param content: content to be appended
-        :param file_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         encoded_script = content.encode()
-        if aggregated_script is None:
-            aggregated_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
-        file_content += encoded_script + b"\n"
-        aggregated_script.write(encoded_script + b"\n")
-        return file_content, aggregated_script
+        if aggregated_js_script is None:
+            aggregated_js_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
+        js_content += encoded_script + b"\n"
+        aggregated_js_script.write(encoded_script + b"\n")
+        return js_content, aggregated_js_script
 
-    def insert_content(self, content: str, file_content: bytes, aggregated_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+    def insert_content(self, content: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
         """
         This method inserts contents above the dividing comment line in a NamedTemporaryFile
         :param content: content to be inserted
-        :param file_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param js_content: The file content of the NamedTemporaryFile
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         encoded_script = content.encode()
-        if aggregated_script is None:
-            aggregated_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
+        if aggregated_js_script is None:
+            aggregated_js_script = tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb")
         # Get the point in the file contents where the divider exists
-        if file_content != b"":
-            index_of_divider = file_content.index(DIVIDING_COMMENT.encode())
+        if js_content != b"":
+            index_of_divider = js_content.index(DIVIDING_COMMENT.encode())
             # Find the beginning of the file
-            aggregated_script.seek(0, 0)
+            aggregated_js_script.seek(0, 0)
             # Insert the encoded script before the divider
-            file_content = file_content[:index_of_divider] + encoded_script + b"\n" + file_content[index_of_divider:]
-            aggregated_script.write(file_content)
+            js_content = js_content[:index_of_divider] + encoded_script + b"\n" + js_content[index_of_divider:]
+            aggregated_js_script.write(js_content)
             # Find the end of the file
-            aggregated_script.seek(0, 2)
-        return file_content, aggregated_script
+            aggregated_js_script.seek(0, 2)
+        return js_content, aggregated_js_script
 
-    def extract_using_soup(self, request: ServiceRequest, initial_file_content: bytes) -> Tuple[str, bytes, Optional[str]]:
+    def extract_using_soup(self, request: ServiceRequest, file_content: bytes, js_content: bytes = b"", aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, insert_above_divider: bool = False) -> Tuple[str, bytes, Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
-        :param initial_file_content: The contents of the initial file to be read
+        :param file_content: The contents of the non-pure JavaScript file to be read
+        :param js_content: The file content of the NamedTemporaryFile
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :param insert_above_divider: A flag indicating if we are inserting above the divider
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written, and the name of the CSS file that was written
         """
         self.log.debug("Extracting HTML elements from soup...")
 
         start_time = time()
-        soup = BeautifulSoup(initial_file_content, features="html5lib")
+        soup = BeautifulSoup(file_content, features="html5lib")
         self.log.debug(f"Parsing the file with BeautifulSoup took {round(time() - start_time)}s")
 
-        aggregated_js_script = None
-        js_content = b""
         js_script_name = None
         css_script_name = None
 
-        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request)
+        aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider)
 
         if request.file_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(soup, request, aggregated_js_script, js_content)
@@ -1174,12 +1174,12 @@ class JsJaws(ServiceBase):
 
         if js_content != b"":
             return js_script_name, js_content, css_script_name
-        return js_script_name, initial_file_content, css_script_name
+        return js_script_name, file_content, css_script_name
 
     def extract_js_from_jscript(self, file_content: bytes) -> Tuple[str, bytes]:
         """
         This method extracts JavaScript from JScript
-        :param file_content: The contents of the initial file to be read
+        :param file_content: The contents of the JScript file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
         """
         def log_and_replace_jscript(match):
@@ -1206,34 +1206,54 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
         self.log.debug("Extracting embedded files from soup...")
+        embed_srcs: Set[str] = set()
 
-        # https://www.w3schools.com/TAGS/tag_embed.asp
-        # Grab all embed srcs with base64-encoded values and extract them
-        embeds = soup.findAll("embed")
+        # https://www.w3schools.com/tags/att_src.asp
+        elements_with_src_attr = ["audio", "embed", "iframe", "img", "input", "script", "source", "track", "video"]
+
+        # https://www.w3schools.com/tags/att_href.asp
+        elements_with_href_attr = ["a", "area", "base", "link"]
+
+        elements_with_attr_of_interest = elements_with_src_attr + elements_with_href_attr
+        embeds = soup.findAll(elements_with_attr_of_interest)
+
         for embed in embeds:
+            element_name = embed.name
             src = embed.attrs.get("src")
             if not src:
-                continue
+                src = embed.attrs.get("href")
+                if not src:
+                    continue
+
             matches = re.match(APPENDCHILD_BASE64_REGEX, src)
             if matches and len(matches.regs) == 2:
                 embedded_file_content = b64decode(matches.group(1).encode())
+
+                if embedded_file_content not in embed_srcs:
+                    embed_srcs.add(embedded_file_content)
+                else:
+                    continue
+
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                     t.write(embedded_file_content)
                     embed_path = t.name
-                artifact = {
-                    "name": get_sha256_for_file(embed_path),
-                    "path": embed_path,
-                    "description": "Base64-decoded Embed Tag Source",
-                    "to_be_extracted": True,
-                }
-                self.log.debug(f"Extracting decoded embed tag source {embed_path}")
-                self.artifact_list.append(artifact)
 
                 # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
                 file_info = self.identify.fileinfo(embed_path)
-                if file_info["type"] in ["code/html", "code/hta", "image/svg"]:
-                    soup = BeautifulSoup(embedded_file_content, features="html5lib")
-                    aggregated_js_script, js_content = self._extract_js_using_soup(soup, aggregated_js_script, js_content, request, insert_above_divider=True)
+                if file_info["type"] in ["code/html", "code/hta", "code/wsf", "code/wsc", "image/svg"]:
+                    file_path, js_content, _ = self.extract_using_soup(request, embedded_file_content, js_content, aggregated_js_script, insert_above_divider=True)
+                    aggregated_js_script = open(file_path, "a+b")
+                elif file_info["type"] in ["code/javascript"]:
+                    js_content, aggregated_js_script = self.append_content(embedded_file_content.decode(), js_content, aggregated_js_script)
+                else:
+                    artifact = {
+                        "name": get_sha256_for_file(embed_path),
+                        "path": embed_path,
+                        "description": f"Base64-decoded {element_name} Tag Source",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Extracting decoded {element_name} tag source {embed_path}")
+                    self.artifact_list.append(artifact)
 
         return aggregated_js_script, js_content
 
@@ -1608,7 +1628,7 @@ class JsJaws(ServiceBase):
         This method handles VisualBasic scripts
         :param body: The VisualBasic script body to be looked through
         :param js_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param aggregated_js_script: The NamedTemporaryFile object
         :param function_varname: The name of the variable pointing at the new Function
         :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
@@ -3006,7 +3026,7 @@ class JsJaws(ServiceBase):
         This method looks in VisualBasic scripts for variable declaration, and converts them to JavaScript
         :param body: The VisualBasic script body to be looked through
         :param file_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         static_vars = re.findall(VBS_GRAB_VARS_REGEX, body, re.IGNORECASE)
@@ -3028,7 +3048,7 @@ class JsJaws(ServiceBase):
         This method looks in VisualBasic scripts for a WScript.Shell declaration, and converts it to JavaScript
         :param body: The VisualBasic script body to be looked through
         :param file_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the variable name of the declared WScript.Shell, file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         wscript_varname = None
@@ -3051,7 +3071,7 @@ class JsJaws(ServiceBase):
         :param wscript_varname: The variable name of the declared WScript.Shell
         :param body: The VisualBasic script body to be looked through
         :param js_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         regwrite = re.search(VBS_WSCRIPT_REG_WRITE_REGEX % wscript_varname, body, re.IGNORECASE)
@@ -3113,7 +3133,7 @@ class JsJaws(ServiceBase):
         :param body: The JavaScript script body to be looked through
         :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
         :param file_content: The file content of the NamedTemporaryFile
-        :param aggregated_script: The NamedTemporaryFile object
+        :param aggregated_js_script: The NamedTemporaryFile object
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
         function_call = re.search(VBS_FUNCTION_CALL % function_varname, body, re.IGNORECASE)
