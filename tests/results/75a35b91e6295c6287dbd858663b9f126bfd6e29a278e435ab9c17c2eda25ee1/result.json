@@ -1,8 +1,26 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 3,
+    "score": 1002,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Script uses function inception",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 19,
+          "score": 500,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Function inception",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}]",
@@ -89,9 +107,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 1,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "function_inception_url": 1
+          }
         },
         "tags": {
           "network": {
@@ -137,7 +157,9 @@
       {
         "attack_ids": [],
         "heur_id": 1,
-        "signatures": []
+        "signatures": [
+          "function_inception_url"
+        ]
       },
       {
         "attack_ids": [],
@@ -147,6 +169,11 @@
       {
         "attack_ids": [],
         "heur_id": 18,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 19,
         "signatures": []
       }
     ],
@@ -159,7 +186,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "dealsontrainers.org"
         },
         {
@@ -169,7 +198,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "iscast.com.br"
         },
         {
@@ -179,7 +210,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "tapasyaevents.com"
         }
       ],
@@ -191,7 +224,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
         },
         {
@@ -201,7 +236,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "https://iscast.com.br/udit/udit.php?68977"
         },
         {
@@ -211,7 +248,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
         }
       ],
@@ -223,7 +262,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "/fmu/fmu.php?55724"
         },
         {
@@ -233,7 +274,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "/tete/tete.php?85434"
         },
         {
@@ -243,7 +286,9 @@
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "function_inception_url"
+          ],
           "value": "/udit/udit.php?68977"
         }
       ],

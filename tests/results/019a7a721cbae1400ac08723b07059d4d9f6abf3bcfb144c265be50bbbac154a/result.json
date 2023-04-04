@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1021,
+    "score": 1521,
     "sections": [
       {
         "auto_collapse": false,
@@ -19,6 +19,24 @@
         },
         "tags": {},
         "title_text": "Suspicious CSS Usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Script uses function inception",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 19,
+          "score": 500,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Function inception",
         "zeroize_on_tag_safe": false
       },
       {
@@ -140,6 +158,11 @@
       {
         "attack_ids": [],
         "heur_id": 8,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 19,
         "signatures": []
       }
     ],

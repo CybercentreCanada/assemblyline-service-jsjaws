@@ -124,6 +124,7 @@ heuristics:
     description: Malware Sandbox Tool(s) detected network traffic.
     signature_score_map:
       single_script_url: 500
+      function_inception_url: 500
 
   - heur_id: 2
     name: IOC(s) Extracted
@@ -237,6 +238,12 @@ heuristics:
     score: 1
     filetype: '.*'
     description: Script(s) with an external source were programatically created by the sample.
+
+  - heur_id: 19
+    name: Function inception
+    score: 500
+    filetype: '.*'
+    description: Script uses function inception
 
 docker_config:
   allow_internet_access: true
