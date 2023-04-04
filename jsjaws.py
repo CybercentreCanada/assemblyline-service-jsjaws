@@ -369,6 +369,16 @@ HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_
 # -->
 HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 
+# Example:
+# function a0nnnnoo() {
+#     var fmicaiaimxeof = ['bunch', 'of', 'nonsense'];
+#     a0nnnnoo = function() {
+#         return fmicaiaimxeof;
+#     };
+#     return a0nnnnoo();
+# };
+FUNCTION_INCEPTION = b"function\s+(?P<function_name>\w+)\(\)\s*\{\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];\s*(?P=function_name)\s+=\s+function\(\)\s*\{\s*return\s+(?P=variable_name);\s*\};\s*return\s+(?P=function_name)\(\);\s*\};"
+
 # Globals
 
 # Flag that the sample was embedded within a third party library
@@ -953,6 +963,15 @@ class JsJaws(ServiceBase):
         if self.malformed_javascript:
             heur = Heuristic(17)
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+        # If the file uses function inception, this is annoying to read and hopefully no one with good intentions
+        # would write code like this
+        function_inception_match = re.search(FUNCTION_INCEPTION, file_content)
+        if function_inception_match:
+            self.log.debug("This sample uses function inception")
+            function_inception_res_sec = ResultTextSection("This sample uses function inception techniques")
+            function_inception_res_sec.set_heuristic(19)
+            request.result.add_section(function_inception_res_sec)
 
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)

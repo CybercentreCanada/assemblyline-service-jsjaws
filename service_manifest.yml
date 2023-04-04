@@ -238,6 +238,12 @@ heuristics:
     filetype: '.*'
     description: Script(s) with an external source were programatically created by the sample.
 
+  - heur_id: 19
+    name: Function inception
+    score: 1
+    filetype: '.*'
+    description: Script uses function inception
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
