@@ -2901,7 +2901,7 @@ class JsJaws(ServiceBase):
         resp[tool_name] = []
         try:
             # Stream stdout to resp rather than waiting for process to finish
-            with Popen(args=args, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
+            with Popen(args=args, stdout=PIPE, stderr=PIPE, bufsize=1, universal_newlines=True) as p:
                 for line in p.stdout:
                     resp[tool_name].append(line)
                     if len(resp[tool_name]) > self.stdout_limit:
