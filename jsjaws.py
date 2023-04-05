@@ -1156,7 +1156,7 @@ class JsJaws(ServiceBase):
             aggregated_js_script.seek(0, 2)
         return js_content, aggregated_js_script
 
-    def extract_using_soup(self, request: ServiceRequest, file_content: bytes, js_content: bytes = b"", aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, insert_above_divider: bool = False) -> Tuple[str, bytes, Optional[str]]:
+    def extract_using_soup(self, request: ServiceRequest, file_content: bytes, js_content: bytes = b"", aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None, insert_above_divider: bool = False) -> Tuple[Optional[str], bytes, Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
@@ -1263,7 +1263,8 @@ class JsJaws(ServiceBase):
                 file_info = self.identify.fileinfo(embed_path)
                 if file_info["type"] in ["code/html", "code/hta", "code/wsf", "code/wsc", "image/svg"]:
                     file_path, js_content, _ = self.extract_using_soup(request, embedded_file_content, js_content, aggregated_js_script, insert_above_divider=True)
-                    aggregated_js_script = open(file_path, "a+b")
+                    if file_path:
+                        aggregated_js_script = open(file_path, "a+b")
                 elif file_info["type"] in ["code/javascript"]:
                     js_content, aggregated_js_script = self.append_content(embedded_file_content.decode(), js_content, aggregated_js_script)
                 else:
