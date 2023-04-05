@@ -210,7 +210,7 @@ MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
 
 # Example:
 # data:image/png;base64,iVBORw0KGgoAAAAN
-APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,(.*)")
+APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,([\s\S]*)")
 
 # Example:
 # const element99_jsjaws =
@@ -1248,7 +1248,11 @@ class JsJaws(ServiceBase):
 
             matches = re.match(APPENDCHILD_BASE64_REGEX, src)
             if matches and len(matches.regs) == 2:
-                embedded_file_content = b64decode(matches.group(1).encode())
+                try:
+                    embedded_file_content = b64decode(matches.group(1).encode())
+                except BinasciiError as e:
+                    self.log.debug(f"Could not base64-decode an element src/href value '{matches.group(1)}' due to '{e}'")
+                    continue
 
                 if embedded_file_content not in embed_srcs:
                     embed_srcs.add(embedded_file_content)
