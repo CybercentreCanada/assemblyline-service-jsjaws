@@ -23,6 +23,7 @@ have a signature written for it, then please make a Pull Request or share the sa
   * `max_payloads_extracted` - [default: 50]: Maximum payload files extracted if deep scan is turned off.
   * `raise_malware_jail_exc` - [default: false]: Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
   * `total_stdout_limit` - [default: 10000]: The limit to number of stdout lines analyzed that werre captured from tools.
+  * `send_tool_stderr_to_pipe` - [default: false]: If you don't want a tool's STDERR clogging up your terminal, set to true
 
 ## Submission Parameters
 Generic parameters:
