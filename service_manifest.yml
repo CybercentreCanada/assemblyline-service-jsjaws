@@ -28,6 +28,8 @@ config:
   raise_malware_jail_exc: false
   # The limit to number of stdout lines analyzed that werre captured from tools
   total_stdout_limit: 10000
+  # If you don't want your STDERR clogging up your terminal, set to true
+  send_tool_stderr_to_pipe: false
 
 submission_params:
   # Service-wide parameters
