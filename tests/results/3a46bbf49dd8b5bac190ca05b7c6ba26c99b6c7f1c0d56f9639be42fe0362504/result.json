@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1164,
+    "score": 1154,
     "sections": [
       {
         "auto_collapse": false,
@@ -30,28 +30,6 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes data to the console\n\t\tTextStream[30].WriteLine(\"ATTENTION!\")\n\n\t\tTextStream[30].WriteLine(\"\")\n\n\t\tTextStream[30].WriteLine(\"All your documents, photos, databases and other important personal files\")...\n\t\tTextStream[30].WriteLine(\"were encrypted using strong RSA-1024 algorithm with a unique key.\")\n\n\t\tTextStream[30].WriteLine(\"To restore your files you have to pay 0.51130 BTC (bitcoins).\")\n\n\t\tTextStream[30].WriteLine(\"Please follow this manual:\")\n\n\t\tTextStream[30].WriteLine(\"1. Create Bitcoin wallet here:\")\n\n\t\tTextStream[30].WriteLine(\"      https://blockchain.info/wallet/new\")\n\n\t\tTextStream[30].WriteLine(\"2. Buy 0.51130 BTC with cash, using search here:\")\n\n\t\tTextStream[30].WriteLine(\"      https://localbitcoins.com/buy_bitcoins\")\n\n\t\tTextStream[30].WriteLine(\"3. Send 0.51130 BTC to this Bitcoin address:\")\n\n\t\tTextStream[30].WriteLine(\"      1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs\")\n\n\t\tTextStream[30].WriteLine(\"4. Open one of the following links in your browser to download decryptor:\"...\n\t\tTextStream[30].WriteLine(\"      http://projectdare.co.uk/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhY...\n\t\tTextStream[30].WriteLine(\"      http://hotel.internetdsl.pl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHi...\n\t\tTextStream[30].WriteLine(\"      http://tt-metall.ru/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs\")\n\n\t\tTextStream[30].WriteLine(\"      http://www.wordbaasoverdebal.nl/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBbD...\n\t\tTextStream[30].WriteLine(\"      http://tintssori.com.mialias.net/counter/?a=1PdN3rw5BbYzjH4bs9J7gNBb...\n\t\tTextStream[30].WriteLine(\"5. Run decryptor to restore your files.\")\n\n\t\tTextStream[30].WriteLine(\"PLEASE REMEMBER:\")\n\n\t\tTextStream[30].WriteLine(\"      - If you do not pay in 3 days YOU LOOSE ALL YOUR FILES.\")\n\n\t\tTextStream[30].WriteLine(\"      - Nobody can help you except us.\")\n\n\t\tTextStream[30].WriteLine(\"      - It`s useless to reinstall Windows, update antivirus software, etc....\n\t\tTextStream[30].WriteLine(\"      - Your files can be decrypted only after you make payment.\")\n\n\t\tTextStream[30].WriteLine(\"      - You can find this manual on your desktop (DECRYPT.txt).\")\n\n\t\tTextStream[31].WriteLine(\"1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs\")\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "console_output": 10
-          },
-          "signatures": {
-            "console_output": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: ConsoleOutput",
         "zeroize_on_tag_safe": false
       },
       {
@@ -406,13 +384,6 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "console_output"
-        ]
       },
       {
         "attack_ids": [],
