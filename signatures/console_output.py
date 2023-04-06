@@ -10,7 +10,7 @@ class ConsoleOutput(Signature):
             heuristic_id=3,
             name="console_output",
             description="JavaScript writes data to the console",
-            indicators=["TextStream", ".Write"],
+            indicators=["console.log"],
             severity=0
         )
 
