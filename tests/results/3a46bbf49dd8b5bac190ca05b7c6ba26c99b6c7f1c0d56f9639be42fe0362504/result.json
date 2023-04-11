@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1154,
+    "score": 1164,
     "sections": [
       {
         "auto_collapse": false,
@@ -30,6 +30,28 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tNew ActiveXObject: Msxml2.XMLHTTP\n\n\t\tNew ActiveXObject: ADODB.Stream\n\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -78,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\n\t\tScripting.FileSystemObject[14].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\n\t\tScripting.FileSystemObject[14].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\n\t\tScripting.FileSystemObject[14].Drives => Drives\n",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\n\t\tScripting.FileSystemObject[14].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\n\t\tScripting.FileSystemObject[14].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\n\t\tScripting.FileSystemObject[14].Drives => Drives\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -384,6 +406,13 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
       },
       {
         "attack_ids": [],
