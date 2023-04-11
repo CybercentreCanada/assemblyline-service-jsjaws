@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: windowsinstaller.installer\n\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

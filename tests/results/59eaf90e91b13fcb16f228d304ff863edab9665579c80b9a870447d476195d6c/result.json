@@ -34,7 +34,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

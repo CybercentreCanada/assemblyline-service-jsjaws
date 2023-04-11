@@ -1,6 +1,6 @@
-from hashlib import sha256
 import os
 import shutil
+from hashlib import sha256
 
 import pytest
 
@@ -307,9 +307,8 @@ class TestJsJaws:
         from subprocess import TimeoutExpired
 
         from assemblyline.odm.messages.task import Task as ServiceTask
-        from assemblyline_v4_service.common.dynamic_service_helper import (
-            OntologyResults,
-        )
+        from assemblyline_v4_service.common.dynamic_service_helper import \
+            OntologyResults
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
         from assemblyline_v4_service.common.task import Task
@@ -597,6 +596,11 @@ class TestJsJaws:
             f.write('{"yaba": []}')
 
         jsjaws_class_instance.artifact_list = []
+        jsjaws_class_instance.boxjs_iocs = "IOC.json"
+        jsjaws_class_instance.boxjs_resources = "resources.json"
+        jsjaws_class_instance.boxjs_snippets = "snippets.json"
+        jsjaws_class_instance.boxjs_analysis_log = "analysis.log"
+        jsjaws_class_instance.boxjs_urls_json_path = "urls.json"
         jsjaws_class_instance._extract_payloads("blah", False)
         assert jsjaws_class_instance.artifact_list[0] == {
             "name": valid_file_name1,
@@ -610,11 +614,8 @@ class TestJsJaws:
         from json import dumps
         from os import mkdir, path, remove
 
-        from assemblyline_v4_service.common.result import (
-            BODY_FORMAT,
-            Result,
-            ResultSection,
-        )
+        from assemblyline_v4_service.common.result import (BODY_FORMAT, Result,
+                                                           ResultSection)
 
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
             jsjaws_class_instance.working_directory, "payload/"
@@ -747,12 +748,10 @@ class TestJsJaws:
         from json import dumps
         from os import mkdir, path
 
-        from assemblyline_v4_service.common.result import (
-            Result,
-            ResultSection,
-            ResultTableSection,
-            TableRow,
-        )
+        from assemblyline_v4_service.common.result import (Result,
+                                                           ResultSection,
+                                                           ResultTableSection,
+                                                           TableRow)
 
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.result")
         jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
@@ -820,11 +819,9 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import (
-            Result,
-            ResultTableSection,
-            TableRow,
-        )
+        from assemblyline_v4_service.common.result import (Result,
+                                                           ResultTableSection,
+                                                           TableRow)
 
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)

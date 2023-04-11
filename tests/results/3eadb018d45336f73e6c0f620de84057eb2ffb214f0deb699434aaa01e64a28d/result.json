@@ -61,7 +61,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar ws = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar ws = new ActiveXObject('WScript.Shell')",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
