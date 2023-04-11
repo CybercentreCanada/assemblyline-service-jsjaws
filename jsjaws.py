@@ -381,8 +381,12 @@ HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 FUNCTION_INCEPTION = b"function\s+(?P<function_name>\w+)\(\)\s*\{\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];\s*(?P=function_name)\s*=\s*function\(\)\s*\{\s*return\s+(?P=variable_name);\s*\};\s*return\s+(?P=function_name)\(\);\s*\};"
 
 # Example:
+# adc4bc7c-8f35-4a85-91e9-dc822b07f60d
+BOX_JS_PAYLOAD_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
+
+# Example:
 # 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
-SNIPPET_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}\.js"
+SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
 
 # Globals
 
@@ -2239,6 +2243,9 @@ class JsJaws(ServiceBase):
                     self.log.debug(f"The maximum number of payloads {max_payloads_extracted} were extracted.")
                     return
                 unique_shas.add(extracted_sha)
+                # Consistency!
+                if re.match(BOX_JS_PAYLOAD_FILE_NAME, file):
+                    file = extracted_sha
                 artifact = {
                     "name": safe_str(file),
                     "path": extracted,
