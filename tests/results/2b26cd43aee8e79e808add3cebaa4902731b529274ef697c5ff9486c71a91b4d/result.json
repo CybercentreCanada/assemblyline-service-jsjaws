@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 50,
+    "score": 51,
     "sections": [
       {
         "auto_collapse": false,
@@ -123,11 +123,52 @@
         "tags": {},
         "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "URL_Blob_file_0",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "URL_Blob_file_0"
+              ]
+            }
+          }
+        },
+        "title_text": "The script wrote the following files",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
     "extracted": [
+      {
+        "name": "ecdade53-a860-4272-b4a9-4b79ca56fe13",
+        "sha256": "3fb5f6db21abb181956aeaf5bdeabfe8c711874d37ff77b20d8689318d3f9d7e"
+      },
       {
         "name": "Blob[77]",
         "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
@@ -142,6 +183,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -178,7 +224,15 @@
         ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "URL_Blob_file_0"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

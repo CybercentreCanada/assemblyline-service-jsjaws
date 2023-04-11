@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1532,
+    "score": 1533,
     "sections": [
       {
         "auto_collapse": false,
@@ -122,6 +122,43 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "URL_Blob_file_0",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "URL_Blob_file_0"
+              ]
+            }
+          }
+        },
+        "title_text": "The script wrote the following files",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -167,12 +204,21 @@
       {
         "name": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned",
         "sha256": "b2aa35a73009051ea945789bb6ae12c644338595cf97d825c8a2266eb592d997"
+      },
+      {
+        "name": "6204f9c2-cb27-4cf9-b68a-f8f89122b07b",
+        "sha256": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc"
       }
     ],
     "supplementary": []
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -217,7 +263,15 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "URL_Blob_file_0"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

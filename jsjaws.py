@@ -2,6 +2,7 @@ import re
 import tempfile
 from base64 import b64decode
 from binascii import Error as BinasciiError
+from glob import glob
 from hashlib import sha256
 from inspect import getmembers, isclass
 from json import JSONDecodeError, dumps, load, loads
@@ -379,6 +380,10 @@ HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 # };
 FUNCTION_INCEPTION = b"function\s+(?P<function_name>\w+)\(\)\s*\{\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];\s*(?P=function_name)\s*=\s*function\(\)\s*\{\s*return\s+(?P=variable_name);\s*\};\s*return\s+(?P=function_name)\(\);\s*\};"
 
+# Example:
+# 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
+SNIPPET_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}\.js"
+
 # Globals
 
 # Flag that the sample was embedded within a third party library
@@ -398,6 +403,7 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump_path: Optional[str] = None
         self.path_to_jailme_js: Optional[str] = None
         self.path_to_boxjs: Optional[str] = None
+        self.path_to_boxjs_boilerplate: Optional[str] = None
         self.path_to_jsxray: Optional[str] = None
         self.path_to_synchrony: Optional[str] = None
         self.boxjs_urls_json_path: Optional[str] = None
@@ -562,6 +568,7 @@ class JsJaws(ServiceBase):
         root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
+        self.path_to_boxjs_boilerplate = path.join(root_dir, "tools/node_modules/box-js/boilerplate.js")
         self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
         self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
@@ -570,7 +577,9 @@ class JsJaws(ServiceBase):
         self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
-        self.boxjs_output_dir = path.join(self.working_directory, f"{request.sha256}.results")
+        # Box.js creates an output directory in the working level directory with the name <file_name>.results
+        # We must use globs to find the specific file paths
+        self.boxjs_output_dir = path.join(self.working_directory, "*.results")
         self.boxjs_urls_json_path = path.join(self.boxjs_output_dir, "urls.json")
         self.boxjs_iocs = path.join(self.boxjs_output_dir, "IOC.json")
         self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
@@ -640,12 +649,22 @@ class JsJaws(ServiceBase):
         :param tool_timeout: The time that the tool with run for
         :return: A list of arguments used for running Box.js
         """
-        # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --no-kill              Do not kill the application when runtime errors occur
+        # --no-rewrite           Do not rewrite the source code at all, other than for `@cc_on` support
+        # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
         # --output-dir           The location on disk to write the results files and folders to (defaults to the
         #                        current directory)
         # --timeout              The script will timeout after this many seconds (default 10)
-        boxjs_args = [self.path_to_boxjs, "--loglevel", "debug", "--no-kill", "--output-dir", self.working_directory, "--timeout", str(tool_timeout)]
+        # --prepended-code       Prepend the JavaScript in the given file to the sample prior to sandboxing
+        boxjs_args = [
+            self.path_to_boxjs,
+            "--no-kill",
+            "--no-rewrite",
+            "--loglevel=debug",
+            f"--output-dir={self.working_directory}",
+            f"--timeout={tool_timeout}",
+            f"--prepended-code={self.path_to_boxjs_boilerplate}"
+        ]
 
         no_shell_error = request.get_param("no_shell_error")
         # --no-shell-error       Do not throw a fake error when executing `WScriptShell.Run` (it throws a fake
@@ -830,36 +849,57 @@ class JsJaws(ServiceBase):
 
         return malware_jail_output
 
-    def _handle_malware_jail_stdout_limit(self, malware_jail_output: List[str],  malware_jail_args: List[str], responses: Dict[str, List[str]]) -> List[str]:
+    def _handle_tool_stdout_limit(self, tool: str, tool_output: List[str],  tool_args: List[str], responses: Dict[str, List[str]]) -> List[str]:
         """
-        This method handles if the MalwareJail exits early due to the stdout limit being surpassed
-        :param malware_jail_output: A list of strings that make up the stdout output from Malware Jail
-        :param malware_jail_args: A list of arguments used for running Malware Jail
+        This method handles if the tool exits early due to the stdout limit being surpassed
+        :param tool: The enumerator used for the tool name
+        :param tool_output: A list of strings that make up the stdout output from the tool
+        :param tool_args: A list of arguments used for running the tool
         :param responses: A dictionary used to contain the stdout from a tool
-        :return: A list of strings that make up the stdout output from Malware Jail
+        :return: A list of strings that make up the stdout output from the tool
         """
-        if len(malware_jail_output) > 2 and malware_jail_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses[MALWARE_JAIL] = [EXITED_DUE_TO_STDOUT_LIMIT]
-            tool_timeout = malware_jail_output[-1] + 5
-            self.log.debug(f"Running {MALWARE_JAIL} again with a timeout of {tool_timeout}s")
-            timeout_arg_index = malware_jail_args.index("-t")
-            malware_jail_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            malware_jail_thr = Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
-            malware_jail_thr.start()
-            malware_jail_thr.join(timeout=tool_timeout)
-            malware_jail_output = responses.get(MALWARE_JAIL, [])
+        if len(tool_output) > 2 and tool_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
+            responses[tool] = [EXITED_DUE_TO_STDOUT_LIMIT]
+            tool_timeout = tool_output[-1] + 5
 
-        return malware_jail_output
+            if tool == MALWARE_JAIL:
+                timeout_arg_index = tool_args.index("-t")
+                tool_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
+            elif tool == BOX_JS:
+                # Box.js requires some more time to shut down
+                tool_timeout += 10
+                timeout_arg_index = tool_args.index(next((arg for arg in tool_args if arg.startswith("--timeout=")), None))
+                tool_args[timeout_arg_index] = f"--timeout={tool_timeout}"
 
-    def _handle_boxjs_output(self) -> List[str]:
+            self.log.debug(f"Running {tool} again with a timeout of {tool_timeout}s")
+            tool_thr = Thread(target=self._run_tool, args=(tool, tool_args, responses), daemon=True)
+            tool_thr.start()
+            tool_thr.join(timeout=tool_timeout)
+            tool_output = responses.get(tool, [])
+
+        return tool_output
+
+    def _handle_boxjs_output(self, responses: Dict[str, List[str]], boxjs_args: List[str]) -> List[str]:
         """
         This method handles retrieving the Box.js output
+        :param responses: A dictionary used to contain the stdout from a tool
+        :param boxjs_args: A list of arguments used for running Box.js
         :return: The a list of strings that make up the analysis log from Box.js
         """
+        temp_boxjs_output = responses.get(BOX_JS, [])
+        temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
+
         boxjs_output: List[str] = []
-        if path.exists(self.boxjs_analysis_log):
-            with open(self.boxjs_analysis_log, "r") as f:
-                boxjs_output = f.readlines()
+        if len(glob(self.boxjs_analysis_log)) > 0:
+            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
+            with open(boxjs_analysis_log, "r") as f:
+                 for line in f:
+                    # This creates clutter!
+                    if line.startswith("[verb] Code saved to"):
+                        continue
+                    else:
+                        boxjs_output.append(line)
+
         return boxjs_output
 
     def _handle_malware_jail_output(self, responses: Dict[str, List[str]], malware_jail_args: List[str]) -> List[str]:
@@ -870,7 +910,7 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        malware_jail_output = self._handle_malware_jail_stdout_limit(malware_jail_output, malware_jail_args, responses)
+        malware_jail_output = self._handle_tool_stdout_limit(MALWARE_JAIL, malware_jail_output, malware_jail_args, responses)
         malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
         return malware_jail_output
 
@@ -1020,17 +1060,7 @@ class JsJaws(ServiceBase):
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
         if not request.get_param("static_analysis_only"):
-            # Box.js cannot handle being run more than once on a sample. Oh well!
-            if not subsequent_run:
-                # Boxjs does not provide "document" object support
-                if b"document[" in request.file_contents or b"document." in request.file_contents:
-                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
-                elif actual_script and b"document." in actual_script:
-                    self.log.debug(f"'document' seen in the file contents. Do not run {BOX_JS}.")
-                else:
-                    tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
-            else:
-                self.log.debug(f"Do not run {BOX_JS} on subsequent runs.")
+            tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             tool_threads.append(Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True))
         tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
 
@@ -1062,7 +1092,7 @@ class JsJaws(ServiceBase):
                 sleep(3)
 
         # Handle each tools' output
-        boxjs_output = self._handle_boxjs_output()
+        boxjs_output = self._handle_boxjs_output(responses, boxjs_args)
         malware_jail_output = self._handle_malware_jail_output(responses, malware_jail_args)
         jsxray_output = self._handle_jsxray_output(responses)
 
@@ -2161,20 +2191,20 @@ class JsJaws(ServiceBase):
         ]
 
         # These are dumped files from Box.js of js that was run successfully
-        files_to_not_extract = set()
-        if path.exists(self.boxjs_snippets):
-            with open(self.boxjs_snippets, "r") as f:
-                snippets = loads(f.read())
-                for snippet in snippets:
-                    files_to_not_extract.add(snippet)
+        snippet_keys: List[str] = []
+        if len(glob(self.boxjs_snippets)) > 0:
+            boxjs_snippets = max(glob(self.boxjs_snippets), key=path.getctime)
+            with open(boxjs_snippets, "r") as f:
+                snippet_keys = list(loads(f.read()).keys())
 
         box_js_payloads = []
-        if path.exists(self.boxjs_output_dir):
-            box_js_payloads = [
-                (file, path.join(self.boxjs_output_dir, file))
-                for file in sorted(listdir(self.boxjs_output_dir))
-                if file not in files_to_not_extract
-            ]
+        if len(glob(self.boxjs_output_dir)) > 0:
+            boxjs_output_dir = max(glob(self.boxjs_output_dir), key=path.getctime)
+
+            box_js_payloads = []
+            for file in sorted(listdir(boxjs_output_dir)):
+                if file not in snippet_keys:
+                    box_js_payloads.append((file, path.join(boxjs_output_dir, file)))
 
         all_payloads = malware_jail_payloads + box_js_payloads
 
@@ -2183,15 +2213,24 @@ class JsJaws(ServiceBase):
             if path.getsize(extracted) == 0:
                 continue
             # These are not payloads
+            # Direct paths
             if extracted in [
                 self.malware_jail_urls_json_path,
                 self.extracted_wscript_path,
+            ]:
+                continue
+            # Glob paths
+            elif any(extracted in glob(glob_path) for glob_path in [
                 self.boxjs_iocs,
                 self.boxjs_resources,
                 self.boxjs_snippets,
                 self.boxjs_analysis_log,
                 self.boxjs_urls_json_path,
-            ]:
+            ]):
+                continue
+            # If the snippets.json is not finished being written to, there is a race condition here,
+            # so let's confirm that the file to be extracted is a snippet but hasn't been written to the snippets.json yet
+            elif len(glob(self.boxjs_output_dir)) > 0 and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime)) and re.match(SNIPPET_FILE_NAME, file):
                 continue
             extracted_sha = get_sha256_for_file(extracted)
             if extracted_sha not in unique_shas and extracted_sha not in [RESOURCE_NOT_FOUND_SHA256, FAKE_FILE_CONTENT]:
@@ -2340,7 +2379,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         self.log.debug("Extracting URLs...")
-        if not path.exists(self.malware_jail_urls_json_path) and not path.exists(self.boxjs_iocs):
+        if not path.exists(self.malware_jail_urls_json_path) and not glob(self.boxjs_iocs):
             return
 
         urls_result_section = ResultTableSection("URLs")
@@ -2365,8 +2404,9 @@ class JsJaws(ServiceBase):
                 for url in urls_rows:
                     self._tag_uri(url["url"], urls_result_section)
 
-        if path.exists(self.boxjs_iocs):
-            with open(self.boxjs_iocs, "r") as f:
+        if len(glob(self.boxjs_iocs)) > 0:
+            boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
+            with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
                 ioc_json = loads(file_contents)
                 for ioc in ioc_json:
@@ -2427,14 +2467,15 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
             self.artifact_list.append(mlwr_jail_out)
 
-        if path.exists(self.boxjs_analysis_log):
+        if len(glob(self.boxjs_analysis_log)) > 0:
+            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
             boxjs_analysis_log = {
                 "name": "boxjs_analysis_log.log",
-                "path": self.boxjs_analysis_log,
+                "path": boxjs_analysis_log,
                 "description": f"{BOX_JS} Output",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {self.boxjs_analysis_log}")
+            self.log.debug(f"Adding supplementary file: {boxjs_analysis_log}")
             self.artifact_list.append(boxjs_analysis_log)
 
     def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
@@ -2512,9 +2553,10 @@ class JsJaws(ServiceBase):
         :return: None
         """
         self.log.debug(f"Extracting IOCs from {BOX_JS} output...")
-        if path.exists(self.boxjs_iocs):
+        if len(glob(self.boxjs_iocs)) > 0:
+            boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
             ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
-            with open(self.boxjs_iocs, "r") as f:
+            with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
 
             ioc_json: List[Dict[str, Any]] = []

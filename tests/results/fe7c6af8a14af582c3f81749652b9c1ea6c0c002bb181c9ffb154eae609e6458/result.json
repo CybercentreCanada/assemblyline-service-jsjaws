@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 82,
+    "score": 83,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\n\t\tNew ActiveXObject: ADODB.Stream\n\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\n\t\tMSXML2.XMLHTTP[10].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tWMI.GetObject.Create not implemented!\n\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -148,7 +148,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[12].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\n\t\tADODB.Stream[17].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n",
+        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile\n\n\t\tADODB.Stream[12].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\n\t\tADODB.Stream[17].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -188,6 +188,43 @@
         },
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "C:/ProgramData/wJPBCKy.HoGKdJI",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:/ProgramData/wJPBCKy.HoGKdJI"
+              ]
+            }
+          }
+        },
+        "title_text": "The script wrote the following files",
         "zeroize_on_tag_safe": false
       },
       {
@@ -280,6 +317,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -336,6 +378,13 @@
       }
     ],
     "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:/ProgramData/wJPBCKy.HoGKdJI"
+        }
+      ],
       "network.dynamic.domain": [
         {
           "heur_id": 1,
