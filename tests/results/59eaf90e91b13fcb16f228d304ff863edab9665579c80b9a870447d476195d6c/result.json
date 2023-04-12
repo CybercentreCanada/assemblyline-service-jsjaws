@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1034,
+    "score": 1533,
     "sections": [
       {
         "auto_collapse": false,
@@ -140,9 +140,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 1,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "obfuscator_io_usage_url": 1
+          }
         },
         "tags": {
           "network": {
@@ -214,7 +216,9 @@
       {
         "attack_ids": [],
         "heur_id": 1,
-        "signatures": []
+        "signatures": [
+          "obfuscator_io_usage_url"
+        ]
       },
       {
         "attack_ids": [],
@@ -262,21 +266,27 @@
       "network.dynamic.domain": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "dce42.shrubs.emptyisland.pics"
         }
       ],
       "network.dynamic.uri": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/subscribeEvent"
         }
       ],
