@@ -1350,7 +1350,7 @@ class JsJaws(ServiceBase):
         :return: A flag indicating if we should skip creating the element
         """
         # We don't want these elements dynamically created
-        if element.name in ["head", "meta", "style", "body", "param"]:
+        if element.name in ["head", "style", "body", "param"]:
             return True
 
         # If the file is code/wsf, skip the job element
@@ -1366,6 +1366,10 @@ class JsJaws(ServiceBase):
             return True
 
         elif self._skip_embed_element(element):
+            return True
+
+        # If we have a meta element that does not have http-equiv set to refresh and content attributes, skip it
+        elif element.name in ["meta"] and not (element.attrs.get("http-equiv") and element.attrs.get("http-equiv").lower() == "refresh" and element.attrs.get("content")):
             return True
 
         return False
