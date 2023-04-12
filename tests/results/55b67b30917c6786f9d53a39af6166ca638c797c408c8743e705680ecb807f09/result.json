@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1554,
+    "score": 2053,
     "sections": [
       {
         "auto_collapse": false,
@@ -228,9 +228,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 1,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "obfuscator_io_usage_url": 1
+          }
         },
         "tags": {
           "network": {
@@ -317,7 +319,9 @@
       {
         "attack_ids": [],
         "heur_id": 1,
-        "signatures": []
+        "signatures": [
+          "obfuscator_io_usage_url"
+        ]
       },
       {
         "attack_ids": [],
@@ -386,51 +390,69 @@
       "network.dynamic.domain": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "api.telegram.org"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "cdnjs.cloudflare.com"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "ip.seeip.org"
         }
       ],
       "network.dynamic.uri": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "https://ip.seeip.org/geoip"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/ajax/libs/zepto/1.2.0/zepto.min.js"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/geoip"
         }
       ],

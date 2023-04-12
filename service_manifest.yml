@@ -127,6 +127,7 @@ heuristics:
     signature_score_map:
       single_script_url: 500
       function_inception_url: 500
+      obfuscator_io_usage_url: 500
 
   - heur_id: 2
     name: IOC(s) Extracted

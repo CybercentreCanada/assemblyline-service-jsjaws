@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2061,
+    "score": 2551,
     "sections": [
       {
         "auto_collapse": false,
@@ -180,9 +180,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 6,
-          "score": 10,
+          "score": 500,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "obfuscator_io_url_redirect": 1
+          }
         },
         "tags": {
           "network": {
@@ -316,7 +318,9 @@
       {
         "attack_ids": [],
         "heur_id": 6,
-        "signatures": []
+        "signatures": [
+          "obfuscator_io_url_redirect"
+        ]
       },
       {
         "attack_ids": [],
@@ -340,7 +344,9 @@
         },
         {
           "heur_id": 6,
-          "signatures": [],
+          "signatures": [
+            "obfuscator_io_url_redirect"
+          ],
           "value": "http://example.com/?search"
         }
       ]

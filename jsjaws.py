@@ -2650,6 +2650,8 @@ class JsJaws(ServiceBase):
         :param urls_result_section: The result section which will have the tags of the uri components added to it
         :return: None
         """
+        if not url:
+            return
         safe_url = safe_str(url)
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
@@ -2737,7 +2739,7 @@ class JsJaws(ServiceBase):
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
-            elif kind in ["suspicious-literal", "short-identifiers"]:
+            elif kind in ["suspicious-literal", "short-identifiers", "suspicious-file"]:
                 # We don't care about these warnings
                 continue
             else:
@@ -2773,12 +2775,14 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
         self.artifact_list.append(artifact)
 
-        # If there is an automatic URL redirect, we should flag this combination with a signature that scores 500
+        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io, we should flag this combination with a signature that scores 500
         for result_section in result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug("Added the obfuscator_io_url_redirect signature to the result section to score the tagged URLs")
                 result_section.heuristic.add_signature_id("obfuscator_io_url_redirect")
-                break
+            elif result_section.heuristic and result_section.heuristic.heur_id == 1:
+                self.log.debug("Added the obfuscator_io_usage_url signature to the result section to score the tagged URLs")
+                result_section.heuristic.add_signature_id("obfuscator_io_usage_url")
 
     def parse_msdt_powershell(self, cmd):
         import shlex
