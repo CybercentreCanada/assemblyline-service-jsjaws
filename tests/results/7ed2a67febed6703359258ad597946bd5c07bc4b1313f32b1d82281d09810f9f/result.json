@@ -56,7 +56,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript loads a local file from disk\n\t\tScripting.FileSystemObject[10].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\tVFS[1].openTextFile(\"flasks/data.txt\", 1, undefined, undefined)\n\n\t\t    at Proxy.openTextFile (tools/malwarejail/env/wscript/lib/util/VFS.js:598:19)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
+        "body": "JavaScript loads a local file from disk\n\t\tScripting.FileSystemObject[11].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\tVFS[2].openTextFile(\"flasks/data.txt\", 1, undefined, undefined)\n\n\t\t    at Proxy.openTextFile (tools/malwarejail/env/wscript/lib/util/VFS.js:598:19)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: scripting.filesystemobject\n\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[10]()\n\n\t\tScripting.FileSystemObject[10].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: scripting.filesystemobject\n\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[11]()\n\n\t\tScripting.FileSystemObject[11].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
