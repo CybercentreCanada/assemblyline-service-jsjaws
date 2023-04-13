@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[76].click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[77].click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -170,7 +170,7 @@
         "sha256": "3fb5f6db21abb181956aeaf5bdeabfe8c711874d37ff77b20d8689318d3f9d7e"
       },
       {
-        "name": "Blob[77]",
+        "name": "Blob[78]",
         "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }
     ],

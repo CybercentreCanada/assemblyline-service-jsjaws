@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[39].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[40].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[30].click(anonymous)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[31].click(anonymous)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -122,7 +122,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[1].setInterval(function _0x42b2a3(_0x216b8d){var _0x544d02={'zmhqO':function(_0x29989c){retur...",
+        "body": "JavaScript attempts to sleep\n\t\twindow[2].setInterval(function _0x42b2a3(_0x216b8d){var _0x544d02={'zmhqO':function(_0x29989c){retur...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
