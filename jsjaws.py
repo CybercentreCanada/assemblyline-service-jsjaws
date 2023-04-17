@@ -2810,6 +2810,8 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
         dynamic_scripts_with_source: List[str] = []
+
+        redirection_res_sec: Optional[ResultTextSection] = None
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -2913,7 +2915,7 @@ class JsJaws(ServiceBase):
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)
-                    res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
 
                     # Try to only recover the msdt command's powershell for the extracted file
                     # If we can't, write the whole command
@@ -2934,10 +2936,11 @@ class JsJaws(ServiceBase):
                     self.artifact_list.append(artifact)
                 else:
                     heur = Heuristic(6)
-                    res = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-                    res.add_tag("network.static.uri", location_href)
-                res.add_line("Redirection to:")
-                res.add_line(location_href)
+                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+                    redirection_res_sec.add_tag("network.static.uri", location_href)
+
+                if not redirection_res_sec.body or (redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body):
+                    redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
 
             # Check if programatically created script with src set is found
             if all(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLSCRIPTELEMENT_SRC_SET_TO_URI]):
