@@ -343,6 +343,7 @@ class TestJsJaws:
             "file_always_exists": False,
             "static_analysis_only": False,
             "enable_synchrony": False,
+            "ignore_stdout_limit": False,
         }
         jsjaws_class_instance._task = task
         service_request = ServiceRequest(task)

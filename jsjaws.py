@@ -368,7 +368,11 @@ HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_
 # Examples:
 # <!--
 # -->
-HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
+LONE_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
+
+# Example:
+# <!-- HTML Encryption provided by www.blah.com -->
+FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-.{1,100}?\-\-\>)\s*;?\n"
 
 # Example:
 # function a0nnnnoo() {
@@ -434,6 +438,7 @@ class JsJaws(ServiceBase):
         self.scripts: Set[str] = set()
         self.malformed_javascript: Optional[bool] = None
         self.function_inception: Optional[bool] = None
+        self.ignore_stdout_limit: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -559,6 +564,7 @@ class JsJaws(ServiceBase):
 
         # Initial setup per sample
         self._reset_execution_variables()
+        self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
         file_path, file_content = self._handle_filtered_code(file_path, file_content)
         file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
 
@@ -891,7 +897,8 @@ class JsJaws(ServiceBase):
         :return: The a list of strings that make up the analysis log from Box.js
         """
         temp_boxjs_output = responses.get(BOX_JS, [])
-        temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
+        if not self.ignore_stdout_limit:
+            temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
 
         boxjs_output: List[str] = []
         if len(glob(self.boxjs_analysis_log)) > 0:
@@ -914,7 +921,8 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        malware_jail_output = self._handle_tool_stdout_limit(MALWARE_JAIL, malware_jail_output, malware_jail_args, responses)
+        if not self.ignore_stdout_limit:
+            malware_jail_output = self._handle_tool_stdout_limit(MALWARE_JAIL, malware_jail_output, malware_jail_args, responses)
         malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
         return malware_jail_output
 
@@ -944,7 +952,9 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Removed HTML comment: {group_0}")
             return b""
 
-        file_content = re.sub(HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
+        # Remove full HTML comments first and then get rid of the stragglers
+        file_content = re.sub(FULL_HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
+        file_content = re.sub(LONE_HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
         return file_content
 
     def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
@@ -1114,19 +1124,31 @@ class JsJaws(ServiceBase):
                     static_file_lines.extend(line.split(";"))
                 else:
                     static_file_lines.append(line)
-            total_output = (
-                boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit] + static_file_lines
-            )
+            if not self.ignore_stdout_limit:
+                total_output = (
+                    boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit] + static_file_lines
+                )
+            else:
+                total_output = (
+                    boxjs_output + malware_jail_output + static_file_lines
+                )
         else:
-            total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
+            if not self.ignore_stdout_limit:
+                total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
+            else:
+                total_output = boxjs_output + malware_jail_output
 
-        total_output = total_output[: self.stdout_limit]
+        if not self.ignore_stdout_limit:
+            total_output = total_output[: self.stdout_limit]
 
         display_iocs = request.get_param("display_iocs")
         self._run_signatures(total_output, request.result, display_iocs)
 
         self._extract_boxjs_iocs(request.result)
-        self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
+        if not self.ignore_stdout_limit:
+            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
+        else:
+            self._extract_malware_jail_iocs(malware_jail_output, request)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
@@ -1147,7 +1169,10 @@ class JsJaws(ServiceBase):
         self._extract_synchrony(request.result)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
-        self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
+        if not self.ignore_stdout_limit:
+            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
+        else:
+            self._extract_doc_writes(malware_jail_output, request)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(self.artifact_list, request)
@@ -1341,6 +1366,10 @@ class JsJaws(ServiceBase):
                 if len(script_contents) > 250 and re.search(regex, script_contents, re.IGNORECASE):
                     self.log.debug(f"A single script was found that used {regex}...")
                     single_script_with_unescape = True
+                    # There is a high chance that enforcing the stdout limit when there is
+                    # a single script that uses an unescape could prevent us from
+                    # correctly executing this sample, therefore ignore this limit
+                    self.ignore_stdout_limit = True
 
     def _skip_element(self, element: PageElement, file_type: str) -> bool:
         """
@@ -2993,7 +3022,8 @@ class JsJaws(ServiceBase):
             with Popen(args=args, stdout=PIPE, stderr=PIPE if self.config.get("send_tool_stderr_to_pipe", False) else None, bufsize=1, universal_newlines=True) as p:
                 for line in p.stdout:
                     resp[tool_name].append(line)
-                    if len(resp[tool_name]) > self.stdout_limit:
+                    # If we are keeping to the stdout limit, then do so
+                    if not self.ignore_stdout_limit and len(resp[tool_name]) > self.stdout_limit:
                         stdout_limit_reached_time = round(time() - start_time)
                         self.log.warning(f"{tool_name} generated more than {self.stdout_limit} lines of output. Time elapsed: {stdout_limit_reached_time}s")
                         if not do_not_terminate:
