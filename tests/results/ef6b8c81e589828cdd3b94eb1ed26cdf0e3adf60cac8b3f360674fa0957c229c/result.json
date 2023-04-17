@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 12,
+    "score": 22,
     "sections": [
       {
         "auto_collapse": false,
@@ -34,6 +34,28 @@
         },
         "tags": {},
         "title_text": "Signature: AJAXNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[10].send()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
       },
       {
@@ -123,6 +145,13 @@
         "heur_id": 3,
         "signatures": [
           "ajax_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
         ]
       }
     ],

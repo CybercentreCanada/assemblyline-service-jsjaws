@@ -34,6 +34,7 @@ Generic parameters:
 * `display_sig_marks`: If you want the lines of code that caused the signatures to be raised to be displayed in the
   ResultSections.
 * `static_analysis_only`: If you do not want the file to be executed via Box.js and MalwareJail, and only with static analysis tools such as JS-X-Ray and Synchony, set this to "true".
+* `ignore_stdout_limit`: The service-level config `total_stdout_limit` will be ignored if you set this flag to "true".
 
 Box.js parameters:
 * `no_shell_error`: For Box.js, select this flag if you want to.

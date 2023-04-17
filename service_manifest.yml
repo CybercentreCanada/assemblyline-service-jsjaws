@@ -26,7 +26,7 @@ config:
   max_payloads_extracted: 50
   # Raise a noisy exception if the MalwareJail tool errors, rather than silently letting the other tools output.
   raise_malware_jail_exc: false
-  # The limit to number of stdout lines analyzed that werre captured from tools
+  # The limit to number of stdout lines analyzed that were captured from tools
   total_stdout_limit: 10000
   # If you don't want your STDERR clogging up your terminal, set to true
   send_tool_stderr_to_pipe: false
@@ -56,6 +56,11 @@ submission_params:
   # Set to "true" if you do not want the file to be executed via Box.js and MalwareJail
   - default: false
     name: static_analysis_only
+    type: bool
+    value: false
+
+  - default: false
+    name: ignore_stdout_limit
     type: bool
     value: false
 
