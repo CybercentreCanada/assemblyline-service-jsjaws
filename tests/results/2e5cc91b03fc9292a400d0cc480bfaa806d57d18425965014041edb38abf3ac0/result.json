@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/lodash4.17.21.js",
+        "body": "Common library used: clean_libs/mdl.js",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -52,7 +52,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in f74e85cd758d6a7143426a30de6828c6a2f4def402876a07b2ed0720ba322c78: object Error...",
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in dddbe4d09997e9a1bbf08d024cfc35fd219654dc4366e7236de5e88cc31bb8a7: object Error...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -74,7 +74,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tcreate1 is evaluated using a suspicious pattern",
+        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tsegmentz is evaluated using a suspicious pattern",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -101,7 +101,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "f74e85cd758d6a7143426a30de6828c6a2f4def402876a07b2ed0720ba322c78"
+        "sha256": "dddbe4d09997e9a1bbf08d024cfc35fd219654dc4366e7236de5e88cc31bb8a7"
       }
     ]
   },
