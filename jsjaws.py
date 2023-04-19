@@ -206,6 +206,31 @@ CHARTVIEW_REGEX = r"\s*\/\*[\s\S]+?\*\/\s*\(function\s+\(global,\s*factory\)\s*\
                   r"\(global\.echarts\s*=\s*\{\}\)\);\s*\}\(this,\s*\(function\s*\(exports\)\s*\{\s*'use\s+strict';"
 
 # Example:
+# ;(function() {
+# "use strict";
+
+# /**
+#  * @license
+#  * Copyright 2015 Google Inc. All Rights Reserved.
+#  *
+#  * Licensed under the Apache License, Version 2.0 (the "License");
+#  * you may not use this file except in compliance with the License.
+#  * You may obtain a copy of the License at
+#  *
+#  *      http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  * Unless required by applicable law or agreed to in writing, software
+#  * distributed under the License is distributed on an "AS IS" BASIS,
+#  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  * See the License for the specific language governing permissions and
+#  * limitations under the License.
+#  */
+
+# /**
+#  * A component handler interface using the revealing module design pattern.
+MDL_REGEX = r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/\s*\/\*\*\s*\*\s*A component handler interface using the revealing module design pattern\."
+
+# Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
 MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
 
@@ -311,7 +336,22 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)
 #       blah9++
 #   }
 # }
-WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s+\w{2,15}\(\)\s*{\s*\w{2,15}\(\w{2,15}\);\s*\w{2,15}\s*=\s*\w{2,15};\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{\s*try\s*{\s*(?:\w{2,15}=)?\w{2,15}\[\w{2,15}\]\(\w{2,15}\);\s*}\s*catch\s*\(\w{2,15}\)\s*{\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+\s*}\s*\w{2,15}\+\+\s*}\s*}"
+# or
+# function blah1(blah2, blah3, blah4, blah5) {
+#   blah6(blah7);
+#   blah8 = blah9;
+#   while (blah10) {
+#           blah11++;
+#           blah11 = blah11;
+#       try {
+#           blah12 = (blah13[blah11](blah11));
+#       } catch (blah14) {
+#           blah15 = 1272242;
+#           blah13[(blah15)] = blah16;
+#       }
+#   }
+# }
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s+\w{2,15}\((?:\w{2,15}(?:,\s*)?){0,5}\)\s*{\s*\w{2,15}\(\w{2,15}\);\s*\w{2,15}\s*=\s*\w{2,15};\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};\s*|\w{2,15}\s*=\s*\w{2,15};\s*|\w{2,15}\+\+;\s*)*try\s*{\s*(?:\w{2,15}\s*=\s*)?\(?\w{2,15}\[\w{2,15}\]\(\w{2,15}\)\)?;\s*}\s*catch\s*\(\w{2,15}\)\s*{\s*(?:\w{2,15}\[\(?\w{2,15}\)?\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+\s*}\s*(?:\w{2,15}\+\+;?)?\s*}\s*}"
 
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
@@ -566,7 +606,10 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
         file_path, file_content = self._handle_filtered_code(file_path, file_content)
-        file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
+
+        # There are always false positive hits in embedded code for VBScript env variables, so let's avoid that
+        if not embedded_code_in_lib:
+            file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
@@ -3048,6 +3091,7 @@ class JsJaws(ServiceBase):
             "clean_libs/d3_v%s.js": D3_REGEX,
             "clean_libs/lodash%s.js": LODASH_REGEX,
             "clean_libs/chartview.js": CHARTVIEW_REGEX,
+            "clean_libs/mdl.js": MDL_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
