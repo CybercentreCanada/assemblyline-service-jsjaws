@@ -131,6 +131,7 @@ heuristics:
     description: Malware Sandbox Tool(s) detected network traffic.
     signature_score_map:
       single_script_url: 500
+      multiple_scripts_url: 500
       function_inception_url: 500
       obfuscator_io_usage_url: 500
 
@@ -252,6 +253,12 @@ heuristics:
     score: 500
     filetype: '.*'
     description: Script uses function inception
+
+  - heur_id: 20
+    name: Multiple scripts writes suspicious values
+    score: 500
+    filetype: 'code/ht.*'
+    description: Multiple script tags with unescaped values written to DOM
 
 docker_config:
   allow_internet_access: true
