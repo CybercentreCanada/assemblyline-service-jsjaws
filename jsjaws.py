@@ -23,16 +23,13 @@ from assemblyline.common.uid import get_id_from_data
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.api import ServiceAPIError
 from assemblyline_v4_service.common.base import ServiceBase
-from assemblyline_v4_service.common.dynamic_service_helper import (
-    URL_REGEX, OntologyResults, extract_iocs_from_text_blob)
+from assemblyline_v4_service.common.dynamic_service_helper import (URL_REGEX, OntologyResults,
+                                                                   extract_iocs_from_text_blob)
 from assemblyline_v4_service.common.request import ServiceRequest
-from assemblyline_v4_service.common.result import (Heuristic, Result,
-                                                   ResultSection,
-                                                   ResultTableSection,
+from assemblyline_v4_service.common.result import (Heuristic, Result, ResultSection, ResultTableSection,
                                                    ResultTextSection, TableRow)
 from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
-from assemblyline_v4_service.common.utils import (PASSWORD_WORDS,
-                                                  extract_passwords)
+from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
@@ -432,14 +429,6 @@ BOX_JS_PAYLOAD_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
 # 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
 SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
 
-# Globals
-
-# Flag that the sample was embedded within a third party library
-embedded_code_in_lib = None
-
-# Flag that the sample contains a single script that writes unescaped values to the DOM
-single_script_with_unescape = False
-
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -479,6 +468,12 @@ class JsJaws(ServiceBase):
         self.malformed_javascript: Optional[bool] = None
         self.function_inception: Optional[bool] = None
         self.ignore_stdout_limit: Optional[bool] = None
+        # Flag that the sample was embedded within a third party library
+        self.embedded_code_in_lib: Optional[str] = None
+        # Flag that the sample contains a single script that writes unescaped values to the DOM
+        self.single_script_with_unescape: Optional[bool] = None
+        # Flag that the sample contains multiple scripts that write unescaped values to the DOM
+        self.multiple_scripts_with_unescape: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -499,13 +494,11 @@ class JsJaws(ServiceBase):
         This method resets variables that are expected to return to their default values when a new sample is received.
         :return: None
         """
-        global embedded_code_in_lib
-        global single_script_with_unescape
-
         # Reset per sample
         self.doc_write_hashes = set()
-        embedded_code_in_lib = None
-        single_script_with_unescape = False
+        self.embedded_code_in_lib = None
+        self.single_script_with_unescape = False
+        self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
         self.script_sources = set()
         self.scripts = set()
@@ -530,14 +523,13 @@ class JsJaws(ServiceBase):
         :param file_content: The content of the file
         :return: A tuple of the file path and the file content
         """
-        global embedded_code_in_lib
         try:
             filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
             if filtered_file_path and filtered_file_content:
                 self.log.debug(f"Extracted malicious code from a third-party library: {lib_path}")
                 file_path = filtered_file_path
                 file_content = filtered_file_content
-                embedded_code_in_lib = lib_path
+                self.embedded_code_in_lib = lib_path
         except UnicodeDecodeError:
             pass
 
@@ -608,7 +600,7 @@ class JsJaws(ServiceBase):
         file_path, file_content = self._handle_filtered_code(file_path, file_content)
 
         # There are always false positive hits in embedded code for VBScript env variables, so let's avoid that
-        if not embedded_code_in_lib:
+        if not self.embedded_code_in_lib:
             file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
 
         # File constants
@@ -650,15 +642,14 @@ class JsJaws(ServiceBase):
 
         self._run_the_gauntlet(request, file_path, file_content)
 
-    @staticmethod
-    def _raise_embedded_code_in_lib(request: ServiceRequest) -> None:
+    def _raise_embedded_code_in_lib(self, request: ServiceRequest) -> None:
         """
         This method adds a section to the result that indicates that embedded code was found in a common library
         :param request: The ServiceRequest object
         :return: None
         """
         embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
-        embedded_code_in_lib_res_sec.add_line(f"Common library used: {embedded_code_in_lib}")
+        embedded_code_in_lib_res_sec.add_line(f"Common library used: {self.embedded_code_in_lib}")
         embedded_code_in_lib_res_sec.set_heuristic(4)
         request.result.add_section(embedded_code_in_lib_res_sec)
 
@@ -1016,7 +1007,7 @@ class JsJaws(ServiceBase):
         self._reset_gauntlet_variables(request)
 
         # If there is embedded code in a common library, handle accordingly
-        if embedded_code_in_lib:
+        if self.embedded_code_in_lib:
             self._raise_embedded_code_in_lib(request)
 
         # Determine the file type to be used for this gauntlet run
@@ -1043,7 +1034,7 @@ class JsJaws(ServiceBase):
             return
 
         # If we did manage to extract embedded code from a common library, add the extracted file as an artifact
-        if embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
+        if self.embedded_code_in_lib and not any(artifact["name"] == TEMP_JS_FILENAME for artifact in self.artifact_list):
             artifact = {
                 "name": TEMP_JS_FILENAME,
                 "path": file_path,
@@ -1054,8 +1045,11 @@ class JsJaws(ServiceBase):
             self.artifact_list.append(artifact)
 
         # If the file consists of a single script with an unescape call, this is worth reporting
-        if single_script_with_unescape:
+        if self.single_script_with_unescape:
             heur = Heuristic(14)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+        elif self.multiple_scripts_with_unescape:
+            heur = Heuristic(20)
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         # If the HTML file has visible text that is most likely JavaScript
@@ -1385,34 +1379,54 @@ class JsJaws(ServiceBase):
 
         return aggregated_js_script, js_content
 
-    def _is_single_script_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+    def _search_script_contents_for_unescapes(self, script_contents_list: List[str]) -> bool:
         """
-        This method checks if the file content is a single script that is made up of a
-        large "unescape" call
+        This method searches a list of script contents (usually with length of 1) using regular expressions, hunting for simple obfuscation
+        :param script_contents_list: The contents of a Soup script, in list format
+        :return: Do the script contents contain simple obfuscation?
+        """
+
+        script_contents = script_contents_list[0] if script_contents_list else ""
+        for regex in [DOM_WRITE_UNESCAPE_REGEX, DOM_WRITE_ATOB_REGEX]:
+            # An unescaped value of decent length is written to the DOM
+            if len(script_contents) > 250 and re.search(regex, script_contents, re.IGNORECASE):
+                self.log.debug(f"Script was found that used {regex}...")
+                # There is a high chance that enforcing the stdout limit when there is
+                # a single script that uses an unescape could prevent us from
+                # correctly executing this sample, therefore ignore this limit
+                self.ignore_stdout_limit = True
+                return True
+        return False
+
+    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+        """
+        This method checks if the file content is contains scripts that are made up of
+        large "unescape" calls
         :param soup: The BeautifulSoup object
         :param scripts: A list of Script soup elements
         :return: None
         """
-        global single_script_with_unescape
-
-        # If the soup consists of a single script element, let's dive in a little
-        # deeper to see if this file is suspicious
         soup_body_contents = []
         if soup.body:
             soup_body_contents = soup.body.contents
 
-        if not single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
+        # If the soup consists of a single script element, let's dive in a little
+        # deeper to see if this file is suspicious
+        if not self.single_script_with_unescape and soup_body_contents == [] and len(scripts) == 1:
             script_contents_list = scripts[0].contents
-            script_contents = script_contents_list[0] if script_contents_list else ""
-            for regex in [DOM_WRITE_UNESCAPE_REGEX, DOM_WRITE_ATOB_REGEX]:
-                # An unescaped value of decent length is written to the DOM
-                if len(script_contents) > 250 and re.search(regex, script_contents, re.IGNORECASE):
-                    self.log.debug(f"A single script was found that used {regex}...")
-                    single_script_with_unescape = True
-                    # There is a high chance that enforcing the stdout limit when there is
-                    # a single script that uses an unescape could prevent us from
-                    # correctly executing this sample, therefore ignore this limit
-                    self.ignore_stdout_limit = True
+            self.single_script_with_unescape = self._search_script_contents_for_unescapes(script_contents_list)
+
+        # If the soup contains multiple script elements, and more than one contains simple obfuscation, flag it!
+        elif not self.single_script_with_unescape and len(scripts) > 1:
+            count = 0
+            for script in scripts:
+                script_contents_list = script.contents
+                script_contains_unescape = self._search_script_contents_for_unescapes(script_contents_list)
+                if script_contains_unescape:
+                    count += 1
+
+            if count > 1:
+                self.multiple_scripts_with_unescape = True
 
     def _skip_element(self, element: PageElement, file_type: str) -> bool:
         """
@@ -1919,7 +1933,7 @@ class JsJaws(ServiceBase):
         scripts = soup.findAll("script")
         visible_texts = self._extract_visible_text_from_soup(soup)
 
-        self._is_single_script_with_unescape(soup, scripts)
+        self._contains_scripts_with_unescape(soup, scripts)
 
         # We need this flag since we are now creating most HTML elements dynamically,
         # and there is a chance that an HTML file has no JavaScript to be run.
@@ -2511,8 +2525,10 @@ class JsJaws(ServiceBase):
             [urls_result_section.add_row(urls_row) for urls_row in urls_rows]
             urls_result_section.set_heuristic(1)
 
-            if single_script_with_unescape:
+            if self.single_script_with_unescape:
                 urls_result_section.heuristic.add_signature_id("single_script_url")
+            elif self.multiple_scripts_with_unescape:
+                urls_result_section.heuristic.add_signature_id("multiple_scripts_url")
 
             if self.function_inception:
                 urls_result_section.heuristic.add_signature_id("function_inception_url")
