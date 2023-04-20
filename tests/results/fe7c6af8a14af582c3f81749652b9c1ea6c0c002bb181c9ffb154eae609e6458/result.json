@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tWMI.GetObject.Create not implemented!\n\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

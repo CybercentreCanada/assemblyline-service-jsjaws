@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@nodesecure/js-x-ray": ">=6.0.1",
-        "box-js": ">=1.9.22",
+        "box-js": ">=1.9.23",
         "crypto-js": ">=4.1.1",
         "deobfuscator": ">=2.4.2",
         "entities": ">=4.5.0",
