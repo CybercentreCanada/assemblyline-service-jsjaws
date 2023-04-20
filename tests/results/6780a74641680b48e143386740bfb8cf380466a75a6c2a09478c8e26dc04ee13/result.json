@@ -170,13 +170,13 @@
     "extracted": [
       {
         "name": "extracted_wscript.bat",
-        "sha256": "6610d1fecfa9c5a4cb9735600aad3357f6b1f71b52fbc02a0d7e4e4359de8c6a"
+        "sha256": "5498d576f84e30cf0603b14156b35d9234b16fe61994298dfcd1ba1092d8a9c3"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "1a697c77600fd4d437af74fa45287d71cfca107978788599fdacc288aa0dc8c6"
+        "sha256": "9fa0451392a7a955da7748f5cf9b09329967e8d4c945d1d9fb16d8fb5e3d6893"
       }
     ]
   },
