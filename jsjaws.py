@@ -1689,14 +1689,16 @@ class JsJaws(ServiceBase):
                             is_shortcut = True
                         elif name == "item1":
                             command_args = value.split(",")
-                            if not command_args[0].strip():
+                            if not command_args[0].strip() and command_args[1].strip() != "cmd.exe":
                                 # This is the default when loaded on Windows
                                 command_args[0] = "cmd.exe"
-                            command = " ".join(command_args)
+                            command = " ".join([command_arg for command_arg in command_args if command_arg])
             if is_shortcut and command:
                 # JavaScript does not like when there are newlines when setting attributes
                 if isinstance(command, str) and "\n" in command:
                     command = command.replace("\n", "")
+                if '\\' in command:
+                    command = command.replace('\\', '\\\\')
                 if '"' in command:
                     command = command.replace('"', '\\"')
 

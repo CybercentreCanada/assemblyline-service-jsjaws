@@ -1,0 +1,298 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 131,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses unusual ShortCut objects",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 9,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "ShortCut usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[124]()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tWScript.Shell[124].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[128](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_elevated_ps1": 10
+          },
+          "signatures": {
+            "runs_elevated_ps1": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsElevatedPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[124].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[128](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_no_profile": 10
+          },
+          "signatures": {
+            "runs_ps1_no_profile": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsNoProfilePowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"metric.cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"add.in\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "msdn.microsoft.com",
+                "ddue.schemas.microsoft.com",
+                "www.microsoft.com",
+                "metric.cl",
+                "add.in",
+                "go.microsoft.com"
+              ],
+              "uri": [
+                "http://msdn.microsoft.com/mshelp",
+                "http://ddue.schemas.microsoft.com/authoring/2003/5",
+                "http://www.microsoft.com/tooltip",
+                "http://go.microsoft.com/fwlink/?linkid=117437",
+                "http://go.microsoft.com/fwlink/?linkid=71543.",
+                "http://go.microsoft.com/fwlink/?linkid=71543"
+              ],
+              "uri_path": [
+                "/mshelp",
+                "/authoring/2003/5",
+                "/tooltip",
+                "/fwlink/?linkid=117437",
+                "/fwlink/?linkid=71543.",
+                "/fwlink/?linkid=71543"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "f20eab87239a3d4d39277c4240bea115f73a324b51ceb25ab433125eb7deef85"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "794d8593ccdced996e5a2fe879bb5f4dcf22803e762c04807b8a4aeee74e1af3"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_elevated_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_no_profile"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 9,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "add.in"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "ddue.schemas.microsoft.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "go.microsoft.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "metric.cl"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "msdn.microsoft.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.microsoft.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://ddue.schemas.microsoft.com/authoring/2003/5"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://go.microsoft.com/fwlink/?linkid=117437"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://go.microsoft.com/fwlink/?linkid=71543"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://go.microsoft.com/fwlink/?linkid=71543."
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://msdn.microsoft.com/mshelp"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.microsoft.com/tooltip"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/authoring/2003/5"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/fwlink/?linkid=117437"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/fwlink/?linkid=71543"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/fwlink/?linkid=71543."
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/mshelp"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/tooltip"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
