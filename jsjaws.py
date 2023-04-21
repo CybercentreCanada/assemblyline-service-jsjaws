@@ -429,6 +429,12 @@ BOX_JS_PAYLOAD_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
 # 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
 SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
 
+# Examples:
+# <!DOCTYPE html>
+# or
+# <html>
+HTML_START = b"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -535,6 +541,39 @@ class JsJaws(ServiceBase):
 
         return file_path, file_content
 
+    def _remove_leading_garbage_from_html(self, request: ServiceRequest, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+        """
+        This method removes leading garbage text from HTML files that have been mis-identified
+        :param request: The ServiceRequest object
+        :param file_path: The path of the file
+        :param file_content: The content of the file
+        :return: A tuple of the file path and the file content
+        """
+        if request.file_type not in ["code/html", "code/hta"]:
+            html_start = re.search(HTML_START, file_content)
+            if html_start:
+                idx = file_content.index(html_start.group("html_start"))
+                garbage = file_content[:idx]
+
+                script_we_want = file_content[idx:]
+
+                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                    t.write(garbage)
+                    garbage_path = t.name
+
+                garbage_info = self.identify.fileinfo(garbage_path)
+
+                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                    t.write(script_we_want)
+                    script_we_want_path = t.name
+
+                script_we_want_info = self.identify.fileinfo(script_we_want_path)
+                if garbage_info["type"] not in ["code/javascript", "code/html", "code/hta", "code/jscript", "code/wsf", "code/wsc", "image/svg"] and script_we_want_info["type"] in ["code/html", "code/hta"]:
+                    request.file_type = script_we_want_info["type"]
+                    return script_we_want_path, script_we_want
+
+        return file_path, file_content
+
     def _handle_vbscript_env_variables(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
         """
         This is a VBScript method of setting an environment variable:
@@ -598,6 +637,7 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
         file_path, file_content = self._handle_filtered_code(file_path, file_content)
+        file_path, file_content = self._remove_leading_garbage_from_html(request, file_path, file_content)
 
         # There are always false positive hits in embedded code for VBScript env variables, so let's avoid that
         if not self.embedded_code_in_lib:
