@@ -38,12 +38,25 @@ class RunsShell(Signature):
             heuristic_id=3,
             name="runs_shell",
             description="JavaScript runs code via shell",
-            indicators=["WScript.Shell", ".Run"],
             severity=0
         )
 
     def process_output(self, output):
-        self.check_indicators_in_list(output, match_all=True)
+        indicator_list = [
+            {
+                "method": "all",
+                "indicators": ["WScript.Shell", ".Exec"]
+            },
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+        indicator_list = [
+            {
+                "method": "all",
+                "indicators": ["WScript.Shell", ".Run"]
+            },
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
 
 
 class RunsShellApplication(Signature):
@@ -80,12 +93,18 @@ class RunsCommandPrompt(Signature):
             heuristic_id=3,
             name="runs_cmd_prompt",
             description="JavaScript runs Command Prompt via cmd.exe",
-            indicators=["WScript.Shell", ".Run", "cmd.exe"],
+            indicators=["cmd.exe", "cmd "],
             severity=0
         )
 
     def process_output(self, output):
-        self.check_indicators_in_list(output, match_all=True)
+        indicator_list = [
+            {
+                "method": "any",
+                "indicators": self.indicators
+            },
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
 
 
 class RunsPowerShell(Signature):
@@ -94,7 +113,7 @@ class RunsPowerShell(Signature):
             heuristic_id=3,
             name="runs_ps1",
             description="JavaScript runs PowerShell via powershell.exe",
-            indicators=["WScript.Shell", ".Run", "powershell.exe"],
+            indicators=["powershell"],
             severity=0
         )
 
@@ -108,8 +127,8 @@ class RunsElevatedPowerShell(Signature):
             heuristic_id=3,
             name="runs_elevated_ps1",
             description="JavaScript runs elevated PowerShell via powershell.exe",
-            indicators=["powershell.exe", "-ExecutionPolicy", "bypass"],
-            severity=0
+            indicators=["powershell", "-exec", "bypass"],
+            severity=3
         )
 
     def process_output(self, output):
@@ -122,7 +141,7 @@ class RunsHiddenPowerShell(Signature):
             heuristic_id=3,
             name="runs_hidden_ps1",
             description="JavaScript runs PowerShell via powershell.exe in a hidden window",
-            indicators=["powershell.exe", "-windowstype", "hidden"],
+            indicators=["powershell", "-w", "hidden"],
             severity=0
         )
 
@@ -136,7 +155,21 @@ class RunsNoProfilePowerShell(Signature):
             heuristic_id=3,
             name="runs_ps1_no_profile",
             description="JavaScript runs PowerShell via powershell.exe with no profile",
-            indicators=["powershell.exe", "-noprofile"],
+            indicators=["powershell", "-nop"],
+            severity=3
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
+class PowerShellDownloader(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="runs_ps1_to_download",
+            description="JavaScript runs PowerShell to call out to a URI",
+            indicators=["powershell", "http"],
             severity=0
         )
 
