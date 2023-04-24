@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 101,
+    "score": 111,
     "sections": [
       {
         "auto_collapse": false,
@@ -12,6 +12,28 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tShell.Application[19].shellexecute(\"powershell\", \"$besmearedUnexcited = Get-ItemProperty -Path HKCU:...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
       },
       {
@@ -85,6 +107,13 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
       },
       {
         "attack_ids": [],

