@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Optional, Union
 from re import findall
-from assemblyline.common.str_utils import safe_str
+from typing import Any, Dict, List, Optional, Union
 
+from assemblyline.common.str_utils import safe_str
 
 ANY = "any"
 ALL = "all"
@@ -133,9 +133,9 @@ class Signature:
             # If all_indicators
             are_indicators_matched = True
             for all_indicator in all_indicators:
-                if are_indicators_matched and all(indicator in string for indicator in all_indicator["indicators"]):
+                if are_indicators_matched and all(indicator.lower() in string.lower() for indicator in all_indicator["indicators"]):
                     for any_indicator in any_indicators:
-                        if are_indicators_matched and any(indicator in string for indicator in any_indicator["indicators"]):
+                        if are_indicators_matched and any(indicator.lower() in string.lower() for indicator in any_indicator["indicators"]):
                             pass
                         else:
                             are_indicators_matched = False
@@ -145,7 +145,7 @@ class Signature:
             # If no all_indicators
             if not all_indicators:
                 for any_indicator in any_indicators:
-                    if are_indicators_matched and any(indicator in string for indicator in any_indicator["indicators"]):
+                    if are_indicators_matched and any(indicator.lower() in string.lower() for indicator in any_indicator["indicators"]):
                         pass
                     else:
                         are_indicators_matched = False

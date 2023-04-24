@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 632,
+    "score": 642,
     "sections": [
       {
         "auto_collapse": false,
@@ -78,6 +78,28 @@
         },
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[13].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\n\t\tWScript.Shell[13].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[13].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...\n\t\t\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcL...\n\t\t } catch (QBkhZXClpWYWxilyQkXzUE) { } \t\t\t\t\t\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo ...\n\t\t \t\t\t } catch (GAcjWCRAUHrRzUrAxKTrny) {\t\t\t\t\t\t}\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"ec...\n\t\t\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLc...\n\t\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\...\n\t\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_cmd_prompt": 10
+          },
+          "signatures": {
+            "runs_cmd_prompt": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsCommandPrompt",
         "zeroize_on_tag_safe": false
       },
       {
@@ -254,6 +276,13 @@
         "heur_id": 3,
         "signatures": [
           "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_cmd_prompt"
         ]
       },
       {
