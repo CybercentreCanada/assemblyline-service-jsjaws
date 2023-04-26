@@ -3064,13 +3064,13 @@ class JsJaws(ServiceBase):
                     }
                     self.log.debug(f"Redirection location: {out.name}")
                     self.artifact_list.append(artifact)
-                else:
+                elif not redirection_res_sec:
                     heur = Heuristic(6)
                     redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-                    redirection_res_sec.add_tag("network.static.uri", location_href)
 
                 if not redirection_res_sec.body or (redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body):
                     redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
+                    redirection_res_sec.add_tag("network.static.uri", location_href)
 
             # Check if programatically created script with src set is found
             if all(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLSCRIPTELEMENT_SRC_SET_TO_URI]):
