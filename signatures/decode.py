@@ -81,7 +81,7 @@ class NestedAtoB(Signature):
             name="nested_atob",
             description="JavaScript uses nested atob() calls for decoding",
             indicators=["atob(atob("],
-            severity=0
+            severity=500
         )
 
     def process_output(self, output):
