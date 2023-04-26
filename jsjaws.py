@@ -1479,8 +1479,8 @@ class JsJaws(ServiceBase):
         if element.name in ["head", "style", "body", "param"]:
             return True
 
-        # If the file is code/wsf, skip the job element
-        elif element.name in ["job"] and file_type == "code/wsf":
+        # If the file is code/wsf, skip the job and package elements
+        elif element.name in ["job", "package"] and file_type == "code/wsf":
             return True
 
         # If the file is code/wsc, skip the component element
