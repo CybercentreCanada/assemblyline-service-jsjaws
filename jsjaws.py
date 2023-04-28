@@ -1305,7 +1305,12 @@ class JsJaws(ServiceBase):
         self.log.debug("Extracting HTML elements from soup...")
 
         start_time = time()
-        soup = BeautifulSoup(file_content, features="html5lib")
+        try:
+            soup = BeautifulSoup(file_content, features="html5lib")
+        except AssertionError:
+            self.log.debug("Could not parse file contents with BeautifulSoup due to 'AssertionError'")
+            return None, None, None
+
         self.log.debug(f"Parsing the file with BeautifulSoup took {round(time() - start_time)}s")
 
         js_script_name = None
@@ -1857,11 +1862,11 @@ class JsJaws(ServiceBase):
             body = body.replace(WSHSHELL, WSHSHELL.lower())
 
         # Looks like we have some malformed JavaScript, let's try to fix it up
-        if body.rstrip()[-1] == "=":
+        if body.rstrip() and body.rstrip()[-1] == "=":
             body = body + "\"\""
 
         # If the body does not end with a semi-colon, add one
-        if body.rstrip()[-1] != ";":
+        if body.rstrip() and body.rstrip()[-1] != ";":
             body = body + ";"
 
         return body
