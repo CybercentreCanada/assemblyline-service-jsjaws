@@ -3047,6 +3047,9 @@ class JsJaws(ServiceBase):
                 # It is possible for the location_href to be assigned an empty dictionary by MalwareJail, or to be unset
                 if not location_href:
                     continue
+                # It is possible that window.location=window.location, so this href could be reference to itself.
+                elif isinstance(location_href, dict):
+                    continue
 
                 if location_href.lower().startswith("ms-msdt:"):
                     heur = Heuristic(5)
