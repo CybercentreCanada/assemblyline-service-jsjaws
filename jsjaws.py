@@ -616,7 +616,11 @@ class JsJaws(ServiceBase):
                     property_name = another_match.group("property_name").decode()
                     property_value = another_match.group("property_value").decode()
 
-            property_value = match.group("property_value").decode()
+            try:
+                property_value = match.group("property_value").decode()
+            except UnicodeDecodeError:
+                return
+
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
             return f"[{property_name}] = {property_value};".encode()
 
