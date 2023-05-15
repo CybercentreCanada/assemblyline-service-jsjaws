@@ -1734,7 +1734,7 @@ class JsJaws(ServiceBase):
                             is_shortcut = True
                         elif name == "item1":
                             command_args = value.split(",")
-                            if not command_args[0].strip() and command_args[1].strip() != "cmd.exe":
+                            if len(command_args) >= 2 and not command_args[0].strip() and command_args[1].strip() != "cmd.exe":
                                 # This is the default when loaded on Windows
                                 command_args[0] = "cmd.exe"
                             command = " ".join([command_arg for command_arg in command_args if command_arg])
