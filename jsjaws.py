@@ -587,7 +587,7 @@ class JsJaws(ServiceBase):
                     # If there is more than one HTML comment, recursively remove
                     html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
                     if html_comment:
-                        self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
+                        return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
 
         return file_path, file_content
 
