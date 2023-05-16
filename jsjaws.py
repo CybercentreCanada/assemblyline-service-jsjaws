@@ -409,7 +409,7 @@ LONE_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
 
 # Example:
 # <!-- HTML Encryption provided by www.blah.com -->
-FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-.{1,100}?\-\-\>)\s*;?\n"
+FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
 
 # Example:
 # function a0nnnnoo() {
@@ -543,19 +543,30 @@ class JsJaws(ServiceBase):
 
     def _remove_leading_garbage_from_html(self, request: ServiceRequest, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
         """
-        This method removes leading garbage text from HTML files that have been mis-identified
+        This method removes garbage text from HTML files that have been mis-identified
         :param request: The ServiceRequest object
         :param file_path: The path of the file
         :param file_content: The content of the file
         :return: A tuple of the file path and the file content
         """
         if request.file_type not in ["code/html", "code/hta"]:
-            html_start = re.search(HTML_START, file_content)
-            if html_start:
-                idx = file_content.index(html_start.group("html_start"))
-                garbage = file_content[:idx]
 
-                script_we_want = file_content[idx:]
+            # First check to see there is an obvious <html> tag somewhere
+            html_start = re.search(HTML_START, file_content)
+            html_comment = None
+            if not html_start:
+                # If no obvious <html> tag, check if there are HTML/XML comments
+                html_comment = re.search(FULL_HTML_COMMENT_IN_JS, file_content)
+
+            if html_start or html_comment:
+                if html_start:
+                    idx = file_content.index(html_start.group("html_start"))
+                    garbage = file_content[:idx]
+                    script_we_want = file_content[idx:]
+                elif html_comment and len(html_comment.regs) > 2:
+                    start_idx, end_idx = html_comment.regs[2]
+                    garbage = file_content[start_idx:end_idx]
+                    script_we_want = file_content[:start_idx] + file_content[end_idx:]
 
                 with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                     t.write(garbage)
@@ -569,8 +580,14 @@ class JsJaws(ServiceBase):
 
                 script_we_want_info = self.identify.fileinfo(script_we_want_path)
                 if garbage_info["type"] not in ["code/javascript", "code/html", "code/hta", "code/jscript", "code/wsf", "code/wsc", "image/svg"] and script_we_want_info["type"] in ["code/html", "code/hta"]:
+                    self.log.debug("Removed garbage from the file...")
                     request.file_type = script_we_want_info["type"]
                     return script_we_want_path, script_we_want
+                else:
+                    # If there is more than one HTML comment, recursively remove
+                    html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
+                    if html_comment:
+                        return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
 
         return file_path, file_content
 
@@ -1634,8 +1651,12 @@ class JsJaws(ServiceBase):
         :param element_id: The element id
         :return: The script used for creating elements
         """
+        element_name = element.name
+        # Escape double quotes since we are wrapping the value in double quotes
+        if '"' in element_name:
+            element_name = element_name.replace('"', "'")
         # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
-        create_element_script = f"const {random_element_varname} = document.createElement(\"{element.name}\");\n" \
+        create_element_script = f"const {random_element_varname} = document.createElement(\"{element_name}\");\n" \
                                 f"{random_element_varname}.setAttribute(\"id\", \"{element_id}\");\n"
         return create_element_script
 
