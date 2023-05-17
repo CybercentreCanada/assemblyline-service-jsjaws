@@ -225,7 +225,7 @@ CHARTVIEW_REGEX = r"\s*\/\*[\s\S]+?\*\/\s*\(function\s+\(global,\s*factory\)\s*\
 
 # /**
 #  * A component handler interface using the revealing module design pattern.
-MDL_REGEX = r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/\s*\/\*\*\s*\*\s*A component handler interface using the revealing module design pattern\."
+MDL_REGEX = r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/[\s\S]*\/\*\*\s*\*\s*A component handler interface using the revealing module design pattern\."
 
 # Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
