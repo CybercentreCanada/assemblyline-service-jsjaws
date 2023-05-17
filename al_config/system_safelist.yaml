@@ -1,19 +1,43 @@
+match:
+  network.static.domain:
+  # WWW
+  - www.w3.org
+  # Bootstrap
+  - getbootstrap.com
+  # Microsoft Auth
+  - aadcdn.msftauth.net
+  # jQuery
+  - code.jquery.com
+  # FontAwesome
+  - use.fontawesome.com
+  # Google Analytics
+  - www.google-analytics.com
+  network.static.uri:
+  # CDNs
+  - https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js
+  network.dynamic.domain:
+  # WWW
+  - www.w3.org
+  # Bootstrap
+  - getbootstrap.com
+  # Microsoft Auth
+  - aadcdn.msftauth.net
+  # jQuery
+  - code.jquery.com
+  # FontAwesome
+  - use.fontawesome.com
+  # Google Analytics
+  - www.google-analytics.com
+  network.dynamic.uri:
+  # CDNs
+  - https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js
+
 regex:
   network.static.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
   # GStatic
   - .*\.gstatic\.com$
-  # WWW
-  - www\.w3\.org$
-  # Bootstrap
-  - getbootstrap\.com$
-  # Microsoft Auth
-  - aadcdn\.msftauth\.net$
-  # jQuery
-  - code\.jquery\.com$
-  # FontAwesome
-  - use\.fontawesome\.com$
   network.static.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
@@ -23,27 +47,20 @@ regex:
   - https?://www\.w3\.org(?:$|/.*)
   # Bootstrap
   - https?://getbootstrap\.com(?:$|/.*)
+  - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
   # Microsoft Auth
   - https?://aadcdn\.msftauth\.net(?:$|/.*)
   # jQuery
   - https?://code\.jquery\.com(?:$|/.*)
   # FontAwesome
   - https?://use\.fontawesome\.com(?:$|/.*)
+  # Google Analytics
+  - https?://www\.google-analytics\.com(?:$|/.*)
   network.dynamic.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
   # GStatic
   - .*\.gstatic\.com$
-  # WWW
-  - www\.w3\.org$
-  # Bootstrap
-  - getbootstrap\.com$
-  # Microsoft Auth
-  - aadcdn\.msftauth\.net$
-  # jQuery
-  - code\.jquery\.com$
-  # FontAwesome
-  - use\.fontawesome\.com$
   network.dynamic.uri:
   # GoogleAPIs
   - https?://.*\.googleapis\.com(?:$|/.*)
@@ -53,9 +70,12 @@ regex:
   - https?://www\.w3\.org(?:$|/.*)
   # Bootstrap
   - https?://getbootstrap\.com(?:$|/.*)
+  - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
   # Microsoft Auth
   - https?://aadcdn\.msftauth\.net(?:$|/.*)
   # jQuery
   - https?://code\.jquery\.com(?:$|/.*)
   # FontAwesome
   - https?://use\.fontawesome\.com(?:$|/.*)
+  # Google Analytics
+  - https?://www\.google-analytics\.com(?:$|/.*)
