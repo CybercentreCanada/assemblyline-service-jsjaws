@@ -402,11 +402,6 @@ DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
 HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_SRC_SET_TO_URI} '(.+)'"
 
-# Examples:
-# <!--
-# -->
-LONE_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-|\-\-\>)\s*;?\n"
-
 # Example:
 # <!-- HTML Encryption provided by www.blah.com -->
 FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
@@ -1036,22 +1031,6 @@ class JsJaws(ServiceBase):
             pass
         return jsxray_output
 
-    def _remove_html_comments(self, file_content: bytes) -> bytes:
-        """
-        This method removes HTML opening comment strings from JavaScript
-        :param file_content: The contents of the initial file to be read
-        :return: The potentially modified contents of the file
-        """
-        def log_and_replace_html_comments(match):
-            group_0 = match.group(0).decode().strip()
-            self.log.debug(f"Removed HTML comment: {group_0}")
-            return b""
-
-        # Remove full HTML comments first and then get rid of the stragglers
-        file_content = re.sub(FULL_HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
-        file_content = re.sub(LONE_HTML_COMMENT_IN_JS, log_and_replace_html_comments, file_content)
-        return file_content
-
     def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
@@ -1149,7 +1128,6 @@ class JsJaws(ServiceBase):
         actual_script = None
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
             _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
-            actual_script = self._remove_html_comments(actual_script)
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                 t.write(actual_script)
                 synchrony_args.append(t.name)

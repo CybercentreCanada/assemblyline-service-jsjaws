@@ -14,5 +14,6 @@ if (split_script.length == 2) {
     var actual_script = split_script[0];
 }
 
-const { warnings } = runASTAnalysis(actual_script);
+const options = { "removeHTMLComments": true };
+const { warnings } = runASTAnalysis(actual_script, options);
 console.log(JSON.stringify({"warnings": warnings}));
