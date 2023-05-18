@@ -104,8 +104,8 @@
         "sha256": "94a8f8f591fb0d26eef0ef07e5c4e5338f4837925273fa3a78848243687a4de3"
       },
       {
-        "name": "cmd_0.bat",
-        "sha256": "a058df6823ab727d5ab02e0cdf3048f610b3a6f47b154aac0451a13ef6cdfa1c"
+        "name": "boxjs_cmds.bat",
+        "sha256": "9b64b7d8cee577d55fe9008941646643c052a22607e92bf7cd0ca0452b5a1cb4"
       }
     ],
     "supplementary": []
