@@ -18,21 +18,32 @@ import signatures
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.hexdump import load as hexload
+from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
 from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
 from assemblyline_v4_service.common.api import ServiceAPIError
 from assemblyline_v4_service.common.base import ServiceBase
-from assemblyline_v4_service.common.dynamic_service_helper import (URL_REGEX, OntologyResults,
-                                                                   extract_iocs_from_text_blob)
+from assemblyline_v4_service.common.dynamic_service_helper import (
+    URL_REGEX,
+    OntologyResults,
+    extract_iocs_from_text_blob,
+)
 from assemblyline_v4_service.common.request import ServiceRequest
-from assemblyline_v4_service.common.result import (Heuristic, Result, ResultSection, ResultTableSection,
-                                                   ResultTextSection, TableRow)
+from assemblyline_v4_service.common.result import (
+    Heuristic,
+    Result,
+    ResultSection,
+    ResultTableSection,
+    ResultTextSection,
+    TableRow,
+)
 from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
+from multidecoder.analyzers.shell import find_powershell_strings, get_powershell_command
 from requests import get
 from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
@@ -447,8 +458,14 @@ class JsJaws(ServiceBase):
         self.boxjs_urls_json_path: Optional[str] = None
         self.malware_jail_urls_json_path: Optional[str] = None
         self.wscript_only_config: Optional[str] = None
-        self.extracted_wscript: Optional[str] = None
-        self.extracted_wscript_path: Optional[str] = None
+        self.extracted_wscript_batch: Optional[str] = None
+        self.extracted_wscript_ps1: Optional[str] = None
+        self.extracted_wscript_batch_path: Optional[str] = None
+        self.extracted_wscript_ps1_path: Optional[str] = None
+        self.boxjs_batch: Optional[str] = None
+        self.boxjs_batch_path: Optional[str] = None
+        self.boxjs_ps1: Optional[str] = None
+        self.boxjs_ps1_path: Optional[str] = None
         self.malware_jail_output: Optional[str] = None
         self.malware_jail_output_path: Optional[str] = None
         self.boxjs_output_dir: Optional[str] = None
@@ -674,8 +691,14 @@ class JsJaws(ServiceBase):
         self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
         self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
-        self.extracted_wscript = "extracted_wscript.bat"
-        self.extracted_wscript_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript)
+        self.extracted_wscript_batch = "extracted_wscript.bat"
+        self.extracted_wscript_batch_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript_batch)
+        self.extracted_wscript_ps1 = "extracted_wscript.ps1"
+        self.extracted_wscript_ps1_path = path.join(self.malware_jail_payload_extraction_dir, self.extracted_wscript_ps1)
+        self.boxjs_batch = "boxjs_cmds.bat"
+        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_batch)
+        self.boxjs_ps1 = "boxjs_cmds.ps1"
+        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_ps1)
         self.malware_jail_output = "output.txt"
         self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
         # Box.js creates an output directory in the working level directory with the name <file_name>.results
@@ -2219,9 +2242,14 @@ class JsJaws(ServiceBase):
         :return: None
         """
         self.log.debug("Extract WScript commands...")
-        comment_added = False
+        batch_cmd_spotted = False
+        ps1_cmd_spotted = False
 
-        wscript_extraction = open(self.extracted_wscript_path, "a+")
+        wscript_batch_extraction = open(self.extracted_wscript_batch_path, "a+")
+        wscript_ps1_extraction = open(self.extracted_wscript_ps1_path, "a+")
+        wscript_batch_extraction.write(CUSTOM_BATCH_ID.decode())
+        wscript_ps1_extraction.write(CUSTOM_PS1_ID.decode())
+
         wscript_res_sec = ResultTableSection("IOCs extracted from WScript")
         pre_rows = 0
         post_rows = 0
@@ -2229,12 +2257,6 @@ class JsJaws(ServiceBase):
             wscript_shell_run = re.search(WSCRIPT_SHELL_REGEX, line, re.IGNORECASE)
             # Script was run
             if wscript_shell_run:
-
-                # We only want to do this once
-                if not comment_added:
-                    wscript_extraction.write("REM Batch extracted by Assemblyline\n")
-                    comment_added = True
-
                 cmd = wscript_shell_run.group(1)
                 # This is a byproduct of the sandbox using WScript.Shell.Run
                 # https://ss64.com/vb/run.html
@@ -2272,8 +2294,23 @@ class JsJaws(ServiceBase):
                 if cmd.startswith('"') and cmd.endswith('"'):
                     cmd = cmd[1:-1]
 
-                # Write command to file
-                wscript_extraction.write(cmd.strip() + "\n")
+                # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
+                try:
+                    matches = find_powershell_strings(cmd.encode())
+                except BinasciiError as e:
+                    self.log.debug(f"Could not base64-decode encoded command value '{cmd}' due to '{e}'")
+                    matches = []
+
+                if matches:
+                    for match in matches:
+                        powershell_command = get_powershell_command(match.value)
+                        wscript_ps1_extraction.write(powershell_command.decode().strip() + "\n")
+                        ps1_cmd_spotted = True
+                else:
+                    # Write non-ps1 to file
+                    wscript_batch_extraction.write(cmd.strip() + "\n")
+                    batch_cmd_spotted = True
+
                 # Let's try to extract IOCs from it
 
                 if wscript_res_sec.body:
@@ -2303,19 +2340,31 @@ class JsJaws(ServiceBase):
                     elif any(cmd.lower().strip().startswith(bitsadmin) for bitsadmin in BITSADMIN_VARIATIONS):
                         wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url")
 
-        wscript_extraction.close()
+        wscript_batch_extraction.close()
+        wscript_ps1_extraction.close()
 
-        if path.getsize(self.extracted_wscript_path) > 0:
+        if batch_cmd_spotted:
             artifact = {
-                "name": self.extracted_wscript,
-                "path": self.extracted_wscript_path,
-                "description": "Extracted WScript",
+                "name": self.extracted_wscript_batch,
+                "path": self.extracted_wscript_batch_path,
+                "description": "Extracted WScript batch file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.extracted_wscript}")
+            self.log.debug(f"Adding extracted file: {self.extracted_wscript_batch}")
             self.artifact_list.append(artifact)
-            if wscript_res_sec.body:
-                result.add_section(wscript_res_sec)
+
+        if ps1_cmd_spotted:
+            artifact = {
+                "name": self.extracted_wscript_ps1,
+                "path": self.extracted_wscript_ps1_path,
+                "description": "Extracted WScript ps1 file",
+                "to_be_extracted": True,
+            }
+            self.log.debug(f"Adding extracted file: {self.extracted_wscript_ps1}")
+            self.artifact_list.append(artifact)
+
+        if (batch_cmd_spotted or ps1_cmd_spotted) and wscript_res_sec.body:
+            result.add_section(wscript_res_sec)
 
     def _extract_payloads(self, sample_sha256: str, deep_scan: bool) -> None:
         """
@@ -2360,7 +2409,10 @@ class JsJaws(ServiceBase):
             # Direct paths
             if extracted in [
                 self.malware_jail_urls_json_path,
-                self.extracted_wscript_path,
+                self.extracted_wscript_batch_path,
+                self.extracted_wscript_ps1_path,
+                self.boxjs_batch_path,
+                self.boxjs_ps1_path,
             ]:
                 continue
             # Glob paths
@@ -2702,88 +2754,124 @@ class JsJaws(ServiceBase):
         :return: None
         """
         self.log.debug(f"Extracting IOCs from {BOX_JS} output...")
-        if len(glob(self.boxjs_iocs)) > 0:
-            boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
-            ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
-            with open(boxjs_iocs, "r") as f:
-                file_contents = f.read()
+        if len(glob(self.boxjs_iocs)) == 0:
+            return
 
-            ioc_json: List[Dict[str, Any]] = []
-            try:
-                ioc_json = loads(file_contents)
-            except JSONDecodeError as e:
-                self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
+        boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
+        ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
+        with open(boxjs_iocs, "r") as f:
+            file_contents = f.read()
 
-            commands = list()
-            file_writes = set()
-            file_reads = set()
-            cmd_count = 0
-            comment_added = False
-            for ioc in ioc_json:
-                type = ioc["type"]
-                value = ioc["value"]
-                if type == "Run" and "command" in value:
-                    if value["command"] not in commands:
-                        commands.append(value["command"].strip())
-                    cmd_file_name = f"cmd_{cmd_count}.bat"
-                    cmd_file_path = path.join(self.working_directory, cmd_file_name)
-                    with open(cmd_file_path, "a+") as f:
+        ioc_json: List[Dict[str, Any]] = []
+        try:
+            ioc_json = loads(file_contents)
+        except JSONDecodeError as e:
+            self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
 
-                        # We only want to do this once
-                        if not comment_added:
-                            f.write("REM Batch extracted by Assemblyline\n")
-                            comment_added = True
+        batch_cmd_spotted = False
+        ps1_cmd_spotted = False
 
-                        f.write(value["command"] + "\n")
+        boxjs_batch_extraction = open(self.boxjs_batch_path, "a+")
+        boxjs_ps1_extraction = open(self.boxjs_ps1_path, "a+")
+        boxjs_batch_extraction.write(CUSTOM_BATCH_ID.decode())
+        boxjs_ps1_extraction.write(CUSTOM_PS1_ID.decode())
 
-                    cmd_count += 1
-                elif type == "FileWrite" and "file" in value:
-                    file_writes.add(value["file"])
-                elif type == "FileRead" and "file" in value:
-                    file_reads.add(value["file"])
-            if commands:
-                self.artifact_list.append(
-                    {
-                        "name": cmd_file_name,
-                        "path": cmd_file_path,
-                        "description": "Command Extracted",
-                        "to_be_extracted": True,
-                    }
-                )
-                self.log.debug(f"Adding extracted file: {cmd_file_name}")
+        commands = set()
+        commands_to_display = list()
+        file_writes = set()
+        file_reads = set()
+        cmd_count = 0
+        for ioc in ioc_json:
+            type = ioc["type"]
+            value = ioc["value"]
+            if type == "Run" and "command" in value:
+                if value["command"] not in commands:
+                    commands.add(value["command"].strip())
 
-                cmd_result_section = ResultTextSection(
-                    "The script ran the following commands", parent=ioc_result_section
-                )
-                cmd_result_section.add_lines(commands)
-                [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in commands]
-                cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
-                extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, is_network_static=True)
-                if cmd_iocs_result_section.body:
-                    cmd_iocs_result_section.set_heuristic(2)
-                    cmd_result_section.add_subsection(cmd_iocs_result_section)
-            if file_writes:
-                file_writes_result_section = ResultTextSection(
-                    "The script wrote the following files", parent=ioc_result_section
-                )
-                file_writes_result_section.add_lines(list(file_writes))
-                [
-                    file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
-                    for file_write in list(file_writes)
-                ]
-            if file_reads:
-                file_reads_result_section = ResultTextSection(
-                    "The script read the following files", parent=ioc_result_section
-                )
-                file_reads_result_section.add_lines(list(file_reads))
-                [
-                    file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
-                    for file_read in list(file_reads)
-                ]
+                # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
+                try:
+                    matches = find_powershell_strings(value["command"].encode())
+                except BinasciiError as e:
+                    self.log.debug(f"Could not base64-decode encoded command value '{value['command']}' due to '{e}'")
+                    matches = []
 
-            if ioc_result_section.subsections:
-                ioc_result_section.set_heuristic(2)
-                result.add_section(ioc_result_section)
+                if matches:
+                    for match in matches:
+                        powershell_command = get_powershell_command(match.value)
+                        # Replace the obfuscated powershell command with the deobfuscated command
+                        commands_to_display.append(powershell_command.decode().strip())
+                        boxjs_ps1_extraction.write(powershell_command.decode().strip() + "\n")
+                        ps1_cmd_spotted = True
+                else:
+                    # Write non-ps1 to file
+                    commands_to_display.append(value["command"].strip())
+                    boxjs_batch_extraction.write(value["command"].strip() + "\n")
+                    batch_cmd_spotted = True
+
+                cmd_count += 1
+            elif type == "FileWrite" and "file" in value:
+                file_writes.add(value["file"])
+            elif type == "FileRead" and "file" in value:
+                file_reads.add(value["file"])
+
+        boxjs_ps1_extraction.close()
+        boxjs_batch_extraction.close()
+
+        if batch_cmd_spotted:
+            artifact = {
+                "name": self.boxjs_batch,
+                "path": self.boxjs_batch_path,
+                "description": "Boxjs batch file",
+                "to_be_extracted": True,
+            }
+            self.log.debug(f"Adding extracted file: {self.boxjs_batch}")
+            self.artifact_list.append(artifact)
+
+        if ps1_cmd_spotted:
+            artifact = {
+                "name": self.boxjs_ps1,
+                "path": self.boxjs_ps1_path,
+                "description": "Boxjs ps1 file",
+                "to_be_extracted": True,
+            }
+            self.log.debug(f"Adding extracted file: {self.boxjs_ps1}")
+            self.artifact_list.append(artifact)
+
+        if batch_cmd_spotted or ps1_cmd_spotted:
+            cmd_result_section = ResultTextSection(
+                "The script ran the following commands", parent=ioc_result_section
+            )
+            cmd_result_section.add_lines(commands_to_display)
+            [cmd_result_section.add_tag("dynamic.process.command_line", command) for command in commands_to_display]
+            cmd_iocs_result_section = ResultTableSection("IOCs found in command lines")
+            extract_iocs_from_text_blob(cmd_result_section.body, cmd_iocs_result_section, is_network_static=True)
+            if cmd_iocs_result_section.body:
+                cmd_iocs_result_section.set_heuristic(2)
+                cmd_result_section.add_subsection(cmd_iocs_result_section)
+
+        if file_writes:
+            file_writes_result_section = ResultTextSection(
+                "The script wrote the following files", parent=ioc_result_section
+            )
+            file_writes_result_section.add_lines(list(file_writes))
+            [
+                file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
+                for file_write in list(file_writes)
+            ]
+
+        if file_reads:
+            file_reads_result_section = ResultTextSection(
+                "The script read the following files", parent=ioc_result_section
+            )
+            file_reads_result_section.add_lines(list(file_reads))
+            [
+                file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
+                for file_read in list(file_reads)
+            ]
+
+        if ioc_result_section.subsections:
+            ioc_result_section.set_heuristic(2)
+            result.add_section(ioc_result_section)
 
     def _tag_uri(self, url: str, urls_result_section: ResultTableSection) -> None:
         """

