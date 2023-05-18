@@ -1,0 +1,146 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 111,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"wscript\", \"\"5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "94a8f8f591fb0d26eef0ef07e5c4e5338f4837925273fa3a78848243687a4de3"
+      },
+      {
+        "name": "cmd_0.bat",
+        "sha256": "a058df6823ab727d5ab02e0cdf3048f610b3a6f47b154aac0451a13ef6cdfa1c"
+      }
+    ],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
+        ]
+      }
+    ],
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}
