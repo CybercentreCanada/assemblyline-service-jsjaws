@@ -210,7 +210,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"metric.cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"add.in\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"add.in\"}, {\"ioc_type\": \"domain\", \"ioc\": \"metric.cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543\"}]",
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -229,8 +229,8 @@
                 "msdn.microsoft.com",
                 "ddue.schemas.microsoft.com",
                 "www.microsoft.com",
-                "metric.cl",
                 "add.in",
+                "metric.cl",
                 "go.microsoft.com"
               ],
               "uri": [

