@@ -274,8 +274,14 @@ class TestJsJaws:
         assert jsjaws_class_instance.boxjs_urls_json_path is None
         assert jsjaws_class_instance.malware_jail_urls_json_path is None
         assert jsjaws_class_instance.wscript_only_config is None
-        assert jsjaws_class_instance.extracted_wscript is None
-        assert jsjaws_class_instance.extracted_wscript_path is None
+        assert jsjaws_class_instance.extracted_wscript_batch is None
+        assert jsjaws_class_instance.extracted_wscript_ps1 is None
+        assert jsjaws_class_instance.extracted_wscript_batch_path is None
+        assert jsjaws_class_instance.extracted_wscript_ps1_path is None
+        assert jsjaws_class_instance.boxjs_batch is None
+        assert jsjaws_class_instance.boxjs_batch_path is None
+        assert jsjaws_class_instance.boxjs_ps1 is None
+        assert jsjaws_class_instance.boxjs_ps1_path is None
         assert jsjaws_class_instance.malware_jail_output is None
         assert jsjaws_class_instance.malware_jail_output_path is None
         assert jsjaws_class_instance.boxjs_output_dir is None
@@ -307,8 +313,7 @@ class TestJsJaws:
         from subprocess import TimeoutExpired
 
         from assemblyline.odm.messages.task import Task as ServiceTask
-        from assemblyline_v4_service.common.dynamic_service_helper import \
-            OntologyResults
+        from assemblyline_v4_service.common.dynamic_service_helper import OntologyResults
         from assemblyline_v4_service.common.request import ServiceRequest
         from assemblyline_v4_service.common.result import ResultSection
         from assemblyline_v4_service.common.task import Task
@@ -376,9 +381,9 @@ class TestJsJaws:
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
         assert jsjaws_class_instance.wscript_only_config == path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
-        assert jsjaws_class_instance.extracted_wscript == "extracted_wscript.bat"
-        assert jsjaws_class_instance.extracted_wscript_path == path.join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript
+        assert jsjaws_class_instance.extracted_wscript_batch == "extracted_wscript.bat"
+        assert jsjaws_class_instance.extracted_wscript_batch_path == path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
         )
         assert jsjaws_class_instance.malware_jail_output == "output.txt"
         assert jsjaws_class_instance.malware_jail_output_path == path.join(
@@ -427,9 +432,13 @@ class TestJsJaws:
         from assemblyline_v4_service.common.result import Result
 
         jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_path = join(
-            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript
+        jsjaws_class_instance.extracted_wscript_batch = "extracted_wscript.bat"
+        jsjaws_class_instance.extracted_wscript_ps1 = "extracted_wscript.ps1"
+        jsjaws_class_instance.extracted_wscript_batch_path = join(
+            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
+        )
+        jsjaws_class_instance.extracted_wscript_ps1_path = join(
+            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript_ps1
         )
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         mocker.patch("jsjaws.extract_iocs_from_text_blob")
@@ -437,11 +446,11 @@ class TestJsJaws:
         res = Result()
         jsjaws_class_instance.artifact_list = []
         jsjaws_class_instance._extract_wscript(output, res)
-        assert exists(jsjaws_class_instance.extracted_wscript_path)
+        assert exists(jsjaws_class_instance.extracted_wscript_batch_path)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.extracted_wscript,
-            "path": jsjaws_class_instance.extracted_wscript_path,
-            "description": "Extracted WScript",
+            "name": jsjaws_class_instance.extracted_wscript_batch,
+            "path": jsjaws_class_instance.extracted_wscript_batch_path,
+            "description": "Extracted WScript batch file",
             "to_be_extracted": True,
         }
 
@@ -558,9 +567,9 @@ class TestJsJaws:
         jsjaws_class_instance.malware_jail_urls_json_path = path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
-        jsjaws_class_instance.extracted_wscript = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_path = path.join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript
+        jsjaws_class_instance.extracted_wscript_batch = "extracted_wscript.bat"
+        jsjaws_class_instance.extracted_wscript_batch_path = path.join(
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
         )
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
         jsjaws_class_instance.boxjs_snippets = path.join(jsjaws_class_instance.boxjs_output_dir, "snippets.json")
@@ -577,7 +586,7 @@ class TestJsJaws:
             f.write("blah")
 
         # extracted_wscript_path file
-        with open(jsjaws_class_instance.extracted_wscript_path, "a+") as f:
+        with open(jsjaws_class_instance.extracted_wscript_batch_path, "a+") as f:
             f.write("blah")
 
         # valid file 1
@@ -615,8 +624,7 @@ class TestJsJaws:
         from json import dumps
         from os import mkdir, path, remove
 
-        from assemblyline_v4_service.common.result import (BODY_FORMAT, Result,
-                                                           ResultSection)
+        from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection
 
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
             jsjaws_class_instance.working_directory, "payload/"
@@ -749,15 +757,18 @@ class TestJsJaws:
         from json import dumps
         from os import mkdir, path
 
-        from assemblyline_v4_service.common.result import (Result,
-                                                           ResultSection,
-                                                           ResultTableSection,
-                                                           TableRow)
+        from assemblyline_v4_service.common.result import Result, ResultSection, ResultTableSection, TableRow
 
+        jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
+        jsjaws_class_instance.boxjs_batch = "boxjs_cmds.bat"
+        jsjaws_class_instance.boxjs_batch_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.boxjs_batch)
+        jsjaws_class_instance.boxjs_ps1 = "boxjs_cmds.ps1"
+        jsjaws_class_instance.boxjs_ps1_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.boxjs_batch)
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.result")
         jsjaws_class_instance.boxjs_iocs = path.join(jsjaws_class_instance.boxjs_output_dir, "IOC.json")
         jsjaws_class_instance.artifact_list = []
         mkdir(jsjaws_class_instance.boxjs_output_dir)
+        mkdir(jsjaws_class_instance.malware_jail_payload_extraction_dir)
         cmd = "blah http://blah.ca"
         file = "blah.txt"
         body = [
@@ -788,9 +799,9 @@ class TestJsJaws:
         jsjaws_class_instance._extract_boxjs_iocs(res)
         assert check_section_equality(res.sections[0], correct_res_sec)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": "cmd_0.bat",
-            "path": path.join(jsjaws_class_instance.working_directory, "cmd_0.bat"),
-            "description": "Command Extracted",
+            "name": "boxjs_cmds.bat",
+            "path": jsjaws_class_instance.boxjs_batch_path,
+            "description": "Boxjs batch file",
             "to_be_extracted": True,
         }
 
@@ -820,9 +831,7 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import (Result,
-                                                           ResultTableSection,
-                                                           TableRow)
+        from assemblyline_v4_service.common.result import Result, ResultTableSection, TableRow
 
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)

