@@ -39,6 +39,7 @@ from assemblyline_v4_service.common.result import (
     TableRow,
 )
 from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
+from assemblyline_v4_service.common.tag_helper import add_tag
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
@@ -123,6 +124,7 @@ BOX_JS = "Box.js"
 SYNCHRONY = "Synchrony"
 EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
+GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
 
 # Regular Expressions
 
@@ -489,6 +491,12 @@ class JsJaws(ServiceBase):
         self.ignore_stdout_limit: Optional[bool] = None
         # Flag that the sample was embedded within a third party library
         self.embedded_code_in_lib: Optional[str] = None
+        # List of malicious domains detected from a gootloader sample
+        self.gootloader_uris: Optional[List[str]] = None
+        self.decoded_gootloader: Optional[str] = None
+        self.gootloader_stage2: Optional[str] = None
+        self.decoded_gootloader_path: Optional[str] = None
+        self.gootloader_stage2_path: Optional[str] = None
         # Flag that the sample contains a single script that writes unescaped values to the DOM
         self.single_script_with_unescape: Optional[bool] = None
         # Flag that the sample contains multiple scripts that write unescaped values to the DOM
@@ -516,6 +524,7 @@ class JsJaws(ServiceBase):
         # Reset per sample
         self.doc_write_hashes = set()
         self.embedded_code_in_lib = None
+        self.gootloader_uris = list()
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
@@ -542,6 +551,32 @@ class JsJaws(ServiceBase):
         :param file_content: The content of the file
         :return: A tuple of the file path and the file content
         """
+        self.decoded_gootloader = "DecodedJsPayload.js_"
+        self.gootloader_stage2 = "GootLoader3Stage2.js_"
+        self.decoded_gootloader_path = path.join(self.working_directory, self.decoded_gootloader)
+        self.gootloader_stage2_path = path.join(self.working_directory, self.gootloader_stage2)
+
+        # Let's try using the Gootloader-decoder lib first
+        resp = {}
+        gootloader_args = ["python3", "-Xfrozen_modules=off", f"./tools/gootloader/{GOOTLOADERAUTOJSDECODER}.py", "--unsafe-uris", "--payload-path", self.decoded_gootloader_path, "--stage2-path", self.gootloader_stage2_path, file_path]
+        gootloader_decoder_thr = Thread(target=self._run_tool, args=(GOOTLOADERAUTOJSDECODER, gootloader_args, resp), daemon=True)
+        gootloader_decoder_thr.start()
+        gootloader_decoder_thr.join(timeout=5)
+        gootloader_decoder_output = resp.get(GOOTLOADERAUTOJSDECODER, [])
+
+        # If we have a hit
+        if "Malicious Domains: \n" in gootloader_decoder_output:
+            self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
+            index_of_mal_uris_header = gootloader_decoder_output.index("Malicious Domains: \n")
+            self.gootloader_uris = [uri.strip() for uri in gootloader_decoder_output[index_of_mal_uris_header+1:] if uri.strip()]
+            self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
+            if path.exists(self.gootloader_stage2_path):
+                file_path = self.gootloader_stage2_path
+                file_content = open(self.gootloader_stage2_path, "rb").read()
+                return file_path, file_content
+
+        # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
+        # library). Let's try to use the libraries we manually extracted.
         try:
             filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
             if filtered_file_path and filtered_file_content:
@@ -728,10 +763,23 @@ class JsJaws(ServiceBase):
         :param request: The ServiceRequest object
         :return: None
         """
-        embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library")
+        heur = Heuristic(4)
+        embedded_code_in_lib_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
         embedded_code_in_lib_res_sec.add_line(f"Common library used: {self.embedded_code_in_lib}")
-        embedded_code_in_lib_res_sec.set_heuristic(4)
-        request.result.add_section(embedded_code_in_lib_res_sec)
+        embedded_code_in_lib_res_sec.add_tag("attribution.implant", "GOOTLOADER")
+        embedded_code_in_lib_res_sec.add_tag("attribution.family", "GOOTLOADER")
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.uri", self.gootloader_uris)
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.domain", self.gootloader_uris)
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.ip", self.gootloader_uris)
+
+        artifact = {
+            "name": self.decoded_gootloader,
+            "path": self.decoded_gootloader_path,
+            "description": f"Extracted Payload from {GOOTLOADERAUTOJSDECODER}",
+            "to_be_extracted": True,
+        }
+        self.log.debug(f"Adding extracted file: {self.decoded_gootloader}")
+        self.artifact_list.append(artifact)
 
     def _strip_null_bytes(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
         """
@@ -1105,7 +1153,7 @@ class JsJaws(ServiceBase):
                 "description": "Extracted JavaScript",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
+            self.log.debug(f"Adding supplementary JavaScript: {TEMP_JS_FILENAME}")
             self.artifact_list.append(artifact)
 
         # If the file consists of a single script with an unescape call, this is worth reporting

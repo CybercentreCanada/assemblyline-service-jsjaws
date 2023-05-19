@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/maplace0.2.7.js",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/maplace0.2.7.js",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,8 +17,26 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "tags": {
+          "attribution": {
+            "family": [
+              "GOOTLOADER"
+            ],
+            "implant": [
+              "GOOTLOADER"
+            ]
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.maghrebassurance.fr",
+                "www.ls1969.fr",
+                "www.macromixenlinea.com"
+              ]
+            }
+          }
+        },
+        "title_text": "Embedded Code in Common Library",
         "zeroize_on_tag_safe": false
       },
       {
@@ -97,7 +115,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "DecodedJsPayload.js_",
+        "sha256": "dc8666f71b2c1232e14c2904978f60cfefaac5ee58c7aa975b72f0d7afd588ec"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -132,7 +155,39 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "attribution.family": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "attribution.implant": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.ls1969.fr"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.macromixenlinea.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.maghrebassurance.fr"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/lodash4.17.21.js",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,8 +17,45 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "tags": {
+          "attribution": {
+            "family": [
+              "GOOTLOADER"
+            ],
+            "implant": [
+              "GOOTLOADER"
+            ]
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "cfkr.dk",
+                "toitumine.ee",
+                "thepatriotnation.net",
+                "cambridgehs76.org",
+                "busoken.com",
+                "pinoymoviepedia.ru",
+                "pornostreaming.net",
+                "card.abcmamma.tv",
+                "financialissues.org",
+                "candidteens.top"
+              ],
+              "uri": [
+                "https://cfkr.dk/xmlrpc.php",
+                "https://toitumine.ee/xmlrpc.php",
+                "https://thepatriotnation.net/xmlrpc.php",
+                "http://cambridgehs76.org/xmlrpc.php",
+                "https://busoken.com/xmlrpc.php",
+                "https://pinoymoviepedia.ru/xmlrpc.php",
+                "https://pornostreaming.net/xmlrpc.php",
+                "http://card.abcmamma.tv/xmlrpc.php",
+                "https://financialissues.org/xmlrpc.php",
+                "https://candidteens.top/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "Embedded Code in Common Library",
         "zeroize_on_tag_safe": false
       },
       {
@@ -52,7 +89,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 8f57b227d5859f878f34b1a88b3c560dc60ecf8f0340271dd72b57f45aa1967b: object Error...",
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 01912bde6a0a9d28cf471e133259c3adb592f15846ed5bd04acfb23ebd14c93b: object Error...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -74,7 +111,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tmeasureq is evaluated using a suspicious pattern",
+        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tmountainc is evaluated using a suspicious pattern",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -97,11 +134,16 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "DecodedJsPayload.js_",
+        "sha256": "168ef0d00184b5a2025c4b037eb41f21241b9a6d78e68f51ac14babb185cd504"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "8f57b227d5859f878f34b1a88b3c560dc60ecf8f0340271dd72b57f45aa1967b"
+        "sha256": "01912bde6a0a9d28cf471e133259c3adb592f15846ed5bd04acfb23ebd14c93b"
       }
     ]
   },
@@ -132,7 +174,126 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "attribution.family": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "attribution.implant": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "busoken.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "cambridgehs76.org"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "candidteens.top"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "card.abcmamma.tv"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "cfkr.dk"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "financialissues.org"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "pinoymoviepedia.ru"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "pornostreaming.net"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "thepatriotnation.net"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "toitumine.ee"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "http://cambridgehs76.org/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "http://card.abcmamma.tv/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://busoken.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://candidteens.top/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://cfkr.dk/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://financialissues.org/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://pinoymoviepedia.ru/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://pornostreaming.net/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://thepatriotnation.net/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://toitumine.ee/xmlrpc.php"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

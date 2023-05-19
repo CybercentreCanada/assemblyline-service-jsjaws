@@ -1,11 +1,12 @@
 # JsJaws Service
-This Assemblyline service integrates components from five open-source projects:
+This Assemblyline service integrates components from six open-source projects:
 * [Malware Jail](https://github.com/HynekPetrak/malware-jail), which provides a sandbox for semi-automatic Javascript
   malware analysis, deobfuscation and payload extraction.
 * [Box.js](https://github.com/CapacitorSet/box-js), which is a sandbox tool for studying JavaScript malware.
 * [JS-X-Ray](https://github.com/NodeSecure/js-x-ray), which is a tool for static analysis via SAST scanning.
 * [Synchrony](https://github.com/relative/synchrony), which is a tool for deobfuscating JavaScript that has been obfuscated with obfuscator.io (https://obfuscator.io).
 * [WScript Emulator](https://github.com/mrpapercut/wscript), which is a tool for emulating/tracing the Windows Script Host functionality. The libraries that this tool uses have been integrated into the MalwareJail environment.
+* [GootLoaderAutoJsDecode](https://github.com/mandiant/gootloader), which contains `GootLoaderAutoJsDecode.js` - a tool used for automatically decoding Gootloader files using static analysis.
 
 Both sandboxes use [Node VM](https://nodejs.org/api/vm.html) under the hood for malware sandboxing, although Box.js prefers a
 modified version of Node VM called [vm2](https://github.com/patriksimek/vm2).
