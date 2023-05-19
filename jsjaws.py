@@ -1964,6 +1964,9 @@ class JsJaws(ServiceBase):
         for visible_text in visible_texts:
             malformed_javascript = visible_text.string.strip()
 
+            if not malformed_javascript:
+                continue
+
             # Writing the malformed javascript to a file so that we can use Identify's fileinfo
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                 out.write(malformed_javascript.encode())
