@@ -1619,8 +1619,7 @@ class JsJaws(ServiceBase):
         return random_element_varname
 
 
-    @staticmethod
-    def _determine_element_value(element: PageElement) -> str:
+    def _determine_element_value(self, element: PageElement) -> str:
         """
         This method determines the value of an element
         :param element: The BeautifulSoup element
@@ -1628,11 +1627,17 @@ class JsJaws(ServiceBase):
         """
         # We cannot trust the text value of these elements, since it contains all nested items within it...
         if element.name in ["div", "p", "svg"]:
+
+            try:
+                element_string = element.string
+            except RecursionError as e:
+                self.log.debug(f"Could not access the element.string value due to '{e}'")
+                element_string = element.text if hasattr(element, "text") else ""
             # If the element contains a script child, and the element's string is the same as the script child's, set value to None
-            if element.next and element.next.name == "script" and element.string == element.next.string:
+            if element.next and element.next.name == "script" and element_string == element.next.string:
                 element_value = None
-            elif element.string is not None:
-                element_value = element.string.strip().replace("\n", "")
+            elif element_string is not None:
+                element_value = element_string.strip().replace("\n", "")
             else:
                 element_value = None
         else:
