@@ -49,6 +49,7 @@ from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
 from tools import tinycss2_helper
 from yaml import safe_load as yaml_safe_load
+from yara import Error as YARAError
 from yara import compile as yara_compile
 
 # Execution constants
@@ -1187,7 +1188,11 @@ class JsJaws(ServiceBase):
         else:
             for yara_rule in listdir("./yara"):
                 rules = yara_compile(filepath=path.join("./yara", yara_rule))
-                matches = rules.match(file_path)
+                try:
+                    matches = rules.match(file_path)
+                except YARAError as e:
+                    self.log.debug(f"Could not open file {file_path} due to '{e}'")
+                    matches = []
                 # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
                 if matches:
                     tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
