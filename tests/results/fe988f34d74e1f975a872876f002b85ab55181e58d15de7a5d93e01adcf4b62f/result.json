@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/combo.js",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/combo.js",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,8 +17,26 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "tags": {
+          "attribution": {
+            "family": [
+              "GOOTLOADER"
+            ],
+            "implant": [
+              "GOOTLOADER"
+            ]
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.macromixenlinea.com",
+                "www.lovlr.com",
+                "www.lukeamiller.net"
+              ]
+            }
+          }
+        },
+        "title_text": "Embedded Code in Common Library",
         "zeroize_on_tag_safe": false
       },
       {
@@ -97,7 +115,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "DecodedJsPayload.js_",
+        "sha256": "d41c30a815825f8c1a7abadf439026cb49616e887ba95536e39c24de42225ce7"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -132,7 +155,39 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "attribution.family": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "attribution.implant": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.lovlr.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.lukeamiller.net"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.macromixenlinea.com"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

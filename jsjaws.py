@@ -39,6 +39,7 @@ from assemblyline_v4_service.common.result import (
     TableRow,
 )
 from assemblyline_v4_service.common.safelist_helper import is_tag_safelisted
+from assemblyline_v4_service.common.tag_helper import add_tag
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
@@ -560,26 +561,30 @@ class JsJaws(ServiceBase):
         gootloader_decoder_thr = Thread(target=self._run_tool, args=(GOOTLOADERAUTOJSDECODER, gootloader_args, resp), daemon=True)
         gootloader_decoder_thr.start()
         gootloader_decoder_thr.join(timeout=5)
-        gootloader_decoder_output = resp[GOOTLOADERAUTOJSDECODER]
+        gootloader_decoder_output = resp.get(GOOTLOADERAUTOJSDECODER, [])
 
         # If we have a hit
         if "Malicious Domains: \n" in gootloader_decoder_output:
+            self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
             index_of_mal_uris_header = gootloader_decoder_output.index("Malicious Domains: \n")
             self.gootloader_uris = [uri.strip() for uri in gootloader_decoder_output[index_of_mal_uris_header+1:] if uri.strip()]
-            file_path = self.gootloader_stage2_path
-            file_content = open(self.gootloader_stage2_path, "rb").read()
             self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
-        else:
-            # Looks like the Gootloader-decoder did not work. Let's try to use the libraries we manually extracted.
-            try:
-                filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
-                if filtered_file_path and filtered_file_content:
-                    self.log.debug(f"Extracted malicious code from a third-party library: {lib_path}")
-                    file_path = filtered_file_path
-                    file_content = filtered_file_content
-                    self.embedded_code_in_lib = lib_path
-            except UnicodeDecodeError:
-                pass
+            if path.exists(self.gootloader_stage2_path):
+                file_path = self.gootloader_stage2_path
+                file_content = open(self.gootloader_stage2_path, "rb").read()
+                return file_path, file_content
+
+        # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
+        # library). Let's try to use the libraries we manually extracted.
+        try:
+            filtered_file_path, filtered_file_content, lib_path = self._extract_filtered_code(file_content)
+            if filtered_file_path and filtered_file_content:
+                self.log.debug(f"Extracted malicious code from a third-party library: {lib_path}")
+                file_path = filtered_file_path
+                file_content = filtered_file_content
+                self.embedded_code_in_lib = lib_path
+        except UnicodeDecodeError:
+            pass
 
         return file_path, file_content
 
@@ -757,14 +762,14 @@ class JsJaws(ServiceBase):
         :param request: The ServiceRequest object
         :return: None
         """
-        embedded_code_in_lib_res_sec = ResultTextSection("Embedded code was found in common library, typical of Gootloader")
+        heur = Heuristic(4)
+        embedded_code_in_lib_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
         embedded_code_in_lib_res_sec.add_line(f"Common library used: {self.embedded_code_in_lib}")
-        embedded_code_in_lib_res_sec.set_heuristic(4)
         embedded_code_in_lib_res_sec.add_tag("attribution.implant", "GOOTLOADER")
         embedded_code_in_lib_res_sec.add_tag("attribution.family", "GOOTLOADER")
-        for uri in self.gootloader_uris:
-            embedded_code_in_lib_res_sec.add_tag("network.dynamic.uri", uri)
-        request.result.add_section(embedded_code_in_lib_res_sec)
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.uri", self.gootloader_uris)
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.domain", self.gootloader_uris)
+        _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.ip", self.gootloader_uris)
 
         artifact = {
             "name": self.decoded_gootloader,
@@ -1147,7 +1152,7 @@ class JsJaws(ServiceBase):
                 "description": "Extracted JavaScript",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding extracted JavaScript: {TEMP_JS_FILENAME}")
+            self.log.debug(f"Adding supplementary JavaScript: {TEMP_JS_FILENAME}")
             self.artifact_list.append(artifact)
 
         # If the file consists of a single script with an unescape call, this is worth reporting
