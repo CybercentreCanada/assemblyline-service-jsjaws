@@ -1,11 +1,11 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2020,
+    "score": 2031,
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/mdl.js",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,8 +17,45 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "tags": {
+          "attribution": {
+            "family": [
+              "GOOTLOADER"
+            ],
+            "implant": [
+              "GOOTLOADER"
+            ]
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "andrzejczyk.net",
+                "grayhouse.co",
+                "ideotvojezdravie.sk",
+                "exystence.net",
+                "starsetonline.com",
+                "funnnyfunny.com",
+                "uchilka.in.ua",
+                "aspencontractingventura.com",
+                "dolanyok.com",
+                "wlext.is"
+              ],
+              "uri": [
+                "http://andrzejczyk.net/xmlrpc.php",
+                "https://grayhouse.co/xmlrpc.php",
+                "https://ideotvojezdravie.sk/xmlrpc.php",
+                "https://exystence.net/xmlrpc.php",
+                "https://starsetonline.com/xmlrpc.php",
+                "https://funnnyfunny.com/xmlrpc.php",
+                "https://uchilka.in.ua/xmlrpc.php",
+                "https://aspencontractingventura.com/xmlrpc.php",
+                "https://dolanyok.com/xmlrpc.php",
+                "https://wlext.is/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "Embedded Code in Common Library",
         "zeroize_on_tag_safe": false
       },
       {
@@ -52,7 +89,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in dddbe4d09997e9a1bbf08d024cfc35fd219654dc4366e7236de5e88cc31bb8a7: object Error...",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: sHelL.applICatioN\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in e4eed1dad4864a0583696a975b7f9cdb514c8d13013922928d9d9fc15ea656f3: object Error...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -74,7 +133,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tsegmentz is evaluated using a suspicious pattern",
+        "body": "JavaScript use a suspicious pattern for evaluation\n\t\tlweuvou is evaluated using a suspicious pattern",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -93,20 +152,78 @@
         "tags": {},
         "title_text": "Signature: SuspiciousFunctionCall",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\"",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\""
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "DecodedJsPayload.js_",
+        "sha256": "b41c6857bae6a7a0bbeddbe80befe28b85d838f6856fc844762e1bba559578ec"
+      },
+      {
+        "name": "boxjs_cmds.bat",
+        "sha256": "f8cc51983cf9a74f49d3dee2ca65f933cfa27152e61c58b2fa24a2be1f762fc4"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "dddbe4d09997e9a1bbf08d024cfc35fd219654dc4366e7236de5e88cc31bb8a7"
+        "sha256": "e4eed1dad4864a0583696a975b7f9cdb514c8d13013922928d9d9fc15ea656f3"
       }
     ]
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -132,7 +249,133 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "attribution.family": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "attribution.implant": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\""
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "andrzejczyk.net"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "aspencontractingventura.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "dolanyok.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "exystence.net"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "funnnyfunny.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "grayhouse.co"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "ideotvojezdravie.sk"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "starsetonline.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "uchilka.in.ua"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "wlext.is"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "http://andrzejczyk.net/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://aspencontractingventura.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://dolanyok.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://exystence.net/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://funnnyfunny.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://grayhouse.co/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://ideotvojezdravie.sk/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://starsetonline.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://uchilka.in.ua/xmlrpc.php"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "https://wlext.is/xmlrpc.php"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

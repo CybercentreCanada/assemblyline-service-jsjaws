@@ -151,7 +151,7 @@ heuristics:
     name: Embedded Code in Common Library
     score: 1000
     filetype: '.*'
-    description: Embedded code was discovered in a file posing as a common library
+    description: Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.
 
   - heur_id: 5
     name: Microsoft Support Diagnostic Tool found in location redirection

@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Common library used: clean_libs/underscore1.13.6.js",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/underscore1.13.6.js",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,8 +17,26 @@
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
-        "title_text": "Embedded code was found in common library",
+        "tags": {
+          "attribution": {
+            "family": [
+              "GOOTLOADER"
+            ],
+            "implant": [
+              "GOOTLOADER"
+            ]
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "www.travelettes.net",
+                "www.tokyo-hi-vision.com",
+                "www.thomadaneau.com"
+              ]
+            }
+          }
+        },
+        "title_text": "Embedded Code in Common Library",
         "zeroize_on_tag_safe": false
       },
       {
@@ -97,7 +115,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "DecodedJsPayload.js_",
+        "sha256": "66534921766a2fb5a9111e112f4eebe4ae9b798c59dfd0d58b505b0e5f95482b"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -132,7 +155,39 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "attribution.family": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "attribution.implant": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "GOOTLOADER"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.thomadaneau.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.tokyo-hi-vision.com"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "www.travelettes.net"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }
