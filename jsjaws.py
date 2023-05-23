@@ -771,6 +771,10 @@ class JsJaws(ServiceBase):
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.uri", self.gootloader_uris)
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.domain", self.gootloader_uris)
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.ip", self.gootloader_uris)
+        if self.gootloader_uris:
+            embedded_code_in_lib_res_sec.add_line("GOOTLOADER IOCs:")
+            for uri in self.gootloader_uris:
+                embedded_code_in_lib_res_sec.add_line(f"\t-\t{safe_str(uri)}")
 
         artifact = {
             "name": self.decoded_gootloader,

@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://tottstore.com/xmlrpc.php\n\t-\thttps://trueteenbabes.com/xmlrpc.php\n\t-\thttps://thesmithrestaurant.com/xmlrpc.php\n\t-\thttps://lamaa.sa/xmlrpc.php\n\t-\thttps://architecturalsankul.com/xmlrpc.php\n\t-\thttp://71397454a0.url-de-test.ws/xmlrpc.php\n\t-\thttps://funnelslive.com/xmlrpc.php\n\t-\thttps://iadnews.in/xmlrpc.php\n\t-\thttps://wototvet.ru/xmlrpc.php\n\t-\thttps://spkp.com.au/xmlrpc.php",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
