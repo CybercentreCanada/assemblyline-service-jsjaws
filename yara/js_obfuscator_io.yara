@@ -10,7 +10,7 @@ rule JS_obfuscator_io {
         sharing = "TLP:WHITE"
         source = "CCCS"
         author = "reveng@CCCS"
-        description = "Detects javascript file obfuscated wiht obfuscator.io (https://obfuscator.io)"
+        description = "Detects javascript file obfuscated with obfuscator.io (https://obfuscator.io)"
         category = "TECHNIQUE"
         technique = "OBFUSCATION"
         report = "TA22-0101"
