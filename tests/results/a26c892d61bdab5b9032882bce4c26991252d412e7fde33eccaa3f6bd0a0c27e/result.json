@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 111,
+    "score": 1111,
     "sections": [
       {
         "auto_collapse": false,
@@ -89,11 +89,33 @@
         },
         "title_text": "MalwareJail extracted the following IOCs",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
     "extracted": [
+      {
+        "name": "a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned",
+        "sha256": "357530966a538ee95d7c42758edf0cbcb60406a757cf2e90397a9a25b136d182"
+      },
       {
         "name": "extracted_wscript.bat",
         "sha256": "60b6b1e1a90e799f3226ab56f341ea71a3956c36f3c1ee25ec388af2330d4858"
@@ -121,6 +143,11 @@
         "signatures": [
           "runs_shell_application"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
       }
     ],
     "tags": {
