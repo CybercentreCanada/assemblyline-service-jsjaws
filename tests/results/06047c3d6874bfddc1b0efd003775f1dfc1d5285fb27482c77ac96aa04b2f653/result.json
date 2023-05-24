@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 122,
+    "score": 1122,
     "sections": [
       {
         "auto_collapse": false,
@@ -153,11 +153,33 @@
         },
         "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file 06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
     "extracted": [
+      {
+        "name": "06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned",
+        "sha256": "4c9f5918bcc7510591e6401b8e8d8f4e2b567d430cf3081c4586e977d9627b15"
+      },
       {
         "name": "boxjs_cmds.ps1",
         "sha256": "971cc0af22ed0c974f6b9298aed9d9b0499c25ee5390b211f3d288c61b8993a7"
@@ -197,6 +219,11 @@
         "signatures": [
           "runs_shell_application"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
       }
     ],
     "tags": {

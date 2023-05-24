@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 111,
+    "score": 1111,
     "sections": [
       {
         "auto_collapse": false,
@@ -94,6 +94,24 @@
         },
         "title_text": "The script ran the following commands",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file 5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -106,6 +124,10 @@
       {
         "name": "boxjs_cmds.bat",
         "sha256": "9b64b7d8cee577d55fe9008941646643c052a22607e92bf7cd0ca0452b5a1cb4"
+      },
+      {
+        "name": "5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned",
+        "sha256": "dd8e77a28261480c58375d3b49f67705bdd36a79bc3e10d96a8154cfd4fe4b8f"
       }
     ],
     "supplementary": []
@@ -130,6 +152,11 @@
         "signatures": [
           "runs_shell_application"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
+        "signatures": []
       }
     ],
     "tags": {

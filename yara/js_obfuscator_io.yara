@@ -2,10 +2,10 @@ rule JS_obfuscator_io {
 
     meta:
         id = "22kXYAtxLg84HyamwhPEF4"
-        fingerprint = "023b22718a4987ca06dc616479455918a0761c3d7a34828f2cb6657f8342ee19"
-        version = "2.1"
+        fingerprint = "670b1afe7ce98b198c6124990291cf2c8504c114f9eb8c323be4ffe853851550"
+        version = "2.2"
         first_imported = "2022-10-13"
-        last_modified = "2023-02-23"
+        last_modified = "2023-05-23"
         status = "RELEASED"
         sharing = "TLP:WHITE"
         source = "CCCS"
@@ -24,8 +24,8 @@ rule JS_obfuscator_io {
     condition:
         // two closely located push_shifts on identical variables
         for 1 i in (1..#push_shift\2):(
-            @push_shift[i*2] - @push_shift[i*2-1] >=34 and
-            @push_shift[i*2] - @push_shift[i*2-1] <=61 and
+            @push_shift[i*2] - @push_shift[i*2-1] >=20 and
+            @push_shift[i*2] - @push_shift[i*2-1] <=300 and
             uint8(@push_shift[i*2]-1) == uint8(@push_shift[i*2]-1)
         )
         or

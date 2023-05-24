@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1002,
+    "score": 2502,
     "sections": [
       {
         "auto_collapse": false,
@@ -107,10 +107,11 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 500,
+          "score": 1000,
           "score_map": {},
           "signatures": {
-            "function_inception_url": 1
+            "function_inception_url": 1,
+            "obfuscator_io_usage_url": 1
           }
         },
         "tags": {
@@ -136,11 +137,34 @@
         },
         "title_text": "URLs",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "View extracted file 75a35b91e6295c6287dbd858663b9f126bfd6e29a278e435ab9c17c2eda25ee1.cleaned for details.",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 8,
+          "score": 1000,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "The file was deobfuscated/cleaned by Synchrony",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "75a35b91e6295c6287dbd858663b9f126bfd6e29a278e435ab9c17c2eda25ee1.cleaned",
+        "sha256": "ce5144044b14b57fa9f8bfdb2a9e6f2b1a59fcd89b03a0d8c9cc59e07653d75e"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_css.css",
@@ -158,12 +182,18 @@
         "attack_ids": [],
         "heur_id": 1,
         "signatures": [
-          "function_inception_url"
+          "function_inception_url",
+          "obfuscator_io_usage_url"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 8,
         "signatures": []
       },
       {
@@ -187,7 +217,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "dealsontrainers.org"
         },
@@ -199,7 +230,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "iscast.com.br"
         },
@@ -211,7 +243,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "tapasyaevents.com"
         }
@@ -225,7 +258,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
         },
@@ -237,7 +271,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "https://iscast.com.br/udit/udit.php?68977"
         },
@@ -249,7 +284,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
         }
@@ -263,7 +299,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "/fmu/fmu.php?55724"
         },
@@ -275,7 +312,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "/tete/tete.php?85434"
         },
@@ -287,7 +325,8 @@
         {
           "heur_id": 1,
           "signatures": [
-            "function_inception_url"
+            "function_inception_url",
+            "obfuscator_io_usage_url"
           ],
           "value": "/udit/udit.php?68977"
         }
