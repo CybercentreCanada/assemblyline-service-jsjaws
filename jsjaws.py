@@ -116,6 +116,9 @@ WSHSHELL = "WshShell"
 HTMLSCRIPTELEMENT = "HTMLScriptElement"
 HTMLSCRIPTELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
 
+# These characters are cannot be included in a variable name
+INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";"]
+
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
 MALWARE_JAIL = "MalwareJail"
@@ -1667,8 +1670,17 @@ class JsJaws(ServiceBase):
             # We cannot assign a random element variable name to object tag elements
             random_element_varname = element_id
         else:
-            # JavaScript variables cannot have hyphens in their names
-            random_element_varname = f"{element_id.lower().replace('-', '_')}_jsjaws"
+
+            # JavaScript variables cannot have hyphens, spaces, colons, commas, semi-colons, etc. in their names
+            for invalid_varname_char in INVALID_VARNAME_CHARS:
+                if invalid_varname_char in element_id:
+                    element_id = element_id.replace(invalid_varname_char, "_")
+
+            # Let's be reasonable with variable name length
+            if len(element_id) > 25:
+                element_id = element_id[:25]
+
+            random_element_varname = f"{element_id.lower()}_jsjaws"
 
             # If the random_element_varname starts with a number, prepend that with a string
             if random_element_varname[0].isdigit():
