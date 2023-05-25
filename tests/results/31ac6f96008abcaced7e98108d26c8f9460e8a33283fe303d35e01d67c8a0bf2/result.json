@@ -34,28 +34,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\tx.Click()",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -74,6 +52,28 @@
         },
         "tags": {},
         "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -144,28 +144,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "runs_ps1_no_profile": 500
-          },
-          "signatures": {
-            "runs_ps1_no_profile": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: RunsNoProfilePowerShell",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -184,6 +162,28 @@
         },
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_ps1_no_profile": 500
+          },
+          "signatures": {
+            "runs_ps1_no_profile": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsNoProfilePowerShell",
         "zeroize_on_tag_safe": false
       },
       {
@@ -282,14 +282,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "creates_wsh_object"
+          "append_and_click"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "append_and_click"
+          "creates_wsh_object"
         ]
       },
       {
@@ -317,14 +317,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "runs_ps1_no_profile"
+          "runs_ps1"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "runs_ps1"
+          "runs_ps1_no_profile"
         ]
       },
       {

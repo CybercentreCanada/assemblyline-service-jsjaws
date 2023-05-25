@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -48,36 +48,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "network_request": 10
+            "creates_wsh_object": 10
           },
           "signatures": {
-            "network_request": 1
+            "creates_wsh_object": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[13].setRequestHeader(\"User-Agent\", \"mozilla firefox\")\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "prepare_network_request": 10
-          },
-          "signatures": {
-            "prepare_network_request": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: PrepareNetworkRequest",
+        "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -148,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -158,14 +136,36 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "creates_wsh_object": 10
+            "network_request": 10
           },
           "signatures": {
-            "creates_wsh_object": 1
+            "network_request": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: CreatesWshObject",
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[13].setRequestHeader(\"User-Agent\", \"mozilla firefox\")\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
         "zeroize_on_tag_safe": false
       },
       {
@@ -192,28 +192,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[15].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 250,
-          "score_map": {
-            "writes_executable": 250
-          },
-          "signatures": {
-            "writes_executable": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: WritesExecutable",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tWScript.CreateObject(\"Schedule.service\")\n\n\t\tnew Schedule.Service[20]()\n\n\t\tSchedule.Service[20].Connect()\n\n\t\tSchedule.Service[20].GetFolder(\"\\\")\n\n\t\tSchedule.Service[20].NewTask(0)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -232,6 +210,28 @@
         },
         "tags": {},
         "title_text": "Signature: ScheduledTask",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[15].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "writes_executable": 250
+          },
+          "signatures": {
+            "writes_executable": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: WritesExecutable",
         "zeroize_on_tag_safe": false
       },
       {
@@ -359,14 +359,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "prepare_network_request"
+          "creates_wsh_object"
         ]
       },
       {
@@ -394,7 +387,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "creates_wsh_object"
+          "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
         ]
       },
       {
@@ -408,14 +408,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "writes_executable"
+          "scheduled_task"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "scheduled_task"
+          "writes_executable"
         ]
       },
       {
