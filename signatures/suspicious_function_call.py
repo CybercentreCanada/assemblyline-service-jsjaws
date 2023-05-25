@@ -10,7 +10,7 @@ class SuspiciousFunctionCall(Signature):
             heuristic_id=3,
             name="suspicious_function_call",
             description="JavaScript use a suspicious pattern for evaluation",
-            severity=0
+            severity=5
         )
 
     def process_output(self, output):
