@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1093,
+    "score": 1193,
     "sections": [
       {
         "auto_collapse": false,
@@ -148,7 +148,29 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\t[2023-05-25T13:10:37.912Z] fetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzc...\n\t\t[2023-05-25T13:10:37.912Z] XMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTts...\n\t\t[2023-05-25T13:10:37.913Z] new URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEg...",
+        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: EMAIL,Email,PASSWORD,Password,Skype,account,email,pa...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "phishing": 100
+          },
+          "signatures": {
+            "phishing": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Phishing",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\t[2023-05-25T13:18:20.095Z] fetch(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEgzc...\n\t\t[2023-05-25T13:18:20.095Z] XMLHttpRequest[77].open(get,https://api.telegram.org/bot6138224277:AAGTts...\n\t\t[2023-05-25T13:18:20.096Z] new URL(https://api.telegram.org/bot6138224277:AAGTtsiVLxup1-ifw6g3spfMEg...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -452,6 +474,13 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "phishing"
         ]
       },
       {

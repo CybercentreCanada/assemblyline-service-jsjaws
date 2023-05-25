@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2053,
+    "score": 2153,
     "sections": [
       {
         "auto_collapse": false,
@@ -118,6 +118,28 @@
         },
         "tags": {},
         "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: Password,email,password",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "phishing": 100
+          },
+          "signatures": {
+            "phishing": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Phishing",
         "zeroize_on_tag_safe": false
       },
       {
@@ -359,6 +381,13 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "phishing"
         ]
       },
       {
