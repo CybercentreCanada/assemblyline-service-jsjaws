@@ -34,6 +34,28 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'ip.seeip.org' is for a GeoIP service.\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -96,28 +118,6 @@
         },
         "tags": {},
         "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "append_and_click": 10
-          },
-          "signatures": {
-            "append_and_click": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       },
       {
@@ -337,6 +337,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "geoip_service_request"
         ]
       },
@@ -352,13 +359,6 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "append_and_click"
         ]
       },
       {

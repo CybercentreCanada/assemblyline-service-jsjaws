@@ -78,28 +78,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "runs_shell": 10
-          },
-          "signatures": {
-            "runs_shell": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: RunsShell",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\t ws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /...",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -118,6 +96,28 @@
         },
         "tags": {},
         "title_text": "Signature: RunsScheduledTask",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: RunsShell",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -156,14 +156,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "runs_shell"
+          "runs_schtasks_via_cmd_prompt"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "runs_schtasks_via_cmd_prompt"
+          "runs_shell"
         ]
       },
       {

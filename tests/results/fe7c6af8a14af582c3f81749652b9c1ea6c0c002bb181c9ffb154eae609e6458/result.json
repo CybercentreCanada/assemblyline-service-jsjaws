@@ -38,28 +38,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "get_object": 10
-          },
-          "signatures": {
-            "get_object": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: GetObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript creates an AutomationObject\n\t\tAutomationObject[24](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -104,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t'sTKiQmbpdFLJpEZLd0bI5SeLNkQQp0dcxVY0FGRtFmcn9mcQxFX6MEIyMDbisiIsRmIrIib1JnIoUGdhVmcD5iYwVGd4UnSrtTK...",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -114,14 +92,14 @@
           "heur_id": 3,
           "score": 10,
           "score_map": {
-            "obfuscation": 10
+            "get_object": 10
           },
           "signatures": {
-            "obfuscation": 1
+            "get_object": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Obfuscation",
+        "title_text": "Signature: GetObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -144,6 +122,28 @@
         },
         "tags": {},
         "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t'sTKiQmbpdFLJpEZLd0bI5SeLNkQQp0dcxVY0FGRtFmcn9mcQxFX6MEIyMDbisiIsRmIrIib1JnIoUGdhVmcD5iYwVGd4UnSrtTK...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "obfuscation": 10
+          },
+          "signatures": {
+            "obfuscation": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
       },
       {
@@ -331,13 +331,6 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "get_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "auto_object"
         ]
       },
@@ -352,7 +345,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "obfuscation"
+          "get_object"
         ]
       },
       {
@@ -360,6 +353,13 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "obfuscation"
         ]
       },
       {
