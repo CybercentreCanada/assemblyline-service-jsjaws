@@ -38,28 +38,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\n\t\tnew Scripting.FileSystemObject[16]()\n\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 100,
-          "score_map": {
-            "file_system_object": 100
-          },
-          "signatures": {
-            "file_system_object": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: FileSystemObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -78,6 +56,28 @@
         },
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\n\t\tnew Scripting.FileSystemObject[16]()\n\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "file_system_object": 100
+          },
+          "signatures": {
+            "file_system_object": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: FileSystemObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -268,14 +268,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "file_system_object"
+          "creates_wsh_object"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "creates_wsh_object"
+          "file_system_object"
         ]
       },
       {

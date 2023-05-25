@@ -2799,7 +2799,8 @@ class JsJaws(ServiceBase):
         # Adding signatures to results
         if len(signatures_that_hit) > 0:
             sigs_res_sec = ResultSection("Signatures")
-            for sig_that_hit in signatures_that_hit:
+            # Sort alphabetically since the results could be inconsistent otherwise if threads finish at different times
+            for sig_that_hit in sorted(signatures_that_hit, key=lambda x: x.name):
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)

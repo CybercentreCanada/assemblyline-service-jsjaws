@@ -56,28 +56,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses unescape() to decode an encoded string\n\t\treturn e},random:Un,now:Wn,escape:$n,unescape:Cn,templateSettings:Kn,template:function(n,r,t){!r&&t&...",
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "unescape": 10
-          },
-          "signatures": {
-            "unescape": 1
-          }
-        },
-        "tags": {},
-        "title_text": "Signature: Unescape",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[12].setRequestHeader(\"Upgrade-Insecure-Requests\", \"1\")\n",
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -96,6 +74,28 @@
         },
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\treturn e},random:Un,now:Wn,escape:$n,unescape:Cn,templateSettings:Kn,template:function(n,r,t){!r&&t&...",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "unescape": 10
+          },
+          "signatures": {
+            "unescape": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
       },
       {
@@ -241,14 +241,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "unescape"
+          "prepare_network_request"
         ]
       },
       {
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "prepare_network_request"
+          "unescape"
         ]
       },
       {

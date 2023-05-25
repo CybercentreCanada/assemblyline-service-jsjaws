@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2053,
+    "score": 2153,
     "sections": [
       {
         "auto_collapse": false,
@@ -30,6 +30,28 @@
         "heuristic": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
       },
       {
@@ -100,7 +122,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
+        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: Password,email,password",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -108,16 +130,16 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 10,
+          "score": 100,
           "score_map": {
-            "append_and_click": 10
+            "phishing": 100
           },
           "signatures": {
-            "append_and_click": 1
+            "phishing": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: AppendAndClick",
+        "title_text": "Signature: Phishing",
         "zeroize_on_tag_safe": false
       },
       {
@@ -337,6 +359,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "geoip_service_request"
         ]
       },
@@ -358,7 +387,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "append_and_click"
+          "phishing"
         ]
       },
       {
