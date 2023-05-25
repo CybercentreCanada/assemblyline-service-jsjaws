@@ -254,7 +254,7 @@ APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,([\s\S]*)")
 
 # Example:
 # const element99_jsjaws =
-ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
+ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)\w*_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
