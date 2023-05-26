@@ -64,6 +64,8 @@ class Signature:
             split_line = string.split("] ")
             if len(split_line) == 2:
                 string = split_line[1]
+            elif len(split_line) > 2:
+                string = "] ".join(split_line[1:])
 
             # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
             if match_all and all(indicator.lower() in string.lower() for indicator in self.indicators) and \

