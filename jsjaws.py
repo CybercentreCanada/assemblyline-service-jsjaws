@@ -254,7 +254,7 @@ APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,([\s\S]*)")
 
 # Example:
 # const element99_jsjaws =
-ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)_jsjaws = ")
+ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)\w*_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
@@ -1633,6 +1633,20 @@ class JsJaws(ServiceBase):
         return idx
 
     @staticmethod
+    def _create_unique_element_id(element_id: str, set_of_variable_names: Set[str]) -> str:
+        """
+        If the proposed element ID already exists, then mock one
+        :param element_id: The element id
+        :param set_of_variable_names: A set containing all variable names
+        :return: The name of the element ID
+        """
+        if element_id in set_of_variable_names:
+            proposed_element_id = element_id
+            while element_id in set_of_variable_names:
+                element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
+        return element_id
+
+    @staticmethod
     def _determine_element_id(element: PageElement, idx: int, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the element id of the element, and will create one if
@@ -1649,20 +1663,17 @@ class JsJaws(ServiceBase):
         if element_id == "":
             element_id = f"element{idx}"
 
-        # If the proposed element ID already exists, then mock one
-        if element_id in set_of_variable_names:
-            proposed_element_id = element_id
-            while element_id in set_of_variable_names:
-                element_id = f"{proposed_element_id}{get_id_from_data(element_id)}"
+        element_id = JsJaws._create_unique_element_id(element_id, set_of_variable_names)
 
         return element_id
 
     @staticmethod
-    def _determine_element_varname(element: PageElement, element_id: str) -> str:
+    def _determine_element_varname(element: PageElement, element_id: str, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the name of the variable representing the element
         :param element: The BeautifulSoup element
         :param element_id: The element id
+        :param set_of_variable_names: A set containing all variable names
         :return: The name of the variable
         """
         # <object> tags are special https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
@@ -1680,6 +1691,8 @@ class JsJaws(ServiceBase):
             if len(element_id) > 25:
                 element_id = element_id[:25]
 
+            element_id = JsJaws._create_unique_element_id(element_id, set_of_variable_names)
+            set_of_variable_names.add(element_id)
             random_element_varname = f"{element_id.lower()}_jsjaws"
 
             # If the random_element_varname starts with a number, prepend that with a string
@@ -1865,7 +1878,7 @@ class JsJaws(ServiceBase):
         :return: The script that creates elements dynamically
         """
         # First get the name of the variable
-        random_element_varname = self._determine_element_varname(element, element_id)
+        random_element_varname = self._determine_element_varname(element, element_id, set_of_variable_names)
 
         # Initialize the script
         create_element_script = self._initialize_create_element_script(random_element_varname, element, element_id)
