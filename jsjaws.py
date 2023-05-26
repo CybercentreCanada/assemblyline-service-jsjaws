@@ -2980,16 +2980,18 @@ class JsJaws(ServiceBase):
             if is_tag_safelisted(safe_url, ["network.dynamic.uri", "network.static.uri"], self.safelist):
                 return
             urls_result_section.add_tag("network.dynamic.uri", safe_url)
+            # Extract IP
+            ip_match = re.search(IP_REGEX, safe_url)
+            ip = None
+            if ip_match:
+                ip = ip_match.group(0)
+                urls_result_section.add_tag("network.dynamic.ip", ip)
             # Extract domain
             domain_match = re.search(DOMAIN_REGEX, safe_url)
             if domain_match:
                 domain = domain_match.group(0)
-                urls_result_section.add_tag("network.dynamic.domain", domain)
-            # Extract IP
-            ip_match = re.search(IP_REGEX, safe_url)
-            if ip_match:
-                ip = ip_match.group(0)
-                urls_result_section.add_tag("network.dynamic.ip", ip)
+                if not ip or (ip and domain != ip):
+                    urls_result_section.add_tag("network.dynamic.domain", domain)
             # Extract URI path
             if "//" in safe_url:
                 safe_url = safe_url.split("//")[1]

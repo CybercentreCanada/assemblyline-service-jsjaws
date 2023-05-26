@@ -3,4 +3,4 @@ html5lib
 tinycss2
 yara-python
 PyYAML
-multidecoder==0.0.14
+multidecoder<1.0.0
