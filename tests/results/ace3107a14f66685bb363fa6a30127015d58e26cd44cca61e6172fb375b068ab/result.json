@@ -85,9 +85,6 @@
         "tags": {
           "network": {
             "dynamic": {
-              "domain": [
-                "194.180.174.158"
-              ],
               "ip": [
                 "194.180.174.158"
               ],
@@ -140,13 +137,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "194.180.174.158"
-        }
-      ],
       "network.dynamic.ip": [
         {
           "heur_id": 1,
