@@ -24,6 +24,9 @@ class Phishing(Signature):
 
         len_of_pwd_hits = len(results)
 
+        if not len_of_pwd_hits:
+            return
+
         # Next look for account prompts
         account_regex = f"(?i)\\b({'|'.join(['email', 'account', 'phone', 'skype'])})\\b"
         for line in output:
