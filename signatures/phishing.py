@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to phishing
 """
-from assemblyline_v4_service.common.utils import PASSWORD_WORDS
+from assemblyline_service_utilities.common.utils import PASSWORD_WORDS
 from signatures.abstracts import Signature
 
 

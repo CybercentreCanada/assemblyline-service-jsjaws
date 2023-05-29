@@ -1,8 +1,20 @@
 import os
 import shutil
 from hashlib import sha256
+from json import dumps
+from os import mkdir, path, remove
+from os.path import exists, join
+from subprocess import TimeoutExpired
 
 import pytest
+from assemblyline.common.identify import Identify
+from assemblyline.odm.messages.task import Task as ServiceTask
+from assemblyline_service_utilities.common.dynamic_service_helper import OntologyResults
+from assemblyline_v4_service.common.request import ServiceRequest
+from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection, ResultTableSection, TableRow
+from assemblyline_v4_service.common.task import Task
+from jsjaws import JsJaws
+from signatures.abstracts import Signature
 
 # Getting absolute paths, names and regexes
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -218,8 +230,6 @@ def dummy_request_class_instance(dummy_task_class):
 def jsjaws_class_instance():
     create_tmp_manifest()
     try:
-        from jsjaws import JsJaws
-
         yield JsJaws()
     finally:
         remove_tmp_manifest()
@@ -262,8 +272,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_init(jsjaws_class_instance):
-        from assemblyline.common.identify import Identify
-
         assert jsjaws_class_instance.artifact_list is None
         assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump is None
@@ -309,15 +317,6 @@ class TestJsJaws:
     @staticmethod
     @pytest.mark.parametrize("sample", samples)
     def test_execute(sample, jsjaws_class_instance, mocker):
-        from os import mkdir, path
-        from subprocess import TimeoutExpired
-
-        from assemblyline.odm.messages.task import Task as ServiceTask
-        from assemblyline_v4_service.common.dynamic_service_helper import OntologyResults
-        from assemblyline_v4_service.common.request import ServiceRequest
-        from assemblyline_v4_service.common.result import ResultSection
-        from assemblyline_v4_service.common.task import Task
-
         mocker.patch.object(jsjaws_class_instance, "_run_signatures")
         mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
         mocker.patch.object(jsjaws_class_instance, "_extract_wscript")
@@ -426,11 +425,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_wscript(jsjaws_class_instance, mocker):
-        from os import mkdir
-        from os.path import exists, join
-
-        from assemblyline_v4_service.common.result import Result
-
         jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
         jsjaws_class_instance.extracted_wscript_batch = "extracted_wscript.bat"
         jsjaws_class_instance.extracted_wscript_ps1 = "extracted_wscript.ps1"
@@ -559,8 +553,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_payloads(jsjaws_class_instance):
-        from os import mkdir, path
-
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
@@ -621,11 +613,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_urls(jsjaws_class_instance):
-        from json import dumps
-        from os import mkdir, path, remove
-
-        from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection
-
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
@@ -682,8 +669,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
-        from os import mkdir, path
-
         jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
@@ -731,8 +716,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_run_signatures(jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import Result, ResultSection
-
         output = ["blah", "SaveToFile"]
         result = Result()
         correct_section = ResultSection("Signatures")
@@ -754,11 +737,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_boxjs_iocs(jsjaws_class_instance):
-        from json import dumps
-        from os import mkdir, path
-
-        from assemblyline_v4_service.common.result import Result, ResultSection, ResultTableSection, TableRow
-
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(jsjaws_class_instance.working_directory, "payload/")
         jsjaws_class_instance.boxjs_batch = "boxjs_cmds.bat"
         jsjaws_class_instance.boxjs_batch_path = path.join(jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.boxjs_batch)
@@ -807,8 +785,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_flag_jsxray_iocs(jsjaws_class_instance, dummy_request_class_instance):
-        from assemblyline_v4_service.common.result import Result, ResultSection
-
         output = {
             "warnings": [
                 {"kind": "blah", "value": "blah"},
@@ -831,8 +807,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_malware_jail_iocs(jsjaws_class_instance):
-        from assemblyline_v4_service.common.result import Result, ResultTableSection, TableRow
-
         correct_res_sec = ResultTableSection("MalwareJail extracted the following IOCs")
         correct_res_sec.set_heuristic(2)
         correct_res_sec.add_tag("network.static.domain", "blah.com")
@@ -852,10 +826,6 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_filtered_code(jsjaws_class_instance, dummy_get_response_class, mocker):
-        from os import path, remove
-
-        from assemblyline_v4_service.common.result import Result, ResultSection
-
         evil_string = "XMLHttpRequest('http://evil.com');\n"
         fake_response_text = "/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
         mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
@@ -884,8 +854,6 @@ class TestJsJaws:
 class TestSignature:
     @staticmethod
     def test_init():
-        from signatures.abstracts import Signature
-
         default_sig = Signature()
         assert default_sig.heuristic_id is None
         assert default_sig.name is None
@@ -933,8 +901,6 @@ class TestSignature:
         ],
     )
     def test_check_indicators_in_list(indicators, safelist, output, match_all, expected_marks):
-        from signatures.abstracts import Signature
-
         sig = Signature(indicators=indicators, safelist=safelist)
         sig.check_indicators_in_list(output, match_all)
         assert sig.marks == expected_marks
@@ -949,22 +915,16 @@ class TestSignature:
         ],
     )
     def test_check_regex(regex, string, expected_output):
-        from signatures.abstracts import Signature
-
         assert Signature.check_regex(regex, string) == expected_output
 
     @staticmethod
     def test_process_output():
-        from signatures.abstracts import Signature
-
         sig = Signature()
         with pytest.raises(NotImplementedError):
             sig.process_output([])
 
     @staticmethod
     def test_add_mark():
-        from signatures.abstracts import Signature
-
         sig = Signature()
         sig.add_mark("")
         sig.add_mark(None)
@@ -1069,8 +1029,6 @@ class TestSignature:
         ],
     )
     def test_check_multiple_indicators_in_list(indicators, safelist, output, expected_marks):
-        from signatures.abstracts import Signature
-
         sig = Signature(safelist=safelist)
         sig.check_multiple_indicators_in_list(output, indicators)
         assert sig.marks == expected_marks
