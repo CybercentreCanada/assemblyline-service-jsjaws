@@ -260,6 +260,12 @@ heuristics:
     filetype: 'code/ht.*'
     description: Multiple script tags with unescaped values written to DOM
 
+  - heur_id: 21
+    name: Script contains leading garbage characters
+    score: 0
+    filetype: '.*'
+    description: A script contains leading characters meant to obfuscate / mis-identify the file.
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
