@@ -2672,7 +2672,7 @@ class JsJaws(ServiceBase):
             return
 
         urls_result_section = ResultTableSection("URLs")
-
+        urls_result_section.set_column_order(["url", "method"])
         urls_rows: List[TableRow] = []
         items_seen: Set[str] = set()
 
