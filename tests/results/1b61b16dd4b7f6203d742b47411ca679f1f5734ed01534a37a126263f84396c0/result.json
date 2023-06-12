@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -35,6 +37,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript uses a common base64 method for decoding characters\n\t\tfunction b64toBlob(_0x31a2b8,_0x3262af,_0x49150f){var _0x1f7950=a0_0x14b753,_0xedd820=atob(_0x31a2b8...\n\t\t}var blob=b64toBlob(text,'application/zip',0x200)",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -57,6 +60,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -79,6 +83,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -123,6 +129,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -141,6 +148,7 @@
       {
         "auto_collapse": false,
         "body": "URL_Blob_file_0",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -160,6 +168,7 @@
       {
         "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -178,6 +187,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file 1b61b16dd4b7f6203d742b47411ca679f1f5734ed01534a37a126263f84396c0.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

