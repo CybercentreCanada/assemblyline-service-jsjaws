@@ -29,7 +29,6 @@ from assemblyline_service_utilities.common.dynamic_service_helper import (
 )
 from assemblyline_service_utilities.common.safelist_helper import is_tag_safelisted
 from assemblyline_service_utilities.common.tag_helper import add_tag
-from assemblyline_service_utilities.common.utils import PASSWORD_WORDS, extract_passwords
 from assemblyline_v4_service.common.api import ServiceAPIError
 from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.request import ServiceRequest
@@ -41,6 +40,7 @@ from assemblyline_v4_service.common.result import (
     ResultTextSection,
     TableRow,
 )
+from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
