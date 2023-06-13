@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[16].click(undefined)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"194.180.174.158\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://194.180.174.158/lv.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/lv.jpg\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -71,6 +79,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"http://194.180.174.158/lv.jpg\", \"method\": \"get\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Script uses function inception",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,11 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}]",
+        "body_config": {
+          "column_order": [
+            "url"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -62,6 +68,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"iscast.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/udit/udit.php?68977\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tapasyaevents.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fmu/fmu.php?55724\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dealsontrainers.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tete/tete.php?85434\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -100,6 +112,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://iscast.com.br/udit/udit.php?68977\", \"method\": \"get\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\", \"method\": \"get\"}, {\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\", \"method\": \"get\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -141,6 +159,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file 75a35b91e6295c6287dbd858663b9f126bfd6e29a278e435ab9c17c2eda25ee1.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

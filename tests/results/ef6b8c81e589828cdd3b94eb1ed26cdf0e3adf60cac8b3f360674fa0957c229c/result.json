@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[12].send()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.icodeps.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.icodeps.com/jsapi.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jsapi.php\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -93,6 +102,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://www.icodeps.com/jsapi.php\", \"method\": \"GET\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

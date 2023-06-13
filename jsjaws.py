@@ -504,6 +504,8 @@ class JsJaws(ServiceBase):
         self.single_script_with_unescape: Optional[bool] = None
         # Flag that the sample contains multiple scripts that write unescaped values to the DOM
         self.multiple_scripts_with_unescape: Optional[bool] = None
+        # Flag that the sample contains leading garbage
+        self.leading_garbage: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -536,6 +538,7 @@ class JsJaws(ServiceBase):
         self.script_with_source_and_no_body = False
         self.malformed_javascript = False
         self.function_inception = False
+        self.leading_garbage = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -610,26 +613,40 @@ class JsJaws(ServiceBase):
                 html_comment = re.search(FULL_HTML_COMMENT_IN_JS, file_content)
 
             if html_start or html_comment:
+                # Setup some defaults for leading garbage and the script we want
+                garbage = b""
+                script_we_want = b""
+
                 if html_start:
                     idx = file_content.index(html_start.group("html_start"))
-                    garbage = file_content[:idx]
-                    script_we_want = file_content[idx:]
+                    # If the index is 0, then there is no leading garbage
+                    if idx > 0:
+                        garbage = file_content[:idx]
+                        script_we_want = file_content[idx:]
                 elif html_comment and len(html_comment.regs) > 2:
                     start_idx, end_idx = html_comment.regs[2]
-                    garbage = file_content[start_idx:end_idx]
-                    script_we_want = file_content[:start_idx] + file_content[end_idx:]
+                    # If the index is 0, then there is no leading garbage
+                    if start_idx > 0:
+                        garbage = file_content[start_idx:end_idx]
+                        script_we_want = file_content[:start_idx] + file_content[end_idx:]
 
-                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                    t.write(garbage)
-                    garbage_path = t.name
+                # If there is leading garbage, write to disk and identify
+                if garbage != b"":
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                        t.write(garbage)
+                        garbage_path = t.name
 
-                garbage_info = self.identify.fileinfo(garbage_path)
+                    garbage_info = self.identify.fileinfo(garbage_path)
 
-                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
-                    t.write(script_we_want)
-                    script_we_want_path = t.name
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                        t.write(script_we_want)
+                        script_we_want_path = t.name
 
-                script_we_want_info = self.identify.fileinfo(script_we_want_path)
+                    script_we_want_info = self.identify.fileinfo(script_we_want_path)
+                else:
+                    # Otherwise, return!
+                    return file_path, file_content
+
                 if garbage_info["type"] not in ["code/javascript", "code/html", "code/hta", "code/jscript", "code/wsf", "code/wsc", "image/svg"] and script_we_want_info["type"] in ["code/html", "code/hta"]:
                     self.log.debug("Removed garbage from the file...")
                     request.file_type = script_we_want_info["type"]
@@ -709,7 +726,11 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
         file_path, file_content = self._handle_filtered_code(file_path, file_content)
-        file_path, file_content = self._remove_leading_garbage_from_html(request, file_path, file_content)
+        file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(request, file_path, file_content)
+
+        if file_content_with_no_leading_garbage != file_content:
+            file_content = file_content_with_no_leading_garbage
+            self.leading_garbage = True
 
         # There are always false positive hits in embedded code for VBScript env variables, so let's avoid that
         if not self.embedded_code_in_lib:
@@ -1128,6 +1149,11 @@ class JsJaws(ServiceBase):
         # If there is embedded code in a common library, handle accordingly
         if self.embedded_code_in_lib:
             self._raise_embedded_code_in_lib(request)
+
+        # If there is leading garbage, raise it up!
+        if self.leading_garbage:
+            heur = Heuristic(21)
+            _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
         # Determine the file type to be used for this gauntlet run
         if not subsequent_run:
@@ -2478,7 +2504,11 @@ class JsJaws(ServiceBase):
         if len(glob(self.boxjs_snippets)) > 0:
             boxjs_snippets = max(glob(self.boxjs_snippets), key=path.getctime)
             with open(boxjs_snippets, "r") as f:
-                snippet_keys = list(loads(f.read()).keys())
+                try:
+                    snippet_keys = list(loads(f.read()).keys())
+                except JSONDecodeError as e:
+                    self.log.debug(f"Could not read {boxjs_snippets} due to {e}.")
+                    snippet_keys = []
 
         box_js_payloads = []
         if len(glob(self.boxjs_output_dir)) > 0:

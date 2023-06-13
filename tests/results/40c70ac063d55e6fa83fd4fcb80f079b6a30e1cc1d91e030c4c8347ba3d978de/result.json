@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/maplace0.2.7.js\nGOOTLOADER IOCs:\n\t-\twww.maghrebassurance.fr\n\t-\twww.ls1969.fr\n\t-\twww.macromixenlinea.com",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -42,6 +43,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -60,6 +62,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -71,6 +74,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 8048d4ebad7b0b965181e93f74dba7229e4130b90b860b50102bd0b77019f033: object Error...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -93,6 +97,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tcotton0 is evaluated using a suspicious pattern",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/underscore1.13.6.js\nGOOTLOADER IOCs:\n\t-\twww.travelettes.net\n\t-\twww.tokyo-hi-vision.com\n\t-\twww.thomadaneau.com",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -42,6 +43,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -60,6 +62,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -71,6 +74,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in b810dbb154f0e3d11700a9427feb1f86f5672353de86f7e9054f7ead1130ef60: object Error...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -93,6 +97,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tchief6 is evaluated using a suspicious pattern",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

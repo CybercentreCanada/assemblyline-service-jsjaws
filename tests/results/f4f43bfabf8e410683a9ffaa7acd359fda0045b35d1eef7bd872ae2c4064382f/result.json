@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript uses a common base64 method for decoding characters\n\t\t\t\t\tfunction b64blb(b64Data, sliceSize)\n\t\t\t\t\t\tvar byteCharacters = atob(b64Data)\n\t\t\t\t\tvar blob = b64blb(content, 512)",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,1,0,8,0,234,145,70,85,152,108,183,42,144,114,3,0,0,248,6,0,16,0,0,0,79,118,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\tnew Blob([object Blob], [object Object])\n\n\t\t\t\t\t\tvar blob = new Blob(byteArrays, {type: \"application/zip\"})\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -105,6 +110,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= slice.charCodeAt(i)",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -127,6 +133,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t\t\t\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -149,6 +156,7 @@
       {
         "auto_collapse": false,
         "body": "Redirection to:\nhttp://example.com/?search",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

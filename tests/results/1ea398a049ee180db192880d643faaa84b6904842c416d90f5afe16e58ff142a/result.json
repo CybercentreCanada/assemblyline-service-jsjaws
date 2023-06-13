@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://tottstore.com/xmlrpc.php\n\t-\thttps://trueteenbabes.com/xmlrpc.php\n\t-\thttps://thesmithrestaurant.com/xmlrpc.php\n\t-\thttps://lamaa.sa/xmlrpc.php\n\t-\thttps://architecturalsankul.com/xmlrpc.php\n\t-\thttp://71397454a0.url-de-test.ws/xmlrpc.php\n\t-\thttps://funnelslive.com/xmlrpc.php\n\t-\thttps://iadnews.in/xmlrpc.php\n\t-\thttps://wototvet.ru/xmlrpc.php\n\t-\thttps://spkp.com.au/xmlrpc.php",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -61,6 +62,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -79,6 +81,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -90,6 +93,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in d1395642601f682797e86896c9be85e5a176019bc519b39f99bf524b81d2d89d: object Error...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -112,6 +116,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tbuild1 is evaluated using a suspicious pattern",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

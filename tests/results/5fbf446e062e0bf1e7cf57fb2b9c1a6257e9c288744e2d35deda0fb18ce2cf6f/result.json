@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"wscript\", \"\"5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -79,6 +83,7 @@
       {
         "auto_collapse": false,
         "body": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -98,6 +103,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file 5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

