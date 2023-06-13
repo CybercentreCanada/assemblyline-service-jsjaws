@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tfunction reverse(s)\n\t\tdocument.getElementById(\"preview\").src = reverse(viewer)",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

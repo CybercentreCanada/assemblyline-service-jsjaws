@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/combo.js\nGOOTLOADER IOCs:\n\t-\twww.macromixenlinea.com\n\t-\twww.lovlr.com\n\t-\twww.lukeamiller.net",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -42,6 +43,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -60,6 +62,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -71,6 +74,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in 8aeebe6b5ee8c6e0917509a86e034726d167ea50be745fc0db0f6147f6bd65af: object Error...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -93,6 +97,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tblood4 is evaluated using a suspicious pattern",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

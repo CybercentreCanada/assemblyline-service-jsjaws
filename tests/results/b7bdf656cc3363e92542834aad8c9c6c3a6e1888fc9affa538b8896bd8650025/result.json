@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript uses a common base64 method for decoding characters\n\t\tdocument.location.href=window.atob('aHR0cHM6Ly9kYXJtc3RhZHQuaGVpbWF0c2NoYXR6LmRlL2ltYWdlcy9pbWdzLw==...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "Redirection to:\nhttps://darmstadt.heimatschatz.de/images/imgs/",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -65,6 +68,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"darmstadt.heimatschatz.de\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://darmstadt.heimatschatz.de\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://darmstadt.heimatschatz.de/images/imgs/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/images/imgs/\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

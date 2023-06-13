@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WinHTTP.WinHTTPRequest.5.1\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].send()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"permissions.default.camera\"}, {\"ioc_type\": \"domain\", \"ioc\": \"toolkit.telemetry.pioneer\"}, {\"ioc_type\": \"domain\", \"ioc\": \"centarial.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://centarial.com/documento.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/documento.php\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -97,6 +106,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"http://centarial.com/documento.php\", \"method\": \"GET\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -129,6 +144,7 @@
       {
         "auto_collapse": false,
         "body": "\t\tAn unsafe statement was found: Function",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,

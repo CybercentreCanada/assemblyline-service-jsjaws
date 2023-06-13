@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: windowsinstaller.installer\n\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[13].send()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"acehphonnajaya.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://acehphonnajaya.com/css/ke.msi\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css/ke.msi\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -93,6 +102,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -125,6 +140,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,

