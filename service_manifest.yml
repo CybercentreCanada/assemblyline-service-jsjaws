@@ -134,6 +134,7 @@ heuristics:
       multiple_scripts_url: 500
       function_inception_url: 500
       obfuscator_io_usage_url: 500
+      split_reverse_join_url: 500
 
   - heur_id: 2
     name: IOC(s) Extracted
