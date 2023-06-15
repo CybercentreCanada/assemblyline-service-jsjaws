@@ -803,6 +803,9 @@ class JsJaws(ServiceBase):
             for uri in self.gootloader_uris:
                 embedded_code_in_lib_res_sec.add_line(f"\t-\t{safe_str(uri)}")
 
+        if not path.exists(self.decoded_gootloader_path) or not path.getsize(self.decoded_gootloader_path):
+            return
+
         artifact = {
             "name": self.decoded_gootloader,
             "path": self.decoded_gootloader_path,
