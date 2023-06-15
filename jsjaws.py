@@ -506,6 +506,8 @@ class JsJaws(ServiceBase):
         self.multiple_scripts_with_unescape: Optional[bool] = None
         # Flag that the sample contains leading garbage
         self.leading_garbage: Optional[bool] = None
+        # Flag that the split_reverse_join signature was raised
+        self.split_reverse_join: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -539,6 +541,7 @@ class JsJaws(ServiceBase):
         self.malformed_javascript = False
         self.function_inception = False
         self.leading_garbage = False
+        self.split_reverse_join = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -2755,6 +2758,9 @@ class JsJaws(ServiceBase):
             if self.function_inception:
                 urls_result_section.heuristic.add_signature_id("function_inception_url")
 
+            if self.split_reverse_join:
+                urls_result_section.heuristic.add_signature_id("split_reverse_join_url")
+
             result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
@@ -2844,6 +2850,8 @@ class JsJaws(ServiceBase):
             sigs_res_sec = ResultSection("Signatures")
             # Sort alphabetically since the results could be inconsistent otherwise if threads finish at different times
             for sig_that_hit in sorted(signatures_that_hit, key=lambda x: x.name):
+                if sig_that_hit.name == "split_reverse_join":
+                    self.split_reverse_join = True
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)

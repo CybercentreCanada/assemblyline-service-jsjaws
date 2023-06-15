@@ -81,7 +81,21 @@ class NestedAtoB(Signature):
             name="nested_atob",
             description="JavaScript uses nested atob() calls for decoding",
             indicators=["atob(atob("],
-            severity=500
+            severity=3
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
+
+
+class SplitReverseJoin(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="split_reverse_join",
+            description="JavaScript uses a uncommon method for de-obfuscating a string (split+reverse+join)",
+            indicators=[".split(\"\").reverse().join(\"\")"],
+            severity=3
         )
 
     def process_output(self, output):

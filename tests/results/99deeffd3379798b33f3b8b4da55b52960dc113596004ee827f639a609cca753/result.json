@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 10,
+    "score": 510,
     "sections": [
       {
         "auto_collapse": false,
@@ -37,6 +37,29 @@
         "tags": {},
         "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a uncommon method for de-obfuscating a string (split+reverse+join)\n\t\tbase64\" + \",\" + y0fhiqUl.split(\"\").reverse().join(\"\"))",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "split_reverse_join": 500
+          },
+          "signatures": {
+            "split_reverse_join": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: SplitReverseJoin",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -69,6 +92,13 @@
         "heur_id": 3,
         "signatures": [
           "obfuscation"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "split_reverse_join"
         ]
       }
     ],
