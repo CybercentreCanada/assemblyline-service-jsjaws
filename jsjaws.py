@@ -1852,6 +1852,9 @@ class JsJaws(ServiceBase):
         if '"' in attr_val:
             attr_val = attr_val.replace('"', '\\"')
 
+        if '\\' in attr_val:
+            attr_val = attr_val.replace('\\', '\\\\')
+
         return f"{random_element_varname}.setAttribute(\"{attr_id}\", \"{attr_val}\");\n"
 
     @staticmethod
@@ -2735,7 +2738,7 @@ class JsJaws(ServiceBase):
                 file_contents = f.read()
                 ioc_json = loads(file_contents)
                 for ioc in ioc_json:
-                    value = ioc["value"]
+                    value = ioc.get("value", "")
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
@@ -2915,7 +2918,7 @@ class JsJaws(ServiceBase):
         cmd_count = 0
         for ioc in ioc_json:
             type = ioc["type"]
-            value = ioc["value"]
+            value = ioc.get("value", "")
             if type == "Run" and "command" in value:
                 if value["command"] not in commands:
                     commands.add(value["command"].strip())
