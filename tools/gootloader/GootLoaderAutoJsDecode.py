@@ -27,6 +27,7 @@
 ############################
 
 import re
+from logging import Logger
 
 goot3detected = False
 
@@ -141,18 +142,18 @@ def workFunc(inputStr):
     return outputStr
 
 
-def save_file(output_filename, output_code):
+def save_file(output_filename, output_code, log: Logger):
     """Save the output file - We may need it for the second iteration"""
-    print(f'\nScript output Saved to: {output_filename}\n')
-    print(f'\nThe script will new attempt to deobfuscate the {output_filename} file.')
+    log(f'\nScript output Saved to: {output_filename}\n')
+    log(f'\nThe script will now attempt to deobfuscate the {output_filename} file.')
     out_file = open(output_filename, "w")
     out_file.write(output_code)
     out_file.close()
 
-def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None):
+def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print):
     # Open File
     outputDomains: str = ""
-    OutputCode: str = "" 
+    OutputCode: str = ""
     file = open(path, mode="r", encoding="utf-8")
 
     # Check for the GootLoader obfuscation variant
@@ -164,15 +165,15 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     gootloader3sample = False
 
     if re.search(r'jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$',fileTopLines):
-        print('\nGootLoader Obfuscation Variant 2.0 detected')
+        log('\nGootLoader Obfuscation Variant 2.0 detected')
         gootloader21sample = False
     elif goot3linesPattern.match(fileTopLines):
-        print('\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.' % path)
+        log('\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.' % path)
         gootloader3sample = True
         # 3 and 2 have some overlap so enabling both flags for simplicity
         gootloader21sample = True
     else:
-        print('\nSample could be either not Gootloader, or could be GootLoader Obfuscation Variant 2.1+')
+        log('\nSample could be either not Gootloader, or could be GootLoader Obfuscation Variant 2.1+')
         gootloader21sample = True
 
     # reset cursor to read again
@@ -229,7 +230,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     file.close()
 
     if not Obfuscated1Text:
-        return
+        return False, outputDomains, OutputCode
 
     # run the decoder
     round1Result = decodeString(Obfuscated1Text)
@@ -243,7 +244,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     round2Result = decodeString(CodeMatch.encode('raw_unicode_escape').decode('unicode_escape'))
 
     if round2Result.startswith('function'):
-        print('GootLoader Obfuscation Variant 3.0 sample detected.')
+        log('GootLoader Obfuscation Variant 3.0 sample detected.')
 
         global goot3detected
         goot3detected = True
@@ -286,8 +287,8 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
         else:
             OutputFileName = stage2_path
 
-        print('\nScript output Saved to: %s\n' % OutputFileName)
-        print('\nThe script will new attempt to deobfuscate the %s file.' % OutputFileName)
+        log('\nScript output Saved to: %s\n' % OutputFileName)
+        log('\nThe script will now attempt to deobfuscate the %s file.' % OutputFileName)
         save_file(OutputFileName, OutputCode)
         return True, outputDomains, OutputCode
 
@@ -311,7 +312,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
             OutputFileName = payload_path
 
         # Print to screen
-        print('\nScript output Saved to: %s\n' % OutputFileName)
+        log('\nScript output Saved to: %s\n' % OutputFileName)
 
         outputDomains = ''
 
@@ -321,7 +322,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
             else:
                 outputDomains += dom + '\n'
 
-        print('\nMalicious Domains: \n\n%s' % outputDomains)
+        log('\nMalicious Domains: \n\n%s' % outputDomains)
 
     save_file(OutputFileName, OutputCode)
     return False, outputDomains, OutputCode
