@@ -27,13 +27,12 @@
 ############################
 
 import re
-
-from typing import List
 from codecs import decode, encode
+from logging import Logger
 from os import SEEK_END, SEEK_SET
+from typing import List
 
-from utils.variables import *
-
+from tools.gootloader.utils.variables import *
 
 version_three: bool = False
 
@@ -69,7 +68,6 @@ def defang(input):
     return result
 
 
-
 def clean_padding(file_data:str):
     """
     I want to remove all the letters | numbers that appear in larger groups followed with a ;
@@ -86,7 +84,7 @@ def clean_padding(file_data:str):
     return file_data
 
 
-def convert_concat_to_string(input_concat_matches, input_variable_dict, no_equals=False):   
+def convert_concat_to_string(input_concat_matches, input_variable_dict, no_equals=False):
     concatenated_results: List[str] = []
     if no_equals:
         dummy_equals = 'dummy='+input_concat_matches.replace('(','').replace(')','')
@@ -113,8 +111,7 @@ def convert_concat_to_string(input_concat_matches, input_variable_dict, no_equal
     return max(concatenated_results, key=len).encode('raw_unicode_escape').decode('unicode_escape')
 
 
-
-def deobfuscate(obfuscated_string):  
+def deobfuscate(obfuscated_string):
     plaintext: str = ""
     obfuscated_string = decode(encode(obfuscated_string, 'latin-1', 'backslashreplace'), 'unicode-escape')
     for counter in range(len(obfuscated_string)):
@@ -135,11 +132,9 @@ def remainder(v1, v2, v3):
     return rtn
 
 
-
 def js_substring(inputStr, idx1):
     """Use this odd format of substring so that it matches the way JS works"""
     return inputStr[idx1:(idx1+1)]
-
 
 
 def work_function(inputStr):
@@ -150,14 +145,13 @@ def work_function(inputStr):
     return outputStr
 
 
-
-def check_file_stage(top_lines: str, path: str):
+def check_file_stage(top_lines: str, path: str, log: Logger):
     goot3linesRegex = """//GOOT3"""
     goot3linesPattern = re.compile(goot3linesRegex, re.MULTILINE)
     gootloader3_sample = False
 
     if goot3linesPattern.match(top_lines):
-        print('\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.' % path)
+        log('GootLoader Obfuscation Variant 3.0 detected')
         gootloader3_sample = True
 
     return gootloader3_sample
@@ -179,28 +173,25 @@ def check_file_size(file_handle):
     if(size >= (2**20 * 10)): return True
 
 
-
-def save_file(output_filename, output_code):
+def save_file(output_filename, output_code, log: Logger):
     """Save the output file - We may need it for the second iteration"""
-    print(f'\nScript output Saved to: {output_filename}\n')
-    print(f'\nThe script will new attempt to deobfuscate the {output_filename} file.')
+    log(f'Script output Saved to: {output_filename}')
+    log(f'The script will now attempt to deobfuscate the {output_filename} file.')
     out_file = open(output_filename, "w")
     out_file.write(output_code)
     out_file.close()
 
 
-
-def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_path = None):
+def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print):
     variables = VariablesParser()                        #Utility class to parse variables from JScript
-    
+
     gootloader3_sample = False
     output_filename: str = ""
-    
+
     file = open(path, mode="r", encoding="utf-8")        # Open File
 
     file_top_lines = ''.join(file.readlines(5))
-    gootloader3_sample = check_file_stage(file_top_lines, path)
-
+    gootloader3_sample = check_file_stage(file_top_lines, path, log)
 
     file.seek(0)                                         #Reset the cursor
     file_data = file.read()                              #Read the file contents
@@ -218,11 +209,8 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
     longest_string = grab_longest_string(first_round_result)
     second_round_result = deobfuscate(longest_string)
 
-    
     if second_round_result.startswith('function'):
-        print('GootLoader Obfuscation Variant 3.0 sample detected.')
-
-        
+        log('GootLoader Obfuscation Variant 3.0 sample detected.')
         """
         Grab all the relevant variables from the sample, that'll be needed to build the obfuscated blocks.
         """
@@ -242,7 +230,7 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         string_concat_new_line = re.sub(string_concat_pattern, r'\n\1\n', string_variable_new_line)
 
         """
-        Attempt to find the last variable and add a tab in front of it. 
+        Attempt to find the last variable and add a tab in front of it.
         This search is imperfect since the line could be shorter than what this regex picks up.
         """
         final_string_concat = re.compile('''([a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){5,}[a-zA-Z0-9_]{2,}\s{0,};)''') # Find: var0 = var1+var2+var3+var4+var5+var6
@@ -256,7 +244,6 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         str_long_digit = re.compile(''';(\d{15,};)''') # Find: ;216541846845465456465121312313221456456465;
         final_regex = re.sub(str_long_digit, r';\n\1_\n', str_var_to_var_new_line)
 
-
         """
         Build the text file, and add the GOOT3 header.
         The header will allow us to direct the code in the correct path for the next iteration.
@@ -265,11 +252,11 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         for line in final_regex.splitlines():
             if line.strip():                           #Clean up the empty strings
                 output_code += (line+'\n')             #Generate the output code to be written to disk
-        if not stage2_path:             
-            output_filename = 'GootLoader3Stage2.js_'  
+        if not stage2_path:
+            output_filename = 'GootLoader3Stage2.js_'
         else:
             output_filename = stage2_path
-        save_file(output_filename, output_code)
+        save_file(output_filename, output_code, log)
         return True, "", ""
 
     else:
@@ -290,17 +277,20 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         else:
             output_filename = payload_path
 
-        print('\nScript output Saved to: %s\n' % output_filename)
-        gootloader_domains = ''
+        # debugging
+        # log('\nScript output Saved to: %s\n' % output_filename)
+
+        gootloader_domains: List[str] = []
         for dom in malicious_domains:
             if not unsafe_uris:
-                gootloader_domains += defang(dom) + '\n'
+                gootloader_domains.append(defang(dom))
             else:
-                gootloader_domains += dom + '\n'
-        print(f'\nMalicious Domains: \n\n{gootloader_domains}')
+                gootloader_domains.append(dom)
+
+        # debugging
+        # domains_as_string = "\n".join(gootloader_domains)
+        # log(f'\nMalicious Domains: \n\n{domains_as_string}')
+
     """Save the output file - We may need it for the second iteration"""
-    save_file(output_filename, output_code)
+    save_file(output_filename, output_code, log)
     return False, gootloader_domains, output_code
-
-
-
