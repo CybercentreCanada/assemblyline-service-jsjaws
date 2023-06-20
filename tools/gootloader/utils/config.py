@@ -1,8 +1,6 @@
-from typing import List
 import dataclasses
 
 class GootLoaderConfig:
-    def __init__(self, urls: List[str], code: str, urls_concat:str):
-        self.urls = urls
+    def __init__(self, code: str, urls:str):
         self.code = code
-        self.urls_concat = urls_concat
+        self.urls = urls

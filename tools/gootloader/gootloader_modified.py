@@ -270,7 +270,7 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         else:
             output_filename = stage2_path
         save_file(output_filename, output_code)
-        return True
+        return True, "", ""
 
     else:
         """To provide support for the log file written to disk for persistance the or is_powershell has been added"""
@@ -300,7 +300,7 @@ def goot_decode_modified(path, unsafe_uris = False, payload_path = None, stage2_
         print(f'\nMalicious Domains: \n\n{gootloader_domains}')
     """Save the output file - We may need it for the second iteration"""
     save_file(output_filename, output_code)
-    return False
+    return False, gootloader_domains, output_code
 
 
 

@@ -140,8 +140,19 @@ def workFunc(inputStr):
         outputStr = remainder(outputStr,var1,i)
     return outputStr
 
+
+def save_file(output_filename, output_code):
+    """Save the output file - We may need it for the second iteration"""
+    print(f'\nScript output Saved to: {output_filename}\n')
+    print(f'\nThe script will new attempt to deobfuscate the {output_filename} file.')
+    out_file = open(output_filename, "w")
+    out_file.write(output_code)
+    out_file.close()
+
 def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None):
     # Open File
+    outputDomains: str = ""
+    OutputCode: str = "" 
     file = open(path, mode="r", encoding="utf-8")
 
     # Check for the GootLoader obfuscation variant
@@ -277,6 +288,9 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
 
         print('\nScript output Saved to: %s\n' % OutputFileName)
         print('\nThe script will new attempt to deobfuscate the %s file.' % OutputFileName)
+        save_file(OutputFileName, OutputCode)
+        return True, outputDomains, OutputCode
+
     else:
         if gootloader3sample:
             OutputCode = round2Result.replace("'+'",'').replace("')+('",'').replace("+()+",'')
@@ -309,7 +323,5 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
 
         print('\nMalicious Domains: \n\n%s' % outputDomains)
 
-    # Write output file
-    outFile = open(OutputFileName, "w")
-    outFile.write(OutputCode)
-    outFile.close()
+    save_file(OutputFileName, OutputCode)
+    return False, outputDomains, OutputCode
