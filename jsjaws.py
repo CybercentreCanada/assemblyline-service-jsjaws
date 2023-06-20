@@ -722,7 +722,10 @@ class JsJaws(ServiceBase):
         # Initial setup per sample
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
-        file_path, file_content = self._handle_filtered_code(file_path, file_content)
+
+        if request.file_type in ["code/javascript", "code/jscript"]:
+            file_path, file_content = self._handle_filtered_code(file_path, file_content)
+
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(request, file_path, file_content)
 
         if file_content_with_no_leading_garbage != file_content:
