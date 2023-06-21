@@ -26,16 +26,8 @@
 #
 ############################
 
-import argparse
 import re
-
-# Argument parsing
-parser = argparse.ArgumentParser()
-parser.add_argument('jsFilePath', help='Path to the GOOTLOADER JS file.')
-parser.add_argument('--unsafe-uris', action="store_true", help='Do not convert http(s) to hxxp(s)')
-parser.add_argument('--payload-path', required=False, default="DecodedJsPayload.js_", help='Path to the payload file that will be written')
-parser.add_argument('--stage2-path', required=False, default="GootLoader3Stage2.js_", help='Path to the GootLoader3 stage 2 file that will be written')
-args = parser.parse_args()
+from logging import Logger
 
 goot3detected = False
 
@@ -149,8 +141,19 @@ def workFunc(inputStr):
         outputStr = remainder(outputStr,var1,i)
     return outputStr
 
-def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None):
+
+def save_file(output_filename, output_code, log: Logger):
+    """Save the output file - We may need it for the second iteration"""
+    log(f'\nScript output Saved to: {output_filename}\n')
+    log(f'\nThe script will now attempt to deobfuscate the {output_filename} file.')
+    out_file = open(output_filename, "w")
+    out_file.write(output_code)
+    out_file.close()
+
+def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print):
     # Open File
+    outputDomains: str = ""
+    OutputCode: str = ""
     file = open(path, mode="r", encoding="utf-8")
 
     # Check for the GootLoader obfuscation variant
@@ -162,15 +165,15 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     gootloader3sample = False
 
     if re.search(r'jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$',fileTopLines):
-        print('\nGootLoader Obfuscation Variant 2.0 detected')
+        log('\nGootLoader Obfuscation Variant 2.0 detected')
         gootloader21sample = False
     elif goot3linesPattern.match(fileTopLines):
-        print('\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.' % path)
+        log('\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.' % path)
         gootloader3sample = True
         # 3 and 2 have some overlap so enabling both flags for simplicity
         gootloader21sample = True
     else:
-        print('\nSample could be either not Gootloader, or could be GootLoader Obfuscation Variant 2.1+')
+        log('\nSample could be either not Gootloader, or could be GootLoader Obfuscation Variant 2.1+')
         gootloader21sample = True
 
     # reset cursor to read again
@@ -227,7 +230,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     file.close()
 
     if not Obfuscated1Text:
-        return
+        return False, outputDomains, OutputCode
 
     # run the decoder
     round1Result = decodeString(Obfuscated1Text)
@@ -241,7 +244,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
     round2Result = decodeString(CodeMatch.encode('raw_unicode_escape').decode('unicode_escape'))
 
     if round2Result.startswith('function'):
-        print('GootLoader Obfuscation Variant 3.0 sample detected.')
+        log('GootLoader Obfuscation Variant 3.0 sample detected.')
 
         global goot3detected
         goot3detected = True
@@ -284,8 +287,11 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
         else:
             OutputFileName = stage2_path
 
-        print('\nScript output Saved to: %s\n' % OutputFileName)
-        print('\nThe script will new attempt to deobfuscate the %s file.' % OutputFileName)
+        log('\nScript output Saved to: %s\n' % OutputFileName)
+        log('\nThe script will now attempt to deobfuscate the %s file.' % OutputFileName)
+        save_file(OutputFileName, OutputCode)
+        return True, outputDomains, OutputCode
+
     else:
         if gootloader3sample:
             OutputCode = round2Result.replace("'+'",'').replace("')+('",'').replace("+()+",'')
@@ -306,7 +312,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
             OutputFileName = payload_path
 
         # Print to screen
-        print('\nScript output Saved to: %s\n' % OutputFileName)
+        log('\nScript output Saved to: %s\n' % OutputFileName)
 
         outputDomains = ''
 
@@ -316,14 +322,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
             else:
                 outputDomains += dom + '\n'
 
-        print('\nMalicious Domains: \n\n%s' % outputDomains)
+        log('\nMalicious Domains: \n\n%s' % outputDomains)
 
-    # Write output file
-    outFile = open(OutputFileName, "w")
-    outFile.write(OutputCode)
-    outFile.close()
-
-gootDecode(args.jsFilePath, args.unsafe_uris, args.payload_path, args.stage2_path)
-
-if goot3detected:
-    gootDecode(args.stage2_path, args.unsafe_uris, args.payload_path, args.stage2_path)
+    save_file(OutputFileName, OutputCode)
+    return False, outputDomains, OutputCode

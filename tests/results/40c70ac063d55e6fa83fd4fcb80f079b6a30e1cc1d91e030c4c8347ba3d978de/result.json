@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/maplace0.2.7.js\nGOOTLOADER IOCs:\n\t-\twww.maghrebassurance.fr\n\t-\twww.ls1969.fr\n\t-\twww.macromixenlinea.com",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: tools/gootloader/clean_libs/maplace0.2.7.js\nGOOTLOADER IOCs:\n\t-\twww.maghrebassurance.fr\n\t-\twww.ls1969.fr\n\t-\twww.macromixenlinea.com",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

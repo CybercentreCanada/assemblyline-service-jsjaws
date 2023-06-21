@@ -49,6 +49,7 @@ from requests import get
 from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
 from tools import tinycss2_helper
+from tools.gootloader.run import run as gootloader_run
 from yaml import safe_load as yaml_safe_load
 from yara import Error as YARAError
 from yara import compile as yara_compile
@@ -566,23 +567,16 @@ class JsJaws(ServiceBase):
         self.gootloader_stage2_path = path.join(self.working_directory, self.gootloader_stage2)
 
         # Let's try using the Gootloader-decoder lib first
-        resp = {}
-        gootloader_args = ["python3", "-Xfrozen_modules=off", f"./tools/gootloader/{GOOTLOADERAUTOJSDECODER}.py", "--unsafe-uris", "--payload-path", self.decoded_gootloader_path, "--stage2-path", self.gootloader_stage2_path, file_path]
-        gootloader_decoder_thr = Thread(target=self._run_tool, args=(GOOTLOADERAUTOJSDECODER, gootloader_args, resp), daemon=True)
-        gootloader_decoder_thr.start()
-        gootloader_decoder_thr.join(timeout=5)
-        gootloader_decoder_output = resp.get(GOOTLOADERAUTOJSDECODER, [])
+        gootloader_config = gootloader_run(file_path, unsafe_uris=True, payload_path=self.decoded_gootloader_path, stage2_path=self.gootloader_stage2_path, log=self.log.debug)
 
         # If we have a hit
-        if "Malicious Domains: \n" in gootloader_decoder_output:
+        if gootloader_config and gootloader_config.urls:
             self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
-            index_of_mal_uris_header = gootloader_decoder_output.index("Malicious Domains: \n")
-            self.gootloader_uris = [uri.strip() for uri in gootloader_decoder_output[index_of_mal_uris_header+1:] if uri.strip()]
+            self.gootloader_uris = [uri.strip() for uri in gootloader_config.urls if uri.strip()]
             self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
-            if path.exists(self.gootloader_stage2_path):
+            if path.exists(self.gootloader_stage2_path) and gootloader_config.code:
                 file_path = self.gootloader_stage2_path
-                file_content = open(self.gootloader_stage2_path, "rb").read()
-                return file_path, file_content
+                return file_path, gootloader_config.code.encode()
 
         # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
         # library). Let's try to use the libraries we manually extracted.
@@ -728,7 +722,10 @@ class JsJaws(ServiceBase):
         # Initial setup per sample
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
-        file_path, file_content = self._handle_filtered_code(file_path, file_content)
+
+        if request.file_type in ["code/javascript", "code/jscript"]:
+            file_path, file_content = self._handle_filtered_code(file_path, file_content)
+
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(request, file_path, file_content)
 
         if file_content_with_no_leading_garbage != file_content:
@@ -837,15 +834,23 @@ class JsJaws(ServiceBase):
         :return: A flag indicating if the file is a time waster or not
         """
         is_time_waster = False
-        for time_waster_regex in TIME_WASTER_REGEXES:
-            time_waster_match = re.search(time_waster_regex, file_content)
-            if time_waster_match:
-                self.log.debug("This sample uses common time-wasting techniques")
-                is_time_waster = True
-                time_waster_res_sec = ResultTextSection("This sample uses common time-wasting techniques")
-                time_waster_res_sec.set_heuristic(11)
-                request.result.add_section(time_waster_res_sec)
-                break
+
+        if self.embedded_code_in_lib:
+            # This is a gootloader staple, so let's just set it here
+            is_time_waster = True
+
+        if not is_time_waster:
+            for time_waster_regex in TIME_WASTER_REGEXES:
+                time_waster_match = re.search(time_waster_regex, file_content)
+                if time_waster_match:
+                    break
+
+        if is_time_waster:
+            self.log.debug("This sample uses common time-wasting techniques")
+            time_waster_res_sec = ResultTextSection("This sample uses common time-wasting techniques")
+            time_waster_res_sec.set_heuristic(11)
+            request.result.add_section(time_waster_res_sec)
+
         return is_time_waster
 
     def _setup_boxjs_args(self, request: ServiceRequest, tool_timeout: int) -> List[str]:
@@ -3379,13 +3384,13 @@ class JsJaws(ServiceBase):
         common_libs = {
             # URL/FILE: REGEX
             "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
-            "clean_libs/maplace%s.js": MAPLACE_REGEX,
-            "clean_libs/combo.js": COMBO_REGEX,
-            "clean_libs/underscore%s.js": UNDERSCORE_REGEX,
-            "clean_libs/d3_v%s.js": D3_REGEX,
-            "clean_libs/lodash%s.js": LODASH_REGEX,
-            "clean_libs/chartview.js": CHARTVIEW_REGEX,
-            "clean_libs/mdl.js": MDL_REGEX,
+            "tools/gootloader/clean_libs/maplace%s.js": MAPLACE_REGEX,
+            "tools/gootloader/clean_libs/combo.js": COMBO_REGEX,
+            "tools/gootloader/clean_libs/underscore%s.js": UNDERSCORE_REGEX,
+            "tools/gootloader/clean_libs/d3_v%s.js": D3_REGEX,
+            "tools/gootloader/clean_libs/lodash%s.js": LODASH_REGEX,
+            "tools/gootloader/clean_libs/chartview.js": CHARTVIEW_REGEX,
+            "tools/gootloader/clean_libs/mdl.js": MDL_REGEX,
         }
         file_contents = file_contents.replace("\r", "")
         split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]

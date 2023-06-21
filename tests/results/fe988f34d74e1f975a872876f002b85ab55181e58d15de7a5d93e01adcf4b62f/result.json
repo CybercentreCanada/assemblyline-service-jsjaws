@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/combo.js\nGOOTLOADER IOCs:\n\t-\twww.macromixenlinea.com\n\t-\twww.lovlr.com\n\t-\twww.lukeamiller.net",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: tools/gootloader/clean_libs/combo.js\nGOOTLOADER IOCs:\n\t-\twww.macromixenlinea.com\n\t-\twww.lovlr.com\n\t-\twww.lukeamiller.net",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

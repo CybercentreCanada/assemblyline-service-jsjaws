@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: clean_libs/underscore1.13.6.js\nGOOTLOADER IOCs:\n\t-\twww.travelettes.net\n\t-\twww.tokyo-hi-vision.com\n\t-\twww.thomadaneau.com",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: tools/gootloader/clean_libs/underscore1.13.6.js\nGOOTLOADER IOCs:\n\t-\twww.travelettes.net\n\t-\twww.tokyo-hi-vision.com\n\t-\twww.thomadaneau.com",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
