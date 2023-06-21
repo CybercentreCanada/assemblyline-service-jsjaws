@@ -5,9 +5,9 @@ from typing import Dict, List, Tuple
 class VariablesParser:
     __concatenated_variable_pattern = (
         # Find: var1 = var2+var3+var4;
-        """(?:[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,}(?=;))|"""
+        """(?:[a-zA-Z0-9_]{2,50}\s{0,10}=\s{0,10}(?:[a-zA-Z0-9_]{2,50}\s{0,10}\+\s{0,10}){1,50}[a-zA-Z0-9_]{2,50}\s{0,10}(?=;))|"""
         # Find: var1 = var2;
-        """(?:[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z][a-zA-Z0-9_]{1,}\s{0,}(?=;))"""
+        """(?:[a-zA-Z0-9_]{2,50}\s{0,10}=\s{0,10}[a-zA-Z][a-zA-Z0-9_]{1,50}\s{0,10}(?=;))"""
     )
     __concatPattern: Pattern = compile(__concatenated_variable_pattern, MULTILINE)
 
