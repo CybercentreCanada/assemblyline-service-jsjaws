@@ -18,9 +18,9 @@ class Phishing(Signature):
         results = []
 
         # First look for password prompts
-        password_regex = f"(?i)\\b({'|'.join(PASSWORD_WORDS)})\\b"
+        password_regex = f"\\b({'|'.join(PASSWORD_WORDS)})\\b"
         for line in output:
-            results.extend(self.check_regex(password_regex, line))
+            results.extend(self.check_regex(password_regex, line.lower()))
 
         len_of_pwd_hits = len(results)
 
@@ -28,9 +28,9 @@ class Phishing(Signature):
             return
 
         # Next look for account prompts
-        account_regex = f"(?i)\\b({'|'.join(['email', 'account', 'phone', 'skype'])})\\b"
+        account_regex = f"\\b({'|'.join(['email', 'account', 'phone', 'skype'])})\\b"
         for line in output:
-            results.extend(self.check_regex(account_regex, line))
+            results.extend(self.check_regex(account_regex, line.lower()))
 
         if len(results) <= len_of_pwd_hits:
             # Not phishing... we need both password and account prompts
