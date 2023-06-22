@@ -128,7 +128,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: Password,email,password",
+        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: email,password",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
