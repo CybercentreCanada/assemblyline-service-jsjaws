@@ -13,6 +13,7 @@ from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
+from urllib.parse import quote_plus, urlparse, urlunparse
 
 import signatures
 from assemblyline.common import forge
@@ -3025,6 +3026,16 @@ class JsJaws(ServiceBase):
         safe_url = safe_str(url)
         # Extract URI
         uri_match = re.match(FULL_URI, safe_url)
+
+        # Let's try to UrlEncode it, sometimes the queries are not UrlEncoded by default
+        if not uri_match:
+            parsed_url = urlparse(safe_url)
+            url_encoded = urlunparse([parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params,quote_plus(parsed_url.query), parsed_url.fragment])
+            uri_match = re.match(FULL_URI, url_encoded)
+
+            if uri_match:
+                safe_url = url_encoded
+
         if uri_match:
             if is_tag_safelisted(safe_url, ["network.dynamic.uri", "network.static.uri"], self.safelist):
                 return
