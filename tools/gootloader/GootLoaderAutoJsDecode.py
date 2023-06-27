@@ -289,7 +289,7 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
 
         log('\nScript output Saved to: %s\n' % OutputFileName)
         log('\nThe script will now attempt to deobfuscate the %s file.' % OutputFileName)
-        save_file(OutputFileName, OutputCode)
+        save_file(OutputFileName, OutputCode, log)
         return True, outputDomains, OutputCode
 
     else:
@@ -324,5 +324,5 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
 
         log('\nMalicious Domains: \n\n%s' % outputDomains)
 
-    save_file(OutputFileName, OutputCode)
+    save_file(OutputFileName, OutputCode, log)
     return False, outputDomains, OutputCode
