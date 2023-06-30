@@ -44,7 +44,7 @@ def defang(input):
     start = input
     end = ""
     ignoreNext = False
-    for i,_ in enumerate(input):
+    for i, _ in enumerate(input):
         if ignoreNext:
             ignoreNext = False
             continue
@@ -59,8 +59,6 @@ def defang(input):
             break
 
     result = re.compile("([^\\[])\\.([^\\]])").sub(r"\1[.]\2", start) + end
-    # but not all! http://0x7f000001 ([^\[]):([^\]])
-    #result = result.replaceAll(new RegExp("([^\\[]):([^\\]])", 'g'), "$1[:]$2");
     result = re.compile("([^\\[]):([^\\]])").sub(r"\1[:]\2", result)
     if result.lower().startswith("http"):
         result = result.replace("https", "hxxps")
@@ -68,7 +66,7 @@ def defang(input):
     return result
 
 
-def clean_padding(file_data:str):
+def clean_padding(file_data: str):
     """
     I want to remove all the letters | numbers that appear in larger groups followed with a ;
     However, before doing so, I'll remove 95% of the bottom section of the file.
@@ -87,7 +85,7 @@ def clean_padding(file_data:str):
 def convert_concat_to_string(input_concat_matches, input_variable_dict, no_equals=False):
     concatenated_results: List[str] = []
     if no_equals:
-        dummy_equals = 'dummy='+input_concat_matches.replace('(','').replace(')','')
+        dummy_equals = 'dummy=' + input_concat_matches.replace('(','').replace(')','')
         input_concat_matches = [dummy_equals]
 
     for index, concat_item in enumerate(input_concat_matches):
@@ -96,11 +94,9 @@ def convert_concat_to_string(input_concat_matches, input_variable_dict, no_equal
 
         current_line_string = ''
         for additionItem in split_item[1].split('+'):
-            try:
-                # look up the items in the dict and join them together
+            try:  # look up the items in the dict and join them together
                 current_line_string += input_variable_dict[additionItem]
-            except Exception as e:
-                # probably a junk match
+            except:  # Probably a junk match
                 continue
             input_variable_dict.update({split_item[0]:current_line_string})
         concatenated_results.append(current_line_string)
@@ -127,20 +123,22 @@ def remainder(v1, v2, v3):
     """
     # V3 Decoding scripts converted from their JS versions
     """
-    if(v3 % 2): rtn = v1+v2
-    else: rtn = v2+v1
+    if (v3 % 2) :
+        rtn = v1 + v2
+    else:
+        rtn = v2 + v1
     return rtn
 
 
 def js_substring(inputStr, idx1):
     """Use this odd format of substring so that it matches the way JS works"""
-    return inputStr[idx1:(idx1+1)]
+    return inputStr[idx1:(idx1 + 1)]
 
 
 def work_function(inputStr):
     outputStr = ''
     for i in range(len(inputStr)):
-        var1 = js_substring(inputStr,i)
+        var1 = js_substring(inputStr, i)
         outputStr = remainder(outputStr, var1, i)
     return outputStr
 
@@ -170,7 +168,8 @@ def check_file_size(file_handle):
     file_handle.seek(0, SEEK_END)
     size = file_handle.tell()
     file_handle.seek(file_position, SEEK_SET)
-    if(size >= (2**20 * 10)): return True
+    if (size >= (2**20 * 10)):
+        return True
 
 
 def save_file(output_filename, output_code, log: Logger):
@@ -183,7 +182,7 @@ def save_file(output_filename, output_code, log: Logger):
 
 
 def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print) -> Tuple[bool, str, str]:
-    variables = VariablesParser()                        #Utility class to parse variables from JScript
+    variables = VariablesParser()                        # Utility class to parse variables from JScript
 
     gootloader3_sample = False
     output_filename: str = ""
@@ -193,11 +192,11 @@ def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, st
     file_top_lines = ''.join(file.readlines(5))
     gootloader3_sample = check_file_stage(file_top_lines, path, log)
 
-    file.seek(0)                                         #Reset the cursor
-    file_data = file.read()                              #Read the file contents
+    file.seek(0)                                         # Reset the cursor
+    file_data = file.read()                              # Read the file contents
     obfuscated_round_one = variables.run(file_data)
 
-    if(check_file_size(file)):
+    if (check_file_size(file)):
         """Handles cleaning the log files"""
         file_data = clean_padding(file_data)
     file.close()
@@ -214,7 +213,8 @@ def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, st
         """
         Grab all the relevant variables from the sample, that'll be needed to build the obfuscated blocks.
         """
-        v3_work_vars_pattern = re.compile('''(?:\((?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,}\))''') # Find: (var1+var2+var3)
+        #  Find: (var1+var2+var3)
+        v3_work_vars_pattern = re.compile('''(?:\((?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,}\))''')
         v3_work_vars = v3_work_vars_pattern.search(second_round_result)[0]
 
         vars_dict = variables.generate_lookup_table(file_data)
@@ -251,7 +251,7 @@ def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, st
         output_code = '//GOOT3\n'                      #The file header which will be needed for the next iteration
         for line in final_regex.splitlines():
             if line.strip():                           #Clean up the empty strings
-                output_code += (line+'\n')             #Generate the output code to be written to disk
+                output_code += (line + '\n')             #Generate the output code to be written to disk
         if not stage2_path:
             output_filename = 'GootLoader3Stage2.js_'
         else:
