@@ -30,7 +30,7 @@ import re
 from codecs import decode, encode
 from logging import Logger
 from os import SEEK_END, SEEK_SET
-from typing import List
+from typing import List, Tuple
 
 from tools.gootloader.utils.variables import *
 
@@ -182,7 +182,7 @@ def save_file(output_filename, output_code, log: Logger):
     out_file.close()
 
 
-def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print):
+def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print) -> Tuple[bool, str, str]:
     variables = VariablesParser()                        #Utility class to parse variables from JScript
 
     gootloader3_sample = False
@@ -203,7 +203,7 @@ def goot_decode_modified(path: str, unsafe_uris = False, payload_path = None, st
     file.close()
 
     if not obfuscated_round_one:
-        return
+        return False, "", ""
 
     first_round_result = deobfuscate(obfuscated_round_one)
     longest_string = grab_longest_string(first_round_result)
