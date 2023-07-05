@@ -1236,15 +1236,44 @@ class JsJaws(ServiceBase):
         # Let's get all of the arguments needs to run the tools
         boxjs_args, malware_jail_args, jsxray_args, synchrony_args = self._setup_tool_args(request, tool_timeout, css_path)
 
-        # Don't forget the sample!
-        malware_jail_args.append(file_path)
-
         # If there is a DIVIDING_COMMENT in the script to run, extract the actual script, send that to Synchrony/Box.js and
         # check if script is a long one-liner
         one_liner_hit = False
         actual_script = None
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
-            _, actual_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            sections_of_script = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            if len(sections_of_script) == 2:
+                _, actual_script = sections_of_script
+                # Don't forget the sample!
+                malware_jail_args.append(file_path)
+            elif len(sections_of_script) > 2:
+                # This case occurs when users resubmit the temp_javascript.js file
+                # (a supplementary file not meant for resubmission). An additional DIVIDING_COMMENT is added since
+                # there is no context that the previous writes to the DOM were from a prior execution. We'll check here
+                # if there is any duplication of script "sections" for dynamically created code.
+                section_hashes = set()
+
+                # MalwareJail requires the whole (non-duplicated) picture.
+                script_for_malware_jail = b""
+                file_for_malware_jail = None
+                for section in sections_of_script:
+                    section_hash = sha256(section).hexdigest()
+                    if section_hash in section_hashes:
+                        continue
+                    else:
+                        section_hashes.add(section_hash)
+                        script_for_malware_jail, file_for_malware_jail = self.append_content(section.decode(), script_for_malware_jail, file_for_malware_jail)
+
+                file_for_malware_jail.close()
+                malware_jail_args.append(file_for_malware_jail.name)
+
+                # There will be some duplication here in the file contents but that is fine since we are already
+                # tracking the contents written to the DOM. This is for Synchrony, Box.js and JS-X-Ray.
+                actual_script = sections_of_script[-1]
+            else:
+                return
+
+            # Synchrony, Box.js and JS-X-Ray want the original script
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                 t.write(actual_script)
                 synchrony_args.append(t.name)
@@ -1254,6 +1283,8 @@ class JsJaws(ServiceBase):
 
             one_liner_hit = self._is_single_line(actual_script)
         else:
+            # Don't forget the sample!
+            malware_jail_args.append(file_path)
             synchrony_args.append(file_path)
             boxjs_args.append(file_path)
             jsxray_args.append(file_path)
