@@ -240,7 +240,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"jzobkk.open\"}, {\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/tscw3rcg.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/tscw3rcg.dll\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"jZOBKK.open\"}, {\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/TsCw3rCG.dll\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -262,14 +262,14 @@
           "network": {
             "static": {
               "domain": [
-                "jzobkk.open",
+                "jZOBKK.open",
                 "gkjdepok.org"
               ],
               "uri": [
-                "http://gkjdepok.org/crtfc/tscw3rcg.dll"
+                "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
               ],
               "uri_path": [
-                "/crtfc/tscw3rcg.dll"
+                "/crtfc/TsCw3rCG.dll"
               ]
             }
           }
@@ -438,21 +438,21 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "jzobkk.open"
+          "value": "jZOBKK.open"
         }
       ],
       "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://gkjdepok.org/crtfc/tscw3rcg.dll"
+          "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/crtfc/tscw3rcg.dll"
+          "value": "/crtfc/TsCw3rCG.dll"
         }
       ]
     },

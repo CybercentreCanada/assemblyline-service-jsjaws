@@ -17,7 +17,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6WB/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6WB/i.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -44,10 +44,10 @@
                 "somonoo.com"
               ],
               "uri": [
-                "https://somonoo.com/6wb/i.gif"
+                "https://somonoo.com/6WB/i.gif"
               ],
               "uri_path": [
-                "/6wb/i.gif"
+                "/6WB/i.gif"
               ]
             }
           }
@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6WB/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6WB/i.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -211,10 +211,10 @@
               ],
               "uri": [
                 "https://google.com",
-                "https://somonoo.com/6wb/i.gif"
+                "https://somonoo.com/6WB/i.gif"
               ],
               "uri_path": [
-                "/6wb/i.gif"
+                "/6WB/i.gif"
               ]
             }
           }
@@ -224,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6wb/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6wb/i.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6WB/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6WB/i.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -251,10 +251,10 @@
                 "somonoo.com"
               ],
               "uri": [
-                "https://somonoo.com/6wb/i.gif"
+                "https://somonoo.com/6WB/i.gif"
               ],
               "uri_path": [
-                "/6wb/i.gif"
+                "/6WB/i.gif"
               ]
             }
           }
@@ -390,7 +390,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "https://somonoo.com/6wb/i.gif"
+          "value": "https://somonoo.com/6WB/i.gif"
         }
       ],
       "network.dynamic.uri_path": [
@@ -399,7 +399,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "/6wb/i.gif"
+          "value": "/6WB/i.gif"
         }
       ],
       "network.static.domain": [
@@ -432,12 +432,12 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "https://somonoo.com/6wb/i.gif"
+          "value": "https://somonoo.com/6WB/i.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://somonoo.com/6wb/i.gif"
+          "value": "https://somonoo.com/6WB/i.gif"
         }
       ],
       "network.static.uri_path": [
@@ -446,12 +446,12 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "/6wb/i.gif"
+          "value": "/6WB/i.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/6wb/i.gif"
+          "value": "/6WB/i.gif"
         }
       ]
     },

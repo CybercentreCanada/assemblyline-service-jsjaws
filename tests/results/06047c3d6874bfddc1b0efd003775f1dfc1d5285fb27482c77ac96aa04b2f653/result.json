@@ -125,7 +125,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.180.209.206\"}, {\"ioc_type\": \"ip\", \"ioc\": \"151.80.5.50\"}, {\"ioc_type\": \"ip\", \"ioc\": \"185.231.204.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"195.20.17.142\"}, {\"ioc_type\": \"ip\", \"ioc\": \"203.96.177.121\"}, {\"ioc_type\": \"ip\", \"ioc\": \"87.236.146.162\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ljkdbdp.dathttp:\"}]",
+        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"139.180.209.206\"}, {\"ioc_type\": \"ip\", \"ioc\": \"151.80.5.50\"}, {\"ioc_type\": \"ip\", \"ioc\": \"185.231.204.114\"}, {\"ioc_type\": \"ip\", \"ioc\": \"195.20.17.142\"}, {\"ioc_type\": \"ip\", \"ioc\": \"203.96.177.121\"}, {\"ioc_type\": \"ip\", \"ioc\": \"87.236.146.162\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/lJkDbdp.dathttp:\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -155,10 +155,10 @@
                 "87.236.146.162"
               ],
               "uri": [
-                "http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat"
+                "http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat"
               ],
               "uri_path": [
-                "/ljkdbdp.dathttp:"
+                "/lJkDbdp.dathttp:"
               ]
             }
           }
@@ -283,14 +283,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://203.96.177.121/ljkdbdp.dathttp://195.20.17.142/ljkdbdp.dathttp://185.231.204.114/ljkdbdp.dathttp://87.236.146.162/ljkdbdp.dathttp://151.80.5.50/ljkdbdp.dathttp://139.180.209.206/ljkdbdp.dat"
+          "value": "http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/ljkdbdp.dathttp:"
+          "value": "/lJkDbdp.dathttp:"
         }
       ]
     },
