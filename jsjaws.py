@@ -2663,13 +2663,16 @@ class JsJaws(ServiceBase):
                 doc_write = False
 
             # The content from a document write is going to start on the next line if there is a match here
-            if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write(content)"]):
+            # This should cover both document.write(content) and document.writeln(content)
+            if all(item in line.split("] ", 1)[1][:40] for item in ["document", "write", "(content)"]):
                 doc_write = True
 
         if not content_to_write_list:
             return
 
-        content_to_write = "\n".join(content_to_write_list).encode()
+        # Do not join by newline because that is not how a browser interprets multiple document.write calls
+        # document.writeln calls will end with a newline in document.js
+        content_to_write = "".join(content_to_write_list).encode()
         doc_write_hash = sha256(content_to_write).hexdigest()
 
         if doc_write_hash in self.doc_write_hashes:
