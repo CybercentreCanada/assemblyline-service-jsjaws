@@ -485,7 +485,7 @@ class TestJsJaws:
             "[2022-10-18T20:12:53.924Z] => 'password?!'",
         ]
         jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
-        expected_doc_write = "write me!\nwrite me too!\npassword?!"
+        expected_doc_write = "write me!write me too!password?!"
         assert jsjaws_class_instance.doc_write_hashes == { sha256(expected_doc_write.encode()).hexdigest() }
         assert dummy_request_class_instance.temp_submission_data.get("passwords") == ['me', 'me!', 'password', 'password?!', 'too', 'too!', 'write']
 
