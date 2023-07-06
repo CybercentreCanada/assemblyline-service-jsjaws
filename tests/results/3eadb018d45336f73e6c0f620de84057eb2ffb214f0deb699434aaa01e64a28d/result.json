@@ -17,7 +17,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -44,10 +44,10 @@
                 "finetuning-digital.com"
               ],
               "uri": [
-                "https://finetuning-digital.com/wrule/01.gif"
+                "https://finetuning-digital.com/wRuLe/01.gif"
               ],
               "uri_path": [
-                "/wrule/01.gif"
+                "/wRuLe/01.gif"
               ]
             }
           }
@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -211,10 +211,10 @@
               ],
               "uri": [
                 "https://google.com",
-                "https://finetuning-digital.com/wrule/01.gif"
+                "https://finetuning-digital.com/wRuLe/01.gif"
               ],
               "uri_path": [
-                "/wrule/01.gif"
+                "/wRuLe/01.gif"
               ]
             }
           }
@@ -224,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wrule/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wrule/01.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -251,10 +251,10 @@
                 "finetuning-digital.com"
               ],
               "uri": [
-                "https://finetuning-digital.com/wrule/01.gif"
+                "https://finetuning-digital.com/wRuLe/01.gif"
               ],
               "uri_path": [
-                "/wrule/01.gif"
+                "/wRuLe/01.gif"
               ]
             }
           }
@@ -390,7 +390,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "https://finetuning-digital.com/wrule/01.gif"
+          "value": "https://finetuning-digital.com/wRuLe/01.gif"
         }
       ],
       "network.dynamic.uri_path": [
@@ -399,7 +399,7 @@
           "signatures": [
             "wscript_curl_url"
           ],
-          "value": "/wrule/01.gif"
+          "value": "/wRuLe/01.gif"
         }
       ],
       "network.static.domain": [
@@ -427,12 +427,12 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "https://finetuning-digital.com/wrule/01.gif"
+          "value": "https://finetuning-digital.com/wRuLe/01.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://finetuning-digital.com/wrule/01.gif"
+          "value": "https://finetuning-digital.com/wRuLe/01.gif"
         },
         {
           "heur_id": 2,
@@ -446,12 +446,12 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "/wrule/01.gif"
+          "value": "/wRuLe/01.gif"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/wrule/01.gif"
+          "value": "/wRuLe/01.gif"
         }
       ]
     },

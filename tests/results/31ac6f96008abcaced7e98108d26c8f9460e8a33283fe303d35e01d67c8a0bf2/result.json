@@ -220,7 +220,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"add.in\"}, {\"ioc_type\": \"domain\", \"ioc\": \"metric.cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?linkid=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?linkid=71543\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"msdn.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ddue.schemas.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"Add.In\"}, {\"ioc_type\": \"domain\", \"ioc\": \"Metric.Cl\"}, {\"ioc_type\": \"domain\", \"ioc\": \"go.microsoft.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=71543\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -245,25 +245,25 @@
                 "msdn.microsoft.com",
                 "ddue.schemas.microsoft.com",
                 "www.microsoft.com",
-                "add.in",
-                "metric.cl",
+                "Add.In",
+                "Metric.Cl",
                 "go.microsoft.com"
               ],
               "uri": [
                 "http://msdn.microsoft.com/mshelp",
                 "http://ddue.schemas.microsoft.com/authoring/2003/5",
                 "http://www.microsoft.com/tooltip",
-                "http://go.microsoft.com/fwlink/?linkid=117437",
-                "http://go.microsoft.com/fwlink/?linkid=71543.",
-                "http://go.microsoft.com/fwlink/?linkid=71543"
+                "http://go.microsoft.com/fwlink/?LinkID=117437",
+                "http://go.microsoft.com/fwlink/?LinkID=71543.",
+                "http://go.microsoft.com/fwlink/?LinkID=71543"
               ],
               "uri_path": [
                 "/mshelp",
                 "/authoring/2003/5",
                 "/tooltip",
-                "/fwlink/?linkid=117437",
-                "/fwlink/?linkid=71543.",
-                "/fwlink/?linkid=71543"
+                "/fwlink/?LinkID=117437",
+                "/fwlink/?LinkID=71543.",
+                "/fwlink/?LinkID=71543"
               ]
             }
           }
@@ -361,7 +361,12 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "add.in"
+          "value": "Add.In"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "Metric.Cl"
         },
         {
           "heur_id": 2,
@@ -372,11 +377,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "go.microsoft.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "metric.cl"
         },
         {
           "heur_id": 2,
@@ -398,17 +398,17 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://go.microsoft.com/fwlink/?linkid=117437"
+          "value": "http://go.microsoft.com/fwlink/?LinkID=117437"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://go.microsoft.com/fwlink/?linkid=71543"
+          "value": "http://go.microsoft.com/fwlink/?LinkID=71543"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://go.microsoft.com/fwlink/?linkid=71543."
+          "value": "http://go.microsoft.com/fwlink/?LinkID=71543."
         },
         {
           "heur_id": 2,
@@ -430,17 +430,17 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/fwlink/?linkid=117437"
+          "value": "/fwlink/?LinkID=117437"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/fwlink/?linkid=71543"
+          "value": "/fwlink/?LinkID=71543"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/fwlink/?linkid=71543."
+          "value": "/fwlink/?LinkID=71543."
         },
         {
           "heur_id": 2,

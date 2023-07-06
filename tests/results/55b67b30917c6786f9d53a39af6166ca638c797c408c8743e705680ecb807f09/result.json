@@ -203,7 +203,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"Liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -228,6 +228,7 @@
                 "liftca.org",
                 "cdnjs.cloudflare.com",
                 "logo.clearbit.com",
+                "Liftca.org",
                 "ip.seeip.org",
                 "api.telegram.org",
                 "ia801500.us.archive.org"
@@ -239,14 +240,14 @@
                 "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js",
                 "https://logo.clearbit.com/liftca.org",
                 "https://ip.seeip.org/geoip",
-                "https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage",
+                "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage",
                 "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
               ],
               "uri_path": [
                 "/ajax/libs/zepto/1.2.0/zepto.min.js",
                 "/liftca.org",
                 "/geoip",
-                "/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage",
+                "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage",
                 "/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
               ]
             }
@@ -512,6 +513,11 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "Liftca.org"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "api.telegram.org"
         },
         {
@@ -551,7 +557,7 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://api.telegram.org/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage"
+          "value": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
         },
         {
           "heur_id": 2,
@@ -595,7 +601,7 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/bot1843792137:aaek1uknbodz64w-oxep8m3behanh1pvfhw/sendmessage"
+          "value": "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
         },
         {
           "heur_id": 2,

@@ -144,7 +144,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"capsimports.shop\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dst.co.tz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"lojalz14.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"redbook.cloud\"}, {\"ioc_type\": \"domain\", \"ioc\": \"utilimixnatal.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"veley.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://capsimports.shop/hrsdh/m2i5rwx05cml\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hrsdh/m2i5rwx05cml\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dst.co.tz/aszwuul/4tj1t\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/aszwuul/4tj1t\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://lojalz14.com.br/8jj3b/ny3yqb\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/8jj3b/ny3yqb\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://redbook.cloud/9ogznh/midmp7cha\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/9ogznh/midmp7cha\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://utilimixnatal.com.br/dj9c/x2yrcdc18s\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/dj9c/x2yrcdc18s\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://veley.co/5xxk2l/uu9ggcjc\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/5xxk2l/uu9ggcjc\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"capsimports.shop\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dst.co.tz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"lojalz14.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"redbook.cloud\"}, {\"ioc_type\": \"domain\", \"ioc\": \"utilimixnatal.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"veley.co\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://capsimports.shop/hrSDh/m2i5rWx05cml\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/hrSDh/m2i5rWx05cml\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dst.co.tz/AsZWuUl/4Tj1t\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/AsZWuUl/4Tj1t\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://lojalz14.com.br/8jJ3b/NY3yqB\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/8jJ3b/NY3yqB\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://redbook.cloud/9OGzNH/MiDmP7ChA\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/9OGzNH/MiDmP7ChA\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://utilimixnatal.com.br/DJ9c/x2yRcdC18S\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/DJ9c/x2yRcdC18S\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://veley.co/5xxk2L/uU9ggcjC\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/5xxk2L/uU9ggcjC\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -174,20 +174,20 @@
                 "veley.co"
               ],
               "uri": [
-                "https://capsimports.shop/hrsdh/m2i5rwx05cml",
-                "https://dst.co.tz/aszwuul/4tj1t",
-                "https://lojalz14.com.br/8jj3b/ny3yqb",
-                "https://redbook.cloud/9ogznh/midmp7cha",
-                "https://utilimixnatal.com.br/dj9c/x2yrcdc18s",
-                "https://veley.co/5xxk2l/uu9ggcjc"
+                "https://capsimports.shop/hrSDh/m2i5rWx05cml",
+                "https://dst.co.tz/AsZWuUl/4Tj1t",
+                "https://lojalz14.com.br/8jJ3b/NY3yqB",
+                "https://redbook.cloud/9OGzNH/MiDmP7ChA",
+                "https://utilimixnatal.com.br/DJ9c/x2yRcdC18S",
+                "https://veley.co/5xxk2L/uU9ggcjC"
               ],
               "uri_path": [
-                "/hrsdh/m2i5rwx05cml",
-                "/aszwuul/4tj1t",
-                "/8jj3b/ny3yqb",
-                "/9ogznh/midmp7cha",
-                "/dj9c/x2yrcdc18s",
-                "/5xxk2l/uu9ggcjc"
+                "/hrSDh/m2i5rWx05cml",
+                "/AsZWuUl/4Tj1t",
+                "/8jJ3b/NY3yqB",
+                "/9OGzNH/MiDmP7ChA",
+                "/DJ9c/x2yRcdC18S",
+                "/5xxk2L/uU9ggcjC"
               ]
             }
           }
@@ -322,64 +322,64 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://capsimports.shop/hrsdh/m2i5rwx05cml"
+          "value": "https://capsimports.shop/hrSDh/m2i5rWx05cml"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://dst.co.tz/aszwuul/4tj1t"
+          "value": "https://dst.co.tz/AsZWuUl/4Tj1t"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://lojalz14.com.br/8jj3b/ny3yqb"
+          "value": "https://lojalz14.com.br/8jJ3b/NY3yqB"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://redbook.cloud/9ogznh/midmp7cha"
+          "value": "https://redbook.cloud/9OGzNH/MiDmP7ChA"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://utilimixnatal.com.br/dj9c/x2yrcdc18s"
+          "value": "https://utilimixnatal.com.br/DJ9c/x2yRcdC18S"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://veley.co/5xxk2l/uu9ggcjc"
+          "value": "https://veley.co/5xxk2L/uU9ggcjC"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/5xxk2l/uu9ggcjc"
+          "value": "/5xxk2L/uU9ggcjC"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/8jj3b/ny3yqb"
+          "value": "/8jJ3b/NY3yqB"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/9ogznh/midmp7cha"
+          "value": "/9OGzNH/MiDmP7ChA"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/aszwuul/4tj1t"
+          "value": "/AsZWuUl/4Tj1t"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/dj9c/x2yrcdc18s"
+          "value": "/DJ9c/x2yRcdC18S"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/hrsdh/m2i5rwx05cml"
+          "value": "/hrSDh/m2i5rWx05cml"
         }
       ]
     },
