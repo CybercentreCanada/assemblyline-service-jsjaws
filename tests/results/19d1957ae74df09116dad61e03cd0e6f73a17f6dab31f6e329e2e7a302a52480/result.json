@@ -224,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpiHmi/invoice.pdf\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -251,11 +251,11 @@
               ],
               "uri": [
                 "https://abc.xyz/img/bg-cropped.jpg",
-                "https://transfer.sh/get/vpihmi/invoice.pdf"
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
               ],
               "uri_path": [
                 "/img/bg-cropped.jpg",
-                "/get/vpihmi/invoice.pdf"
+                "/get/vpiHmi/invoice.pdf"
               ]
             }
           }
@@ -265,7 +265,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpihmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpihmi/invoice.pdf\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpiHmi/invoice.pdf\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -292,10 +292,10 @@
                 "transfer.sh"
               ],
               "uri": [
-                "https://transfer.sh/get/vpihmi/invoice.pdf"
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
               ],
               "uri_path": [
-                "/get/vpihmi/invoice.pdf"
+                "/get/vpiHmi/invoice.pdf"
               ]
             }
           }
@@ -466,7 +466,7 @@
           "signatures": [
             "wscript_pwsh_url"
           ],
-          "value": "https://transfer.sh/get/vpihmi/invoice.pdf"
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
         }
       ],
       "network.dynamic.uri_path": [
@@ -475,7 +475,7 @@
           "signatures": [
             "wscript_pwsh_url"
           ],
-          "value": "/get/vpihmi/invoice.pdf"
+          "value": "/get/vpiHmi/invoice.pdf"
         },
         {
           "heur_id": 1,
@@ -504,14 +504,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://transfer.sh/get/vpihmi/invoice.pdf"
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/get/vpihmi/invoice.pdf"
+          "value": "/get/vpiHmi/invoice.pdf"
         },
         {
           "heur_id": 2,
