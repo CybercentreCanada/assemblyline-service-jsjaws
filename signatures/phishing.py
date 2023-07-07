@@ -5,12 +5,12 @@ from assemblyline_v4_service.common.utils import PASSWORD_WORDS
 from signatures.abstracts import Signature
 
 
-class Phishing(Signature):
+class PhishingTerms(Signature):
     def __init__(self):
         super().__init__(
             heuristic_id=3,
-            name="phishing",
-            description="JavaScript builds a webpage that is used for phishing",
+            name="phishing_terms",
+            description="JavaScript uses terms commonly associated with logging in",
             severity=1
         )
 
@@ -41,3 +41,17 @@ class Phishing(Signature):
                 self.marks.append(f"The following terms were found in the document: {','.join(sorted(set(results_set))[:25])}. {len(results_set[25:])} marks were not displayed.")
             else:
                 self.marks.append(f"The following terms were found in the document: {','.join(results_set)}")
+
+
+class PhishingLogoDownload(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_logo_download",
+            description="JavaScript reaches out to common URL that is used for hosting logos for organizations.",
+            indicators=["logo.clearbit.com"],
+            severity=1
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
