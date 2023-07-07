@@ -510,6 +510,8 @@ class JsJaws(ServiceBase):
         self.leading_garbage: Optional[bool] = None
         # Flag that the split_reverse_join signature was raised
         self.split_reverse_join: Optional[bool] = None
+        # Flag that the file is phishing
+        self.is_phishing: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -544,6 +546,7 @@ class JsJaws(ServiceBase):
         self.function_inception = False
         self.leading_garbage = False
         self.split_reverse_join = False
+        self.is_phishing = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -2751,9 +2754,10 @@ class JsJaws(ServiceBase):
             return
 
         urls_result_section = ResultTableSection("URLs")
-        urls_result_section.set_column_order(["url", "method"])
+        urls_result_section.set_column_order(["url", "method", "request_body"])
         urls_rows: List[TableRow] = []
         items_seen: Set[str] = set()
+        post_seen = False
 
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
@@ -2764,6 +2768,8 @@ class JsJaws(ServiceBase):
                         item["url"] = truncate(item["url"], 500)
                     if is_tag_safelisted(item["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
                         continue
+                    if item.get("method", "").lower() == "post":
+                        post_seen = True
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
@@ -2785,6 +2791,8 @@ class JsJaws(ServiceBase):
                         elif is_tag_safelisted(value["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
+                        if item.get("method", "").lower() == "post":
+                            post_seen = True
                         if dumps(item) not in items_seen:
                             items_seen.add(dumps(item))
                             urls_rows.append(TableRow(**item))
@@ -2806,6 +2814,9 @@ class JsJaws(ServiceBase):
 
             if self.split_reverse_join:
                 urls_result_section.heuristic.add_signature_id("split_reverse_join_url")
+
+            if self.is_phishing and post_seen:
+                urls_result_section.heuristic.add_signature_id("is_phishing_url")
 
             result.add_section(urls_result_section)
 
@@ -2891,6 +2902,9 @@ class JsJaws(ServiceBase):
             thread.join()
         self.log.debug(f"Completed running {len(sigs)} signatures! Time elapsed: {round(time() - start_time)}s")
 
+        phishing_terms = False
+        phishing_logos = False
+
         # Adding signatures to results
         if len(signatures_that_hit) > 0:
             sigs_res_sec = ResultSection("Signatures")
@@ -2898,6 +2912,10 @@ class JsJaws(ServiceBase):
             for sig_that_hit in sorted(signatures_that_hit, key=lambda x: x.name):
                 if sig_that_hit.name == "split_reverse_join":
                     self.split_reverse_join = True
+                elif sig_that_hit.name == "phishing_terms":
+                    phishing_terms = True
+                elif sig_that_hit.name == "phishing_logo_download":
+                    phishing_logos = True
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -2908,6 +2926,9 @@ class JsJaws(ServiceBase):
                         sig_res_sec.add_line(f"\t\t{truncate(mark)}")
 
             result.add_section(sigs_res_sec)
+
+        if phishing_terms and phishing_logos:
+            self.is_phishing = True
 
     @staticmethod
     def _process_signature(signature: Signature, output: List[str], signatures_that_hit: List[Signature]) -> None:
