@@ -3209,7 +3209,7 @@ class JsJaws(ServiceBase):
             return
 
         # We do not want a loop of Synchrony extractions
-        if request.temp_submission_data.get("cleaned_by_synchrony"):
+        if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
             return
 
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
