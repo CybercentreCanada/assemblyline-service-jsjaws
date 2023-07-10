@@ -287,6 +287,8 @@
         }
       ]
     },
-    "temp_submission_data": {}
+    "temp_submission_data": {
+      "cleaned_by_synchrony": true
+    }
   }
 }

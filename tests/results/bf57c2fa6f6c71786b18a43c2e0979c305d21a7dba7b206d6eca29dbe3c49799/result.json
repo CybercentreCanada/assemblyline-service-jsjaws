@@ -320,6 +320,7 @@
       ]
     },
     "temp_submission_data": {
+      "cleaned_by_synchrony": true,
       "passwords": [
         "\t\tDocument Password:",
         "Document",
