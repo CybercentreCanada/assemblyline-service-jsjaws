@@ -2231,6 +2231,9 @@ class JsJaws(ServiceBase):
                 continue
 
             if script.get("type", "").lower() in ["", "text/javascript"]:
+                # BeautifulSoup has failed us, don't add this as it will break JavaScript compilation
+                if body.startswith("<script "):
+                    continue
                 aggregated_js_script, js_content, body = self._handle_misparsed_soup(body, aggregated_js_script, js_content, request)
 
                 # If there is no "type" attribute specified in a script element, then the default assumption is
