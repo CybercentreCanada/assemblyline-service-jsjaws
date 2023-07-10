@@ -551,6 +551,7 @@ class JsJaws(ServiceBase):
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
         This method resets variables that are expected to return to their default values when a gauntlet run begins.
+        :param request: The ServiceRequest object
         :return: None
         """
         # Reset per gauntlet run
@@ -784,6 +785,10 @@ class JsJaws(ServiceBase):
             mkdir(self.malware_jail_sandbox_env_dir)
 
         self._run_the_gauntlet(request, file_path, file_content)
+
+        if path.exists(self.cleaned_with_synchrony_path):
+            # Set this to avoid a loop of Synchrony extractions
+            request.temp_submission_data["cleaned_by_synchrony"] = True
 
     def _raise_embedded_code_in_lib(self, request: ServiceRequest) -> None:
         """
@@ -1397,7 +1402,7 @@ class JsJaws(ServiceBase):
         # TODO: Do something with the Synchrony output
         _ = responses.get(SYNCHRONY)
 
-        self._extract_synchrony(request.result)
+        self._extract_synchrony(request)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
@@ -3194,18 +3199,23 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, result: Result):
+    def _extract_synchrony(self, request: ServiceRequest):
         """
         This method extracts the created Synchrony artifact, if applicable
-        :param result: A Result object containing the service results
+        :param request: The ServiceRequest object
         :return: None
         """
         if not path.exists(self.cleaned_with_synchrony_path):
             return
+
+        # We do not want a loop of Synchrony extractions
+        if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
+            return
+
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
         deobfuscated_with_synchrony_res.set_heuristic(8)
-        result.add_section(deobfuscated_with_synchrony_res)
+        request.result.add_section(deobfuscated_with_synchrony_res)
 
         artifact = {
             "name": self.cleaned_with_synchrony,
@@ -3217,7 +3227,7 @@ class JsJaws(ServiceBase):
         self.artifact_list.append(artifact)
 
         # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io, we should flag this combination with a signature that scores 500
-        for result_section in result.sections:
+        for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug("Added the obfuscator_io_url_redirect signature to the result section to score the tagged URLs")
                 result_section.heuristic.add_signature_id("obfuscator_io_url_redirect")
