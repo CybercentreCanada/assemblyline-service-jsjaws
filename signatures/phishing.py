@@ -49,9 +49,15 @@ class PhishingLogoDownload(Signature):
             heuristic_id=3,
             name="phishing_logo_download",
             description="JavaScript reaches out to common URL that is used for hosting logos for organizations.",
-            indicators=["logo.clearbit.com"],
+            indicators=["logo.clearbit.com", "vectorstock.com", "1.bp.blogspot.com"],
             severity=1
         )
 
     def process_output(self, output):
-        self.check_indicators_in_list(output)
+        indicator_list = [
+            {
+                "method": "any",
+                "indicators": self.indicators
+            },
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
