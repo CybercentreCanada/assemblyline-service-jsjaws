@@ -101,7 +101,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.icodeps.com/jsapi.php\", \"method\": \"GET\"}]",
+        "body": "[{\"url\": \"https://www.icodeps.com/jsapi.php\", \"method\": \"get\"}]",
         "body_config": {
           "column_order": [
             "url",
