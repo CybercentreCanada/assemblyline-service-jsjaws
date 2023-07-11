@@ -72,3 +72,23 @@ class GeoIPServiceRequest(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class TelegramExfil(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="telegram_exfil",
+            description="An outgoing POST request was made to Telegram",
+            indicators=["XMLHttpRequest", ".open(", "post", "api.telegram.org"],
+            severity=3
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {
+                "method": "all",
+                "indicators": self.indicators
+            },
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
