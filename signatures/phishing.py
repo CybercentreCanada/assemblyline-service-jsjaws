@@ -70,7 +70,7 @@ class PhishingReEnterPrompt(Signature):
             name="phishing_reenter_prompt",
             description="JavaScript prompts user to re-enter account data.",
             indicators=["incorrect ", "try again", " be empty"],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):
@@ -90,7 +90,7 @@ class PhishingPostPassword(Signature):
             name="phishing_post_password",
             description="JavaScript makes network request via POST with password data.",
             indicators=["XMLHttpRequest", "JsJ@w$==C00l!"],
-            severity=1
+            severity=0
         )
 
     def process_output(self, output):
