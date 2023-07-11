@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 3353,
+    "score": 3263,
     "sections": [
       {
         "auto_collapse": false,
@@ -160,9 +160,9 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 100,
+          "score": 10,
           "score_map": {
-            "phishing_post_password": 100
+            "phishing_post_password": 10
           },
           "signatures": {
             "phishing_post_password": 1
