@@ -39,43 +39,17 @@ regex:
   # GStatic
   - .*\.gstatic\.com$
   network.static.uri:
-  # GoogleAPIs
-  - https?://.*\.googleapis\.com(?:$|/.*)
-  # GStatic
-  - https?://.*\.gstatic\.com(?:$|/.*)
-  # WWW
-  - https?://www\.w3\.org(?:$|/.*)
   # Bootstrap
-  - https?://getbootstrap\.com(?:$|/.*)
   - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
-  # Microsoft Auth
-  - https?://aadcdn\.msftauth\.net(?:$|/.*)
-  # jQuery
-  - https?://code\.jquery\.com(?:$|/.*)
-  # FontAwesome
-  - https?://use\.fontawesome\.com(?:$|/.*)
-  # Google Analytics
-  - https?://www\.google-analytics\.com(?:$|/.*)
+  # JQuery
+  - https?://ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js
   network.dynamic.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
   # GStatic
   - .*\.gstatic\.com$
   network.dynamic.uri:
-  # GoogleAPIs
-  - https?://.*\.googleapis\.com(?:$|/.*)
-  # GStatic
-  - https?://.*\.gstatic\.com(?:$|/.*)
-  # WWW
-  - https?://www\.w3\.org(?:$|/.*)
   # Bootstrap
-  - https?://getbootstrap\.com(?:$|/.*)
   - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
-  # Microsoft Auth
-  - https?://aadcdn\.msftauth\.net(?:$|/.*)
-  # jQuery
-  - https?://code\.jquery\.com(?:$|/.*)
-  # FontAwesome
-  - https?://use\.fontawesome\.com(?:$|/.*)
-  # Google Analytics
-  - https?://www\.google-analytics\.com(?:$|/.*)
+  # JQuery
+  - https?://ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js
