@@ -220,7 +220,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "An outgoing POST request was made to Telegram\n\t\tXMLHttpRequest[43].open(post,https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pv...",
+        "body": "An outgoing request was made to Telegram\n\t\tXMLHttpRequest[43].open(post,https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pv...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

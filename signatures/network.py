@@ -79,8 +79,8 @@ class TelegramExfil(Signature):
         super().__init__(
             heuristic_id=3,
             name="telegram_exfil",
-            description="An outgoing POST request was made to Telegram",
-            indicators=["XMLHttpRequest", ".open(", "post", "api.telegram.org"],
+            description="An outgoing request was made to Telegram",
+            indicators=["XMLHttpRequest", ".open(", "api.telegram.org"],
             severity=3
         )
 

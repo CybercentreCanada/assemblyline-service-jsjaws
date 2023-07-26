@@ -49,7 +49,7 @@ class PhishingLogoDownload(Signature):
             heuristic_id=3,
             name="phishing_logo_download",
             description="JavaScript reaches out to common URL that is used for hosting logos for organizations.",
-            indicators=["logo.clearbit.com", "vectorstock.com", "1.bp.blogspot.com", "2.bp.blogspot.com", "3.bp.blogspot.com", "4.bp.blogspot.com", "pngtoico.io"],
+            indicators=["logo.clearbit.com", "vectorstock.com", "1.bp.blogspot.com", "2.bp.blogspot.com", "3.bp.blogspot.com", "4.bp.blogspot.com", "pngtoico.io", "aadcdn.msauth.net/shared/1.0/content/images/", "softwarereviews.s3.amazonaws.com/production/favicons/", "logincdn.msauth.net/shared/1.0/content/images/"],
             severity=1
         )
 
