@@ -262,8 +262,8 @@
           "network": {
             "static": {
               "domain": [
-                "jZOBKK.open",
-                "gkjdepok.org"
+                "gkjdepok.org",
+                "jZOBKK.open"
               ],
               "uri": [
                 "http://gkjdepok.org/crtfc/TsCw3rCG.dll"

@@ -63,7 +63,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"permissions.default.camera\"}, {\"ioc_type\": \"domain\", \"ioc\": \"toolkit.telemetry.pioneer\"}, {\"ioc_type\": \"domain\", \"ioc\": \"centarial.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://centarial.com/documento.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/documento.php\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"permissions.default.camera\"}, {\"ioc_type\": \"domain\", \"ioc\": \"toolkit.telemetry.pioneer\"}, {\"ioc_type\": \"domain\", \"ioc\": \"centarial.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://centarial.com/documento.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/documento.php\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -85,14 +85,14 @@
           "network": {
             "static": {
               "domain": [
+                "centarial.com",
                 "google.com",
                 "permissions.default.camera",
-                "toolkit.telemetry.pioneer",
-                "centarial.com"
+                "toolkit.telemetry.pioneer"
               ],
               "uri": [
-                "https://google.com",
-                "http://centarial.com/documento.php"
+                "http://centarial.com/documento.php",
+                "https://google.com"
               ],
               "uri_path": [
                 "/documento.php"

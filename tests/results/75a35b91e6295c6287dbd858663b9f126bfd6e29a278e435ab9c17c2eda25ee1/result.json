@@ -67,7 +67,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"iscast.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/udit/udit.php?68977\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tapasyaevents.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fmu/fmu.php?55724\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dealsontrainers.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tete/tete.php?85434\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"iscast.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tapasyaevents.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"dealsontrainers.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/udit/udit.php?68977\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tete/tete.php?85434\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -89,19 +89,19 @@
           "network": {
             "static": {
               "domain": [
+                "dealsontrainers.org",
                 "iscast.com.br",
-                "tapasyaevents.com",
-                "dealsontrainers.org"
+                "tapasyaevents.com"
               ],
               "uri": [
+                "https://dealsontrainers.org/tete/tete.php?85434",
                 "https://iscast.com.br/udit/udit.php?68977",
-                "https://tapasyaevents.com/fmu/fmu.php?55724",
-                "https://dealsontrainers.org/tete/tete.php?85434"
+                "https://tapasyaevents.com/fmu/fmu.php?55724"
               ],
               "uri_path": [
-                "/udit/udit.php?68977",
                 "/fmu/fmu.php?55724",
-                "/tete/tete.php?85434"
+                "/tete/tete.php?85434",
+                "/udit/udit.php?68977"
               ]
             }
           }

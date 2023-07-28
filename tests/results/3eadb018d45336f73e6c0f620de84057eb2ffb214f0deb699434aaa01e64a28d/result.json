@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -206,12 +206,12 @@
           "network": {
             "static": {
               "domain": [
-                "google.com",
-                "finetuning-digital.com"
+                "finetuning-digital.com",
+                "google.com"
               ],
               "uri": [
-                "https://google.com",
-                "https://finetuning-digital.com/wRuLe/01.gif"
+                "https://finetuning-digital.com/wRuLe/01.gif",
+                "https://google.com"
               ],
               "uri_path": [
                 "/wRuLe/01.gif"
