@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"139.99.117.17\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://139.99.117.17/68597.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/68597.dat\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",

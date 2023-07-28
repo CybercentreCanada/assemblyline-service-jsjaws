@@ -224,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://deal.real\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpiHmi/invoice.pdf\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"abc.xyz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://deal.real\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://abc.xyz/img/bg-cropped.jpg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/img/bg-cropped.jpg\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
