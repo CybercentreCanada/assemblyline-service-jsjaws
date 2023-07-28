@@ -261,8 +261,14 @@
         "tags": {
           "network": {
             "static": {
+              "domain": [
+                "ia801500.us.archive.org"
+              ],
               "uri": [
                 "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
+              ],
+              "uri_path": [
+                "/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
               ]
             }
           }
@@ -427,7 +433,7 @@
       },
       {
         "name": "temp_javascript.js",
-        "sha256": "1fccd040e824d46fbf60348275bd956268ece8d8a9d0ab618f3681308e1bb03f"
+        "sha256": "b14087e4d328dad79521f98a07adf69d1bf94c8ee046eb4e2fba20e171ab065e"
       }
     ]
   },
@@ -628,6 +634,13 @@
           "value": "cdnjs.cloudflare.com"
         },
         {
+          "heur_id": 6,
+          "signatures": [
+            "obfuscator_io_url_redirect"
+          ],
+          "value": "ia801500.us.archive.org"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "ia801500.us.archive.org"
@@ -690,6 +703,13 @@
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 6,
+          "signatures": [
+            "obfuscator_io_url_redirect"
+          ],
+          "value": "/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3"
+        },
         {
           "heur_id": 2,
           "signatures": [],

@@ -52,6 +52,9 @@
                 "https://aspencontractingventura.com/xmlrpc.php",
                 "https://dolanyok.com/xmlrpc.php",
                 "https://wlext.is/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
               ]
             }
           }
@@ -296,6 +299,13 @@
           "heur_id": 4,
           "signatures": [],
           "value": "https://wlext.is/xmlrpc.php"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
         }
       ]
     },
