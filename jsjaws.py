@@ -13,7 +13,6 @@ from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
-from urllib.parse import quote_plus, urlparse, urlunparse
 
 import signatures
 from assemblyline.common import forge
@@ -22,12 +21,9 @@ from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
-from assemblyline.odm.base import DOMAIN_REGEX, FULL_URI, IP_REGEX, URI_PATH
-from assemblyline_service_utilities.common.dynamic_service_helper import (
-    URL_REGEX,
-    OntologyResults,
-    extract_iocs_from_text_blob,
-)
+from assemblyline.odm.base import FULL_URI, URI_REGEX
+from assemblyline_service_utilities.common.dynamic_service_helper import OntologyResults, extract_iocs_from_text_blob
+from assemblyline_service_utilities.common.extractor.base64 import BASE64_RE
 from assemblyline_service_utilities.common.safelist_helper import is_tag_safelisted
 from assemblyline_service_utilities.common.tag_helper import add_tag
 from assemblyline_v4_service.common.api import ServiceAPIError
@@ -449,6 +445,10 @@ SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
 # <html>
 HTML_START = b"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
 
+# Example:
+# atob was seen decoding a URI: 'http://blah.com'
+ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -512,6 +512,10 @@ class JsJaws(ServiceBase):
         self.split_reverse_join: Optional[bool] = None
         # Flag that the file is phishing
         self.is_phishing: Optional[bool] = None
+        # Flag that the file sets long base64-encoded strings to weird attributes, like innerText or input:value
+        self.weird_base64_value_set: Optional[bool] = None
+        # List of marks to indicate if a base64-encoded URL was base64-decoded
+        self.base64_encoded_urls: List[str] = []
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -547,6 +551,8 @@ class JsJaws(ServiceBase):
         self.leading_garbage = False
         self.split_reverse_join = False
         self.is_phishing = False
+        self.weird_base64_value_set = False
+        self.base64_encoded_urls = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1864,6 +1870,10 @@ class JsJaws(ServiceBase):
             if element_value.startswith(CDATA_START) and element_value.endswith(CDATA_END):
                 element_value = element_value[9:-3]
 
+            # Catch long base64-encoded strings set in weird element attributes
+            if not self.weird_base64_value_set and len(element_value) > 2000 and re.match(BASE64_RE, element_value.encode()):
+                self.weird_base64_value_set = True
+
             return f"{random_element_varname}.innerText = \"{element_value}\";\n"
 
         return ""
@@ -2697,8 +2707,8 @@ class JsJaws(ServiceBase):
                 if self.gauntlet_runs >= 5 and self.script_with_source_and_no_body:
                     url_sec = ResultTableSection("Script sources that were found in nested DOM writes")
                     for script_src in self.script_sources:
-                        url_sec.add_row(TableRow(**{"url": script_src}))
-                        self._tag_uri(script_src, url_sec)
+                        if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
+                            url_sec.add_row(TableRow(**{"url": script_src}))
 
                     if url_sec.body:
                         heur15_res_sec.set_heuristic(None)
@@ -2774,17 +2784,13 @@ class JsJaws(ServiceBase):
                 for item in urls_json:
                     if len(item["url"]) > 500:
                         item["url"] = truncate(item["url"], 500)
-                    if is_tag_safelisted(item["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                    if not add_tag(urls_result_section, "network.dynamic.uri", item["url"], self.safelist):
                         continue
                     if item.get("method", "").lower() == "post":
                         post_seen = True
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
-                    else:
-                        continue
-                for url in urls_rows:
-                    self._tag_uri(url["url"], urls_result_section)
 
         if len(glob(self.boxjs_iocs)) > 0:
             boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
@@ -2796,7 +2802,7 @@ class JsJaws(ServiceBase):
                     if ioc["type"] == "UrlFetch":
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
-                        elif is_tag_safelisted(value["url"], ["network.dynamic.uri", "network.static.uri"], self.safelist):
+                        elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
                         if item.get("method", "").lower() == "post":
@@ -2806,7 +2812,6 @@ class JsJaws(ServiceBase):
                             urls_rows.append(TableRow(**item))
                         else:
                             continue
-                        self._tag_uri(value["url"], urls_result_section)
 
         if urls_rows:
             [urls_result_section.add_row(urls_row) for urls_row in urls_rows]
@@ -2825,6 +2830,9 @@ class JsJaws(ServiceBase):
 
             if self.is_phishing and post_seen:
                 urls_result_section.heuristic.add_signature_id("is_phishing_url")
+
+            if self.weird_base64_value_set:
+                urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url")
 
             result.add_section(urls_result_section)
 
@@ -2924,6 +2932,8 @@ class JsJaws(ServiceBase):
                     phishing_terms = True
                 elif sig_that_hit.name == "phishing_logo_download":
                     phishing_logos = True
+                elif sig_that_hit.name == "base64_encoded_url":
+                    self.base64_encoded_urls = sig_that_hit.marks
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -3076,55 +3086,6 @@ class JsJaws(ServiceBase):
         if ioc_result_section.subsections:
             ioc_result_section.set_heuristic(2)
             result.add_section(ioc_result_section)
-
-    def _tag_uri(self, url: str, urls_result_section: ResultTableSection) -> None:
-        """
-        This method tags components of a URI
-        :param url: The url to be analyzed
-        :param urls_result_section: The result section which will have the tags of the uri components added to it
-        :return: None
-        """
-        if not url:
-            return
-        safe_url = safe_str(url)
-        # Extract URI
-        uri_match = re.match(FULL_URI, safe_url)
-
-        # Let's try to UrlEncode it, sometimes the queries are not UrlEncoded by default
-        if not uri_match:
-            parsed_url = urlparse(safe_url)
-            url_encoded = urlunparse([parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params,quote_plus(parsed_url.query), parsed_url.fragment])
-            uri_match = re.match(FULL_URI, url_encoded)
-
-            if uri_match:
-                safe_url = url_encoded
-
-        if uri_match:
-            if is_tag_safelisted(safe_url, ["network.dynamic.uri", "network.static.uri"], self.safelist):
-                return
-            urls_result_section.add_tag("network.dynamic.uri", safe_url)
-            # Extract IP
-            ip_match = re.search(IP_REGEX, safe_url)
-            ip = None
-            if ip_match:
-                ip = ip_match.group(0)
-                urls_result_section.add_tag("network.dynamic.ip", ip)
-            # Extract domain
-            domain_match = re.search(DOMAIN_REGEX, safe_url)
-            if domain_match:
-                domain = domain_match.group(0)
-                if not ip or (ip and domain != ip):
-                    urls_result_section.add_tag("network.dynamic.domain", domain)
-            # Extract URI path
-            if "//" in safe_url:
-                safe_url = safe_url.split("//")[1]
-            uri_path_match = re.search(URI_PATH, safe_url)
-            if uri_path_match:
-                uri_path = uri_path_match.group(0)
-                urls_result_section.add_tag("network.dynamic.uri_path", uri_path)
-        else:
-            # Might as well tag this while we're here
-            urls_result_section.add_tag("file.string.extracted", safe_url)
 
     def _flag_jsxray_iocs(self, output: Dict[str, Any], request: ServiceRequest) -> bool:
         """
@@ -3309,10 +3270,8 @@ class JsJaws(ServiceBase):
                         script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
                         for script_src in self.script_sources:
-                            if is_tag_safelisted(script_src, ["network.dynamic.uri", "network.static.uri"], self.safelist):
-                                continue
-                            url_sec.add_row(TableRow(**{"url": script_src}))
-                            self._tag_uri(script_src, url_sec)
+                            if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
+                                url_sec.add_row(TableRow(**{"url": script_src}))
 
                         if url_sec.body:
                             script_source_res.add_subsection(url_sec)
@@ -3322,7 +3281,7 @@ class JsJaws(ServiceBase):
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
                 if not path.exists(self.malware_jail_sandbox_env_dump_path):
-                    matches = re.findall(URL_REGEX, log_line)
+                    matches = re.findall(URI_REGEX, log_line)
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
@@ -3389,8 +3348,8 @@ class JsJaws(ServiceBase):
                     redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
 
                 if not redirection_res_sec.body or (redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body):
-                    redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
-                    redirection_res_sec.add_tag("network.static.uri", location_href)
+                    if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
+                        redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
 
             # Check if programatically created script with src set is found
             if all(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLSCRIPTELEMENT_SRC_SET_TO_URI]):
@@ -3406,11 +3365,18 @@ class JsJaws(ServiceBase):
         if dynamic_scripts_with_source:
             heur = Heuristic(18)
             dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur, parent=request.result)
+            # Check if domain or IP matches that of a URI that is programmatically loaded
+            decoded_urls: Set[str] = set()
+            for mark in self.base64_encoded_urls:
+                uri = re.match(ATOB_URI_REGEX, mark)
+                if len(uri.regs) == 2:
+                    decoded_urls.add(uri.group(1))
             for script_src in dynamic_scripts_with_source:
-                if is_tag_safelisted(script_src, ["network.dynamic.uri", "network.static.uri"], self.safelist):
-                    continue
-                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
-                self._tag_uri(script_src, dynamic_script_source_res)
+                if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
+                    if any(decoded_url in script_src for decoded_url in decoded_urls):
+                        # This is suspicious, flag it!
+                        dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
+                    dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
 
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
