@@ -2643,7 +2643,7 @@ class JsJaws(ServiceBase):
         # ret represents the value to be yielded
         ret = None
         for line in output:
-            if "] " in line:
+            if line.startswith("[") and "] " in line:
                 try:
                     timestamp = re.match(MALWARE_JAIL_TIME_STAMP, line)
                     if not timestamp:
