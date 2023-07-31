@@ -171,8 +171,14 @@
         "tags": {
           "network": {
             "static": {
+              "domain": [
+                "example.com"
+              ],
               "uri": [
                 "http://example.com/?search"
+              ],
+              "uri_path": [
+                "/?search"
               ]
             }
           }
@@ -192,7 +198,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "ae934d68037be4e4a34262f52e4bbf7ef8c9febcd89939e3d5f0d99dc5b3df80"
+        "sha256": "557a174d981df51357643614fe2e19d2b35e4ff03d245b2fb45f8b80d72dd999"
       }
     ]
   },
@@ -247,11 +253,25 @@
       }
     ],
     "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "example.com"
+        }
+      ],
       "network.static.uri": [
         {
           "heur_id": 6,
           "signatures": [],
           "value": "http://example.com/?search"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "/?search"
         }
       ]
     },

@@ -52,6 +52,9 @@
                 "https://madsandreasolesen.dk/xmlrpc.php",
                 "http://roilandtv.com/xmlrpc.php",
                 "https://ariessys.com/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
               ]
             }
           }
@@ -326,6 +329,13 @@
           "heur_id": 4,
           "signatures": [],
           "value": "https://rooziato.com/xmlrpc.php"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
         }
       ]
     },

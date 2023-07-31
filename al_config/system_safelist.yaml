@@ -12,9 +12,23 @@ match:
   - use.fontawesome.com
   # Google Analytics
   - www.google-analytics.com
+  # Microsoft
+  - www.microsoft.com
+  - go.microsoft.com
+  - msdn.microsoft.com
+  - ddue.schemas.microsoft.com
+  # Google Fonts
+  - fonts.googleapis.com
   network.static.uri:
   # CDNs
   - https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js
+  # WWW
+  - http://www.w3.org/1999/xhtml
+  - http://www.w3.org/1999/xlink
+  - http://www.w3.org/2000/svg
+  # Bootstrap
+  - https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css
+  - https://getbootstrap.com/docs/5.2/examples/sign-in/signin.css
   network.dynamic.domain:
   # WWW
   - www.w3.org
@@ -28,9 +42,23 @@ match:
   - use.fontawesome.com
   # Google Analytics
   - www.google-analytics.com
+  # Microsoft
+  - www.microsoft.com
+  - go.microsoft.com
+  - msdn.microsoft.com
+  - ddue.schemas.microsoft.com
+  # Google Fonts
+  - fonts.googleapis.com
   network.dynamic.uri:
   # CDNs
   - https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js
+  # WWW
+  - http://www.w3.org/1999/xhtml
+  - http://www.w3.org/1999/xlink
+  - http://www.w3.org/2000/svg
+  # Bootstrap
+  - https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css
+  - https://getbootstrap.com/docs/5.2/examples/sign-in/signin.css
 
 regex:
   network.static.domain:
@@ -43,6 +71,8 @@ regex:
   - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
   # JQuery
   - https?://ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js
+  # Google Fonts
+  - https?://fonts\.googleapis\.com\/css2\?family\=.+
   network.dynamic.domain:
   # GoogleAPIs
   - .*\.googleapis\.com$
@@ -53,3 +83,5 @@ regex:
   - https?://maxcdn\.bootstrapcdn\.com\/bootstrap\/\d\.\d\.\d\/js\/bootstrap\.min\.js
   # JQuery
   - https?://ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js
+  # Google Fonts
+  - https?://fonts\.googleapis\.com\/css2\?family\=.+

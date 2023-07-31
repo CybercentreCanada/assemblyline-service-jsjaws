@@ -52,6 +52,9 @@
                 "http://card.abcmamma.tv/xmlrpc.php",
                 "https://financialissues.org/xmlrpc.php",
                 "https://candidteens.top/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
               ]
             }
           }
@@ -326,6 +329,13 @@
           "heur_id": 4,
           "signatures": [],
           "value": "https://toitumine.ee/xmlrpc.php"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
         }
       ]
     },

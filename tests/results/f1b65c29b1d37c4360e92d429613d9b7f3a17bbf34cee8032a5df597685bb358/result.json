@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6WB/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6WB/i.gif\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"somonoo.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://somonoo.com/6WB/i.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/6WB/i.gif\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
