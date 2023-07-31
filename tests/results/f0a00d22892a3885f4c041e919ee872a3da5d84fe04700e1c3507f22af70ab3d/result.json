@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"103.214.71.45\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://103.214.71.45/86204.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/86204.dat\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"103.214.71.45\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://103.214.71.45/86204.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/86204.dat\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -212,8 +212,8 @@
                 "103.214.71.45"
               ],
               "uri": [
-                "https://google.com",
-                "http://103.214.71.45/86204.dat"
+                "http://103.214.71.45/86204.dat",
+                "https://google.com"
               ],
               "uri_path": [
                 "/86204.dat"

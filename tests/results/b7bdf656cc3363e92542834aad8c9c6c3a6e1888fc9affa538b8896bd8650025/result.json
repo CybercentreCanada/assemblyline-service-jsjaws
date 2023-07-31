@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 21,
+    "score": 271,
     "sections": [
       {
         "auto_collapse": false,
@@ -40,6 +40,29 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript uses atob to decode a base64-encoded URL\n\t\tatob was seen decoding a URI: 'https://darmstadt.heimatschatz.de'\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "base64_encoded_url": 250
+          },
+          "signatures": {
+            "base64_encoded_url": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Base64EncodedURL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Redirection to:\nhttps://darmstadt.heimatschatz.de/images/imgs/",
         "body_config": {},
         "body_format": "TEXT",
@@ -56,8 +79,14 @@
         "tags": {
           "network": {
             "static": {
+              "domain": [
+                "darmstadt.heimatschatz.de"
+              ],
               "uri": [
                 "https://darmstadt.heimatschatz.de/images/imgs/"
+              ],
+              "uri_path": [
+                "/images/imgs/"
               ]
             }
           }
@@ -131,12 +160,24 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "base64_encoded_url"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 6,
         "signatures": []
       }
     ],
     "tags": {
       "network.static.domain": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "darmstadt.heimatschatz.de"
+        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -161,6 +202,11 @@
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "/images/imgs/"
+        },
         {
           "heur_id": 2,
           "signatures": [],

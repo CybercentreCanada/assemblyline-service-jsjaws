@@ -100,3 +100,32 @@ class SplitReverseJoin(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class WriteBase64ContentFromElement(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="write_base64_content_from_element",
+            description="JavaScript writes content to the DOM by base64-decoding a value from an element",
+            indicators=["document.write(atob(document.getElementById("],
+            severity=3
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
+
+
+class Base64EncodedURL(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="base64_encoded_url",
+            description="JavaScript uses atob to decode a base64-encoded URL",
+            # Directly related to the ATOB_URI_REGEX constant!
+            indicators=["atob was seen decoding a URI:"],
+            severity=2
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)

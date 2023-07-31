@@ -52,6 +52,9 @@
                 "https://iadnews.in/xmlrpc.php",
                 "https://wototvet.ru/xmlrpc.php",
                 "https://spkp.com.au/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
               ]
             }
           }
@@ -326,6 +329,13 @@
           "heur_id": 4,
           "signatures": [],
           "value": "https://wototvet.ru/xmlrpc.php"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
         }
       ]
     },

@@ -535,12 +535,12 @@ class TestJsJaws:
             body_format=BODY_FORMAT.TABLE,
             body=dumps(body),
             tags={
+                "network.dynamic.domain": ["blah.ca", "definitely-a-url.ca"],
                 "network.dynamic.uri": [
                     "http://blah.ca/blah.exe",
                     "http://1.1.1.1/blah.exe",
                     "http://definitely-a-url.ca",
                 ],
-                "network.dynamic.domain": ["blah.ca", "blah.exe", "definitely-a-url.ca"],
                 "network.dynamic.ip": ["1.1.1.1"],
                 "network.dynamic.uri_path": ["/blah.exe"],
                 "file.string.extracted": ["blahblahblah"],

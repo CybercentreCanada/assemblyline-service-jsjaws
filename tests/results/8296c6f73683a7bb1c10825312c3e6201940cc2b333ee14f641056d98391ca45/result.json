@@ -21,6 +21,9 @@
         "tags": {
           "network": {
             "static": {
+              "domain": [
+                "www.savethechildren.org"
+              ],
               "uri": [
                 "http://www.savethechildren.org"
               ]
@@ -86,6 +89,11 @@
     ],
     "tags": {
       "network.static.domain": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "www.savethechildren.org"
+        },
         {
           "heur_id": 2,
           "signatures": [],

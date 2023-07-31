@@ -240,7 +240,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"jZOBKK.open\"}, {\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/TsCw3rCG.dll\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"jZOBKK.open\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/TsCw3rCG.dll\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -262,8 +262,8 @@
           "network": {
             "static": {
               "domain": [
-                "jZOBKK.open",
-                "gkjdepok.org"
+                "gkjdepok.org",
+                "jZOBKK.open"
               ],
               "uri": [
                 "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
