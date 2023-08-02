@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1152,
+    "score": 1402,
     "sections": [
       {
         "auto_collapse": false,
@@ -272,6 +272,25 @@
         },
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 250,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -352,6 +371,11 @@
         "signatures": [
           "wscript_cmd_url"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 15,
+        "signatures": []
       }
     ],
     "tags": {
