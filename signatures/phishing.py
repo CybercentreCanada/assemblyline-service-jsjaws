@@ -28,7 +28,7 @@ class PhishingTerms(Signature):
             return
 
         # Next look for account prompts
-        account_regex = f"\\b({'|'.join(['email', 'account', 'phone', 'skype', 'e-mail'])})\\b"
+        account_regex = f"\\b({'|'.join(['email', 'account', 'phone', 'skype', 'e-mail', 'authentication', 'login'])})\\b"
         for line in output:
             results.extend(self.check_regex(account_regex, line.lower()))
 

@@ -225,7 +225,7 @@ heuristics:
 
   - heur_id: 15
     name: Nested document.write calls
-    score: 500
+    score: 250
     filetype: '.*'
     description: Multiple rounds of tool runs were required due to nested document.write calls
     signature_score_map:
