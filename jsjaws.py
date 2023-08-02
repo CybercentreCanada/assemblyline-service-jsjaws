@@ -1871,8 +1871,10 @@ class JsJaws(ServiceBase):
                 element_value = element_value[9:-3]
 
             # Catch long base64-encoded strings set in weird element attributes
-            if not self.weird_base64_value_set and len(element_value) > 2000 and re.match(BASE64_RE, element_value.encode()):
-                self.weird_base64_value_set = True
+            if not self.weird_base64_value_set and len(element_value) > 2000:
+                match = re.match(BASE64_RE, element_value.encode())
+                if match and match.group(0) == element_value.encode():
+                    self.weird_base64_value_set = True
 
             return f"{random_element_varname}.innerText = \"{element_value}\";\n"
 
