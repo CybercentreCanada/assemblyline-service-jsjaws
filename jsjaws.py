@@ -110,9 +110,10 @@ BITSADMIN_VARIATIONS = ["bitsadmin"]
 # WshShell is a protected term because it is used as a module class name in MalwareJail
 WSHSHELL = "WshShell"
 
-# HTMLScriptElement-related constants that will be used for seeking output in MalwareJail
+# HTMLScriptElement/HTMLIFrameElement-related constants that will be used for seeking output in MalwareJail
 HTMLSCRIPTELEMENT = "HTMLScriptElement"
-HTMLSCRIPTELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
+HTMLIFRAMEELEMENT = "HTMLIFrameElement"
+HTMLELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
 
 # These characters are cannot be included in a variable name
 INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";"]
@@ -415,7 +416,7 @@ DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
 
 # Example:
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
-HTMLSCRIPTELEMENT_SRC_REGEX = f"{HTMLSCRIPTELEMENT}\[[0-9]+\]{HTMLSCRIPTELEMENT_SRC_SET_TO_URI} '(.+)'"
+HTMLELEMENT_SRC_REGEX = f"(?:{HTMLSCRIPTELEMENT}|{HTMLIFRAMEELEMENT})\[[0-9]+\]{HTMLELEMENT_SRC_SET_TO_URI} '(.+)'"
 
 # Example:
 # <!-- HTML Encryption provided by www.blah.com -->
@@ -3371,8 +3372,8 @@ class JsJaws(ServiceBase):
                         redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
 
             # Check if programatically created script with src set is found
-            if all(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLSCRIPTELEMENT_SRC_SET_TO_URI]):
-                uri_match = re.search(HTMLSCRIPTELEMENT_SRC_REGEX, log_line, re.IGNORECASE)
+            if HTMLELEMENT_SRC_SET_TO_URI in log_line and any(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLIFRAMEELEMENT]):
+                uri_match = re.search(HTMLELEMENT_SRC_REGEX, log_line, re.IGNORECASE)
                 if len(uri_match.regs) == 2:
                     uri_src = uri_match.group(1)
                 else:
