@@ -488,7 +488,12 @@ class JsJaws(ServiceBase):
         self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.doc_write_hashes: Optional[Set[str]] = None
         self.gauntlet_runs: Optional[int] = None
-        self.script_sources: Optional[Set[str]] = None
+        # Script sources that are NOT programatically created
+        # (or at least, written to the DOM via code)
+        self.initial_script_sources: Optional[Set[str]] = None
+        # Script sources that ARE programatically created
+        # (or at least, written to the DOM via code)
+        self.subsequent_script_sources: Optional[Set[str]] = None
         self.script_with_source_and_no_body: Optional[bool] = None
         self.scripts: Set[str] = set()
         self.malformed_javascript: Optional[bool] = None
@@ -543,7 +548,8 @@ class JsJaws(ServiceBase):
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
-        self.script_sources = set()
+        self.initial_script_sources = set()
+        self.subsequent_script_sources = set()
         self.scripts = set()
         self.script_with_source_and_no_body = False
         self.malformed_javascript = False
@@ -2019,8 +2025,11 @@ class JsJaws(ServiceBase):
         :return: A flag indicating if a script source was added
         """
         source_added = False
-        if script.get("src") and script["src"] not in self.script_sources and re.match(FULL_URI, script["src"]):
-            self.script_sources.add(script["src"])
+        if script.get("src") and script["src"] not in self.initial_script_sources and re.match(FULL_URI, script["src"]):
+            if self.gauntlet_runs < 2:
+                self.initial_script_sources.add(script["src"])
+            else:
+                self.subsequent_script_sources.add(script["src"])
             source_added = True
 
         return source_added
@@ -2702,21 +2711,29 @@ class JsJaws(ServiceBase):
             # To avoid recursive gauntlet runs, perform this check
             self.log.debug("No new content written to the DOM...")
 
-            if self.gauntlet_runs >= 3:
+            heur15_res_sec: Optional[ResultTableSection] = None
+            url_sec: Optional[ResultTableSection] = None
+
+            if self.gauntlet_runs >= 2 and not heur15_res_sec:
                 heur = Heuristic(15)
                 heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
-                if self.gauntlet_runs >= 5 and self.script_with_source_and_no_body:
-                    url_sec = ResultTableSection("Script sources that were found in nested DOM writes")
-                    for script_src in self.script_sources:
-                        if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
-                            url_sec.add_row(TableRow(**{"url": script_src}))
+            if self.gauntlet_runs >= 2 and self.script_with_source_and_no_body and not url_sec:
+                url_sec = ResultTableSection("Script sources that were found in nested DOM writes")
+                for script_src in self.subsequent_script_sources:
+                    if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
+                        url_sec.add_row(TableRow(**{"url": script_src}))
 
-                    if url_sec.body:
-                        heur15_res_sec.set_heuristic(None)
-                        url_sec.set_heuristic(15)
-                        url_sec.heuristic.add_signature_id("multi_write_3rd_party_script")
-                        heur15_res_sec.add_subsection(url_sec)
+            if self.gauntlet_runs >= 5 and heur15_res_sec and url_sec:
+                # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
+                # 5 runs fo the gauntlet
+                heur15_res_sec.set_heuristic(None)
+                url_sec.set_heuristic(15)
+                url_sec.heuristic.add_signature_id("multi_write_3rd_party_script")
+
+            if url_sec:
+                heur15_res_sec.add_subsection(url_sec)
+
             return
 
         self.doc_write_hashes.add(doc_write_hash)
@@ -3271,7 +3288,7 @@ class JsJaws(ServiceBase):
                         heur = Heuristic(16)
                         script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
-                        for script_src in self.script_sources:
+                        for script_src in self.initial_script_sources + self.subsequent_script_sources:
                             if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
                                 url_sec.add_row(TableRow(**{"url": script_src}))
 
@@ -3360,8 +3377,7 @@ class JsJaws(ServiceBase):
                     uri_src = uri_match.group(1)
                 else:
                     continue
-                # self.script_sources are script sources that are not programatically created (or at least, written to the DOM via code)
-                if uri_src not in self.script_sources:
+                if uri_src not in self.initial_script_sources:
                     dynamic_scripts_with_source.append(uri_src)
 
         if dynamic_scripts_with_source:
