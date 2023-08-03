@@ -2719,12 +2719,6 @@ class JsJaws(ServiceBase):
                 heur = Heuristic(15)
                 heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
-            if self.gauntlet_runs >= 2 and self.script_with_source_and_no_body and not url_sec:
-                url_sec = ResultTableSection("Script sources that were found in nested DOM writes")
-                for script_src in self.subsequent_script_sources:
-                    if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
-                        url_sec.add_row(TableRow(**{"url": script_src}))
-
             if self.gauntlet_runs >= 5 and heur15_res_sec and url_sec:
                 # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
                 # 5 runs fo the gauntlet
@@ -3237,7 +3231,6 @@ class JsJaws(ServiceBase):
     def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
-        dynamic_scripts_with_source: List[str] = []
 
         redirection_res_sec: Optional[ResultTextSection] = None
         for line in self._parse_malwarejail_output(output):
@@ -3379,23 +3372,26 @@ class JsJaws(ServiceBase):
                 else:
                     continue
                 if uri_src not in self.initial_script_sources:
-                    dynamic_scripts_with_source.append(uri_src)
+                    self.subsequent_script_sources.add(uri_src)
 
-        if dynamic_scripts_with_source:
+        if self.subsequent_script_sources:
             heur = Heuristic(18)
-            dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur, parent=request.result)
+            dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
             # Check if domain or IP matches that of a URI that is programmatically loaded
             decoded_urls: Set[str] = set()
             for mark in self.base64_encoded_urls:
                 uri = re.match(ATOB_URI_REGEX, mark)
                 if len(uri.regs) == 2:
                     decoded_urls.add(uri.group(1))
-            for script_src in dynamic_scripts_with_source:
+            for script_src in self.subsequent_script_sources:
                 if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
                     if any(decoded_url in script_src for decoded_url in decoded_urls):
                         # This is suspicious, flag it!
                         dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
                     dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+
+            if dynamic_script_source_res.body:
+                request.result.add_section(dynamic_script_source_res)
 
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
