@@ -24,7 +24,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}]",
+        "body": "[{\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}]",
         "body_config": {
           "column_order": [
             "url"
@@ -45,19 +45,19 @@
           "network": {
             "dynamic": {
               "domain": [
+                "dealsontrainers.org",
                 "iscast.com.br",
-                "tapasyaevents.com",
-                "dealsontrainers.org"
+                "tapasyaevents.com"
               ],
               "uri": [
+                "https://dealsontrainers.org/tete/tete.php?85434",
                 "https://iscast.com.br/udit/udit.php?68977",
-                "https://tapasyaevents.com/fmu/fmu.php?55724",
-                "https://dealsontrainers.org/tete/tete.php?85434"
+                "https://tapasyaevents.com/fmu/fmu.php?55724"
               ],
               "uri_path": [
+                "/tete/tete.php?85434",
                 "/udit/udit.php?68977",
-                "/fmu/fmu.php?55724",
-                "/tete/tete.php?85434"
+                "/fmu/fmu.php?55724"
               ]
             }
           }
