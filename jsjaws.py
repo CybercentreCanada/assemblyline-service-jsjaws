@@ -1997,8 +1997,7 @@ class JsJaws(ServiceBase):
 
         return create_element_script
 
-    @staticmethod
-    def _is_vb_and_js_scripts(scripts: ResultSet[PageElement], request: ServiceRequest) -> Tuple[bool, Optional[ResultTextSection]]:
+    def _is_vb_and_js_scripts(self, scripts: ResultSet[PageElement], request: ServiceRequest) -> Tuple[bool, Optional[ResultTextSection]]:
         """
         This method determines if there is a combination of VisualBasic and JavaScript scripts
         :param scripts: A list of Script soup elements
@@ -2014,6 +2013,25 @@ class JsJaws(ServiceBase):
         if vb_and_js_scripts:
             heur = Heuristic(12)
             vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+            # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
+            for index, script in enumerate(scripts):
+                if script.get("language", "").lower() in ["vbscript"]:
+                    # Make sure there is actually a body to the script
+                    body = script.string if script.string is None else str(script.string).strip()
+
+                    if body and len(body) > 2:
+                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                            out.write(body.encode())
+                            vbscript_to_extract = out.name
+                        artifact = {
+                            "name": f"vbscript_contents_{index}.vbs",
+                            "path": vbscript_to_extract,
+                            "description": "Extracted VBScript Contents",
+                            "to_be_extracted": True,
+                        }
+                        self.log.debug(f"Adding extracted VBScript: vbscript_contents_{index}.vbs")
+                        self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
 
@@ -2045,6 +2063,9 @@ class JsJaws(ServiceBase):
         :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature for URIs
         :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
         """
+        # We want to include VBScript code in the JavaScript file to be run, for posperity's sake
+        js_content, aggregated_js_script = self._create_vbscript_element(body, js_content, aggregated_js_script)
+
         # This code is used for converting simple VBScript to JavaScript
 
         # First, look for any static variables being assigned
@@ -2063,6 +2084,36 @@ class JsJaws(ServiceBase):
             js_content, aggregated_js_script = self._convert_vb_function_call(function_varname, body, vb_and_js_section, js_content, aggregated_js_script)
 
         return js_content, aggregated_js_script
+
+    def _create_vbscript_element(self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, Optional[tempfile.NamedTemporaryFile]]:
+        """
+        This method takes the body of a VBScript and creates an element in the DOM, basically as a placeholder
+        since we cannot run this script in Node.js
+        :param body: The VisualBasic script body to be looked through
+        :param js_content: The file content of the NamedTemporaryFile
+        :param aggregated_js_script: The NamedTemporaryFile object
+        :return: A tuple of the file contents of the NamedTemporaryFile object and the NamedTemporaryFile object
+        """
+        element_name = f"vbscript_{get_id_from_data(body.encode())}"
+        element_value = body
+
+        # Escape backslashes since they are handled differently in Python strings than in HTML
+        if "\\" in element_value:
+            element_value = element_value.replace("\\", "\\\\")
+        # Escape double quotes since we are wrapping the value in double quotes
+        if '"' in element_value:
+            element_value = element_value.replace('"', '\\"')
+        # Colons act as a line separator in VBScript so we're going to replace newlines with colons so that the
+        # JavaScript doesn't get messed up
+        element_value = element_value.strip().replace("\n", " : ")
+
+        create_element_script = f"// The following VBScript is never run and is included for informational purposes\n" \
+                                f"const {element_name} = document.createElement(\"script\");\n" \
+                                f"{element_name}.setAttribute(\"language\", \"vbscript\");\n" \
+                                f"{element_name}.setAttribute(\"innerText\", \"{element_value}\");\n"
+        js_content, aggregated_js_script = self.insert_content(create_element_script, js_content, aggregated_js_script)
+        return js_content, aggregated_js_script
+
 
     @staticmethod
     def _modify_javascript_body(body: str) -> str:
