@@ -1,0 +1,76 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 750,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 500,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 250,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "vbscript_contents_1.vbs",
+        "sha256": "ac2830eca0d79ad5156be6dff4c48cbb5e1d72c7b923a334ee34cd8fff611f88"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "c2e543e9effa14d852ef703a3d7bce0803d1af608711dcbbf059028eef73253d"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 15,
+        "signatures": []
+      }
+    ],
+    "tags": {},
+    "temp_submission_data": {}
+  }
+}
