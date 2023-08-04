@@ -128,6 +128,10 @@ EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
 GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
 
+# Default value for the maximum number of times the gauntlet should be run
+# This usually gets exceeded when a script writes randomly generated content to the DOM
+MAXIMUM_GAUNTLET_RUNS = 30
+
 # Regular Expressions
 
 # Examples:
@@ -1175,6 +1179,10 @@ class JsJaws(ServiceBase):
         """
         # Each time that we run through the gauntlet, increment this count
         self.gauntlet_runs += 1
+
+        if self.gauntlet_runs > self.config.get("max_gauntlet_runs", MAXIMUM_GAUNTLET_RUNS):
+            self.log.debug("Maximum number of gauntlet runs exceeded. Exiting...")
+            return
 
         # Initial setup per gauntlet run
         self._reset_gauntlet_variables(request)
@@ -3333,7 +3341,7 @@ class JsJaws(ServiceBase):
                         heur = Heuristic(16)
                         script_source_res = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
-                        for script_src in self.initial_script_sources + self.subsequent_script_sources:
+                        for script_src in self.initial_script_sources | self.subsequent_script_sources:
                             if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
                                 url_sec.add_row(TableRow(**{"url": script_src}))
 
@@ -3418,7 +3426,7 @@ class JsJaws(ServiceBase):
             # Check if programatically created script with src set is found
             if HTMLELEMENT_SRC_SET_TO_URI in log_line and any(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLIFRAMEELEMENT]):
                 uri_match = re.search(HTMLELEMENT_SRC_REGEX, log_line, re.IGNORECASE)
-                if len(uri_match.regs) == 2:
+                if uri_match and len(uri_match.regs) == 2:
                     uri_src = uri_match.group(1)
                 else:
                     continue
