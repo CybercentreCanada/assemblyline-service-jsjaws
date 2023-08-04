@@ -30,6 +30,8 @@ config:
   total_stdout_limit: 10000
   # If you don't want your STDERR clogging up your terminal, set to true
   send_tool_stderr_to_pipe: false
+  # The maximum number of times that the gauntlet should be run
+  max_gauntlet_runs: 30
 
 submission_params:
   # Service-wide parameters
