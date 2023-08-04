@@ -2032,13 +2032,14 @@ class JsJaws(ServiceBase):
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(body.encode())
                             vbscript_to_extract = out.name
+                        vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
                         artifact = {
-                            "name": f"vbscript_contents_{index}.vbs",
+                            "name": vbs_file_name,
                             "path": vbscript_to_extract,
                             "description": "Extracted VBScript Contents",
                             "to_be_extracted": True,
                         }
-                        self.log.debug(f"Adding extracted VBScript: vbscript_contents_{index}.vbs")
+                        self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
                         self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
