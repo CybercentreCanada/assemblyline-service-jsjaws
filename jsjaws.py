@@ -2023,7 +2023,7 @@ class JsJaws(ServiceBase):
             vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
-            for index, script in enumerate(scripts):
+            for script in scripts:
                 if script.get("language", "").lower() in ["vbscript"]:
                     # Make sure there is actually a body to the script
                     body = script.string if script.string is None else str(script.string).strip()
@@ -3443,7 +3443,7 @@ class JsJaws(ServiceBase):
                 uri = re.match(ATOB_URI_REGEX, mark)
                 if len(uri.regs) == 2:
                     decoded_urls.add(uri.group(1))
-            for script_src in self.subsequent_script_sources:
+            for script_src in sorted(list(self.subsequent_script_sources)):
                 if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
                     if any(decoded_url in script_src for decoded_url in decoded_urls):
                         # This is suspicious, flag it!
