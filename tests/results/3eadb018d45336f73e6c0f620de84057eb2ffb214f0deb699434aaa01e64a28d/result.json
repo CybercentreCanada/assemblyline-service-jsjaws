@@ -239,7 +239,9 @@
           "frequency": 1,
           "heur_id": 13,
           "score": 500,
-          "score_map": {},
+          "score_map": {
+            "wscript_curl_url": 500
+          },
           "signatures": {
             "wscript_curl_url": 1
           }

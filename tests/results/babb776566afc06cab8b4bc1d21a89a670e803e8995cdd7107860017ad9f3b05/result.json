@@ -162,7 +162,9 @@
           "frequency": 1,
           "heur_id": 1,
           "score": 500,
-          "score_map": {},
+          "score_map": {
+            "split_reverse_join_url": 500
+          },
           "signatures": {
             "split_reverse_join_url": 1
           }
