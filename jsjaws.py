@@ -1406,6 +1406,8 @@ class JsJaws(ServiceBase):
             self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
         else:
             self._extract_malware_jail_iocs(malware_jail_output, request)
+
+        self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
@@ -2773,22 +2775,10 @@ class JsJaws(ServiceBase):
             self.log.debug("No new content written to the DOM...")
 
             heur15_res_sec: Optional[ResultTableSection] = None
-            url_sec: Optional[ResultTableSection] = None
 
             if self.gauntlet_runs >= 2 and not heur15_res_sec:
                 heur = Heuristic(15)
                 heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
-
-            if self.gauntlet_runs >= 5 and heur15_res_sec and url_sec:
-                # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
-                # 5 runs fo the gauntlet
-                heur15_res_sec.set_heuristic(None)
-                url_sec.set_heuristic(15)
-                url_sec.heuristic.add_signature_id("multi_write_3rd_party_script", 500)
-
-            if url_sec:
-                heur15_res_sec.add_subsection(url_sec)
-
             return
 
         self.doc_write_hashes.add(doc_write_hash)
@@ -3434,28 +3424,41 @@ class JsJaws(ServiceBase):
                 if uri_src not in self.initial_script_sources:
                     self.subsequent_script_sources.add(uri_src)
 
-        if self.subsequent_script_sources:
-            heur = Heuristic(18)
-            dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
-            # Check if domain or IP matches that of a URI that is programmatically loaded
-            decoded_urls: Set[str] = set()
-            for mark in self.base64_encoded_urls:
-                uri = re.match(ATOB_URI_REGEX, mark)
-                if len(uri.regs) == 2:
-                    decoded_urls.add(uri.group(1))
-            for script_src in sorted(list(self.subsequent_script_sources)):
-                if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
-                    if any(decoded_url in script_src for decoded_url in decoded_urls):
-                        # This is suspicious, flag it!
-                        dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
-                    dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
-
-            if dynamic_script_source_res.body:
-                request.result.add_section(dynamic_script_source_res)
-
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
+
+    def _handle_subsequent_scripts(self, result: Result):
+        """
+        This method handles subsequent script sources, by creating a result section and applying applicable signatures
+        :param result: A Result object containing the service results
+        :return: None
+        """
+        if not self.subsequent_script_sources:
+            return
+
+        heur = Heuristic(18)
+        dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
+        # Check if domain or IP matches that of a URI that is programmatically loaded
+        decoded_urls: Set[str] = set()
+        for mark in self.base64_encoded_urls:
+            uri = re.match(ATOB_URI_REGEX, mark)
+            if len(uri.regs) == 2:
+                decoded_urls.add(uri.group(1))
+        for script_src in sorted(list(self.subsequent_script_sources)):
+            if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
+                if any(decoded_url in script_src for decoded_url in decoded_urls):
+                    # This is suspicious, flag it!
+                    dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
+                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+
+        if self.gauntlet_runs >= 5:
+            # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
+            # 5 runs fo the gauntlet
+            dynamic_script_source_res.heuristic.add_signature_id("multi_write_3rd_party_script", 500)
+
+        if dynamic_script_source_res.body:
+            result.add_section(dynamic_script_source_res)
 
     def _run_tool(
         self,

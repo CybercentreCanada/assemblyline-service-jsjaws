@@ -24,49 +24,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}]",
-        "body_config": {
-          "column_order": [
-            "url"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 18,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "dealsontrainers.org",
-                "iscast.com.br",
-                "tapasyaevents.com"
-              ],
-              "uri": [
-                "https://dealsontrainers.org/tete/tete.php?85434",
-                "https://iscast.com.br/udit/udit.php?68977",
-                "https://tapasyaevents.com/fmu/fmu.php?55724"
-              ],
-              "uri_path": [
-                "/tete/tete.php?85434",
-                "/udit/udit.php?68977",
-                "/fmu/fmu.php?55724"
-              ]
-            }
-          }
-        },
-        "title_text": "Programmatically created script(s) with external source",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"dealsontrainers.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"iscast.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tapasyaevents.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tete/tete.php?85434\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/udit/udit.php?68977\"}]",
         "body_config": {
           "column_order": [
@@ -107,6 +64,49 @@
           }
         },
         "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}]",
+        "body_config": {
+          "column_order": [
+            "url"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 18,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "dealsontrainers.org",
+                "iscast.com.br",
+                "tapasyaevents.com"
+              ],
+              "uri": [
+                "https://dealsontrainers.org/tete/tete.php?85434",
+                "https://iscast.com.br/udit/udit.php?68977",
+                "https://tapasyaevents.com/fmu/fmu.php?55724"
+              ],
+              "uri_path": [
+                "/tete/tete.php?85434",
+                "/udit/udit.php?68977",
+                "/fmu/fmu.php?55724"
+              ]
+            }
+          }
+        },
+        "title_text": "Programmatically created script(s) with external source",
         "zeroize_on_tag_safe": false
       },
       {
