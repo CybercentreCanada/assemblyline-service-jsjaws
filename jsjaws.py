@@ -13,6 +13,7 @@ from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
+from urllib.parse import urlparse
 
 import signatures
 from assemblyline.common import forge
@@ -3459,7 +3460,7 @@ class JsJaws(ServiceBase):
                 decoded_urls.add(uri.group(1))
         for script_src in sorted(list(self.subsequent_script_sources)):
             if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
-                if any(decoded_url in script_src for decoded_url in decoded_urls):
+                if any(urlparse(decoded_url).netloc in script_src for decoded_url in decoded_urls):
                     # This is suspicious, flag it!
                     dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
                 dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
