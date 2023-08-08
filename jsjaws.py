@@ -2584,16 +2584,16 @@ class JsJaws(ServiceBase):
 
                     # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
                     if any(cmd.lower().strip().startswith(ps1) for ps1 in POWERSHELL_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url", 500)
                     # If Wscript.Shell uses CMD AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(cp) for cp in COMMAND_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url", 500)
                     # If Wscript.Shell uses cURL AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(curl) for curl in CURL_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_curl_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_curl_url", 500)
                     # If Wscript.Shell uses bitsadmin AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(bitsadmin) for bitsadmin in BITSADMIN_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url", 500)
 
         wscript_batch_extraction.close()
         wscript_ps1_extraction.close()
@@ -2784,7 +2784,7 @@ class JsJaws(ServiceBase):
                 # 5 runs fo the gauntlet
                 heur15_res_sec.set_heuristic(None)
                 url_sec.set_heuristic(15)
-                url_sec.heuristic.add_signature_id("multi_write_3rd_party_script")
+                url_sec.heuristic.add_signature_id("multi_write_3rd_party_script", 500)
 
             if url_sec:
                 heur15_res_sec.add_subsection(url_sec)
@@ -2892,21 +2892,21 @@ class JsJaws(ServiceBase):
             urls_result_section.set_heuristic(1)
 
             if self.single_script_with_unescape:
-                urls_result_section.heuristic.add_signature_id("single_script_url")
+                urls_result_section.heuristic.add_signature_id("single_script_url", 500)
             elif self.multiple_scripts_with_unescape:
-                urls_result_section.heuristic.add_signature_id("multiple_scripts_url")
+                urls_result_section.heuristic.add_signature_id("multiple_scripts_url", 500)
 
             if self.function_inception:
-                urls_result_section.heuristic.add_signature_id("function_inception_url")
+                urls_result_section.heuristic.add_signature_id("function_inception_url", 500)
 
             if self.split_reverse_join:
-                urls_result_section.heuristic.add_signature_id("split_reverse_join_url")
+                urls_result_section.heuristic.add_signature_id("split_reverse_join_url", 500)
 
             if self.is_phishing and post_seen:
-                urls_result_section.heuristic.add_signature_id("is_phishing_url")
+                urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
 
             if self.weird_base64_value_set:
-                urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url")
+                urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
 
             result.add_section(urls_result_section)
 
@@ -3265,10 +3265,10 @@ class JsJaws(ServiceBase):
         for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug("Added the obfuscator_io_url_redirect signature to the result section to score the tagged URLs")
-                result_section.heuristic.add_signature_id("obfuscator_io_url_redirect")
+                result_section.heuristic.add_signature_id("obfuscator_io_url_redirect", 500)
             elif result_section.heuristic and result_section.heuristic.heur_id == 1:
                 self.log.debug("Added the obfuscator_io_usage_url signature to the result section to score the tagged URLs")
-                result_section.heuristic.add_signature_id("obfuscator_io_usage_url")
+                result_section.heuristic.add_signature_id("obfuscator_io_usage_url", 500)
 
     def parse_msdt_powershell(self, cmd):
         import shlex

@@ -131,14 +131,6 @@ heuristics:
     score: 1
     filetype: '.*'
     description: Malware Sandbox Tool(s) detected network traffic.
-    signature_score_map:
-      single_script_url: 500
-      multiple_scripts_url: 500
-      function_inception_url: 500
-      obfuscator_io_usage_url: 500
-      split_reverse_join_url: 500
-      is_phishing_url: 500
-      weird_base64_value_set_url: 500
 
   - heur_id: 2
     name: IOC(s) Extracted
@@ -169,8 +161,6 @@ heuristics:
     score: 10
     filetype: '.*'
     description: Automatic redirection to another resource
-    signature_score_map:
-      obfuscator_io_url_redirect: 500
 
   - heur_id: 7
     name: Suspicious CSS Usage
@@ -213,11 +203,6 @@ heuristics:
     score: 1
     filetype: '.*'
     description: Sample uses a WScript Shell to manipulate network calls
-    signature_score_map:
-      wscript_pwsh_url: 500
-      wscript_cmd_url: 500
-      wscript_curl_url: 500
-      wscript_bitsadmin_url: 500
 
   - heur_id: 14
     name: Single script writes suspicious value
@@ -230,8 +215,6 @@ heuristics:
     score: 250
     filetype: '.*'
     description: Multiple rounds of tool runs were required due to nested document.write calls
-    signature_score_map:
-      multi_write_3rd_party_script: 500
 
   - heur_id: 16
     name: Third-party script(s) required

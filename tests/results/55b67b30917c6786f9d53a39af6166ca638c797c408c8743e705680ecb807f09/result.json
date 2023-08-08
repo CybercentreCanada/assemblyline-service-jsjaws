@@ -253,7 +253,9 @@
           "frequency": 1,
           "heur_id": 6,
           "score": 500,
-          "score_map": {},
+          "score_map": {
+            "obfuscator_io_url_redirect": 500
+          },
           "signatures": {
             "obfuscator_io_url_redirect": 1
           }
@@ -349,7 +351,10 @@
           "frequency": 1,
           "heur_id": 1,
           "score": 1000,
-          "score_map": {},
+          "score_map": {
+            "is_phishing_url": 500,
+            "obfuscator_io_usage_url": 500
+          },
           "signatures": {
             "is_phishing_url": 1,
             "obfuscator_io_usage_url": 1

@@ -126,7 +126,10 @@
           "frequency": 1,
           "heur_id": 1,
           "score": 1000,
-          "score_map": {},
+          "score_map": {
+            "function_inception_url": 500,
+            "obfuscator_io_usage_url": 500
+          },
           "signatures": {
             "function_inception_url": 1,
             "obfuscator_io_usage_url": 1
