@@ -191,7 +191,9 @@
           "heur_id": 15,
           "score": 250,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
         },
         "tags": {},
         "title_text": "Nested document.write calls",
@@ -240,7 +242,9 @@
       {
         "attack_ids": [],
         "heur_id": 15,
-        "signatures": []
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
       },
       {
         "attack_ids": [],

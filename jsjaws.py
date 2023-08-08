@@ -2774,11 +2774,23 @@ class JsJaws(ServiceBase):
             # To avoid recursive gauntlet runs, perform this check
             self.log.debug("No new content written to the DOM...")
 
-            heur15_res_sec: Optional[ResultTableSection] = None
-
-            if self.gauntlet_runs >= 2 and not heur15_res_sec:
+            if self.gauntlet_runs > 1:
                 heur = Heuristic(15)
                 heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+                # Add a signature for the number of times the gauntlet has been run
+                if self.gauntlet_runs == 2:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_2")
+                elif self.gauntlet_runs == 3:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_3")
+                elif self.gauntlet_runs in [4, 5]:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_4_or_5")
+                elif self.gauntlet_runs > 5 and self.gauntlet_runs <= 10:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_between_5_and_10")
+                elif self.gauntlet_runs > 10 and self.gauntlet_runs <= 20:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_between_10_and_20")
+                elif self.gauntlet_runs > 20:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_greater_than_20")
             return
 
         self.doc_write_hashes.add(doc_write_hash)
