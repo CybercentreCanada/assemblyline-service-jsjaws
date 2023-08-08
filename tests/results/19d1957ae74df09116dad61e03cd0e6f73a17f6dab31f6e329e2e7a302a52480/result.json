@@ -287,7 +287,9 @@
           "frequency": 1,
           "heur_id": 13,
           "score": 1000,
-          "score_map": {},
+          "score_map": {
+            "wscript_pwsh_url": 500
+          },
           "signatures": {
             "wscript_pwsh_url": 2
           }

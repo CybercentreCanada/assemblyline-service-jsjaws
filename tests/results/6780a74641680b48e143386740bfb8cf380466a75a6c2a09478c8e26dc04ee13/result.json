@@ -223,7 +223,9 @@
           "frequency": 1,
           "heur_id": 13,
           "score": 500,
-          "score_map": {},
+          "score_map": {
+            "wscript_cmd_url": 500
+          },
           "signatures": {
             "wscript_cmd_url": 1
           }
@@ -286,7 +288,9 @@
           "heur_id": 15,
           "score": 250,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
         },
         "tags": {},
         "title_text": "Nested document.write calls",
@@ -379,7 +383,9 @@
       {
         "attack_ids": [],
         "heur_id": 15,
-        "signatures": []
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
       }
     ],
     "tags": {

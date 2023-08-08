@@ -1406,6 +1406,8 @@ class JsJaws(ServiceBase):
             self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
         else:
             self._extract_malware_jail_iocs(malware_jail_output, request)
+
+        self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
         self._extract_urls(request.result)
@@ -2584,16 +2586,16 @@ class JsJaws(ServiceBase):
 
                     # If Wscript.Shell uses PowerShell AND an IOC was found, this is suspicious
                     if any(cmd.lower().strip().startswith(ps1) for ps1 in POWERSHELL_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_pwsh_url", 500)
                     # If Wscript.Shell uses CMD AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(cp) for cp in COMMAND_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_cmd_url", 500)
                     # If Wscript.Shell uses cURL AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(curl) for curl in CURL_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_curl_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_curl_url", 500)
                     # If Wscript.Shell uses bitsadmin AND an IOC was found, this is suspicious
                     elif any(cmd.lower().strip().startswith(bitsadmin) for bitsadmin in BITSADMIN_VARIATIONS):
-                        wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url")
+                        wscript_res_sec.heuristic.add_signature_id("wscript_bitsadmin_url", 500)
 
         wscript_batch_extraction.close()
         wscript_ps1_extraction.close()
@@ -2772,23 +2774,23 @@ class JsJaws(ServiceBase):
             # To avoid recursive gauntlet runs, perform this check
             self.log.debug("No new content written to the DOM...")
 
-            heur15_res_sec: Optional[ResultTableSection] = None
-            url_sec: Optional[ResultTableSection] = None
-
-            if self.gauntlet_runs >= 2 and not heur15_res_sec:
+            if self.gauntlet_runs > 1:
                 heur = Heuristic(15)
                 heur15_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
 
-            if self.gauntlet_runs >= 5 and heur15_res_sec and url_sec:
-                # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
-                # 5 runs fo the gauntlet
-                heur15_res_sec.set_heuristic(None)
-                url_sec.set_heuristic(15)
-                url_sec.heuristic.add_signature_id("multi_write_3rd_party_script")
-
-            if url_sec:
-                heur15_res_sec.add_subsection(url_sec)
-
+                # Add a signature for the number of times the gauntlet has been run
+                if self.gauntlet_runs == 2:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_2")
+                elif self.gauntlet_runs == 3:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_3")
+                elif self.gauntlet_runs in [4, 5]:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_4_or_5")
+                elif self.gauntlet_runs > 5 and self.gauntlet_runs <= 10:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_between_5_and_10")
+                elif self.gauntlet_runs > 10 and self.gauntlet_runs <= 20:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_between_10_and_20")
+                elif self.gauntlet_runs > 20:
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_greater_than_20")
             return
 
         self.doc_write_hashes.add(doc_write_hash)
@@ -2892,21 +2894,21 @@ class JsJaws(ServiceBase):
             urls_result_section.set_heuristic(1)
 
             if self.single_script_with_unescape:
-                urls_result_section.heuristic.add_signature_id("single_script_url")
+                urls_result_section.heuristic.add_signature_id("single_script_url", 500)
             elif self.multiple_scripts_with_unescape:
-                urls_result_section.heuristic.add_signature_id("multiple_scripts_url")
+                urls_result_section.heuristic.add_signature_id("multiple_scripts_url", 500)
 
             if self.function_inception:
-                urls_result_section.heuristic.add_signature_id("function_inception_url")
+                urls_result_section.heuristic.add_signature_id("function_inception_url", 500)
 
             if self.split_reverse_join:
-                urls_result_section.heuristic.add_signature_id("split_reverse_join_url")
+                urls_result_section.heuristic.add_signature_id("split_reverse_join_url", 500)
 
             if self.is_phishing and post_seen:
-                urls_result_section.heuristic.add_signature_id("is_phishing_url")
+                urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
 
             if self.weird_base64_value_set:
-                urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url")
+                urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
 
             result.add_section(urls_result_section)
 
@@ -3265,10 +3267,10 @@ class JsJaws(ServiceBase):
         for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug("Added the obfuscator_io_url_redirect signature to the result section to score the tagged URLs")
-                result_section.heuristic.add_signature_id("obfuscator_io_url_redirect")
+                result_section.heuristic.add_signature_id("obfuscator_io_url_redirect", 500)
             elif result_section.heuristic and result_section.heuristic.heur_id == 1:
                 self.log.debug("Added the obfuscator_io_usage_url signature to the result section to score the tagged URLs")
-                result_section.heuristic.add_signature_id("obfuscator_io_usage_url")
+                result_section.heuristic.add_signature_id("obfuscator_io_usage_url", 500)
 
     def parse_msdt_powershell(self, cmd):
         import shlex
@@ -3434,28 +3436,41 @@ class JsJaws(ServiceBase):
                 if uri_src not in self.initial_script_sources:
                     self.subsequent_script_sources.add(uri_src)
 
-        if self.subsequent_script_sources:
-            heur = Heuristic(18)
-            dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
-            # Check if domain or IP matches that of a URI that is programmatically loaded
-            decoded_urls: Set[str] = set()
-            for mark in self.base64_encoded_urls:
-                uri = re.match(ATOB_URI_REGEX, mark)
-                if len(uri.regs) == 2:
-                    decoded_urls.add(uri.group(1))
-            for script_src in sorted(list(self.subsequent_script_sources)):
-                if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
-                    if any(decoded_url in script_src for decoded_url in decoded_urls):
-                        # This is suspicious, flag it!
-                        dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
-                    dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
-
-            if dynamic_script_source_res.body:
-                request.result.add_section(dynamic_script_source_res)
-
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
+
+    def _handle_subsequent_scripts(self, result: Result):
+        """
+        This method handles subsequent script sources, by creating a result section and applying applicable signatures
+        :param result: A Result object containing the service results
+        :return: None
+        """
+        if not self.subsequent_script_sources:
+            return
+
+        heur = Heuristic(18)
+        dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
+        # Check if domain or IP matches that of a URI that is programmatically loaded
+        decoded_urls: Set[str] = set()
+        for mark in self.base64_encoded_urls:
+            uri = re.match(ATOB_URI_REGEX, mark)
+            if len(uri.regs) == 2:
+                decoded_urls.add(uri.group(1))
+        for script_src in sorted(list(self.subsequent_script_sources)):
+            if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
+                if any(decoded_url in script_src for decoded_url in decoded_urls):
+                    # This is suspicious, flag it!
+                    dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
+                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+
+        if self.gauntlet_runs >= 5:
+            # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
+            # 5 runs fo the gauntlet
+            dynamic_script_source_res.heuristic.add_signature_id("multi_write_3rd_party_script", 500)
+
+        if dynamic_script_source_res.body:
+            result.add_section(dynamic_script_source_res)
 
     def _run_tool(
         self,
