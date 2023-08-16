@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 871,
+    "score": 372,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,11 +14,17 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 12,
-          "score": 500,
+          "score": 1,
           "score_map": {},
           "signatures": {}
         },
-        "tags": {},
+        "tags": {
+          "file": {
+            "behavior": [
+              "Visual Basic and JavaScript"
+            ]
+          }
+        },
         "title_text": "Visual Basic and JavaScript",
         "zeroize_on_tag_safe": false
       },
@@ -228,6 +234,13 @@
           "heur_id": null,
           "signatures": [],
           "value": "flasks/data.txt"
+        }
+      ],
+      "file.behavior": [
+        {
+          "heur_id": 12,
+          "signatures": [],
+          "value": "Visual Basic and JavaScript"
         }
       ]
     },
