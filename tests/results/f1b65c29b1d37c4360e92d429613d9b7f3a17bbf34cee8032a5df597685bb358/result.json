@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1632,
+    "score": 1133,
     "sections": [
       {
         "auto_collapse": false,
@@ -11,7 +11,13 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
-        "tags": {},
+        "tags": {
+          "file": {
+            "behavior": [
+              "Visual Basic and JavaScript"
+            ]
+          }
+        },
         "title_text": "Visual Basic and JavaScript",
         "zeroize_on_tag_safe": false
       },
@@ -31,7 +37,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 12,
-          "score": 500,
+          "score": 1,
           "score_map": {},
           "signatures": {
             "suspicious_url_found": 1
@@ -408,6 +414,13 @@
             "wscript_curl_url"
           ],
           "value": "taskkill /f /im mshta.exe"
+        }
+      ],
+      "file.behavior": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "Visual Basic and JavaScript"
         }
       ],
       "file.string.extracted": [

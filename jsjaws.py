@@ -2024,6 +2024,7 @@ class JsJaws(ServiceBase):
         if vb_and_js_scripts:
             heur = Heuristic(12)
             vb_and_js_section = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+            vb_and_js_section.add_tag("file.behavior", heur.name)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
             for script in scripts:
