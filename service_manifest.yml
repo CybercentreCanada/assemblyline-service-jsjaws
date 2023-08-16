@@ -194,7 +194,7 @@ heuristics:
 
   - heur_id: 12
     name: Visual Basic and JavaScript
-    score: 500
+    score: 1
     filetype: '.*'
     description: Sample uses a combination of both Visual Basic and JavaScript
 
