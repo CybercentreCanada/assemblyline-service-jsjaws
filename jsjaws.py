@@ -656,13 +656,13 @@ class JsJaws(ServiceBase):
                         t.write(garbage)
                         garbage_path = t.name
 
-                    garbage_info = self.identify.fileinfo(garbage_path)
+                    garbage_info = self.identify.fileinfo(garbage_path, generate_hashes=False)
 
                     with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
                         t.write(script_we_want)
                         script_we_want_path = t.name
 
-                    script_we_want_info = self.identify.fileinfo(script_we_want_path)
+                    script_we_want_info = self.identify.fileinfo(script_we_want_path, generate_hashes=False)
                 else:
                     # Otherwise, return!
                     return file_path, file_content
@@ -1202,7 +1202,7 @@ class JsJaws(ServiceBase):
             file_type = request.file_type
             file_type_details = dict(mime=None)
         else:
-            file_type_details = self.identify.fileinfo(file_path)
+            file_type_details = self.identify.fileinfo(file_path, generate_hashes=False)
             file_type = file_type_details["type"]
 
         # Based on the file type, send to the proper extraction method
@@ -1588,7 +1588,7 @@ class JsJaws(ServiceBase):
                     embed_path = t.name
 
                 # We also want to aggregate Javscript scripts, but prior to the DIVIDING_COMMENT break, if it exists
-                file_info = self.identify.fileinfo(embed_path)
+                file_info = self.identify.fileinfo(embed_path, generate_hashes=False)
                 if file_info["type"] in ["code/html", "code/hta", "code/wsf", "code/wsc", "image/svg"]:
                     file_path, js_content, _ = self.extract_using_soup(request, embedded_file_content, js_content, aggregated_js_script, insert_above_divider=True)
                     if file_path:
@@ -2224,7 +2224,7 @@ class JsJaws(ServiceBase):
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                 out.write(malformed_javascript.encode())
                 malformed_path = out.name
-            file_type_details = self.identify.fileinfo(malformed_path)
+            file_type_details = self.identify.fileinfo(malformed_path, generate_hashes=False)
             file_type = file_type_details["type"]
 
             if file_type == "text/javascript" or "document.write" in malformed_javascript:
@@ -2382,7 +2382,7 @@ class JsJaws(ServiceBase):
 
                 # If has been observed that BeautifulSoup has difficulty parsing CSS,
                 # and JavaScript can be embedded within a Style element. Therefore, try to extract and aggregate!
-                file_type_details = self.identify.fileinfo(aggregated_css_script.name)
+                file_type_details = self.identify.fileinfo(aggregated_css_script.name, generate_hashes=False)
                 file_type = file_type_details["type"]
                 if file_type in ["code/html", "code/hta", "image/svg"]:
                     css_body_soup = BeautifulSoup(body, features="html5lib")
