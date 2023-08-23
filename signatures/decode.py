@@ -129,3 +129,17 @@ class Base64EncodedURL(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class Base64Redirect(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="base64_redirect",
+            description="JavaScript uses atob to decode a base64-encoded URL then redirect to it",
+            indicators=["window.location.replace(atob("],
+            severity=2
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output)
