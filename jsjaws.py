@@ -3013,7 +3013,10 @@ class JsJaws(ServiceBase):
                 elif sig_that_hit.name == "phishing_logo_download":
                     phishing_logos = True
                 elif sig_that_hit.name == "base64_encoded_url":
-                    self.base64_encoded_urls = sig_that_hit.marks
+                    for mark in sig_that_hit.marks:
+                        uri = re.match(ATOB_URI_REGEX, mark)
+                        if len(uri.regs) == 2:
+                            self.base64_encoded_urls.append(uri.group(1))
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -3430,6 +3433,9 @@ class JsJaws(ServiceBase):
                     if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
                         redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
 
+                        if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
+                            redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
+
             # Check if programatically created script with src set is found
             if HTMLELEMENT_SRC_SET_TO_URI in log_line and any(item in log_line for item in [HTMLSCRIPTELEMENT, HTMLIFRAMEELEMENT]):
                 uri_match = re.search(HTMLELEMENT_SRC_REGEX, log_line, re.IGNORECASE)
@@ -3456,14 +3462,9 @@ class JsJaws(ServiceBase):
         heur = Heuristic(18)
         dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
         # Check if domain or IP matches that of a URI that is programmatically loaded
-        decoded_urls: Set[str] = set()
-        for mark in self.base64_encoded_urls:
-            uri = re.match(ATOB_URI_REGEX, mark)
-            if len(uri.regs) == 2:
-                decoded_urls.add(uri.group(1))
         for script_src in sorted(list(self.subsequent_script_sources)):
             if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
-                if any(urlparse(decoded_url).netloc in script_src for decoded_url in decoded_urls):
+                if any(urlparse(decoded_url).netloc in script_src for decoded_url in self.base64_encoded_urls):
                     # This is suspicious, flag it!
                     dynamic_script_source_res.heuristic.add_signature_id("programmatically_created_base64_decoded_url", 500)
                 dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
