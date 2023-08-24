@@ -605,9 +605,11 @@ class JsJaws(ServiceBase):
             if self.gootloader_uris:
                 self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
                 self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
-                if path.exists(self.gootloader_stage2_path) and gootloader_config.code:
-                    file_path = self.gootloader_stage2_path
-                    return file_path, gootloader_config.code.encode()
+                if gootloader_config.code:
+                    if path.exists(self.gootloader_stage2_path):
+                         return self.gootloader_stage2_path, gootloader_config.code.encode()
+                    elif path.exists(self.decoded_gootloader_path):
+                        return self.decoded_gootloader_path, gootloader_config.code.encode()
 
         # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
         # library). Let's try to use the libraries we manually extracted.
@@ -2921,6 +2923,9 @@ class JsJaws(ServiceBase):
 
             if self.weird_base64_value_set:
                 urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
+
+            if self.embedded_code_in_lib:
+                urls_result_section.heuristic.add_signature_id("gootloader_url", 500)
 
             result.add_section(urls_result_section)
 
