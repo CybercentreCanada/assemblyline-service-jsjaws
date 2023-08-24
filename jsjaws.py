@@ -2924,6 +2924,9 @@ class JsJaws(ServiceBase):
             if self.weird_base64_value_set:
                 urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
 
+            if self.embedded_code_in_lib:
+                urls_result_section.heuristic.add_signature_id("gootloader_url", 500)
+
             result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
