@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\twww.maghrebassurance.fr\n\t-\twww.ls1969.fr\n\t-\twww.macromixenlinea.com",
+        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\twww.lohevisto.com\n\t-\twww.liparicasa.it\n\t-\twww.location-atelier-garage.com",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -30,9 +30,9 @@
           "network": {
             "dynamic": {
               "domain": [
-                "www.maghrebassurance.fr",
-                "www.ls1969.fr",
-                "www.macromixenlinea.com"
+                "www.lohevisto.com",
+                "www.liparicasa.it",
+                "www.location-atelier-garage.com"
               ]
             }
           }
@@ -96,7 +96,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\t if (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\"...",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\t if (WScript.CreateObject((\"W\")+(\"Scr\")+(\"ipt.\")+(\"She\")+(\"ll\")).ExpandEnvironmentStrings((\"%USE\")+(...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -119,7 +119,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\n\t\tMSXML2.XMLHTTP[14].send()\n\n\t\tMSXML2.XMLHTTP[16].send()\n\n\t\t h.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\n\t\tMSXML2.XMLHTTP[14].send()\n\n\t\tMSXML2.XMLHTTP[16].send()\n\n\t\t g.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -142,7 +142,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\tWScript.Sleep(\"23232\")\n\n\t\t if ((i.indexOf(\"@\"+I+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t } } else { WScript.sleep(11111)",
+        "body": "JavaScript attempts to sleep\n\t\tWScript.Sleep(\"23232\")\n\n\t\t if ((a.indexOf(\"@\"+p+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t } } else { WScript.sleep(12345)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -165,7 +165,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.ls1969.fr\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.macromixenlinea.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.maghrebassurance.fr\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=079549590345013854173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=203829534623162224173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=75731049555993084173581\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.liparicasa.it\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.location-atelier-garage.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.lohevisto.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?mhsctaxsmkzg=40766623021699114173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?mhsctaxsmkzg=63808859147822444173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?mhsctaxsmkzg=96970579608599074173581\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -188,19 +188,19 @@
             "static": {
               "domain": [
                 "CORP.ORGANIZATION.CA",
-                "www.ls1969.fr",
-                "www.macromixenlinea.com",
-                "www.maghrebassurance.fr"
+                "www.liparicasa.it",
+                "www.location-atelier-garage.com",
+                "www.lohevisto.com"
               ],
               "uri": [
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581",
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581",
+                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581",
+                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "/test.php?mhsctaxsmkzg=40766623021699114173581",
+                "/test.php?mhsctaxsmkzg=63808859147822444173581",
+                "/test.php?mhsctaxsmkzg=96970579608599074173581"
               ]
             }
           }
@@ -210,7 +210,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581\", \"method\": \"GET\"}, {\"url\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581\", \"method\": \"GET\"}, {\"url\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581\", \"method\": \"GET\"}]",
+        "body": "[{\"url\": \"https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581\", \"method\": \"GET\"}, {\"url\": \"https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581\", \"method\": \"GET\"}, {\"url\": \"https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581\", \"method\": \"GET\"}]",
         "body_config": {
           "column_order": [
             "url",
@@ -236,19 +236,19 @@
           "network": {
             "dynamic": {
               "domain": [
-                "www.maghrebassurance.fr",
-                "www.ls1969.fr",
-                "www.macromixenlinea.com"
+                "www.lohevisto.com",
+                "www.liparicasa.it",
+                "www.location-atelier-garage.com"
               ],
               "uri": [
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581",
+                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581",
+                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "/test.php?mhsctaxsmkzg=96970579608599074173581",
+                "/test.php?mhsctaxsmkzg=63808859147822444173581",
+                "/test.php?mhsctaxsmkzg=40766623021699114173581"
               ]
             }
           }
@@ -262,13 +262,13 @@
     "extracted": [
       {
         "name": "DecodedJsPayload.js_",
-        "sha256": "dc8666f71b2c1232e14c2904978f60cfefaac5ee58c7aa975b72f0d7afd588ec"
+        "sha256": "71dc46737656851e261beb36daf91089b634344e68b062930bf6a38807f395fe"
       }
     ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "dc8666f71b2c1232e14c2904978f60cfefaac5ee58c7aa975b72f0d7afd588ec"
+        "sha256": "71dc46737656851e261beb36daf91089b634344e68b062930bf6a38807f395fe"
       }
     ]
   },
@@ -344,38 +344,38 @@
         {
           "heur_id": 4,
           "signatures": [],
-          "value": "www.ls1969.fr"
+          "value": "www.liparicasa.it"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "www.ls1969.fr"
+          "value": "www.liparicasa.it"
         },
         {
           "heur_id": 4,
           "signatures": [],
-          "value": "www.macromixenlinea.com"
+          "value": "www.location-atelier-garage.com"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "www.macromixenlinea.com"
+          "value": "www.location-atelier-garage.com"
         },
         {
           "heur_id": 4,
           "signatures": [],
-          "value": "www.maghrebassurance.fr"
+          "value": "www.lohevisto.com"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "www.maghrebassurance.fr"
+          "value": "www.lohevisto.com"
         }
       ],
       "network.dynamic.uri": [
@@ -384,21 +384,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -407,21 +407,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "/test.php?mhsctaxsmkzg=40766623021699114173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "/test.php?mhsctaxsmkzg=63808859147822444173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "/test.php?mhsctaxsmkzg=96970579608599074173581"
         }
       ],
       "network.static.domain": [
@@ -433,51 +433,51 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "www.ls1969.fr"
+          "value": "www.liparicasa.it"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "www.macromixenlinea.com"
+          "value": "www.location-atelier-garage.com"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "www.maghrebassurance.fr"
+          "value": "www.lohevisto.com"
         }
       ],
       "network.static.uri": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=63808859147822444173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=40766623021699114173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=96970579608599074173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "/test.php?mhsctaxsmkzg=40766623021699114173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "/test.php?mhsctaxsmkzg=63808859147822444173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "/test.php?mhsctaxsmkzg=96970579608599074173581"
         }
       ]
     },
