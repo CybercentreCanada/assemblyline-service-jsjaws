@@ -86,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[17]()\n\n\t\tScripting.FileSystemObject[17].Drives => Drives\n\n\t\tScripting.FileSystemObject[17].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[17]()\n\n\t\tScripting.FileSystemObject[17].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
