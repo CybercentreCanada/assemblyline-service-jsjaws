@@ -152,7 +152,7 @@ def save_file(output_filename, output_code, log: Logger):
 
 def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = None, log: Logger = print):
     # Open File
-    outputDomains: str = ""
+    outputDomains = list()
     OutputCode: str = ""
     file = open(path, mode="r", encoding="utf-8")
 
@@ -314,15 +314,13 @@ def gootDecode(path, unsafe_uris = False, payload_path = None, stage2_path = Non
         # Print to screen
         log('\nScript output Saved to: %s\n' % OutputFileName)
 
-        outputDomains = ''
-
         for dom in maliciousDomains:
             if not unsafe_uris:
-                outputDomains += defang(dom) + '\n'
+                outputDomains.append(defang(dom))
             else:
-                outputDomains += dom + '\n'
+                outputDomains.append(dom)
 
-        log('\nMalicious Domains: \n\n%s' % outputDomains)
+        log('\nMalicious Domains: \n\n%s' % '\n'.join(outputDomains))
 
     save_file(OutputFileName, OutputCode, log)
     return False, outputDomains, OutputCode

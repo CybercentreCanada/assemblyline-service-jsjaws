@@ -22,7 +22,7 @@ from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
-from assemblyline.odm.base import FULL_URI, URI_REGEX
+from assemblyline.odm.base import DOMAIN_ONLY_REGEX, FULL_URI, URI_REGEX
 from assemblyline_service_utilities.common.dynamic_service_helper import OntologyResults, extract_iocs_from_text_blob
 from assemblyline_service_utilities.common.extractor.base64 import BASE64_RE
 from assemblyline_service_utilities.common.safelist_helper import is_tag_safelisted
@@ -594,12 +594,20 @@ class JsJaws(ServiceBase):
 
         # If we have a hit
         if gootloader_config and gootloader_config.urls:
-            self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
-            self.gootloader_uris = [uri.strip() for uri in gootloader_config.urls if uri.strip()]
-            self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
-            if path.exists(self.gootloader_stage2_path) and gootloader_config.code:
-                file_path = self.gootloader_stage2_path
-                return file_path, gootloader_config.code.encode()
+            for uri in gootloader_config.urls:
+                stripped_uri = uri.strip()
+                # URI should exist, URI should actually be a URI, or URI is actually a domain
+                if not stripped_uri or (not re.match(FULL_URI, stripped_uri) and not re.match(DOMAIN_ONLY_REGEX, stripped_uri)):
+                    continue
+
+                self.gootloader_uris.append(stripped_uri)
+
+            if self.gootloader_uris:
+                self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
+                self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
+                if path.exists(self.gootloader_stage2_path) and gootloader_config.code:
+                    file_path = self.gootloader_stage2_path
+                    return file_path, gootloader_config.code.encode()
 
         # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
         # library). Let's try to use the libraries we manually extracted.
