@@ -2166,7 +2166,7 @@ class JsJaws(ServiceBase):
         This method
         """
         # Look for elements with the on<event> attributes and add their script bodies to the aggregated js script
-        for event in ["error", "pageshow", "load", "submit", "click"]:
+        for event in ["error", "pageshow", "load", "submit", "click", "finish"]:
             for onevent in element.get_attribute_list(f"on{event}"):
                 if onevent:
                     is_script_body = True
