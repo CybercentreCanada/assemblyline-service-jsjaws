@@ -3605,7 +3605,7 @@ class JsJaws(ServiceBase):
 
                         dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
 
-            if len(diff) > 0:
+            if len(diff) > 10:
                 new_file_contents = b""
                 for line in diff:
                     new_file_contents += f"{line}\n".encode()
