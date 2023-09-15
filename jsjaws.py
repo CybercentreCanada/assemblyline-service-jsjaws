@@ -2315,6 +2315,7 @@ class JsJaws(ServiceBase):
         function_varname = None
 
         vb_and_js_scripts, vb_and_js_section = self._is_vb_and_js_scripts(scripts, request)
+        url_sec = None
 
         for script in scripts:
             source_added = self._is_script_source(script)
@@ -2345,7 +2346,7 @@ class JsJaws(ServiceBase):
                     # Look for Function usage in JavaScript, because it may be used in VBScript later on in an HTML file
                     function_varname = self._find_js_function_declaration(body)
 
-                    self._look_for_iocs_between_vb_and_js(body, vb_and_js_section)
+                    url_sec = self._look_for_iocs_between_vb_and_js(body, vb_and_js_section, url_sec)
 
                 body = self._modify_javascript_body(body)
 
@@ -3723,22 +3724,39 @@ class JsJaws(ServiceBase):
                 function_varname = fn_reassignment.group("new_name")
         return function_varname
 
-    def _look_for_iocs_between_vb_and_js(self, body: str, vb_and_js_section: ResultTextSection) -> None:
+    def _look_for_iocs_between_vb_and_js(self, body: str, vb_and_js_section: ResultTextSection, url_sec: Optional[ResultTableSection] = None) -> Optional[ResultTableSection]:
         """
         This method looks for network IOCs (specifically URIs) being used in script bodies
         :param body: The script body to be looked through
         :param vb_and_js_section: The ResultSection that will contain the subsection detailing the IOCs + heuristic + signature
-        :return None:
+        :return: The URL section that may have been added to the vb_and_js_section
         """
-        url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
-        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
-        if vb_and_js_section and url_sec.body and url_sec.tags.get("network.static.uri"):
-            # Move heuristic to this IOC section so that the score is associated with the tag
-            url_sec.set_heuristic(12)
-            vb_and_js_section.set_heuristic(None)
-            vb_and_js_section.add_subsection(url_sec)
-            url_sec.heuristic.add_signature_id("suspicious_url_found")
+        if not vb_and_js_section:
+            return
 
+        if not url_sec:
+            previous_url_sec = False
+        else:
+            previous_url_sec = True
+
+        # If we did not receive a previous url_sec...
+        if not previous_url_sec:
+            url_sec = ResultTableSection("IOCs found being passed between Visual Basic and JavaScript")
+
+        extract_iocs_from_text_blob(body, url_sec, is_network_static=True)
+
+        # Perform the following only if this is the first time we are seeing a url_sec
+        if url_sec.body and url_sec.tags.get("network.static.uri"):
+            if not previous_url_sec:
+                # Move heuristic to this IOC section so that the score is associated with the tag
+                url_sec.set_heuristic(12)
+                vb_and_js_section.set_heuristic(None)
+                vb_and_js_section.add_subsection(url_sec)
+                url_sec.heuristic.add_signature_id("suspicious_url_found", 500)
+            # Once we have url_sec that has tags, we always return it
+            return url_sec
+        else:
+            return None
 
     def _convert_vb_function_call(self, function_varname: str, body: str, vb_and_js_section: ResultTextSection, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
         """
