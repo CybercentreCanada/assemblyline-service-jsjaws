@@ -3734,10 +3734,7 @@ class JsJaws(ServiceBase):
         if not vb_and_js_section:
             return
 
-        if not url_sec:
-            previous_url_sec = False
-        else:
-            previous_url_sec = True
+        previous_url_sec = url_sec is not None
 
         # If we did not receive a previous url_sec...
         if not previous_url_sec:
