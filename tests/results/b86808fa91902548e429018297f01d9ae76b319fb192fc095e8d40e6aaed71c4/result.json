@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1133,
+    "score": 1632,
     "sections": [
       {
         "auto_collapse": false,
@@ -37,8 +37,10 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 12,
-          "score": 1,
-          "score_map": {},
+          "score": 500,
+          "score_map": {
+            "suspicious_url_found": 500
+          },
           "signatures": {
             "suspicious_url_found": 1
           }
