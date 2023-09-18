@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 51,
+    "score": 52,
     "sections": [
       {
         "auto_collapse": false,
@@ -168,6 +168,41 @@
         },
         "title_text": "The script wrote the following files",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.protware.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.protware.com\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.protware.com"
+              ],
+              "uri": [
+                "http://www.protware.com"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -191,6 +226,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -238,6 +278,20 @@
           "heur_id": null,
           "signatures": [],
           "value": "URL_Blob_file_0"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.protware.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.protware.com"
         }
       ]
     },
