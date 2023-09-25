@@ -123,12 +123,16 @@
   "files": {
     "extracted": [
       {
-        "name": "a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned",
-        "sha256": "357530966a538ee95d7c42758edf0cbcb60406a757cf2e90397a9a25b136d182"
+        "name": "extracted_wscript.ps1",
+        "sha256": "0f1ad7f5b1d4813bd2c989e8e8660de446ef167eb806ce4cb274ffd7440c91c0"
       },
       {
         "name": "extracted_wscript.bat",
-        "sha256": "60b6b1e1a90e799f3226ab56f341ea71a3956c36f3c1ee25ec388af2330d4858"
+        "sha256": "178d490b3af9c07c74d6b2a4ccdd4de8e86f56e77cd1a712894d8a4efefabc56"
+      },
+      {
+        "name": "a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned",
+        "sha256": "357530966a538ee95d7c42758edf0cbcb60406a757cf2e90397a9a25b136d182"
       }
     ],
     "supplementary": []
