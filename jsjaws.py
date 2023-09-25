@@ -42,7 +42,7 @@ from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwor
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
-from multidecoder.analyzers.shell import find_powershell_strings, get_powershell_command
+from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
 from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
