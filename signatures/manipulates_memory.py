@@ -11,7 +11,7 @@ class MemoryStream(Signature):
             name="memory_stream",
             description="JavaScript uses a MemoryStream object to manipulate memory",
             indicators=["MemoryStream"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

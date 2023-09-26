@@ -11,7 +11,7 @@ class SuspiciousProcess(Signature):
             name="suspicious_process",
             description="JavaScript uses a suspicious process",
             indicators=["winmgmts", "eval(", "uneval(", "new Worker("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

@@ -11,7 +11,7 @@ class Unescape(Signature):
             name="unescape",
             description="JavaScript uses unescape() to decode an encoded string",
             indicators=["unescape"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class SuspiciousUseOfCharCodes(Signature):
             name="suspicious_char_codes",
             description="JavaScript uses charCodeAt() obfuscate/de-obfuscate characters",
             indicators=[".charCodeAt("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class Base64Decoding(Signature):
             name="base64_decoding",
             description="JavaScript uses a common base64 method for decoding characters",
             indicators=["b64toblob(", "atob(", "b64blb(", "FromBase64Transform", "TransformFinalBlock"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -53,7 +53,7 @@ class Obfuscation(Signature):
             name="obfuscation",
             description="JavaScript uses a commonly-seen method for de-obfuscating a string",
             indicators=["reverse("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -67,7 +67,7 @@ class CryptoJSObfuscation(Signature):
             name="crypto_js_obfuscation",
             description="JavaScript uses CryptoJS for obfuscating/de-obfuscating a string",
             indicators=["CryptoJS"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -81,7 +81,7 @@ class NestedAtoB(Signature):
             name="nested_atob",
             description="JavaScript uses nested atob() calls for decoding",
             indicators=["atob(atob("],
-            severity=3
+            severity=3,
         )
 
     def process_output(self, output):
@@ -94,8 +94,8 @@ class SplitReverseJoin(Signature):
             heuristic_id=3,
             name="split_reverse_join",
             description="JavaScript uses a uncommon method for de-obfuscating a string (split+reverse+join)",
-            indicators=[".split(\"\").reverse().join(\"\")"],
-            severity=3
+            indicators=['.split("").reverse().join("")'],
+            severity=3,
         )
 
     def process_output(self, output):
@@ -109,7 +109,7 @@ class WriteBase64ContentFromElement(Signature):
             name="write_base64_content_from_element",
             description="JavaScript writes content to the DOM by base64-decoding a value from an element",
             indicators=["document.write(atob(document.getElementById("],
-            severity=3
+            severity=3,
         )
 
     def process_output(self, output):
@@ -124,7 +124,7 @@ class Base64EncodedURL(Signature):
             description="JavaScript uses atob to decode a base64-encoded URL",
             # Directly related to the ATOB_URI_REGEX constant!
             indicators=["atob was seen decoding a URI:"],
-            severity=2
+            severity=2,
         )
 
     def process_output(self, output):
@@ -138,7 +138,7 @@ class Base64Redirect(Signature):
             name="base64_redirect",
             description="JavaScript uses atob to decode a base64-encoded URL then redirect to it",
             indicators=["window.location.replace(atob("],
-            severity=2
+            severity=2,
         )
 
     def process_output(self, output):

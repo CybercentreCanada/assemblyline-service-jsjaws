@@ -11,18 +11,12 @@ class AppendAndClick(Signature):
             name="append_and_click",
             description="JavaScript appends a child object to the document and clicks it",
             indicators=[".click("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {
-                "method": "any",
-                "indicators": "document.body.appendChild("
-            },
-            {
-                "method": "any",
-                "indicators": self.indicators
-            },
+            {"method": "any", "indicators": "document.body.appendChild("},
+            {"method": "any", "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)

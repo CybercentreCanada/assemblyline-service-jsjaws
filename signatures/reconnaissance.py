@@ -11,7 +11,7 @@ class ExpandEnvStrings(Signature):
             name="env_str_recon",
             description="JavaScript looks at the environment strings",
             indicators=[".ExpandEnvironmentStrings"],
-            severity=2
+            severity=2,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class DriveObject(Signature):
             name="drive_object",
             description="JavaScript creates an object representing a hard drive",
             indicators=["DriveObject"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class FileSystemObject(Signature):
             name="file_system_object",
             description="JavaScript creates an ActiveXObject to gain access to the computer's file system",
             indicators=["Scripting.FileSystemObject"],
-            severity=1
+            severity=1,
         )
 
     def process_output(self, output):
@@ -53,7 +53,7 @@ class GetSpecialFolder(Signature):
             name="get_special_folder",
             description="JavaScript uses the FileSystemObject to discover the special folder",
             indicators=["GetSpecialFolder"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -67,7 +67,7 @@ class GetFolder(Signature):
             name="get_folder",
             description="JavaScript uses the FileSystemObject to discover a folder",
             indicators=["GetFolder"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

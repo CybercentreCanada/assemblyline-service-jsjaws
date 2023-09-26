@@ -11,7 +11,7 @@ class PrepareNetworkRequest(Signature):
             name="prepare_network_request",
             description="JavaScript prepares a network request",
             indicators=[".setRequestHeader(", "User-Agent", "XMLHttpRequest("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class NetworkRequest(Signature):
             name="network_request",
             description="JavaScript sends a network request",
             indicators=[".send()"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class AJAXNetworkRequest(Signature):
             name="ajax_network_request",
             description="JavaScript sends a network request via AJAX and jQuery",
             indicators=["$.ajax("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -53,7 +53,7 @@ class JQueryNetworkRequest(Signature):
             name="jquery_network_request",
             description="JavaScript sends a network request via jQuery",
             indicators=["$.post(", "$.getJSON("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -67,7 +67,7 @@ class GeoIPServiceRequest(Signature):
             name="geoip_service_request",
             description="A domain associated with GeoIP services was observed",
             indicators=["GeoIP service"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -81,14 +81,11 @@ class TelegramExfil(Signature):
             name="telegram_exfil",
             description="An outgoing request was made to Telegram",
             indicators=["XMLHttpRequest", ".open(", "api.telegram.org"],
-            severity=3
+            severity=3,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {
-                "method": "all",
-                "indicators": self.indicators
-            },
+            {"method": "all", "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)

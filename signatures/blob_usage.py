@@ -11,7 +11,7 @@ class CreatesBlob(Signature):
             name="creates_blob",
             description="JavaScript creates a Blob object",
             indicators=["new Blob(", "new File("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class CreatesObjectURL(Signature):
             name="creates_object_url",
             description="JavaScript creates an object URL with a blob",
             indicators=["createObjectURL("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class GetBytes(Signature):
             name="gets_bytes",
             description="JavaScript accesses byte blob",
             indicators=["GetBytes", "GetByteCount"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
