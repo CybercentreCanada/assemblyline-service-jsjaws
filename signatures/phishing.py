@@ -11,7 +11,7 @@ class PhishingTerms(Signature):
             heuristic_id=3,
             name="phishing_terms",
             description="JavaScript uses terms commonly associated with logging in",
-            severity=1
+            severity=1,
         )
 
     def process_output(self, output):
@@ -28,7 +28,9 @@ class PhishingTerms(Signature):
             return
 
         # Next look for account prompts
-        account_regex = f"\\b({'|'.join(['email', 'account', 'phone', 'skype', 'e-mail', 'authentication', 'login'])})\\b"
+        account_regex = (
+            f"\\b({'|'.join(['email', 'account', 'phone', 'skype', 'e-mail', 'authentication', 'login'])})\\b"
+        )
         for line in output:
             results.extend(self.check_regex(account_regex, line.lower()))
 
@@ -38,7 +40,9 @@ class PhishingTerms(Signature):
         else:
             results_set = sorted(set(results))
             if len(results_set) > 25:
-                self.marks.append(f"The following terms were found in the document: {','.join(sorted(set(results_set))[:25])}. {len(results_set[25:])} marks were not displayed.")
+                self.marks.append(
+                    f"The following terms were found in the document: {','.join(sorted(set(results_set))[:25])}. {len(results_set[25:])} marks were not displayed."
+                )
             else:
                 self.marks.append(f"The following terms were found in the document: {','.join(results_set)}")
 
@@ -49,16 +53,24 @@ class PhishingLogoDownload(Signature):
             heuristic_id=3,
             name="phishing_logo_download",
             description="JavaScript reaches out to common URL that is used for hosting logos for organizations.",
-            indicators=["logo.clearbit.com", "vectorstock.com", "1.bp.blogspot.com", "2.bp.blogspot.com", "3.bp.blogspot.com", "4.bp.blogspot.com", "pngtoico.io", "aadcdn.msauth.net/shared/1.0/content/images/", "softwarereviews.s3.amazonaws.com/production/favicons/", "logincdn.msauth.net/shared/1.0/content/images/"],
-            severity=1
+            indicators=[
+                "logo.clearbit.com",
+                "vectorstock.com",
+                "1.bp.blogspot.com",
+                "2.bp.blogspot.com",
+                "3.bp.blogspot.com",
+                "4.bp.blogspot.com",
+                "pngtoico.io",
+                "aadcdn.msauth.net/shared/1.0/content/images/",
+                "softwarereviews.s3.amazonaws.com/production/favicons/",
+                "logincdn.msauth.net/shared/1.0/content/images/",
+            ],
+            severity=1,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {
-                "method": "any",
-                "indicators": self.indicators
-            },
+            {"method": "any", "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -70,15 +82,12 @@ class PhishingReEnterPrompt(Signature):
             name="phishing_reenter_prompt",
             description="JavaScript prompts user to re-enter account data.",
             indicators=["incorrect ", "try again", " be empty"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {
-                "method": "any",
-                "indicators": self.indicators
-            },
+            {"method": "any", "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -90,14 +99,11 @@ class PhishingPostPassword(Signature):
             name="phishing_post_password",
             description="JavaScript makes network request via POST with password data.",
             indicators=["XMLHttpRequest", "JsJ@w$==C00l!"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {
-                "method": "all",
-                "indicators": self.indicators
-            },
+            {"method": "all", "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)

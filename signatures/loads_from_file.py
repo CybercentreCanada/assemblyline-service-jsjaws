@@ -11,7 +11,7 @@ class LoadsLocalFile(Signature):
             name="loads_local_file",
             description="JavaScript loads a local file from disk",
             indicators=[".LoadFromFile", ".OpenTextFile"],
-            severity=2
+            severity=2,
         )
 
     def process_output(self, output):

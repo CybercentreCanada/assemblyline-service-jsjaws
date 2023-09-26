@@ -11,7 +11,7 @@ class ActiveXObject(Signature):
             name="active_x_object",
             description="JavaScript creates an ActiveXObject",
             indicators=["ActiveXObject"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class GetObject(Signature):
             name="get_object",
             description="JavaScript returns a reference to an object provided by an ActiveX component",
             indicators=["GetObject"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -39,7 +39,7 @@ class XMLHTTP(Signature):
             name="xml_http",
             description="JavaScript creates an ActiveXObject to perform XML HTTP requests",
             indicators=["ActiveXObject", "Microsoft.XMLHTTP"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

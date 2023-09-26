@@ -11,12 +11,11 @@ class ScheduledTask(Signature):
             name="scheduled_task",
             description="JavaScript creates an ActiveXObject to schedule a task",
             indicators=["Schedule.Service"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
-
 
 
 class RunsScheduledTask(Signature):
@@ -26,7 +25,7 @@ class RunsScheduledTask(Signature):
             name="runs_schtasks_via_cmd_prompt",
             description="JavaScript runs Scheduled Task utility via cmd.exe",
             indicators=["cmd.exe", "schtasks"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

@@ -6,8 +6,9 @@ from tools.gootloader.GootLoaderAutoJsDecode import gootDecode
 from tools.gootloader.utils import GootLoaderConfig
 
 
-def run(js_file_path: str, unsafe_uris: bool = False, payload_path: str = None, stage2_path: str = None,
-        log: Logger = print) -> Optional[GootLoaderConfig]:
+def run(
+    js_file_path: str, unsafe_uris: bool = False, payload_path: str = None, stage2_path: str = None, log: Logger = print
+) -> Optional[GootLoaderConfig]:
     third_generation: bool = False
     urls: str = ""
     code: str = ""
@@ -28,7 +29,7 @@ def run(js_file_path: str, unsafe_uris: bool = False, payload_path: str = None, 
         except Exception as e:
             log(f"Error when running GootLoaderAutoJsDecode due to {e}")
 
-    if (urls and code):
+    if urls and code:
         return GootLoaderConfig(code, urls)
     else:
         return None

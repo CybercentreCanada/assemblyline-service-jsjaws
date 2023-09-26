@@ -7,15 +7,30 @@ import functools
 
 # https://github.com/Kozea/tinycss2/blob/master/tinycss2/ast.py
 from tinycss2.ast import (
-    AtKeywordToken, AtRule, Comment, CurlyBracketsBlock, Declaration,
-    DimensionToken, FunctionBlock, HashToken, IdentToken, LiteralToken,
-    NumberToken, ParenthesesBlock, ParseError, PercentageToken, QualifiedRule,
-    SquareBracketsBlock, StringToken, UnicodeRangeToken, URLToken,
-    WhitespaceToken)
+    AtKeywordToken,
+    AtRule,
+    Comment,
+    CurlyBracketsBlock,
+    Declaration,
+    DimensionToken,
+    FunctionBlock,
+    HashToken,
+    IdentToken,
+    LiteralToken,
+    NumberToken,
+    ParenthesesBlock,
+    ParseError,
+    PercentageToken,
+    QualifiedRule,
+    SquareBracketsBlock,
+    StringToken,
+    UnicodeRangeToken,
+    URLToken,
+    WhitespaceToken,
+)
 
 # https://github.com/Kozea/tinycss2/blob/master/tinycss2/color3.py
 from tinycss2.color3 import RGBA
-
 from webencodings import Encoding
 
 SKIP_COMMENTS = False
@@ -67,17 +82,17 @@ def parse_declaration_list(tokens, skip_comments=False, skip_whitespace=False):
         SKIP_WHITESPACE = True
     result = []
     for token in tokens:
-        if token.type == 'whitespace':
+        if token.type == "whitespace":
             if not SKIP_WHITESPACE:
                 result.append(token)
-        elif token.type == 'comment':
+        elif token.type == "comment":
             if not SKIP_COMMENTS:
                 result.append(token)
-        elif token.type == 'at-keyword':
+        elif token.type == "at-keyword":
             # result.append(_consume_at_rule(token, tokens))
             print("At-rule spotted!")
-        elif token.type == 'ident':
-            declaration = _consume_declaration_in_list(token, tokens[tokens.index(token):])
+        elif token.type == "ident":
+            declaration = _consume_declaration_in_list(token, tokens[tokens.index(token) :])
             if declaration:
                 declaration_as_json = to_json(declaration)
                 result.append(declaration_as_json)
@@ -92,11 +107,11 @@ def _consume_declaration_in_list(first_token, tokens):
     for token in tokens:
         if token == first_token:
             continue
-        elif token.type == 'whitespace' and SKIP_WHITESPACE:
+        elif token.type == "whitespace" and SKIP_WHITESPACE:
             continue
-        elif token.type == 'comment' and SKIP_COMMENTS:
+        elif token.type == "comment" and SKIP_COMMENTS:
             continue
-        elif token == ';':
+        elif token == ";":
             break
         other_declaration_tokens.append(token)
     return _parse_declaration(first_token, iter(other_declaration_tokens))
@@ -119,33 +134,31 @@ def _parse_declaration(first_token, tokens):
 
     """
     name = first_token
-    if name.type != 'ident':
+    if name.type != "ident":
         return
 
     colon = _next_significant(tokens)
     if colon is None:
         return
-    elif colon != ':':
+    elif colon != ":":
         return
 
     value = []
-    state = 'value'
+    state = "value"
     for i, token in enumerate(tokens):
-        if state == 'value' and token == '!':
-            state = 'bang'
+        if state == "value" and token == "!":
+            state = "bang"
             bang_position = i
-        elif state == 'bang' and token.type == 'ident' \
-                and token.lower_value == 'important':
-            state = 'important'
-        elif token.type not in ('whitespace', 'comment'):
-            state = 'value'
+        elif state == "bang" and token.type == "ident" and token.lower_value == "important":
+            state = "important"
+        elif token.type not in ("whitespace", "comment"):
+            state = "value"
         value.append(token)
 
-    if state == 'important':
+    if state == "important":
         del value[bang_position:]
 
-    return Declaration(name.source_line, name.source_column, name.value,
-                       name.lower_value, value, state == 'important')
+    return Declaration(name.source_line, name.source_column, name.value, name.lower_value, value, state == "important")
 
 
 # The same as _next_significant in https://github.com/Kozea/tinycss2/blob/master/tinycss2/parser.py
@@ -159,7 +172,7 @@ def _next_significant(tokens):
 
     """
     for token in tokens:
-        if token.type not in ('whitespace', 'comment'):
+        if token.type not in ("whitespace", "comment"):
             return token
 
 
@@ -185,18 +198,24 @@ def consume_at_rule(at_token, tokens):
         return at_token
 
     for token in tokens:
-        if token.type == 'whitespace' and SKIP_WHITESPACE:
+        if token.type == "whitespace" and SKIP_WHITESPACE:
             continue
-        elif token.type == 'comment' and SKIP_COMMENTS:
+        elif token.type == "comment" and SKIP_COMMENTS:
             continue
-        elif token.type == '{} block':
+        elif token.type == "{} block":
             content = token.content
             break
-        elif token == ';':
+        elif token == ";":
             break
         prelude.append(token)
-    return AtRule(at_token.source_line, at_token.source_column,
-                  getattr(at_token, "value", None), getattr(at_token, "lower_value", None), prelude, content)
+    return AtRule(
+        at_token.source_line,
+        at_token.source_column,
+        getattr(at_token, "value", None),
+        getattr(at_token, "lower_value", None),
+        prelude,
+        content,
+    )
 
 
 # Custom method
@@ -208,7 +227,7 @@ def significant_tokens(tokens):
     :param tokens: An iterator yielding :term:`component values`.
     :returns: The significant tokens.
     """
-    return [token for token in tokens if token.type not in ('whitespace', 'comment')]
+    return [token for token in tokens if token.type not in ("whitespace", "comment")]
 
 
 # The following was pulled from the tinycss2 testing suite
@@ -221,15 +240,15 @@ def _generic(func):
     def run(value):
         repr(value)  # Test that this does not raise.
         return implementations[type(value)](value)
+
     return run
 
 
 @_generic
 def to_json():
     def numeric(t):
-        return [
-            t.representation, t.value,
-            'integer' if t.int_value is not None else 'number']
+        return [t.representation, t.value, "integer" if t.int_value is not None else "number"]
+
     return {
         type(None): lambda _: None,
         str: lambda s: s,
@@ -238,42 +257,29 @@ def to_json():
         set: lambda l: [to_json(el) for el in l],
         tuple: lambda l: [to_json(el) for el in l],
         Encoding: lambda e: e.name,
-        ParseError: lambda e: ['error', e.kind],
-
-        Comment: lambda t: '/* … */',
-        WhitespaceToken: lambda t: ' ',
+        ParseError: lambda e: ["error", e.kind],
+        Comment: lambda t: "/* … */",
+        WhitespaceToken: lambda t: " ",
         LiteralToken: lambda t: t.value,
         IdentToken: lambda t: t.value,
-        AtKeywordToken: lambda t: {'at-keyword', t.value},
-        HashToken: lambda t: {
-            'hash': t.value,
-            'id': t.is_identifier if t.is_identifier else 'unrestricted'
-        },
-        StringToken: lambda t: {'string', t.value},
-        URLToken: lambda t: {'url': t.value},
-        NumberToken: lambda t: ['number'] + numeric(t),
-        PercentageToken: lambda t: ['percentage'] + numeric(t),
-        DimensionToken: lambda t: ['dimension'] + numeric(t) + [t.unit],
-        UnicodeRangeToken: lambda t: ['unicode-range', t.start, t.end],
-
-        CurlyBracketsBlock: lambda t: ['{}'] + to_json(t.content),
-        SquareBracketsBlock: lambda t: ['[]'] + to_json(t.content),
-        ParenthesesBlock: lambda t: ['()'] + to_json(t.content),
-        FunctionBlock: lambda t: ['function', t.name] + to_json(t.arguments),
-
-        Declaration: lambda d: {
-            d.name: {
-                'values': to_json(d.value),
-                'important': d.important
-            }
-        },
-        AtRule: lambda r: ['at-rule', r.at_keyword, to_json(r.prelude),
-                           to_json(r.content)],
+        AtKeywordToken: lambda t: {"at-keyword", t.value},
+        HashToken: lambda t: {"hash": t.value, "id": t.is_identifier if t.is_identifier else "unrestricted"},
+        StringToken: lambda t: {"string", t.value},
+        URLToken: lambda t: {"url": t.value},
+        NumberToken: lambda t: ["number"] + numeric(t),
+        PercentageToken: lambda t: ["percentage"] + numeric(t),
+        DimensionToken: lambda t: ["dimension"] + numeric(t) + [t.unit],
+        UnicodeRangeToken: lambda t: ["unicode-range", t.start, t.end],
+        CurlyBracketsBlock: lambda t: ["{}"] + to_json(t.content),
+        SquareBracketsBlock: lambda t: ["[]"] + to_json(t.content),
+        ParenthesesBlock: lambda t: ["()"] + to_json(t.content),
+        FunctionBlock: lambda t: ["function", t.name] + to_json(t.arguments),
+        Declaration: lambda d: {d.name: {"values": to_json(d.value), "important": d.important}},
+        AtRule: lambda r: ["at-rule", r.at_keyword, to_json(r.prelude), to_json(r.content)],
         QualifiedRule: lambda r: {
-            'type': 'qualified rule',
-            'prelude': to_json(r.prelude),
-            'content': to_json(r.content)
+            "type": "qualified rule",
+            "prelude": to_json(r.prelude),
+            "content": to_json(r.content),
         },
-
         RGBA: lambda v: [round(c, 10) for c in v],
     }

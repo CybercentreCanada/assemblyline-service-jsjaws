@@ -11,7 +11,7 @@ class AutomationObject(Signature):
             name="auto_object",
             description="JavaScript creates an AutomationObject",
             indicators=["AutomationObject"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -25,7 +25,7 @@ class WinMgmtsAutoObject(Signature):
             name="auto_object_winmgmts",
             description="JavaScript creates an AutomationObject that uses winmgmts",
             indicators=["AutomationObject", "winmgmts"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

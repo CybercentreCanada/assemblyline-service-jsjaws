@@ -11,7 +11,7 @@ class ConsoleOutput(Signature):
             name="console_output",
             description="JavaScript writes data to the console",
             indicators=["console.log"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
