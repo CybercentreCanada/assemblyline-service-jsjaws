@@ -12,9 +12,18 @@ class Signature:
     This Signature class represents an abstract signature which can be used for scoring and adding additional details
     to heuristics
     """
-    def __init__(self, heuristic_id: int = None, name: str = None, description: str = None, ttp: List[str] = None,
-                 families: List[str] = None, indicators: List[str] = None, severity: int = None,
-                 safelist: List[str] = None):
+
+    def __init__(
+        self,
+        heuristic_id: int = None,
+        name: str = None,
+        description: str = None,
+        ttp: List[str] = None,
+        families: List[str] = None,
+        indicators: List[str] = None,
+        severity: int = None,
+        safelist: List[str] = None,
+    ):
         """
         This method instantiates the base Signature class and performs some validtion checks
         :param heuristic_id: The ID of the heuristic that is associated with this signature
@@ -68,16 +77,20 @@ class Signature:
                 string = "] ".join(split_line[1:])
 
             # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
-            if match_all and all(indicator.lower() in string.lower() for indicator in self.indicators) and \
-                    not any(item.lower() in string.lower() for item in self.safelist):
+            if (
+                match_all
+                and all(indicator.lower() in string.lower() for indicator in self.indicators)
+                and not any(item.lower() in string.lower() for item in self.safelist)
+            ):
                 if safe_str(string) not in self.marks:
                     self.marks.append(safe_str(string))
 
             # If we only want to match at least one indicator in a line, then mark it!
             if not match_all:
                 for indicator in self.indicators:
-                    if indicator.lower() in string.lower() and \
-                        not any(item.lower() in string.lower() for item in self.safelist):
+                    if indicator.lower() in string.lower() and not any(
+                        item.lower() in string.lower() for item in self.safelist
+                    ):
                         if safe_str(string) not in self.marks:
                             self.marks.append(safe_str(string))
                         continue
@@ -123,8 +136,12 @@ class Signature:
         if not indicators:
             return
 
-        all_indicators: List[Dict[str, Union[str, List[str]]]] = [indicator for indicator in indicators if indicator["method"] == ALL]
-        any_indicators: List[Dict[str, Union[str, List[str]]]] = [indicator for indicator in indicators if indicator["method"] == ANY]
+        all_indicators: List[Dict[str, Union[str, List[str]]]] = [
+            indicator for indicator in indicators if indicator["method"] == ALL
+        ]
+        any_indicators: List[Dict[str, Union[str, List[str]]]] = [
+            indicator for indicator in indicators if indicator["method"] == ANY
+        ]
 
         for string in output:
             # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
@@ -135,9 +152,13 @@ class Signature:
             # If all_indicators
             are_indicators_matched = True
             for all_indicator in all_indicators:
-                if are_indicators_matched and all(indicator.lower() in string.lower() for indicator in all_indicator["indicators"]):
+                if are_indicators_matched and all(
+                    indicator.lower() in string.lower() for indicator in all_indicator["indicators"]
+                ):
                     for any_indicator in any_indicators:
-                        if are_indicators_matched and any(indicator.lower() in string.lower() for indicator in any_indicator["indicators"]):
+                        if are_indicators_matched and any(
+                            indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
+                        ):
                             pass
                         else:
                             are_indicators_matched = False
@@ -147,7 +168,9 @@ class Signature:
             # If no all_indicators
             if not all_indicators:
                 for any_indicator in any_indicators:
-                    if are_indicators_matched and any(indicator.lower() in string.lower() for indicator in any_indicator["indicators"]):
+                    if are_indicators_matched and any(
+                        indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
+                    ):
                         pass
                     else:
                         are_indicators_matched = False

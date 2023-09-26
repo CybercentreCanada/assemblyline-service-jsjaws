@@ -11,7 +11,7 @@ class HideObjects(Signature):
             name="hide_object",
             description="JavaScript removes objects from the DOM",
             indicators=[".removeChild("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):

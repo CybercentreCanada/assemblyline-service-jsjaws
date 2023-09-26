@@ -11,7 +11,7 @@ class Sleep(Signature):
             name="sleep",
             description="JavaScript attempts to sleep",
             indicators=["WScript.Sleep", ".setTimeout(", ".setInterval("],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
@@ -27,7 +27,7 @@ class AntiSandboxTimeout(Signature):
             name="antisandbox_timeout",
             description="JavaScript file managed to delay execution until the sandbox timed out",
             indicators=["Script execution timed out after"],
-            severity=0
+            severity=0,
         )
 
     def process_output(self, output):
