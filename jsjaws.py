@@ -704,7 +704,11 @@ class JsJaws(ServiceBase):
                     "image/svg",
                 ] and script_we_want_info["type"] in ["code/html", "code/hta"]:
                     self.log.debug("Removed garbage from the file...")
-                    request.file_type = script_we_want_info["type"]
+                    # Backwards compatibility check with service base
+                    if hasattr(request.task, "fileinfo"):
+                        request.task.fileinfo.type = script_we_want_info["type"]
+                    else:
+                        request.file_type = script_we_want_info["type"]
                     return script_we_want_path, script_we_want
                 else:
                     # If there is more than one HTML comment, recursively remove
