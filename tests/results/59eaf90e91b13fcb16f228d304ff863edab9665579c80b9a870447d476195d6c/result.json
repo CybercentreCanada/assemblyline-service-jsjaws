@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Long One-Liner",
         "zeroize_on_tag_safe": false
@@ -30,6 +31,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -53,6 +55,7 @@
             "active_x_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
@@ -76,6 +79,7 @@
             "prepare_network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
         "zeroize_on_tag_safe": false
@@ -99,6 +103,7 @@
             "unescape": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
@@ -123,6 +128,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -167,6 +173,7 @@
             "obfuscator_io_usage_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -200,6 +207,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
@@ -219,6 +227,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false

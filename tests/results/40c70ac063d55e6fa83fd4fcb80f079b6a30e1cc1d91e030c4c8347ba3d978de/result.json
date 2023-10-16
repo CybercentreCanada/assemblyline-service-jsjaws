@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "attribution": {
             "family": [
@@ -55,6 +56,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "This sample uses common time-wasting techniques",
         "zeroize_on_tag_safe": false
@@ -67,6 +69,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -90,6 +93,7 @@
             "creates_wsh_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
@@ -113,6 +117,7 @@
             "env_str_recon": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ExpandEnvStrings",
         "zeroize_on_tag_safe": false
@@ -136,6 +141,7 @@
             "network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
@@ -159,13 +165,14 @@
             "sleep": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Sleep",
         "zeroize_on_tag_safe": false
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.ls1969.fr\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.macromixenlinea.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.maghrebassurance.fr\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=079549590345013854173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=203829534623162224173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=75731049555993084173581\"}]",
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.ls1969.fr\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.macromixenlinea.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.maghrebassurance.fr\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=56869258812643734173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=69802338981305884173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=70580888052613984173581\"}]",
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -183,6 +190,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -193,14 +201,14 @@
                 "www.maghrebassurance.fr"
               ],
               "uri": [
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581",
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581",
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "/test.php?eqhwvautjqdnpp=56869258812643734173581",
+                "/test.php?eqhwvautjqdnpp=69802338981305884173581",
+                "/test.php?eqhwvautjqdnpp=70580888052613984173581"
               ]
             }
           }
@@ -210,7 +218,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581\", \"method\": \"GET\"}, {\"url\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581\", \"method\": \"GET\"}, {\"url\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581\", \"method\": \"GET\"}]",
+        "body": "[{\"url\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581\", \"method\": \"GET\"}, {\"url\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581\", \"method\": \"GET\"}, {\"url\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581\", \"method\": \"GET\"}]",
         "body_config": {
           "column_order": [
             "url",
@@ -232,6 +240,7 @@
             "gootloader_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -241,14 +250,14 @@
                 "www.macromixenlinea.com"
               ],
               "uri": [
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581",
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=203829534623162224173581",
-                "/test.php?eqhwvautjqdnpp=079549590345013854173581",
-                "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+                "/test.php?eqhwvautjqdnpp=56869258812643734173581",
+                "/test.php?eqhwvautjqdnpp=70580888052613984173581",
+                "/test.php?eqhwvautjqdnpp=69802338981305884173581"
               ]
             }
           }
@@ -384,21 +393,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -407,21 +416,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "/test.php?eqhwvautjqdnpp=56869258812643734173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "/test.php?eqhwvautjqdnpp=69802338981305884173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "/test.php?eqhwvautjqdnpp=70580888052613984173581"
         }
       ],
       "network.static.domain": [
@@ -450,34 +459,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=079549590345013854173581"
+          "value": "/test.php?eqhwvautjqdnpp=56869258812643734173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=203829534623162224173581"
+          "value": "/test.php?eqhwvautjqdnpp=69802338981305884173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=75731049555993084173581"
+          "value": "/test.php?eqhwvautjqdnpp=70580888052613984173581"
         }
       ]
     },

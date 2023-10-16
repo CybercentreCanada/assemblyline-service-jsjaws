@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "ShortCut usage",
         "zeroize_on_tag_safe": false
@@ -30,6 +31,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -53,6 +55,7 @@
             "creates_wsh_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
@@ -76,6 +79,7 @@
             "runs_cmd_prompt": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsCommandPrompt",
         "zeroize_on_tag_safe": false
@@ -99,6 +103,7 @@
             "runs_schtasks_via_cmd_prompt": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsScheduledTask",
         "zeroize_on_tag_safe": false
@@ -122,6 +127,7 @@
             "runs_shell": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShell",
         "zeroize_on_tag_safe": false
