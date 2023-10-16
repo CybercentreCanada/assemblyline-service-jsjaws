@@ -11,6 +11,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -34,6 +35,7 @@
             "append_and_click": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: AppendAndClick",
         "zeroize_on_tag_safe": false
@@ -58,6 +60,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -96,6 +99,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {

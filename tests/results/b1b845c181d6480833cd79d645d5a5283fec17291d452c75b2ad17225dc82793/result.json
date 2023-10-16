@@ -11,6 +11,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -34,6 +35,7 @@
             "base64_decoding": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Base64Decoding",
         "zeroize_on_tag_safe": false
@@ -57,6 +59,7 @@
             "base64_encoded_url": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Base64EncodedURL",
         "zeroize_on_tag_safe": false
@@ -80,6 +83,7 @@
             "crypto_js_obfuscation": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CryptoJSObfuscation",
         "zeroize_on_tag_safe": false
@@ -103,6 +107,7 @@
             "jquery_network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: JQueryNetworkRequest",
         "zeroize_on_tag_safe": false
@@ -126,6 +131,7 @@
             "suspicious_process": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
@@ -150,6 +156,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -240,6 +247,7 @@
             "programmatically_created_base64_decoded_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -262,7 +270,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://code.jquery.com/jquery-3.1.1.min.js\", \"method\": \"get\"}, {\"url\": \"https://braconidae.buzz/bucket/1ec247a.php\", \"method\": \"post\", \"request_body\": \"scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=Nw==&data22=QwNTIz&data33=MTY5Mz\"}, {\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\", \"method\": \"get\"}]",
+        "body": "[{\"url\": \"https://code.jquery.com/jquery-3.1.1.min.js\", \"method\": \"get\"}, {\"url\": \"https://braconidae.buzz/bucket/1ec247a.php\", \"method\": \"post\", \"request_body\": \"scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=Nw==&data22=Q3NTcy&data33=MTY5Nz\"}, {\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\", \"method\": \"get\"}]",
         "body_config": {
           "column_order": [
             "url",
@@ -286,6 +294,7 @@
             "weird_base64_value_set_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -324,6 +333,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
@@ -343,6 +353,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false
@@ -364,6 +375,7 @@
             "dom_writes_equal_4_or_5": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Nested document.write calls",
         "zeroize_on_tag_safe": false

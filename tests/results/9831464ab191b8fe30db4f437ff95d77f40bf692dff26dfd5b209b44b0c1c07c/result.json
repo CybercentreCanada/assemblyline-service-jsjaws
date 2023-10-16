@@ -11,6 +11,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -34,6 +35,7 @@
             "active_x_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
@@ -57,6 +59,7 @@
             "creates_wsh_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
@@ -80,6 +83,7 @@
             "env_str_recon": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ExpandEnvStrings",
         "zeroize_on_tag_safe": false
@@ -103,6 +107,7 @@
             "file_system_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: FileSystemObject",
         "zeroize_on_tag_safe": false
@@ -126,6 +131,7 @@
             "get_folder": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: GetFolder",
         "zeroize_on_tag_safe": false
@@ -149,6 +155,7 @@
             "network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
@@ -172,6 +179,7 @@
             "prepare_network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
         "zeroize_on_tag_safe": false
@@ -195,6 +203,7 @@
             "save_to_file": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: SaveToFile",
         "zeroize_on_tag_safe": false
@@ -218,6 +227,7 @@
             "scheduled_task": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ScheduledTask",
         "zeroize_on_tag_safe": false
@@ -241,6 +251,7 @@
             "writes_executable": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: WritesExecutable",
         "zeroize_on_tag_safe": false
@@ -265,6 +276,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -308,6 +320,7 @@
             "obfuscator_io_usage_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -341,6 +354,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false
