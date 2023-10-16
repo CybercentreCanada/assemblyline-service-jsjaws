@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Long One-Liner",
         "zeroize_on_tag_safe": false
@@ -30,6 +31,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -53,6 +55,7 @@
             "active_x_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
@@ -76,6 +79,7 @@
             "creates_wsh_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
@@ -99,6 +103,7 @@
             "env_str_recon": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ExpandEnvStrings",
         "zeroize_on_tag_safe": false
@@ -122,6 +127,7 @@
             "file_system_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: FileSystemObject",
         "zeroize_on_tag_safe": false
@@ -145,6 +151,7 @@
             "network_request": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
@@ -168,6 +175,7 @@
             "runs_executable": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsExecutable",
         "zeroize_on_tag_safe": false
@@ -191,6 +199,7 @@
             "runs_shell": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShell",
         "zeroize_on_tag_safe": false
@@ -214,6 +223,7 @@
             "save_to_file": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: SaveToFile",
         "zeroize_on_tag_safe": false
@@ -237,6 +247,7 @@
             "suspicious_process": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
@@ -260,6 +271,7 @@
             "writes_executable": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: WritesExecutable",
         "zeroize_on_tag_safe": false
@@ -284,6 +296,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -346,6 +359,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "dynamic": {
@@ -387,6 +401,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false

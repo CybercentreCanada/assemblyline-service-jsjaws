@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "attribution": {
             "family": [
@@ -77,6 +78,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "This sample uses common time-wasting techniques",
         "zeroize_on_tag_safe": false
@@ -89,6 +91,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -112,6 +115,7 @@
             "memory_stream": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: MemoryStream",
         "zeroize_on_tag_safe": false
@@ -135,6 +139,7 @@
             "runs_ps1": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false

@@ -11,6 +11,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {
           "file": {
             "behavior": [
@@ -45,6 +46,7 @@
             "suspicious_url_found": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -71,6 +73,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -94,6 +97,7 @@
             "active_x_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
@@ -117,6 +121,7 @@
             "creates_wsh_object": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
@@ -140,6 +145,7 @@
             "runs_executable": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsExecutable",
         "zeroize_on_tag_safe": false
@@ -163,6 +169,7 @@
             "runs_shell": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShell",
         "zeroize_on_tag_safe": false
@@ -186,6 +193,7 @@
             "runs_shell_application": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShellApplication",
         "zeroize_on_tag_safe": false
@@ -210,6 +218,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -256,6 +265,7 @@
             "wscript_curl_url": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "dynamic": {
             "process": {
@@ -297,6 +307,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {
           "file": {
             "string": {

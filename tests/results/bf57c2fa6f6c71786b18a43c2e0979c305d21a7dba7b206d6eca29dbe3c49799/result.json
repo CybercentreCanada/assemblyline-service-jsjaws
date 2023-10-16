@@ -18,6 +18,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Suspicious CSS Usage",
         "zeroize_on_tag_safe": false
@@ -30,6 +31,7 @@
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": null,
+        "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
         "zeroize_on_tag_safe": false
@@ -53,6 +55,7 @@
             "base64_decoding": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: Base64Decoding",
         "zeroize_on_tag_safe": false
@@ -76,6 +79,7 @@
             "creates_blob": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesBlob",
         "zeroize_on_tag_safe": false
@@ -99,6 +103,7 @@
             "creates_object_url": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: CreatesObjectURL",
         "zeroize_on_tag_safe": false
@@ -122,6 +127,7 @@
             "save_to_file": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: SaveToFile",
         "zeroize_on_tag_safe": false
@@ -145,6 +151,7 @@
             "writes_archive": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Signature: WritesArchive",
         "zeroize_on_tag_safe": false
@@ -168,6 +175,7 @@
             "obfuscator_io_url_redirect": 1
           }
         },
+        "promote_to": null,
         "tags": {
           "network": {
             "static": {
@@ -201,6 +209,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
@@ -220,6 +229,7 @@
           "score_map": {},
           "signatures": {}
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false
@@ -241,6 +251,7 @@
             "dom_writes_equal_2": 1
           }
         },
+        "promote_to": null,
         "tags": {},
         "title_text": "Nested document.write calls",
         "zeroize_on_tag_safe": false
