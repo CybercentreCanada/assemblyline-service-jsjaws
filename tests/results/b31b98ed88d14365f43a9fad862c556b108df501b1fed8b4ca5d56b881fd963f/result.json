@@ -216,12 +216,12 @@
         "sha256": "435e4333b650a89c4131be0994b61f5c0f28dfc3464168e925788be5e723db00"
       },
       {
-        "name": "boxjs_cmds.ps1",
-        "sha256": "8305d2e384a2176ec2c8baa337a4762b0d8d19610c42749937df2d30bb6fb7a1"
+        "name": "b31b98ed88d14365f43a9fad862c556b108df501b1fed8b4ca5d56b881fd963f.cleaned",
+        "sha256": "6dc388ff9c439b27bd7df387a0503eff2b05a21ded80131a5fe112d2dd73e278"
       },
       {
-        "name": "b31b98ed88d14365f43a9fad862c556b108df501b1fed8b4ca5d56b881fd963f.cleaned",
-        "sha256": "d9398b7a23dd0741b9b4a070f956d462d1364119840f81e7b018eb8f32456a9d"
+        "name": "boxjs_cmds.ps1",
+        "sha256": "8305d2e384a2176ec2c8baa337a4762b0d8d19610c42749937df2d30bb6fb7a1"
       }
     ],
     "supplementary": [
