@@ -147,12 +147,12 @@
   "files": {
     "extracted": [
       {
-        "name": "019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned",
-        "sha256": "4d9f8f8f2c88dee123582d76e57ad4d80c770b83bd5e5cbcb9cf14b514be7dd5"
-      },
-      {
         "name": "9f87bb2ecdffe788b912927cf0bcbe6791bb405f1fa3c079bb7bd76864589f9f",
         "sha256": "9f87bb2ecdffe788b912927cf0bcbe6791bb405f1fa3c079bb7bd76864589f9f"
+      },
+      {
+        "name": "019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned",
+        "sha256": "e00e03477b8ce27e42709d9de07fad13d8a31146cc63710deb14a344261312b9"
       },
       {
         "name": "attachment.zip",
