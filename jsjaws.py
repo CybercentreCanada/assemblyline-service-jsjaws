@@ -1834,7 +1834,7 @@ class JsJaws(ServiceBase):
         return idx
 
     @staticmethod
-    def _create_unique_element_id(element_id: str, set_of_variable_names: Set[str]) -> str:
+    def create_unique_element_id(element_id: str, set_of_variable_names: Set[str]) -> str:
         """
         If the proposed element ID already exists, then mock one
         :param element_id: The element id
@@ -1864,7 +1864,7 @@ class JsJaws(ServiceBase):
         if element_id == "":
             element_id = f"element{idx}"
 
-        element_id = JsJaws._create_unique_element_id(element_id, set_of_variable_names)
+        element_id = JsJaws.create_unique_element_id(element_id, set_of_variable_names)
 
         return element_id
 
@@ -1891,7 +1891,7 @@ class JsJaws(ServiceBase):
             if len(element_id) > 25:
                 element_id = element_id[:25]
 
-            element_id = JsJaws._create_unique_element_id(element_id, set_of_variable_names)
+            element_id = JsJaws.create_unique_element_id(element_id, set_of_variable_names)
             set_of_variable_names.add(element_id)
             random_element_varname = f"{element_id.lower()}_jsjaws"
 
