@@ -1,0 +1,291 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 33,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[14].send()\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tconst get_script=()=>{const request=new XMLHttpRequest()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\teval(get_script())",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
+              ],
+              "uri": [
+                "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+              ],
+              "uri_path": [
+                "/"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/\", \"method\": \"get\", \"request_body\": null}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method",
+            "request_body"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
+              ],
+              "uri": [
+                "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+              ],
+              "uri_path": [
+                "/"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tAn unsafe statement was found: eval",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [
+      {
+        "name": "32c2799ebeedcdf63dd9b0df82fd6d30e10b07ada402890f511a38d6bddfccce",
+        "sha256": "32c2799ebeedcdf63dd9b0df82fd6d30e10b07ada402890f511a38d6bddfccce"
+      }
+    ],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "1934eefff8c2218d2673aa9eaf20b631348fed60eb1dd39d5d1515e57a20d399"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_process"
+        ]
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/"
+        }
+      ]
+    },
+    "temp_submission_data": {}
+  }
+}

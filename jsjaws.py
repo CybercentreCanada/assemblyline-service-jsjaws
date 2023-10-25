@@ -1228,7 +1228,10 @@ class JsJaws(ServiceBase):
 
     def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
         """
-        Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws tools and signatures. Ideally you should only call this when you are running an "improved" or "superset" version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet runs.
+        Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
+        tools and signatures. Ideally you should only call this when you are running an "improved" or "superset"
+        version of the initial sample, since it will overwrite all result sections and artifacts from previous gauntlet
+        runs.
         :param request: The ServiceRequest object
         :param file_path: The path of the file to use as we traverse this iteration of the gauntlet
         :param file_content: The content of the file to use as we traverse this iteration of the gauntlet
@@ -2170,12 +2173,25 @@ class JsJaws(ServiceBase):
         :return: A flag indicating if a script source was added
         """
         source_added = False
-        if script.get("src") and script["src"] not in self.initial_script_sources and re.match(FULL_URI, script["src"]):
-            if self.gauntlet_runs < 2:
-                self.initial_script_sources.add(script["src"])
+        if script.get("src") and script["src"] not in self.initial_script_sources:
+            if re.match(FULL_URI, script["src"]):
+                if self.gauntlet_runs < 2:
+                    self.initial_script_sources.add(script["src"])
+                else:
+                    self.subsequent_script_sources.add(script["src"])
+                source_added = True
             else:
-                self.subsequent_script_sources.add(script["src"])
-            source_added = True
+                # Sometimes a script could have a src=the base64-encoded "body" of a script
+                # So technically a source was added, but it's not a script source that we want to flag as such
+                matches = re.match(APPENDCHILD_BASE64_REGEX, script["src"])
+                if matches and len(matches.regs) == 2:
+                    try:
+                        _ = b64decode(matches.group(1).encode())
+                        source_added = True
+                    except BinasciiError as e:
+                        self.log.debug(
+                            f"Could not base64-decode an script src/href value '{matches.group(1)}' due to '{e}'"
+                        )
 
         return source_added
 
@@ -2480,8 +2496,22 @@ class JsJaws(ServiceBase):
 
             if body is None or len(body) <= 2:
                 if source_added:
-                    self.script_with_source_and_no_body = True
-                continue
+                    # Sometimes a script could have a src=the base64-encoded "body" of a script
+                    # So technically a source was added, but it's not a script source that we want to flag as such
+                    # Pop the body out and continue running the gauntlet
+                    matches = re.match(APPENDCHILD_BASE64_REGEX, script["src"])
+                    if matches and len(matches.regs) == 2:
+                        try:
+                            body = b64decode(matches.group(1).encode()).decode()
+                        except BinasciiError as e:
+                            self.log.debug(
+                                f"Could not base64-decode an script src/href value '{matches.group(1)}' due to '{e}'"
+                            )
+                    else:
+                        self.script_with_source_and_no_body = True
+
+                if not body:
+                    continue
 
             if script.get("language", "").lower() in ["vbscript"]:
                 js_content, aggregated_js_script = self._handle_vbscript(
