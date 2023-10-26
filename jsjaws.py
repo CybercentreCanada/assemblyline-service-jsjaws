@@ -537,6 +537,8 @@ class JsJaws(ServiceBase):
         self.weird_base64_value_set: Optional[bool] = None
         # List of marks to indicate if a base64-encoded URL was base64-decoded
         self.base64_encoded_urls: List[str] = []
+        # URL is seen in the same execution as a "SaveToFile", "WritesExecutable" and "RunsShell"
+        self.url_used_for_suspicious_exec: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -572,6 +574,7 @@ class JsJaws(ServiceBase):
         self.split_reverse_join = False
         self.is_phishing = False
         self.weird_base64_value_set = False
+        self.url_used_for_suspicious_exec = False
         self.base64_encoded_urls = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
@@ -3143,6 +3146,9 @@ class JsJaws(ServiceBase):
             if self.embedded_code_in_lib:
                 urls_result_section.heuristic.add_signature_id("gootloader_url", 500)
 
+            if self.url_used_for_suspicious_exec:
+                urls_result_section.heuristic.add_signature_id("url_used_for_suspicious_exec", 500)
+
             result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
@@ -3254,6 +3260,10 @@ class JsJaws(ServiceBase):
                 if display_iocs:
                     for mark in sig_that_hit.marks:
                         sig_res_sec.add_line(f"\t\t{truncate(mark)}")
+
+            sig_hit_names = [sig.name for sig in signatures_that_hit]
+            if all(item in sig_hit_names for item in ["save_to_file", "writes_executable", "runs_shell"]):
+                self.url_used_for_suspicious_exec = True
 
             result.add_section(sigs_res_sec)
 

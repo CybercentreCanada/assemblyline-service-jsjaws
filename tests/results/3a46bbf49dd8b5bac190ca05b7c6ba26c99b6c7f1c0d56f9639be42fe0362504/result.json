@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1164,
+    "score": 1663,
     "sections": [
       {
         "auto_collapse": false,
@@ -355,9 +355,13 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
+          "score": 500,
+          "score_map": {
+            "url_used_for_suspicious_exec": 500
+          },
+          "signatures": {
+            "url_used_for_suspicious_exec": 1
+          }
         },
         "promote_to": null,
         "tags": {
@@ -435,7 +439,9 @@
       {
         "attack_ids": [],
         "heur_id": 1,
-        "signatures": []
+        "signatures": [
+          "url_used_for_suspicious_exec"
+        ]
       },
       {
         "attack_ids": [],
@@ -527,61 +533,83 @@
       "network.dynamic.domain": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "projectdare.co.uk"
         }
       ],
       "network.dynamic.uri": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
         }
       ],
       "network.dynamic.uri_path": [
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
         },
         {
           "heur_id": 1,
-          "signatures": [],
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
         }
       ],
