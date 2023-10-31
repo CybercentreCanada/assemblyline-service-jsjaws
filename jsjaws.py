@@ -1506,7 +1506,7 @@ class JsJaws(ServiceBase):
             self._extract_doc_writes(malware_jail_output, request)
 
         # Adding sandbox artifacts using the OntologyResults helper class
-        _ = OntologyResults.handle_artifacts(self.artifact_list, request)
+        _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
 
     def append_content(
         self, content: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
