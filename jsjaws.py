@@ -3264,6 +3264,16 @@ class JsJaws(ServiceBase):
             sig_hit_names = [sig.name for sig in signatures_that_hit]
             if all(item in sig_hit_names for item in ["save_to_file", "writes_executable", "runs_shell"]):
                 self.url_used_for_suspicious_exec = True
+            elif all(item in sig_hit_names for item in ["runs_ps1_to_download", "runs_shell"]):
+                ps1_to_download_sig = next(
+                    (sig for sig in signatures_that_hit if sig.name == "runs_ps1_to_download"), None
+                )
+                http_res = ResultTableSection("Suspicious URL Downloaded by PowerShell", parent=sigs_res_sec)
+                for mark in ps1_to_download_sig.marks:
+                    extract_iocs_from_text_blob(mark, http_res)
+                if http_res.body and http_res.tags.get("network.dynamic.uri"):
+                    http_res.set_heuristic(13)
+                    http_res.heuristic.add_signature_id("suspicious_pwsh_url", 500)
 
             result.add_section(sigs_res_sec)
 

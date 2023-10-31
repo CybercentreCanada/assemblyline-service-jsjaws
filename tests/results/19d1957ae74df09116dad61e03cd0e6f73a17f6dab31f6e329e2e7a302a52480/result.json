@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2072,
+    "score": 2572,
     "sections": [
       {
         "auto_collapse": false,
@@ -230,6 +230,56 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"transfer.sh\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://deal.real\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://transfer.sh/get/vpiHmi/invoice.pdf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/get/vpiHmi/invoice.pdf\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "suspicious_pwsh_url": 500
+          },
+          "signatures": {
+            "suspicious_pwsh_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "file": {
+            "string": {
+              "extracted": [
+                "http://deal.real"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "transfer.sh"
+              ],
+              "uri": [
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
+              ],
+              "uri_path": [
+                "/get/vpiHmi/invoice.pdf"
+              ]
+            }
+          }
+        },
+        "title_text": "Suspicious URL Downloaded by PowerShell",
         "zeroize_on_tag_safe": false
       },
       {
@@ -473,6 +523,13 @@
         "attack_ids": [],
         "heur_id": 13,
         "signatures": [
+          "suspicious_pwsh_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
           "wscript_pwsh_url"
         ]
       }
@@ -496,6 +553,13 @@
       ],
       "file.string.extracted": [
         {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "http://deal.real"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "http://deal.real"
@@ -517,6 +581,13 @@
         {
           "heur_id": 13,
           "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "transfer.sh"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
             "wscript_pwsh_url"
           ],
           "value": "transfer.sh"
@@ -531,12 +602,26 @@
         {
           "heur_id": 13,
           "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
             "wscript_pwsh_url"
           ],
           "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "/get/vpiHmi/invoice.pdf"
+        },
         {
           "heur_id": 13,
           "signatures": [
