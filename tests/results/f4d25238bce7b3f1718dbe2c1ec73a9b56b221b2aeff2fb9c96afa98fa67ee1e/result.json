@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 41,
+    "score": 51,
     "sections": [
       {
         "auto_collapse": false,
@@ -131,6 +131,30 @@
         "tags": {},
         "title_text": "Signature: MemoryStream",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses classes found in .NET Runtime Assembly\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[14].Deserialize_2(System.IO.MemoryStr...\n\t\tDelegate[16](System.IO.MemoryStream[13], undefined).DynamicInvoke([0, 1, 0, 0, 0, 255, 255, 255, 255...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "reflective_code_loading": 10
+          },
+          "signatures": {
+            "reflective_code_loading": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ReflectiveCodeLoading",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -171,6 +195,13 @@
         "heur_id": 3,
         "signatures": [
           "memory_stream"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "reflective_code_loading"
         ]
       },
       {
