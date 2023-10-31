@@ -63,7 +63,10 @@ class PhishingLogoDownload(Signature):
                 "pngtoico.io",
                 "aadcdn.msauth.net/shared/1.0/content/images/",
                 "softwarereviews.s3.amazonaws.com/production/favicons/",
-                "logincdn.msauth.net/shared/1.0/content/images/",
+                "img.alicdn.com",
+                "img.freepik.com",
+                "splash247.com",
+                "companieslogo.com",
             ],
             severity=1,
         )
