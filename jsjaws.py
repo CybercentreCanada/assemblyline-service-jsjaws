@@ -3235,6 +3235,7 @@ class JsJaws(ServiceBase):
 
         phishing_terms = False
         phishing_logos = False
+        phishing_form = False
 
         # Adding signatures to results
         if len(signatures_that_hit) > 0:
@@ -3252,6 +3253,8 @@ class JsJaws(ServiceBase):
                         uri = re.match(ATOB_URI_REGEX, mark)
                         if len(uri.regs) == 2:
                             self.base64_encoded_urls.append(uri.group(1))
+                elif sig_that_hit.name == "form_action_uri":
+                    phishing_form = True
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -3277,7 +3280,7 @@ class JsJaws(ServiceBase):
 
             result.add_section(sigs_res_sec)
 
-        if phishing_terms and phishing_logos:
+        if phishing_terms and (phishing_logos or phishing_form):
             self.is_phishing = True
 
     @staticmethod
