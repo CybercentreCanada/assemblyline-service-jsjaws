@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 341,
+    "score": 351,
     "sections": [
       {
         "auto_collapse": false,
@@ -236,6 +236,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript uses classes found in .NET Runtime Assembly\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[23].Deserialize_2(System.IO.MemoryStr...\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).DynamicInvoke([undefined])\n\n\t\t    var HJUSD_HSKHDKS_LSHLLS = OPOIUY_BNMJUYH_GAGHGDHSJ_SGGSHSHS.Deserialize_2(TYIWSSD_HLSKDHLSSD)\n\t\t    var RTRW_NMBH_SHSHJSS_MNJKLK = HJUSD_HSKHDKS_LSHLLS.DynamicInvoke(CBBZCS_SGSWRW_NMKISG.ToArray()...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "reflective_code_loading": 10
+          },
+          "signatures": {
+            "reflective_code_loading": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ReflectiveCodeLoading",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery => function () {?      ...\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select * From AntiVirus...",
         "body_config": {},
         "body_format": "TEXT",
@@ -366,6 +390,13 @@
         "heur_id": 3,
         "signatures": [
           "memory_stream"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "reflective_code_loading"
         ]
       },
       {
