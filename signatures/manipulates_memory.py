@@ -25,7 +25,7 @@ class ReflectiveCodeLoading(Signature):
             name="reflective_code_loading",
             description="JavaScript uses classes found in .NET Runtime Assembly",
             indicators=["Deserialize_2(", "DynamicInvoke("],
-            severity=0,
+            severity=3,
         )
 
     def process_output(self, output):
