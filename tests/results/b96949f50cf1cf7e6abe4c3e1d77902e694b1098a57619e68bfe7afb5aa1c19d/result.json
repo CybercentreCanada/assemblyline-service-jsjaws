@@ -1,0 +1,531 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 1381,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Single script tag with unescaped value written to DOM",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 14,
+          "score": 500,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Single script writes suspicious value",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prompts user to re-enter account data.\n\t\tundefined.alert(please check your internet connection and try again )\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "phishing_reenter_prompt": 10
+          },
+          "signatures": {
+            "phishing_reenter_prompt": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PhishingReEnterPrompt",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: e-mail,email,login,password,phone,skype",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "phishing_terms": 100
+          },
+          "signatures": {
+            "phishing_terms": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PhishingTerms",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tconst _0x4b1197=_0x5dbe75;function _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31b...\n\t\tXMLHttpRequest[41].setRequestHeader(Content-Type)\n\n\t\t}if(_0x3599b8<=0x4){if(_0x49cbf2('0xed','0xfe')!==_0x4deabc(-'0x7d',-'0x78')){const _0x267ffe=new XM...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses unescape() to decode an encoded string\n\t\tCalling unescape() no.: 1\n\n\t\tdocument.write(unescape('%3C%21DOCTYPE%20html%3E%20%3Chtml%20lang%3D%22en%22%3E%3Chead%3E%20%3Cmeta%...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "unescape": 10
+          },
+          "signatures": {
+            "unescape": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: Unescape",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"40securview.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"couponhagen.churchontheranch.uk\"}, {\"ioc_type\": \"domain\", \"ioc\": \"kasumbo.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"securview.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.w3schools.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://couponhagen.churchontheranch.uk/app/exlca.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.w3schools.com/w3css/4/w3.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/app/exlca.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/smarty/xls_v1.6/msoxcel_.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/smarty/xls_v1.6/tail-spin.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w3css/4/w3.css\"}]",
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "40securview.com",
+                "cdnjs.cloudflare.com",
+                "couponhagen.churchontheranch.uk",
+                "kasumbo.com",
+                "securview.com",
+                "www.w3schools.com"
+              ],
+              "uri": [
+                "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+                "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+                "https://couponhagen.churchontheranch.uk/app/exlca.php",
+                "https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg",
+                "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg",
+                "https://www.w3schools.com/w3css/4/w3.css"
+              ],
+              "uri_path": [
+                "/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+                "/app/exlca.php",
+                "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+                "/smarty/xls_v1.6/msoxcel_.svg",
+                "/smarty/xls_v1.6/tail-spin.svg",
+                "/w3css/4/w3.css"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "[{\"url\": \"https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\", \"method\": \"get\"}, {\"url\": \"https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg\", \"method\": \"get\"}, {\"url\": \"https://couponhagen.churchontheranch.uk/app/exlca.php\", \"method\": \"post\", \"request_body\": \"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\"}]",
+        "body_config": {
+          "column_order": [
+            "url",
+            "method",
+            "request_body"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "single_script_url": 500
+          },
+          "signatures": {
+            "single_script_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "kasumbo.com",
+                "couponhagen.churchontheranch.uk"
+              ],
+              "uri": [
+                "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+                "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg",
+                "https://couponhagen.churchontheranch.uk/app/exlca.php"
+              ],
+              "uri_path": [
+                "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+                "/smarty/xls_v1.6/tail-spin.svg",
+                "/app/exlca.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 250,
+          "score_map": {},
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": [
+      {
+        "name": "temp_javascript.js",
+        "sha256": "2236c9d3f90218194b1e227508caad87afaf8734705ba44cdb36f985494f80d4"
+      },
+      {
+        "name": "temp_css.css",
+        "sha256": "58d605d21fd8fe8fd83d07befafad7fe0f8ba6fcf3ae91296e0d000b9302b0cf"
+      }
+    ]
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "single_script_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "phishing_reenter_prompt"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "phishing_terms"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "unescape"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 14,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 15,
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
+      }
+    ],
+    "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "couponhagen.churchontheranch.uk"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "kasumbo.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "/smarty/xls_v1.6/tail-spin.svg"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "40securview.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "cdnjs.cloudflare.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "couponhagen.churchontheranch.uk"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "kasumbo.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "securview.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.w3schools.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.w3schools.com/w3css/4/w3.css"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/app/exlca.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/smarty/xls_v1.6/msoxcel_.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/smarty/xls_v1.6/tail-spin.svg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/w3css/4/w3.css"
+        }
+      ]
+    },
+    "temp_submission_data": {
+      "passwords": [
+        "Continue",
+        "E",
+        "E-mail",
+        "Enter",
+        "Excel",
+        "File",
+        "Microsoft",
+        "Payment",
+        "Payment-notice.xls",
+        "Please",
+        "Skype",
+        "This",
+        "a",
+        "address",
+        "address,",
+        "document",
+        "email",
+        "enter",
+        "is",
+        "mail",
+        "name",
+        "name.",
+        "notice",
+        "number",
+        "number,",
+        "open",
+        "open.",
+        "or",
+        "password",
+        "phone",
+        "protected",
+        "protected!",
+        "to",
+        "valid",
+        "xls",
+        "your"
+      ]
+    }
+  }
+}
