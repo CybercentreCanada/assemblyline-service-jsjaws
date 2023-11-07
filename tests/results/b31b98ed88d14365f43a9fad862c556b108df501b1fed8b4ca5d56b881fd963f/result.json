@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tIOC: The script ran the command 'powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGU...\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tIOC: The script ran the command 'powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGU...\n\t\tShell.Application[74].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[74].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -226,12 +226,12 @@
     ],
     "supplementary": [
       {
-        "name": "temp_javascript.js",
-        "sha256": "3b27c7c6eadb89d7ce7ade7ce3aef073229168443b6fd55c59b5a4af35c22f0d"
-      },
-      {
         "name": "temp_css.css",
         "sha256": "4c8d28b64934f2ad37a54477c5f1664786748ee43843feaf1359ee366c528ce6"
+      },
+      {
+        "name": "temp_javascript.js",
+        "sha256": "beaa26ca28bd2f3864629b765840baadc24dabf97e0155018814adbf49d91223"
       }
     ]
   },
