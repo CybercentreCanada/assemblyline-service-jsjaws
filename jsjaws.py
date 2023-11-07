@@ -539,6 +539,8 @@ class JsJaws(ServiceBase):
         self.base64_encoded_urls: List[str] = []
         # URL is seen in the same execution as a "SaveToFile", "WritesExecutable" and "RunsShell"
         self.url_used_for_suspicious_exec: Optional[bool] = None
+        # Used for heuristic 22
+        self.low_body_elements: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -575,6 +577,7 @@ class JsJaws(ServiceBase):
         self.is_phishing = False
         self.weird_base64_value_set = False
         self.url_used_for_suspicious_exec = False
+        self.low_body_elements = False
         self.base64_encoded_urls = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
@@ -1403,6 +1406,12 @@ class JsJaws(ServiceBase):
         if one_liner_hit:
             heur = Heuristic(10)
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+        if self.low_body_elements:
+            low_body_heur = Heuristic(22)
+            _ = ResultSection(
+                low_body_heur.name, low_body_heur.description, heuristic=low_body_heur, parent=request.result
+            )
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -2463,6 +2472,15 @@ class JsJaws(ServiceBase):
 
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
+        bodies = soup.findAll("body")
+        body_children: List[str] = []
+        for body in bodies:
+            body_children.extend(
+                [child.name for child in body.children if child.name]
+                + [descendant.name for descendant in body.descendants if descendant.name]
+            )
+        if not body_children and not self.low_body_elements:
+            self.low_body_elements = True
 
         # This will hold all variable names, to ensure we avoid variable name collision
         set_of_variable_names: Set[str] = set()

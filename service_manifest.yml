@@ -252,6 +252,12 @@ heuristics:
     filetype: '.*'
     description: A script contains leading characters meant to obfuscate / mis-identify the file.
 
+  - heur_id: 22
+    name: Detected JavaScript Redirector / Loader
+    score: 0
+    filetype: '.*'
+    description: Low number of body elements.
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
