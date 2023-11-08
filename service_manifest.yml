@@ -258,6 +258,12 @@ heuristics:
     filetype: '.*'
     description: Low number of body elements.
 
+  - heur_id: 23
+    name: document.write usage found in HTML
+    score: 0
+    filetype: 'code/html'
+    description: Suspicious JavaScript code found in HTML file
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

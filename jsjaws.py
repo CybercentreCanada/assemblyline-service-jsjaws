@@ -541,6 +541,8 @@ class JsJaws(ServiceBase):
         self.url_used_for_suspicious_exec: Optional[bool] = None
         # Used for heuristic 22
         self.low_body_elements: Optional[bool] = None
+        # Used for heuristic 23
+        self.html_document_write: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -578,6 +580,7 @@ class JsJaws(ServiceBase):
         self.weird_base64_value_set = False
         self.url_used_for_suspicious_exec = False
         self.low_body_elements = False
+        self.html_document_write = False
         self.base64_encoded_urls = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
@@ -1491,6 +1494,12 @@ class JsJaws(ServiceBase):
 
         display_iocs = request.get_param("display_iocs")
         self._run_signatures(total_output, request.result, display_iocs)
+
+        if self.html_document_write and request.file_type == "code/html":
+            doc_write_heur = Heuristic(23)
+            _ = ResultSection(
+                doc_write_heur.name, doc_write_heur.description, heuristic=doc_write_heur, parent=request.result
+            )
 
         self._extract_boxjs_iocs(request.result)
         if not self.ignore_stdout_limit:
@@ -3296,6 +3305,9 @@ class JsJaws(ServiceBase):
                             self.base64_encoded_urls.append(uri.group(1))
                 elif sig_that_hit.name == "form_action_uri":
                     phishing_form = True
+                elif sig_that_hit.name == "document_write":
+                    self.html_document_write = True
+
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -3305,6 +3317,7 @@ class JsJaws(ServiceBase):
                     for mark in sig_that_hit.marks:
                         sig_res_sec.add_line(f"\t\t{truncate(mark)}")
 
+            # Signature combos
             sig_hit_names = [sig.name for sig in signatures_that_hit]
             if all(item in sig_hit_names for item in ["save_to_file", "writes_executable", "runs_shell"]):
                 self.url_used_for_suspicious_exec = True

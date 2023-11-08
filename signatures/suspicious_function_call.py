@@ -24,3 +24,17 @@ class SuspiciousFunctionCall(Signature):
             for result in results:
                 if f"{result} is evaluated using a suspicious pattern" not in self.marks:
                     self.marks.append(f"{result} is evaluated using a suspicious pattern")
+
+
+class DocumentWrite(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="document_write",
+            description="Object(s) are written to the DOM",
+            indicators=["document", ".write(content)"],
+            severity=0,
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
