@@ -45,6 +45,26 @@
       },
       {
         "auto_collapse": false,
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'usrn' contains the following phishing terms: 'email, usrn'\n\t- <input> element 'psrd' contains the following phishing terms: 'email, password, psrd'",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 25,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "HTML document queries sensitive user data",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Low number of body elements.",
         "body_config": {},
         "body_format": "TEXT",
@@ -126,7 +146,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: e-mail,email,login,password,phone,skype",
+        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: e-mail,email,login,password,phone,psrd,skype,usrn",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -430,6 +450,11 @@
       {
         "attack_ids": [],
         "heur_id": 24,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 25,
         "signatures": []
       }
     ],

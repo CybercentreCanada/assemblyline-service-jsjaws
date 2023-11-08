@@ -141,17 +141,33 @@ PHISHING_TITLE_TERMS = [
     "invoice",
     "notice",
     # These file-type specific terms of suspicious because this is an HTML file!
-    ".xls",
-    ".doc",
-    ".ppt",
-    ".one",
-    ".pdf",
+    "\.xls",
+    "\.doc",
+    "\.ppt",
+    "\.one",
+    "\.pdf",
     "microsoft",
     "excel",
     "word",
     "powerpoint",
     "onenote",
     "pdf",
+]
+
+# There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
+# in the JavaScript code / emulation output
+# These values will be used for this signature, as well as looking for "input" elements in the HTML that use these.
+PHISHING_INPUTS = [
+    "email",
+    "account",
+    "phone",
+    "skype",
+    "e-mail",
+    "authentication",
+    "login",
+    "username",
+    "usrn",
+    "psrd",
 ]
 
 # Regular Expressions
@@ -572,6 +588,8 @@ class JsJaws(ServiceBase):
         self.html_document_write: Optional[bool] = None
         # Used for heuristic 24
         self.html_phishing_title: List[str] = []
+        # Used for heuristic 25
+        self.phishing_inputs: List[str] = []
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -612,6 +630,7 @@ class JsJaws(ServiceBase):
         self.html_document_write = False
         self.base64_encoded_urls = []
         self.html_phishing_title = []
+        self.phishing_inputs = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1372,6 +1391,14 @@ class JsJaws(ServiceBase):
             phishing_title_sec.add_line(phishing_title_heur.description)
             phishing_title_sec.add_lines([f"\t- {title}" for title in self.html_phishing_title])
 
+        if self.phishing_inputs:
+            phishing_inputs_heur = Heuristic(25)
+            phishing_inputs_sec = ResultTextSection(
+                phishing_inputs_heur.name, heuristic=phishing_inputs_heur, parent=request.result
+            )
+            phishing_inputs_sec.add_line(phishing_inputs_heur.description)
+            phishing_inputs_sec.add_lines([f"\t- {item}" for item in self.phishing_inputs])
+
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
 
@@ -1660,6 +1687,7 @@ class JsJaws(ServiceBase):
                 soup, request, aggregated_js_script, js_content
             )
             self._hunt_for_suspicious_titles(soup)
+            self._hunt_for_suspicious_input_fields(soup)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -4201,3 +4229,28 @@ class JsJaws(ServiceBase):
             hits = re.findall(PHISHING_TITLE_TERMS_REGEX, title, re.IGNORECASE)
             if len(hits) >= 2:
                 self.html_phishing_title.append(title)
+
+    def _hunt_for_suspicious_input_fields(self, soup: BeautifulSoup) -> None:
+        """
+        This method looks for input fields and then tries to determine if these fields are used for sensitive user data.
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        inputs = [inp for inp in soup.findAll("input")]
+        if inputs:
+            for inp in inputs:
+                inp_hits = []
+                for key, value in inp.attrs.items():
+                    if not value:
+                        continue
+                    # These are the attributes we care about
+                    if key not in ["name", "id", "placeholder", "value", "type"]:
+                        continue
+                    inp_hits.extend(
+                        [item for item in PHISHING_INPUTS + PASSWORD_WORDS if item.lower() in value.lower()]
+                    )
+                if inp_hits:
+                    self.phishing_inputs.append(
+                        f"<input> element '{inp.attrs.get('id', 'unknown_id')}' "
+                        f"contains the following phishing terms: '{', '.join(sorted(set(inp_hits)))}'"
+                    )

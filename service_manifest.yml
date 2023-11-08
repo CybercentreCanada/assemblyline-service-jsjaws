@@ -270,6 +270,12 @@ heuristics:
     filetype: 'code/html'
     description: HTML document has title containing common phishing terms
 
+  - heur_id: 25
+    name: HTML document queries sensitive user data
+    score: 0
+    filetype: 'code/html'
+    description: HTML document has password / email / username input fields
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

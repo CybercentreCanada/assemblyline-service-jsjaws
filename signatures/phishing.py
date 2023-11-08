@@ -2,6 +2,7 @@
 These are all of the signatures related to phishing
 """
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS
+from jsjaws import PHISHING_INPUTS
 from signatures.abstracts import Signature
 
 
@@ -28,9 +29,7 @@ class PhishingTerms(Signature):
             return
 
         # Next look for account prompts
-        account_regex = (
-            f"\\b({'|'.join(['email', 'account', 'phone', 'skype', 'e-mail', 'authentication', 'login'])})\\b"
-        )
+        account_regex = f"\\b({'|'.join(PHISHING_INPUTS)})\\b"
         for line in output:
             results.extend(self.check_regex(account_regex, line.lower()))
 
