@@ -25,6 +25,26 @@
       },
       {
         "auto_collapse": false,
+        "body": "HTML document has title containing common phishing terms\n\t- Payment-notice.xls  Microsoft Excel File",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 24,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "HTML document with suspicious title",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Low number of body elements.",
         "body_config": {},
         "body_format": "TEXT",
@@ -405,6 +425,11 @@
       {
         "attack_ids": [],
         "heur_id": 23,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 24,
         "signatures": []
       }
     ],

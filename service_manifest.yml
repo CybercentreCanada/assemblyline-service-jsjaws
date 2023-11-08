@@ -264,6 +264,12 @@ heuristics:
     filetype: 'code/html'
     description: Suspicious JavaScript code found in HTML file
 
+  - heur_id: 24
+    name: HTML document with suspicious title
+    score: 0
+    filetype: 'code/html'
+    description: HTML document has title containing common phishing terms
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
