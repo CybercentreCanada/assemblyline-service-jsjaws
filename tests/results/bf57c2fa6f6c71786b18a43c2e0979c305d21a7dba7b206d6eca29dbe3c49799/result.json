@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2301,
+    "score": 2311,
     "sections": [
       {
         "auto_collapse": false,
@@ -110,6 +110,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 63 bytes\n\n\t\tdocument[6].write(content) 18 bytes\n\n\t\tdocument[6].write(content) 8 bytes\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "document_write": 10
+          },
+          "signatures": {
+            "document_write": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\n\t\t}let _0x298ed1=new File([_0x15710a],_0x255887(0x11d),{'type':_0x255887(0x12c)}),_0x3635d0=URL['creat...",
         "body_config": {},
         "body_format": "TEXT",
@@ -154,6 +178,26 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: WritesArchive",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Suspicious JavaScript code found in HTML file",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 23,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "document.write usage found in HTML",
         "zeroize_on_tag_safe": false
       },
       {
@@ -320,6 +364,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "save_to_file"
         ]
       },
@@ -353,6 +404,11 @@
         "signatures": [
           "dom_writes_equal_2"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 23,
+        "signatures": []
       }
     ],
     "tags": {
