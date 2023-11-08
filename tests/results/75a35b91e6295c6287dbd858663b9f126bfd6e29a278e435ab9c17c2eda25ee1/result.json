@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2752,
+    "score": 2762,
     "sections": [
       {
         "auto_collapse": false,
@@ -21,6 +21,63 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Function inception",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 23 bytes\n\n\t\tdocument[6].write(content) 99 bytes\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "document_write": 10
+          },
+          "signatures": {
+            "document_write": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Suspicious JavaScript code found in HTML file",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 23,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "document.write usage found in HTML",
         "zeroize_on_tag_safe": false
       },
       {
@@ -242,6 +299,13 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 8,
         "signatures": []
       },
@@ -260,6 +324,11 @@
       {
         "attack_ids": [],
         "heur_id": 19,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 23,
         "signatures": []
       }
     ],

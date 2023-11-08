@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to saving a file
 """
-from signatures.abstracts import Signature
+from signatures.abstracts import ANY, Signature
 
 # List of commands used to save a file to disk
 save_commands = ["saveToFile", "msSaveOrOpenBlob(", "saveAs(", "new File("]
@@ -33,8 +33,8 @@ class WritesExecutable(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": save_commands},
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": save_commands},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -51,8 +51,8 @@ class WritesArchive(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": save_commands},
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": save_commands},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 

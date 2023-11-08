@@ -133,6 +133,43 @@ GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
 # This usually gets exceeded when a script writes randomly generated content to the DOM
 MAXIMUM_GAUNTLET_RUNS = 30
 
+# When looking at HTML files, these are common terms found in phishing files
+PHISHING_TITLE_TERMS = [
+    # Classic phishing terms for file names
+    "payment",
+    "statement",
+    "invoice",
+    "notice",
+    # These file-type specific terms of suspicious because this is an HTML file!
+    "\.xls",
+    "\.doc",
+    "\.ppt",
+    "\.one",
+    "\.pdf",
+    "microsoft",
+    "excel",
+    "word",
+    "powerpoint",
+    "onenote",
+    "pdf",
+]
+
+# There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
+# in the JavaScript code / emulation output
+# These values will be used for this signature, as well as looking for "input" elements in the HTML that use these.
+PHISHING_INPUTS = [
+    "email",
+    "account",
+    "phone",
+    "skype",
+    "e-mail",
+    "authentication",
+    "login",
+    "username",
+    "usrn",
+    "psrd",
+]
+
 # Regular Expressions
 
 # Examples:
@@ -465,6 +502,12 @@ HTML_START = b"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
 # atob was seen decoding a URI: 'http://blah.com'
 ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
 
+# Example:
+# Payment.xls
+# or
+# Invoice.pdf
+PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
+
 
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
@@ -539,6 +582,16 @@ class JsJaws(ServiceBase):
         self.base64_encoded_urls: List[str] = []
         # URL is seen in the same execution as a "SaveToFile", "WritesExecutable" and "RunsShell"
         self.url_used_for_suspicious_exec: Optional[bool] = None
+        # Used for heuristic 22
+        self.low_body_elements: Optional[bool] = None
+        # Used for heuristic 23
+        self.html_document_write: Optional[bool] = None
+        # Used for heuristic 24
+        self.html_phishing_title: List[str] = []
+        # Used for heuristic 25
+        self.phishing_inputs: List[str] = []
+        # Used for heuristic 26
+        self.password_input_and_no_form_action: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -575,7 +628,12 @@ class JsJaws(ServiceBase):
         self.is_phishing = False
         self.weird_base64_value_set = False
         self.url_used_for_suspicious_exec = False
+        self.low_body_elements = False
+        self.html_document_write = False
+        self.password_input_and_no_form_action = False
         self.base64_encoded_urls = []
+        self.html_phishing_title = []
+        self.phishing_inputs = []
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1331,6 +1389,29 @@ class JsJaws(ServiceBase):
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
             self.function_inception = True
 
+        if self.html_phishing_title:
+            phishing_title_heur = Heuristic(24)
+            phishing_title_sec = ResultTextSection(
+                phishing_title_heur.name, heuristic=phishing_title_heur, parent=request.result
+            )
+            phishing_title_sec.add_line(phishing_title_heur.description)
+            phishing_title_sec.add_lines([f"\t- {title}" for title in self.html_phishing_title])
+
+        if self.phishing_inputs:
+            phishing_inputs_heur = Heuristic(25)
+            phishing_inputs_sec = ResultTextSection(
+                phishing_inputs_heur.name, heuristic=phishing_inputs_heur, parent=request.result
+            )
+            phishing_inputs_sec.add_line(phishing_inputs_heur.description)
+            phishing_inputs_sec.add_lines([f"\t- {item}" for item in self.phishing_inputs])
+
+        if self.password_input_and_no_form_action:
+            pass_and_no_action_heur = Heuristic(26)
+            pass_and_no_action_sec = ResultTextSection(
+                pass_and_no_action_heur.name, heuristic=pass_and_no_action_heur, parent=request.result
+            )
+            pass_and_no_action_sec.add_line(pass_and_no_action_heur.description)
+
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
 
@@ -1406,6 +1487,12 @@ class JsJaws(ServiceBase):
         if one_liner_hit:
             heur = Heuristic(10)
             _ = ResultTextSection(heur.name, heuristic=heur, parent=request.result, body=heur.description)
+
+        if self.low_body_elements:
+            low_body_heur = Heuristic(22)
+            _ = ResultSection(
+                low_body_heur.name, low_body_heur.description, heuristic=low_body_heur, parent=request.result
+            )
 
         tool_threads: List[Thread] = []
         responses: Dict[str, List[str]] = {}
@@ -1485,6 +1572,12 @@ class JsJaws(ServiceBase):
 
         display_iocs = request.get_param("display_iocs")
         self._run_signatures(total_output, request.result, display_iocs)
+
+        if self.html_document_write and request.file_type == "code/html":
+            doc_write_heur = Heuristic(23)
+            _ = ResultSection(
+                doc_write_heur.name, doc_write_heur.description, heuristic=doc_write_heur, parent=request.result
+            )
 
         self._extract_boxjs_iocs(request.result)
         if not self.ignore_stdout_limit:
@@ -1606,6 +1699,9 @@ class JsJaws(ServiceBase):
             css_script_name, aggregated_js_script, js_content = self._extract_css_using_soup(
                 soup, request, aggregated_js_script, js_content
             )
+            self._hunt_for_suspicious_titles(soup)
+            self._hunt_for_suspicious_input_fields(soup)
+            self._hunt_for_suspicious_forms(soup)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -2466,6 +2562,15 @@ class JsJaws(ServiceBase):
 
         # Create most HTML elements with JavaScript
         elements = soup.findAll()
+        bodies = soup.findAll("body")
+        body_children: List[str] = []
+        for body in bodies:
+            body_children.extend(
+                [child.name for child in body.children if child.name]
+                + [descendant.name for descendant in body.descendants if descendant.name]
+            )
+        if not body_children and not self.low_body_elements:
+            self.low_body_elements = True
 
         # This will hold all variable names, to ensure we avoid variable name collision
         set_of_variable_names: Set[str] = set()
@@ -3281,6 +3386,9 @@ class JsJaws(ServiceBase):
                             self.base64_encoded_urls.append(uri.group(1))
                 elif sig_that_hit.name == "form_action_uri":
                     phishing_form = True
+                elif sig_that_hit.name == "document_write":
+                    self.html_document_write = True
+
                 sig_res_sec = ResultTextSection(f"Signature: {type(sig_that_hit).__name__}", parent=sigs_res_sec)
                 sig_res_sec.add_line(sig_that_hit.description)
                 sig_res_sec.set_heuristic(sig_that_hit.heuristic_id)
@@ -3290,6 +3398,7 @@ class JsJaws(ServiceBase):
                     for mark in sig_that_hit.marks:
                         sig_res_sec.add_line(f"\t\t{truncate(mark)}")
 
+            # Signature combos
             sig_hit_names = [sig.name for sig in signatures_that_hit]
             if all(item in sig_hit_names for item in ["save_to_file", "writes_executable", "runs_shell"]):
                 self.url_used_for_suspicious_exec = True
@@ -4103,3 +4212,134 @@ class JsJaws(ServiceBase):
             )
 
         return js_content, aggregated_js_script
+
+    def _hunt_for_suspicious_titles(self, soup: BeautifulSoup) -> None:
+        """
+        This method looks for possible "titles" of the webpage, and then hunts for
+        commonly used terms found in phishing.
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        # First let's look for the actual titles
+        # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title
+        # https://beautiful-soup.readthedocs.io/en/latest/#string
+        titles = [title.string.strip() for title in soup.findAll("title") if title.string and title.string.strip()]
+
+        # Now we'll look for visible text
+        # https://beautiful-soup.readthedocs.io/en/latest/#get-text
+        potential_titles = [item.strip() for item in soup.get_text().split("\n") if item.strip()]
+        if potential_titles:
+            titles.extend(potential_titles)
+
+        for title in titles:
+            # Phishing titles are not long
+            if len(title) > 100:
+                continue
+            # Do not start with tags
+            elif title.startswith("<") and title.endswith(">"):
+                continue
+
+            # Let's start the threshold with two or more phishing terms in the title
+            hits = re.findall(PHISHING_TITLE_TERMS_REGEX, title, re.IGNORECASE)
+            if len(hits) >= 2:
+                self.html_phishing_title.append(title)
+
+    def _hunt_for_suspicious_input_fields(self, soup: BeautifulSoup) -> None:
+        """
+        This method looks for input fields and then tries to determine if these fields are used for sensitive user data.
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        # First get all of the inputs
+        inputs = [inp for inp in soup.findAll("input")]
+
+        if not inputs:
+            return
+
+        for inp in inputs:
+            inp_hits = []
+            # Now look through the attributes to find any pertaining to sensitive user data
+            for key, value in inp.attrs.items():
+                if not value:
+                    continue
+                # These are the attributes we care about
+                if key not in ["name", "id", "placeholder", "value", "type"]:
+                    continue
+                inp_hits.extend([item for item in PHISHING_INPUTS + PASSWORD_WORDS if item.lower() in value.lower()])
+            if inp_hits:
+                self.phishing_inputs.append(
+                    f"<input> element '{inp.attrs.get('id', 'unknown_id')}' "
+                    f"contains the following phishing terms: '{', '.join(sorted(set(inp_hits)))}'"
+                )
+
+    def _hunt_for_suspicious_forms(self, soup: BeautifulSoup) -> None:
+        """
+        This method looks for password input fields as well as forms with no actions, which is suspicious.
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        # First get all of the inputs
+        # Note that it is not as simple as just looking for all inputs with the type="password"
+        inputs = [inp for inp in soup.findAll("input")]
+
+        if not inputs:
+            return
+
+        password_field_exists = False
+        for inp in inputs:
+            # Now look through the attributes to find any pertaining to sensitive user data
+            for key, value in inp.attrs.items():
+                if not value:
+                    continue
+                # These are the attributes we care about
+                if key not in ["name", "id", "placeholder", "value", "type"]:
+                    continue
+                if any(item.lower() in value.lower() for item in PASSWORD_WORDS):
+                    # Yay we have a password field!
+                    password_field_exists = True
+                    break
+
+            if password_field_exists:
+                break
+
+        if password_field_exists:
+            # If we have a password field, let's look at the form details
+            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
+            forms = soup.findAll("form")
+            if not forms:
+                return
+            for form in forms:
+                form_has_action = False
+                for key, value in form.attrs.items():
+                    if not value:
+                        continue
+                    # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
+                    if key == "action":
+                        form_has_action = True
+                        break
+
+                if form_has_action:
+                    break
+
+                # The form action can be overridden, so we need to look at a few more items
+                else:
+                    for form_child in form.children:
+                        if (
+                            form_child.name == "button"
+                            or form_child.name == "input"
+                            and form_child.attrs.get("type") in ["submit", "image"]
+                        ):
+                            # Potential
+                            for key, value in form.attrs.items():
+                                if not value:
+                                    continue
+                                # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
+                                if key == "formaction":
+                                    form_has_action = True
+                                    break
+
+                            if form_has_action:
+                                break
+
+                if not form_has_action:
+                    self.password_input_and_no_form_action = True

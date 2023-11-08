@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to making network requests
 """
-from signatures.abstracts import Signature
+from signatures.abstracts import ALL, Signature
 
 
 class PrepareNetworkRequest(Signature):
@@ -86,6 +86,6 @@ class TelegramExfil(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "all", "indicators": self.indicators},
+            {"method": ALL, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)

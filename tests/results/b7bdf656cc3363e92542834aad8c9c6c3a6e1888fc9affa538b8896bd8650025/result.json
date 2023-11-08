@@ -5,6 +5,26 @@
     "sections": [
       {
         "auto_collapse": false,
+        "body": "Low number of body elements.",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 22,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Detected JavaScript Redirector / Loader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": null,
         "body_config": {},
         "body_format": "TEXT",
@@ -179,6 +199,11 @@
         "signatures": [
           "redirection_to_base64_decoded_url"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 22,
+        "signatures": []
       }
     ],
     "tags": {
