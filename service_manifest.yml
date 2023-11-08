@@ -276,6 +276,12 @@ heuristics:
     filetype: 'code/html'
     description: HTML document has password / email / username input fields
 
+  - heur_id: 26
+    name: HTML document contains password input but no form action
+    score: 0
+    filetype: 'code/html'
+    description: <input type="password"/> found but no <form action="..."/>
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1391,
+    "score": 1401,
     "sections": [
       {
         "auto_collapse": false,
@@ -65,6 +65,26 @@
       },
       {
         "auto_collapse": false,
+        "body": "<input type=\"password\"/> found but no <form action=\"...\"/>",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 26,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "HTML document contains password input but no form action",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Low number of body elements.",
         "body_config": {},
         "body_format": "TEXT",
@@ -118,6 +138,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[41].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\")\n\n\t\tXMLHttpRequest[41].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\") finished\n",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "phishing_post_password": 10
+          },
+          "signatures": {
+            "phishing_post_password": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PhishingPostPassword",
         "zeroize_on_tag_safe": false
       },
       {
@@ -401,6 +445,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "phishing_post_password"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "phishing_reenter_prompt"
         ]
       },
@@ -455,6 +506,11 @@
       {
         "attack_ids": [],
         "heur_id": 25,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 26,
         "signatures": []
       }
     ],

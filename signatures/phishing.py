@@ -3,7 +3,7 @@ These are all of the signatures related to phishing
 """
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS
 from jsjaws import PHISHING_INPUTS
-from signatures.abstracts import Signature
+from signatures.abstracts import ALL, ANY, Signature
 
 
 class PhishingTerms(Signature):
@@ -40,7 +40,8 @@ class PhishingTerms(Signature):
             results_set = sorted(set(results))
             if len(results_set) > 25:
                 self.marks.append(
-                    f"The following terms were found in the document: {','.join(sorted(set(results_set))[:25])}. {len(results_set[25:])} marks were not displayed."
+                    f"The following terms were found in the document: {','.join(sorted(set(results_set))[:25])}. "
+                    f"{len(results_set[25:])} marks were not displayed."
                 )
             else:
                 self.marks.append(f"The following terms were found in the document: {','.join(results_set)}")
@@ -72,7 +73,7 @@ class PhishingLogoDownload(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -89,7 +90,7 @@ class PhishingReEnterPrompt(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -100,12 +101,13 @@ class PhishingPostPassword(Signature):
             heuristic_id=3,
             name="phishing_post_password",
             description="JavaScript makes network request via POST with password data.",
-            indicators=["XMLHttpRequest", "JsJ@w$==C00l!"],
             severity=0,
         )
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "all", "indicators": self.indicators},
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {"method": ANY, "indicators": ["JsJ@w$==C00l!", "JsJ%40w%24%3D%3DC00l!"]},
         ]
+
         self.check_multiple_indicators_in_list(output, indicator_list)

@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to running a document object on page load
 """
-from signatures.abstracts import Signature
+from signatures.abstracts import ANY, Signature
 
 
 class AppendAndClick(Signature):
@@ -16,7 +16,7 @@ class AppendAndClick(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": "document.body.appendChild("},
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": "document.body.appendChild("},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)

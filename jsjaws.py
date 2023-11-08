@@ -590,6 +590,8 @@ class JsJaws(ServiceBase):
         self.html_phishing_title: List[str] = []
         # Used for heuristic 25
         self.phishing_inputs: List[str] = []
+        # Used for heuristic 26
+        self.password_input_and_no_form_action: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -628,6 +630,7 @@ class JsJaws(ServiceBase):
         self.url_used_for_suspicious_exec = False
         self.low_body_elements = False
         self.html_document_write = False
+        self.password_input_and_no_form_action = False
         self.base64_encoded_urls = []
         self.html_phishing_title = []
         self.phishing_inputs = []
@@ -1399,6 +1402,13 @@ class JsJaws(ServiceBase):
             phishing_inputs_sec.add_line(phishing_inputs_heur.description)
             phishing_inputs_sec.add_lines([f"\t- {item}" for item in self.phishing_inputs])
 
+        if self.password_input_and_no_form_action:
+            pass_and_no_action_heur = Heuristic(26)
+            pass_and_no_action_sec = ResultTextSection(
+                pass_and_no_action_heur.name, heuristic=pass_and_no_action_heur, parent=request.result
+            )
+            pass_and_no_action_sec.add_line(pass_and_no_action_heur.description)
+
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
 
@@ -1688,6 +1698,7 @@ class JsJaws(ServiceBase):
             )
             self._hunt_for_suspicious_titles(soup)
             self._hunt_for_suspicious_input_fields(soup)
+            self._hunt_for_suspicious_forms(soup)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -4236,21 +4247,96 @@ class JsJaws(ServiceBase):
         :param soup: The BeautifulSoup object
         :return: None
         """
+        # First get all of the inputs
         inputs = [inp for inp in soup.findAll("input")]
-        if inputs:
-            for inp in inputs:
-                inp_hits = []
-                for key, value in inp.attrs.items():
+
+        if not inputs:
+            return
+
+        for inp in inputs:
+            inp_hits = []
+            # Now look through the attributes to find any pertaining to sensitive user data
+            for key, value in inp.attrs.items():
+                if not value:
+                    continue
+                # These are the attributes we care about
+                if key not in ["name", "id", "placeholder", "value", "type"]:
+                    continue
+                inp_hits.extend([item for item in PHISHING_INPUTS + PASSWORD_WORDS if item.lower() in value.lower()])
+            if inp_hits:
+                self.phishing_inputs.append(
+                    f"<input> element '{inp.attrs.get('id', 'unknown_id')}' "
+                    f"contains the following phishing terms: '{', '.join(sorted(set(inp_hits)))}'"
+                )
+
+    def _hunt_for_suspicious_forms(self, soup: BeautifulSoup) -> None:
+        """
+        This method looks for password input fields as well as forms with no actions, which is suspicious.
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        # First get all of the inputs
+        # Note that it is not as simple as just looking for all inputs with the type="password"
+        inputs = [inp for inp in soup.findAll("input")]
+
+        if not inputs:
+            return
+
+        password_field_exists = False
+        for inp in inputs:
+            # Now look through the attributes to find any pertaining to sensitive user data
+            for key, value in inp.attrs.items():
+                if not value:
+                    continue
+                # These are the attributes we care about
+                if key not in ["name", "id", "placeholder", "value", "type"]:
+                    continue
+                if any(item.lower() in value.lower() for item in PASSWORD_WORDS):
+                    # Yay we have a password field!
+                    password_field_exists = True
+                    break
+
+            if password_field_exists:
+                break
+
+        if password_field_exists:
+            # If we have a password field, let's look at the form details
+            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
+            forms = soup.findAll("form")
+            if not forms:
+                return
+            for form in forms:
+                form_has_action = False
+                for key, value in form.attrs.items():
                     if not value:
                         continue
-                    # These are the attributes we care about
-                    if key not in ["name", "id", "placeholder", "value", "type"]:
-                        continue
-                    inp_hits.extend(
-                        [item for item in PHISHING_INPUTS + PASSWORD_WORDS if item.lower() in value.lower()]
-                    )
-                if inp_hits:
-                    self.phishing_inputs.append(
-                        f"<input> element '{inp.attrs.get('id', 'unknown_id')}' "
-                        f"contains the following phishing terms: '{', '.join(sorted(set(inp_hits)))}'"
-                    )
+                    # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
+                    if key == "action":
+                        form_has_action = True
+                        break
+
+                if form_has_action:
+                    break
+
+                # The form action can be overridden, so we need to look at a few more items
+                else:
+                    for form_child in form.children:
+                        if (
+                            form_child.name == "button"
+                            or form_child.name == "input"
+                            and form_child.attrs.get("type") in ["submit", "image"]
+                        ):
+                            # Potential
+                            for key, value in form.attrs.items():
+                                if not value:
+                                    continue
+                                # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
+                                if key == "formaction":
+                                    form_has_action = True
+                                    break
+
+                            if form_has_action:
+                                break
+
+                if not form_has_action:
+                    self.password_input_and_no_form_action = True

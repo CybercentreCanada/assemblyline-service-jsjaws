@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to manipulating memory
 """
-from signatures.abstracts import Signature
+from signatures.abstracts import ANY, Signature
 
 
 class MemoryStream(Signature):
@@ -30,6 +30,6 @@ class ReflectiveCodeLoading(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
