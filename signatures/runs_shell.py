@@ -1,7 +1,7 @@
 """
 These are all of the signatures related to running a shell command
 """
-from signatures.abstracts import Signature
+from signatures.abstracts import ALL, ANY, Signature
 
 
 class CreatesWshObject(Signature):
@@ -38,12 +38,12 @@ class RunsShell(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "all", "indicators": ["WScript.Shell", ".Exec"]},
+            {"method": ALL, "indicators": ["WScript.Shell", ".Exec"]},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
         indicator_list = [
-            {"method": "all", "indicators": ["WScript.Shell", ".Run"]},
+            {"method": ALL, "indicators": ["WScript.Shell", ".Run"]},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
@@ -89,7 +89,7 @@ class RunsCommandPrompt(Signature):
 
     def process_output(self, output):
         indicator_list = [
-            {"method": "any", "indicators": self.indicators},
+            {"method": ANY, "indicators": self.indicators},
         ]
         self.check_multiple_indicators_in_list(output, indicator_list)
 
