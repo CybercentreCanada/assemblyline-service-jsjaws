@@ -140,6 +140,7 @@ PHISHING_TITLE_TERMS = [
     "statement",
     "invoice",
     "notice",
+    "download"
     # These file-type specific terms of suspicious because this is an HTML file!
     "\.xls",
     "\.doc",
@@ -147,6 +148,7 @@ PHISHING_TITLE_TERMS = [
     "\.one",
     "\.pdf",
     "microsoft",
+    "adobe",
     "excel",
     "word",
     "powerpoint",
@@ -168,6 +170,7 @@ PHISHING_INPUTS = [
     "username",
     "usrn",
     "psrd",
+    "pswd",
 ]
 
 # Regular Expressions
@@ -587,9 +590,9 @@ class JsJaws(ServiceBase):
         # Used for heuristic 23
         self.html_document_write: Optional[bool] = None
         # Used for heuristic 24
-        self.html_phishing_title: List[str] = []
+        self.html_phishing_title: Set[str] = set()
         # Used for heuristic 25
-        self.phishing_inputs: List[str] = []
+        self.phishing_inputs: Set[str] = set()
         # Used for heuristic 26
         self.password_input_and_no_form_action: Optional[bool] = None
         self.log.debug("JsJaws service initialized")
@@ -632,8 +635,8 @@ class JsJaws(ServiceBase):
         self.html_document_write = False
         self.password_input_and_no_form_action = False
         self.base64_encoded_urls = []
-        self.html_phishing_title = []
-        self.phishing_inputs = []
+        self.html_phishing_title = set()
+        self.phishing_inputs = set()
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1395,7 +1398,7 @@ class JsJaws(ServiceBase):
                 phishing_title_heur.name, heuristic=phishing_title_heur, parent=request.result
             )
             phishing_title_sec.add_line(phishing_title_heur.description)
-            phishing_title_sec.add_lines([f"\t- {title}" for title in self.html_phishing_title])
+            phishing_title_sec.add_lines([f"\t- {title}" for title in sorted(self.html_phishing_title)])
 
         if self.phishing_inputs:
             phishing_inputs_heur = Heuristic(25)
@@ -1403,7 +1406,7 @@ class JsJaws(ServiceBase):
                 phishing_inputs_heur.name, heuristic=phishing_inputs_heur, parent=request.result
             )
             phishing_inputs_sec.add_line(phishing_inputs_heur.description)
-            phishing_inputs_sec.add_lines([f"\t- {item}" for item in self.phishing_inputs])
+            phishing_inputs_sec.add_lines([f"\t- {item}" for item in sorted(self.phishing_inputs)])
 
         if self.password_input_and_no_form_action:
             pass_and_no_action_heur = Heuristic(26)
@@ -4242,7 +4245,7 @@ class JsJaws(ServiceBase):
             # Let's start the threshold with two or more phishing terms in the title
             hits = re.findall(PHISHING_TITLE_TERMS_REGEX, title, re.IGNORECASE)
             if len(hits) >= 2:
-                self.html_phishing_title.append(title)
+                self.html_phishing_title.add(title)
 
     def _hunt_for_suspicious_input_fields(self, soup: BeautifulSoup) -> None:
         """
@@ -4267,7 +4270,7 @@ class JsJaws(ServiceBase):
                     continue
                 inp_hits.extend([item for item in PHISHING_INPUTS + PASSWORD_WORDS if item.lower() in value.lower()])
             if inp_hits:
-                self.phishing_inputs.append(
+                self.phishing_inputs.add(
                     f"<input> element '{inp.attrs.get('id', 'unknown_id')}' "
                     f"contains the following phishing terms: '{', '.join(sorted(set(inp_hits)))}'"
                 )
