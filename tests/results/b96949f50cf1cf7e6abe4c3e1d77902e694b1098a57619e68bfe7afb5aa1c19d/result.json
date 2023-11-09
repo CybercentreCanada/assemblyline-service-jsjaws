@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1401,
+    "score": 1891,
     "sections": [
       {
         "auto_collapse": false,
@@ -45,7 +45,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "HTML document has password / email / username input fields\n\t- <input> element 'usrn' contains the following phishing terms: 'email, usrn'\n\t- <input> element 'psrd' contains the following phishing terms: 'email, password, psrd'",
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'psrd' contains the following phishing terms: 'email, password, psrd'\n\t- <input> element 'usrn' contains the following phishing terms: 'email, usrn'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -151,9 +151,9 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 10,
+          "score": 500,
           "score_map": {
-            "phishing_post_password": 10
+            "phishing_post_password": 500
           },
           "signatures": {
             "phishing_post_password": 1
