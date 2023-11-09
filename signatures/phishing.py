@@ -84,7 +84,7 @@ class PhishingReEnterPrompt(Signature):
             heuristic_id=3,
             name="phishing_reenter_prompt",
             description="JavaScript prompts user to re-enter account data.",
-            indicators=["incorrect ", "try again", " be empty"],
+            indicators=["incorrect ", "wrong ", "try again", " be empty"],
             severity=0,
         )
 
@@ -101,13 +101,13 @@ class PhishingPostPassword(Signature):
             heuristic_id=3,
             name="phishing_post_password",
             description="JavaScript makes network request via POST with password data.",
-            severity=0,
+            severity=3,
         )
 
     def process_output(self, output):
         indicator_list = [
             {"method": ALL, "indicators": ["XMLHttpRequest"]},
-            {"method": ANY, "indicators": ["JsJ@w$==C00l!", "JsJ%40w%24%3D%3DC00l!"]},
+            {"method": ANY, "indicators": ["JsJ@w$==C00l!", "JsJ%40w%24%3D%3DC00l!", "SnNKQHckPT1DMDBsIQ=="]},
         ]
 
         self.check_multiple_indicators_in_list(output, indicator_list)

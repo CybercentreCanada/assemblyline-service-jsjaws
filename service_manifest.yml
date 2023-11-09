@@ -241,7 +241,7 @@ heuristics:
     description: Script uses function inception
 
   - heur_id: 20
-    name: Multiple scripts writes suspicious values
+    name: Multiple script writes with suspicious values
     score: 500
     filetype: 'code/ht.*'
     description: Multiple script tags with unescaped values written to DOM

