@@ -140,7 +140,8 @@ PHISHING_TITLE_TERMS = [
     "statement",
     "invoice",
     "notice",
-    "download"
+    "download",
+    "sign in",
     # These file-type specific terms of suspicious because this is an HTML file!
     "\.xls",
     "\.doc",
@@ -171,6 +172,7 @@ PHISHING_INPUTS = [
     "usrn",
     "psrd",
     "pswd",
+    "passwd",
 ]
 
 # Regular Expressions
@@ -595,6 +597,8 @@ class JsJaws(ServiceBase):
         self.phishing_inputs: Set[str] = set()
         # Used for heuristic 26
         self.password_input_and_no_form_action: Optional[bool] = None
+        # List of URLs found in suspicious forms, used for heuristic 27
+        self.sus_form_actions: Set[str] = set()
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -637,6 +641,7 @@ class JsJaws(ServiceBase):
         self.base64_encoded_urls = []
         self.html_phishing_title = set()
         self.phishing_inputs = set()
+        self.sus_form_actions = set()
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1414,6 +1419,16 @@ class JsJaws(ServiceBase):
                 pass_and_no_action_heur.name, heuristic=pass_and_no_action_heur, parent=request.result
             )
             pass_and_no_action_sec.add_line(pass_and_no_action_heur.description)
+
+        if self.sus_form_actions:
+            sus_form_action_heur = Heuristic(27)
+            sus_form_action_sec = ResultTextSection(
+                sus_form_action_heur.name, heuristic=sus_form_action_heur, parent=request.result
+            )
+            sus_form_action_sec.add_line(sus_form_action_heur.description)
+            for item in sorted(self.sus_form_actions):
+                sus_form_action_sec.add_line(f"\t- {item}")
+                _ = add_tag(sus_form_action_sec, "network.static.uri", item)
 
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
@@ -4319,6 +4334,10 @@ class JsJaws(ServiceBase):
                     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
                     if key == "action":
                         form_has_action = True
+                        if self.single_script_with_unescape:
+                            # A form with an action was created from a single script that used an unescape AND the form
+                            # contains a password input field
+                            self.sus_form_actions.add(value)
                         break
 
                 if form_has_action:
@@ -4339,6 +4358,10 @@ class JsJaws(ServiceBase):
                                 # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
                                 if key == "formaction":
                                     form_has_action = True
+                                    if self.single_script_with_unescape:
+                                        # A form with an action was created from a single script that used an
+                                        # unescape AND the form contains a password input field
+                                        self.sus_form_actions.add(value)
                                     break
 
                             if form_has_action:
