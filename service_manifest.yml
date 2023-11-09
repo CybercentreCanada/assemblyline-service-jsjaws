@@ -282,6 +282,12 @@ heuristics:
     filetype: 'code/html'
     description: <input type="password"/> found but no <form action="..."/>
 
+  - heur_id: 27
+    name: Suspicious form URL found
+    score: 0
+    filetype: 'code/html'
+    description: Form action is suspicious because form was created in suspicious way
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG
