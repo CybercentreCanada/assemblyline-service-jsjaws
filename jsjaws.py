@@ -155,6 +155,12 @@ PHISHING_TITLE_TERMS = [
     "powerpoint",
     "onenote",
     "pdf",
+    # https://github.com/CAPESandbox/community/blob/815e21980f4b234cf84e78749447f262af2beef9/modules/signatures/secure_login_phish.py
+    "secure login",
+    "google doc",
+    "dropbox",
+    "google drive",
+    "outlook",
 ]
 
 # There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
