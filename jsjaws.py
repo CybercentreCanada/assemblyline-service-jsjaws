@@ -141,7 +141,7 @@ PHISHING_TITLE_TERMS = [
     "invoice",
     "notice",
     "download",
-    "sign in",
+    "transfer",
     # These file-type specific terms of suspicious because this is an HTML file!
     "\.xls",
     "\.doc",
@@ -161,6 +161,23 @@ PHISHING_TITLE_TERMS = [
     "dropbox",
     "google drive",
     "outlook",
+    # Other
+    "paypal",
+    "instagram",
+    "facebook",
+    "secure",
+    "security",
+    "sign",
+    "bank",
+    "ether",
+    "coin",
+    "files",
+    "challenge",
+    "card",
+    "remember",
+    "forgot",
+    "verify",
+    "confirm",
 ]
 
 # There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
@@ -179,6 +196,10 @@ PHISHING_INPUTS = [
     "psrd",
     "pswd",
     "passwd",
+    "identity",
+    "card",
+    "mail",
+    "challenge",
 ]
 
 # Regular Expressions
