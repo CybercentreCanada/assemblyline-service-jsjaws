@@ -526,7 +526,7 @@ class TestJsJaws:
         }
 
     @staticmethod
-    def test_extract_urls(jsjaws_class_instance):
+    def test_extract_urls(jsjaws_class_instance, dummy_request_class_instance):
         jsjaws_class_instance.malware_jail_payload_extraction_dir = path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
@@ -555,7 +555,8 @@ class TestJsJaws:
             contents = dumps(val)
             f.write(contents)
         result = Result()
-        jsjaws_class_instance._extract_urls(result)
+        dummy_request_class_instance.result = result
+        jsjaws_class_instance._extract_urls(dummy_request_class_instance)
         body.append({"url": "http://definitely-a-url.ca", "method": "blah", "request_headers": "blah"})
         correct_res_sec = ResultSection(
             "URLs",
@@ -574,12 +575,12 @@ class TestJsJaws:
             },
         )
         correct_res_sec.set_heuristic(1)
-        assert check_section_equality(result.sections[0], correct_res_sec)
+        assert check_section_equality(dummy_request_class_instance.result.sections[0], correct_res_sec)
 
         # Code Coverage
         remove(jsjaws_class_instance.malware_jail_urls_json_path)
         remove(jsjaws_class_instance.boxjs_iocs)
-        jsjaws_class_instance._extract_urls(result)
+        jsjaws_class_instance._extract_urls(dummy_request_class_instance)
 
     @staticmethod
     def test_extract_supplementary(jsjaws_class_instance):
