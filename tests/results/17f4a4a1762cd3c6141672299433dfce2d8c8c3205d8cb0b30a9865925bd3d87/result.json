@@ -5,7 +5,16 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"uri\", \"ioc\": \"http://example.com/?search\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/?search\"}]",
+        "body": [
+          {
+            "ioc": "http://example.com/?search",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/?search",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

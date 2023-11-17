@@ -179,7 +179,16 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.protware.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.protware.com\"}]",
+        "body": [
+          {
+            "ioc": "www.protware.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://www.protware.com",
+            "ioc_type": "uri"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

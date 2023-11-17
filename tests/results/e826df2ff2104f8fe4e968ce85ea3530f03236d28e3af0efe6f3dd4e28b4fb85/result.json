@@ -172,7 +172,48 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.thomadaneau.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.tokyo-hi-vision.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.travelettes.net\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/xml.php?axkhpbmxwhmjuwt=053727389886957694173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/xml.php?axkhpbmxwhmjuwt=227200198502192534173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/xml.php?axkhpbmxwhmjuwt=31622164637114494173581\"}]",
+        "body": [
+          {
+            "ioc": "CORP.ORGANIZATION.CA",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.thomadaneau.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.tokyo-hi-vision.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.travelettes.net",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -201,14 +242,14 @@
                 "www.travelettes.net"
               ],
               "uri": [
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581",
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=053727389886957694173581",
-                "/xml.php?axkhpbmxwhmjuwt=227200198502192534173581",
-                "/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+                "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+                "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+                "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
               ]
             }
           }
@@ -218,7 +259,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581\", \"method\": \"GET\"}, {\"url\": \"https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581\", \"method\": \"GET\"}, {\"url\": \"https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581\", \"method\": \"GET\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",
@@ -250,14 +304,14 @@
                 "www.thomadaneau.com"
               ],
               "uri": [
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581",
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=31622164637114494173581",
-                "/xml.php?axkhpbmxwhmjuwt=053727389886957694173581",
-                "/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+                "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+                "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+                "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
               ]
             }
           }
@@ -393,21 +447,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581"
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -416,21 +470,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=053727389886957694173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
         }
       ],
       "network.static.domain": [
@@ -459,34 +513,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=053727389886957694173581"
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=053727389886957694173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=227200198502192534173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=31622164637114494173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
         }
       ]
     },

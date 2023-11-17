@@ -66,7 +66,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"acehphonnajaya.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://acehphonnajaya.com/css/ke.msi\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/css/ke.msi\"}]",
+        "body": [
+          {
+            "ioc": "acehphonnajaya.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://acehphonnajaya.com/css/ke.msi",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/css/ke.msi",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -105,7 +118,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://acehphonnajaya.com/css/ke.msi"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",
@@ -144,7 +162,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://acehphonnajaya.com/css/ke.msi\", \"method\": \"get\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://acehphonnajaya.com/css/ke.msi"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

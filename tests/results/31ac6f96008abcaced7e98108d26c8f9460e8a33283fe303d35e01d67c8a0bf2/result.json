@@ -230,7 +230,56 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"uri\", \"ioc\": \"http://ddue.schemas.microsoft.com/authoring/2003/5\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=117437\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=71543\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://go.microsoft.com/fwlink/?LinkID=71543.\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://msdn.microsoft.com/mshelp\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.microsoft.com/tooltip\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/authoring/2003/5\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=117437\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=71543\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fwlink/?LinkID=71543.\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/mshelp\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tooltip\"}]",
+        "body": [
+          {
+            "ioc": "http://ddue.schemas.microsoft.com/authoring/2003/5",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://go.microsoft.com/fwlink/?LinkID=117437",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://go.microsoft.com/fwlink/?LinkID=71543",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://go.microsoft.com/fwlink/?LinkID=71543.",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://msdn.microsoft.com/mshelp",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://www.microsoft.com/tooltip",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/authoring/2003/5",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/fwlink/?LinkID=117437",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/fwlink/?LinkID=71543",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/fwlink/?LinkID=71543.",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/mshelp",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/tooltip",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

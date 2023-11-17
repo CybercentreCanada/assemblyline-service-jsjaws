@@ -25,7 +25,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "HTML document has password / email / username input fields\n\t- <input> element 'Email' contains the following phishing terms: 'email'\n\t- <input> element 'Passwd' contains the following phishing terms: 'passwd, password'",
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'Email' contains the following phishing terms: 'email, mail'\n\t- <input> element 'Passwd' contains the following phishing terms: 'passwd, password'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -208,7 +208,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: email,passwd,password",
+        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: card,email,passwd,password",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -348,7 +348,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"e.open\"}]",
+        "body": [
+          {
+            "ioc": "e.open",
+            "ioc_type": "domain"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

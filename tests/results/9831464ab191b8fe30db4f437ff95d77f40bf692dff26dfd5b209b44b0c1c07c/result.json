@@ -258,7 +258,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"kuratoro.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://kuratoro.com/community/experience.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/community/experience.min.js\"}]",
+        "body": [
+          {
+            "ioc": "kuratoro.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://kuratoro.com/community/experience.min.js",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/community/experience.min.js",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -297,7 +310,13 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://kuratoro.com/community/experience.min.js\", \"method\": \"GET\", \"request_headers\": \"mozilla firefox\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "request_headers": "mozilla firefox",
+            "url": "https://kuratoro.com/community/experience.min.js"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

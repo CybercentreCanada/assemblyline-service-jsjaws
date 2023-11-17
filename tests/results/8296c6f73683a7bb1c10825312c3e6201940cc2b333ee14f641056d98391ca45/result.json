@@ -36,7 +36,16 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.savethechildren.org\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://www.savethechildren.org\"}]",
+        "body": [
+          {
+            "ioc": "www.savethechildren.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://www.savethechildren.org",
+            "ioc_type": "uri"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
