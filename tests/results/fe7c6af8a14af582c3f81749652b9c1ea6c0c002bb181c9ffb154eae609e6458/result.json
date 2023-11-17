@@ -257,10 +257,6 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "jZOBKK.open",
-            "ioc_type": "domain"
-          },
-          {
             "ioc": "http://gkjdepok.org/crtfc/TsCw3rCG.dll",
             "ioc_type": "uri"
           },
@@ -291,8 +287,7 @@
           "network": {
             "static": {
               "domain": [
-                "gkjdepok.org",
-                "jZOBKK.open"
+                "gkjdepok.org"
               ],
               "uri": [
                 "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
@@ -469,11 +464,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "gkjdepok.org"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "jZOBKK.open"
         }
       ],
       "network.static.uri": [
