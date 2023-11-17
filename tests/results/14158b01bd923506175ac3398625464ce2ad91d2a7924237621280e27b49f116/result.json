@@ -210,7 +210,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"orthodentrics.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://orthodentrics.com/8GE/fdsfdsfewwwe23\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/8GE/fdsfdsfewwwe23\"}]",
+        "body": [
+          {
+            "ioc": "orthodentrics.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://orthodentrics.com/8GE/fdsfdsfewwwe23",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/8GE/fdsfdsfewwwe23",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -249,7 +262,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://orthodentrics.com/8GE/fdsfdsfewwwe23\", \"method\": \"GET\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

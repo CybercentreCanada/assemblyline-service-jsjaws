@@ -110,7 +110,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"dce42.shrubs.emptyisland.pics\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dce42.shrubs.emptyisland.pics/subscribeEvent\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/subscribeEvent\"}]",
+        "body": [
+          {
+            "ioc": "dce42.shrubs.emptyisland.pics",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://dce42.shrubs.emptyisland.pics/subscribeEvent",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/subscribeEvent",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -149,7 +162,14 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://dce42.shrubs.emptyisland.pics/subscribeEvent\", \"method\": \"POST\", \"request_headers\": \"1\", \"request_body\": \"GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==\"}]",
+        "body": [
+          {
+            "method": "POST",
+            "request_body": "GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==",
+            "request_headers": "1",
+            "url": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

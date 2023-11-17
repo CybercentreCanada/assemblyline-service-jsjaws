@@ -172,7 +172,48 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"CORP.ORGANIZATION.CA\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.ls1969.fr\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.macromixenlinea.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.maghrebassurance.fr\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=56869258812643734173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=69802338981305884173581\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/test.php?eqhwvautjqdnpp=70580888052613984173581\"}]",
+        "body": [
+          {
+            "ioc": "CORP.ORGANIZATION.CA",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.ls1969.fr",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.macromixenlinea.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.maghrebassurance.fr",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/test.php?eqhwvautjqdnpp=152061332949076764173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/test.php?eqhwvautjqdnpp=56044884556520414173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/test.php?eqhwvautjqdnpp=65432525336909714173581",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -201,14 +242,14 @@
                 "www.maghrebassurance.fr"
               ],
               "uri": [
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581",
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581",
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=56869258812643734173581",
-                "/test.php?eqhwvautjqdnpp=69802338981305884173581",
-                "/test.php?eqhwvautjqdnpp=70580888052613984173581"
+                "/test.php?eqhwvautjqdnpp=152061332949076764173581",
+                "/test.php?eqhwvautjqdnpp=56044884556520414173581",
+                "/test.php?eqhwvautjqdnpp=65432525336909714173581"
               ]
             }
           }
@@ -218,7 +259,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581\", \"method\": \"GET\"}, {\"url\": \"https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581\", \"method\": \"GET\"}, {\"url\": \"https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581\", \"method\": \"GET\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",
@@ -250,14 +304,14 @@
                 "www.macromixenlinea.com"
               ],
               "uri": [
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581",
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581",
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=56869258812643734173581",
-                "/test.php?eqhwvautjqdnpp=70580888052613984173581",
-                "/test.php?eqhwvautjqdnpp=69802338981305884173581"
+                "/test.php?eqhwvautjqdnpp=56044884556520414173581",
+                "/test.php?eqhwvautjqdnpp=152061332949076764173581",
+                "/test.php?eqhwvautjqdnpp=65432525336909714173581"
               ]
             }
           }
@@ -393,21 +447,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -416,21 +470,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=56869258812643734173581"
+          "value": "/test.php?eqhwvautjqdnpp=152061332949076764173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=69802338981305884173581"
+          "value": "/test.php?eqhwvautjqdnpp=56044884556520414173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=70580888052613984173581"
+          "value": "/test.php?eqhwvautjqdnpp=65432525336909714173581"
         }
       ],
       "network.static.domain": [
@@ -459,34 +513,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=70580888052613984173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=69802338981305884173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56869258812643734173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=56869258812643734173581"
+          "value": "/test.php?eqhwvautjqdnpp=152061332949076764173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=69802338981305884173581"
+          "value": "/test.php?eqhwvautjqdnpp=56044884556520414173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=70580888052613984173581"
+          "value": "/test.php?eqhwvautjqdnpp=65432525336909714173581"
         }
       ]
     },

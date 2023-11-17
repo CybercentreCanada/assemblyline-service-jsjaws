@@ -114,7 +114,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"www.computerhope.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.computerhope.com/jargon/t/tilde.htm\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jargon/t/tilde.htm\"}]",
+        "body": [
+          {
+            "ioc": "www.computerhope.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.computerhope.com/jargon/t/tilde.htm",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/jargon/t/tilde.htm",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -153,7 +166,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://www.computerhope.com/jargon/t/tilde.htm\", \"method\": \"GET\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.computerhope.com/jargon/t/tilde.htm"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

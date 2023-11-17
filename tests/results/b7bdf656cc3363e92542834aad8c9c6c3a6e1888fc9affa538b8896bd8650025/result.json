@@ -124,7 +124,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"darmstadt.heimatschatz.de\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://darmstadt.heimatschatz.de/images/imgs/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/images/imgs/\"}]",
+        "body": [
+          {
+            "ioc": "darmstadt.heimatschatz.de",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://darmstadt.heimatschatz.de/images/imgs/",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/images/imgs/",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

@@ -24,7 +24,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"103.214.71.45\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://103.214.71.45/86204.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/86204.dat\"}]",
+        "body": [
+          {
+            "ioc": "103.214.71.45",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://103.214.71.45/86204.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/86204.dat",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -200,7 +213,28 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"ip\", \"ioc\": \"103.214.71.45\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://103.214.71.45/86204.dat\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/86204.dat\"}]",
+        "body": [
+          {
+            "ioc": "google.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "103.214.71.45",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://103.214.71.45/86204.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://google.com",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/86204.dat",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -243,7 +277,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"103.214.71.45\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://103.214.71.45/86204.dat\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/86204.dat\"}]",
+        "body": [
+          {
+            "ioc": "103.214.71.45",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://103.214.71.45/86204.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/86204.dat",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
