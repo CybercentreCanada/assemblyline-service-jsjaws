@@ -251,7 +251,24 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"gkjdepok.org\"}, {\"ioc_type\": \"domain\", \"ioc\": \"jZOBKK.open\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/crtfc/TsCw3rCG.dll\"}]",
+        "body": [
+          {
+            "ioc": "gkjdepok.org",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "jZOBKK.open",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://gkjdepok.org/crtfc/TsCw3rCG.dll",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/crtfc/TsCw3rCG.dll",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -291,7 +308,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"http://gkjdepok.org/crtfc/TsCw3rCG.dll\", \"method\": \"GET\"}]",
+        "body": [
+          {
+            "method": "GET",
+            "url": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

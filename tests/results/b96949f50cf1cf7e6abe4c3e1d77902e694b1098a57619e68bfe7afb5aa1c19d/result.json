@@ -45,7 +45,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "HTML document has password / email / username input fields\n\t- <input> element 'psrd' contains the following phishing terms: 'email, password, psrd'\n\t- <input> element 'usrn' contains the following phishing terms: 'email, usrn'",
+        "body": "HTML document has password / email / username input fields\n\t- <input> element 'psrd' contains the following phishing terms: 'email, mail, password, psrd'\n\t- <input> element 'usrn' contains the following phishing terms: 'email, mail, usrn'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -190,7 +190,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: e-mail,email,login,password,phone,psrd,skype,usrn",
+        "body": "JavaScript uses terms commonly associated with logging in\n\t\tThe following terms were found in the document: e-mail,email,login,mail,password,phone,psrd,skype,us...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -282,7 +282,80 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"40securview.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"cdnjs.cloudflare.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"couponhagen.churchontheranch.uk\"}, {\"ioc_type\": \"domain\", \"ioc\": \"kasumbo.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"securview.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"www.w3schools.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://couponhagen.churchontheranch.uk/app/exlca.php\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://www.w3schools.com/w3css/4/w3.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/app/exlca.php\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/smarty/xls_v1.6/msoxcel_.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/smarty/xls_v1.6/tail-spin.svg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w3css/4/w3.css\"}]",
+        "body": [
+          {
+            "ioc": "40securview.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "cdnjs.cloudflare.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "couponhagen.churchontheranch.uk",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "kasumbo.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "securview.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.w3schools.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://couponhagen.churchontheranch.uk/app/exlca.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.w3schools.com/w3css/4/w3.css",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/app/exlca.php",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/smarty/xls_v1.6/msoxcel_.svg",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/smarty/xls_v1.6/tail-spin.svg",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/w3css/4/w3.css",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -336,7 +409,21 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg\", \"method\": \"get\"}, {\"url\": \"https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg\", \"method\": \"get\"}, {\"url\": \"https://couponhagen.churchontheranch.uk/app/exlca.php\", \"method\": \"post\", \"request_body\": \"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+          },
+          {
+            "method": "get",
+            "url": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
+          },
+          {
+            "method": "post",
+            "request_body": "usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!",
+            "url": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

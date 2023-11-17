@@ -42,7 +42,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"194.180.174.158\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://194.180.174.158/lv.jpg\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/lv.jpg\"}]",
+        "body": [
+          {
+            "ioc": "194.180.174.158",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://194.180.174.158/lv.jpg",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/lv.jpg",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -81,7 +94,12 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"http://194.180.174.158/lv.jpg\", \"method\": \"get\"}]",
+        "body": [
+          {
+            "method": "get",
+            "url": "http://194.180.174.158/lv.jpg"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

@@ -24,7 +24,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
+        "body": [
+          {
+            "ioc": "finetuning-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://finetuning-digital.com/wRuLe/01.gif",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/wRuLe/01.gif",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -200,7 +213,28 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"domain\", \"ioc\": \"google.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://google.com\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
+        "body": [
+          {
+            "ioc": "finetuning-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "google.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://finetuning-digital.com/wRuLe/01.gif",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://google.com",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/wRuLe/01.gif",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -241,7 +275,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"finetuning-digital.com\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://finetuning-digital.com/wRuLe/01.gif\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/wRuLe/01.gif\"}]",
+        "body": [
+          {
+            "ioc": "finetuning-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://finetuning-digital.com/wRuLe/01.gif",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/wRuLe/01.gif",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

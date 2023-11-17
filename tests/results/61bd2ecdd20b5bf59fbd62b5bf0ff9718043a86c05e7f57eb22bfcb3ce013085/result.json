@@ -131,7 +131,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body": [
+          {
+            "ioc": "skynetx.com.br",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://skynetx.com.br/info2.txt",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/info2.txt",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -170,7 +183,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body": [
+          {
+            "ioc": "skynetx.com.br",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://skynetx.com.br/info2.txt",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/info2.txt",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -209,7 +235,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"skynetx.com.br\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://skynetx.com.br/info2.txt\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/info2.txt\"}]",
+        "body": [
+          {
+            "ioc": "skynetx.com.br",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://skynetx.com.br/info2.txt",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/info2.txt",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",

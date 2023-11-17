@@ -110,7 +110,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"domain\", \"ioc\": \"hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev\"}, {\"ioc_type\": \"uri\", \"ioc\": \"https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/\"}]",
+        "body": [
+          {
+            "ioc": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -149,7 +162,13 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"url\": \"https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/\", \"method\": \"get\", \"request_body\": null}]",
+        "body": [
+          {
+            "method": "get",
+            "request_body": null,
+            "url": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+          }
+        ],
         "body_config": {
           "column_order": [
             "url",

@@ -228,7 +228,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -291,7 +304,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
@@ -330,7 +356,20 @@
       },
       {
         "auto_collapse": false,
-        "body": "[{\"ioc_type\": \"ip\", \"ioc\": \"165.22.160.25\"}, {\"ioc_type\": \"uri\", \"ioc\": \"http://165.22.160.25/w9edb/160223\"}, {\"ioc_type\": \"uri_path\", \"ioc\": \"/w9edb/160223\"}]",
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
         "body_config": {
           "column_order": [
             "ioc_type",
