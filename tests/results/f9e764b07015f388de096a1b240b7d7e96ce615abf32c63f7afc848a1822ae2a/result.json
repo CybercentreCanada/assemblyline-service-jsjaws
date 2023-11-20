@@ -440,7 +440,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "https://www.moneyminerxyx.xyz/dude/post.php",
+        "sha256": "5939a2bc0ad57031fee444aeac4bd236c21ef5e5a2b5ec961fec6e8100c51c6c"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -696,6 +701,19 @@
         }
       ]
     },
-    "temp_submission_data": {}
+    "temp_submission_data": {
+      "uri_metadata_97d0caedad3488b7d8f801c97b280a64": {
+        "headers": {},
+        "json": {
+          "OSName": "Windows",
+          "email": "blah.blah@blah.com",
+          "pwd": "JsJ@w$==C00l!",
+          "userBrowser": "IE8",
+          "userIP": "127.0.0.1",
+          "verify": "stepOne"
+        },
+        "method": "POST"
+      }
+    }
   }
 }

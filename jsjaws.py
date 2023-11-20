@@ -1633,7 +1633,7 @@ class JsJaws(ServiceBase):
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
-        self._extract_urls(request.result)
+        self._extract_urls(request)
 
         if request.get_param("add_supplementary"):
             self._extract_supplementary(malware_jail_output)
@@ -3245,11 +3245,11 @@ class JsJaws(ServiceBase):
         self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
         self._run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
 
-    def _extract_urls(self, result: Result) -> None:
+    def _extract_urls(self, request: ServiceRequest) -> None:
         """
         This method extracts the URL interactions from urls.json that is dumped by MalwareJail
         This method also extracts the URL interactions from the IOC.json that is dumped by Box.js
-        :param result: A Result object containing the service results
+        :param request: The ServiceRequest object
         :return: None
         """
         self.log.debug("Extracting URLs...")
@@ -3273,6 +3273,13 @@ class JsJaws(ServiceBase):
                         continue
                     if item.get("method", "").lower() == "post":
                         post_seen = True
+                        params = {"method": "POST", "headers": item.get("headers", {})}
+                        if isinstance(item.get("request_body"), dict):
+                            params["json"] = item.get("request_body", None)
+                        else:
+                            params["data"] = item.get("request_body", None)
+                        self.log.debug(f"Extracting URI file for '{item['url']}'")
+                        request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
@@ -3292,6 +3299,13 @@ class JsJaws(ServiceBase):
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
                         if item.get("method", "").lower() == "post":
                             post_seen = True
+                            params = {"method": "POST", "headers": item.get("headers", {})}
+                            if isinstance(item.get("request_body"), dict):
+                                params["json"] = item.get("request_body", None)
+                            else:
+                                params["data"] = item.get("request_body", None)
+                            self.log.debug(f"Extracting URI file for '{item['url']}'")
+                            request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
                         if dumps(item) not in items_seen:
                             items_seen.add(dumps(item))
                             urls_rows.append(TableRow(**item))
@@ -3325,7 +3339,7 @@ class JsJaws(ServiceBase):
             if self.url_used_for_suspicious_exec:
                 urls_result_section.heuristic.add_signature_id("url_used_for_suspicious_exec", 500)
 
-            result.add_section(urls_result_section)
+            request.result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
         """
