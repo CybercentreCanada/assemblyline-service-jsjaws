@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 681,
+    "score": 680,
     "sections": [
       {
         "auto_collapse": false,
@@ -345,44 +345,6 @@
         "tags": {},
         "title_text": "document.write usage found in HTML",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "e.open",
-            "ioc_type": "domain"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "e.open"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -397,11 +359,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -493,11 +450,6 @@
     ],
     "tags": {
       "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "e.open"
-        },
         {
           "heur_id": 27,
           "signatures": [],
