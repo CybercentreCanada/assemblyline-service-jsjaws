@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2781,
+    "score": 2801,
     "sections": [
       {
         "auto_collapse": false,
@@ -76,7 +76,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\n\t\tnew WScript.Shell[15]()\n\n\t\tnew WScript.Shell[17]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\t\tnew WScript.Shell[15]()\n\t\tnew WScript.Shell[17]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\t if (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\"...",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -124,7 +124,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\n\t\tMSXML2.XMLHTTP[14].send()\n\n\t\tMSXML2.XMLHTTP[16].send()\n\n\t\t h.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\tMSXML2.XMLHTTP[14].send()\n\t\tMSXML2.XMLHTTP[16].send()\n\t\th.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -148,7 +148,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\tWScript.Sleep(\"23232\")\n\n\t\t if ((i.indexOf(\"@\"+I+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t } } else { WScript.sleep(11111)",
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar O = i.replace(/(\\d{2})/g, function (t) { return String.fromCharCode(parseInt(t,10)+30)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"23232\")\n\t\tif ((i.indexOf(\"@\"+I+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -172,6 +196,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tvar O = i.replace(/(\\d{2})/g, function (t) { return String.fromCharCode(parseInt(t,10)+30)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_char_codes": 10
+          },
+          "signatures": {
+            "suspicious_char_codes": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "CORP.ORGANIZATION.CA",
@@ -190,27 +238,27 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
+            "ioc": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581",
+            "ioc": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581",
+            "ioc": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/test.php?eqhwvautjqdnpp=152061332949076764173581",
+            "ioc": "/test.php?eqhwvautjqdnpp=455827106420826134173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?eqhwvautjqdnpp=56044884556520414173581",
+            "ioc": "/test.php?eqhwvautjqdnpp=59344453575259994173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?eqhwvautjqdnpp=65432525336909714173581",
+            "ioc": "/test.php?eqhwvautjqdnpp=84631290845102014173581",
             "ioc_type": "uri_path"
           }
         ],
@@ -242,14 +290,14 @@
                 "www.maghrebassurance.fr"
               ],
               "uri": [
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581",
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581",
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=152061332949076764173581",
-                "/test.php?eqhwvautjqdnpp=56044884556520414173581",
-                "/test.php?eqhwvautjqdnpp=65432525336909714173581"
+                "/test.php?eqhwvautjqdnpp=455827106420826134173581",
+                "/test.php?eqhwvautjqdnpp=59344453575259994173581",
+                "/test.php?eqhwvautjqdnpp=84631290845102014173581"
               ]
             }
           }
@@ -262,15 +310,15 @@
         "body": [
           {
             "method": "GET",
-            "url": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
+            "url": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581"
           },
           {
             "method": "GET",
-            "url": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
+            "url": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581"
           },
           {
             "method": "GET",
-            "url": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
+            "url": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581"
           }
         ],
         "body_config": {
@@ -304,14 +352,14 @@
                 "www.macromixenlinea.com"
               ],
               "uri": [
-                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581",
-                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581",
-                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
+                "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581",
+                "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581",
+                "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581"
               ],
               "uri_path": [
-                "/test.php?eqhwvautjqdnpp=56044884556520414173581",
-                "/test.php?eqhwvautjqdnpp=152061332949076764173581",
-                "/test.php?eqhwvautjqdnpp=65432525336909714173581"
+                "/test.php?eqhwvautjqdnpp=59344453575259994173581",
+                "/test.php?eqhwvautjqdnpp=455827106420826134173581",
+                "/test.php?eqhwvautjqdnpp=84631290845102014173581"
               ]
             }
           }
@@ -374,7 +422,21 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "sleep"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_char_codes"
         ]
       },
       {
@@ -447,21 +509,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -470,21 +532,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=152061332949076764173581"
+          "value": "/test.php?eqhwvautjqdnpp=455827106420826134173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=56044884556520414173581"
+          "value": "/test.php?eqhwvautjqdnpp=59344453575259994173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?eqhwvautjqdnpp=65432525336909714173581"
+          "value": "/test.php?eqhwvautjqdnpp=84631290845102014173581"
         }
       ],
       "network.static.domain": [
@@ -513,34 +575,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=152061332949076764173581"
+          "value": "https://www.ls1969.fr/test.php?eqhwvautjqdnpp=455827106420826134173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=65432525336909714173581"
+          "value": "https://www.macromixenlinea.com/test.php?eqhwvautjqdnpp=84631290845102014173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=56044884556520414173581"
+          "value": "https://www.maghrebassurance.fr/test.php?eqhwvautjqdnpp=59344453575259994173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=152061332949076764173581"
+          "value": "/test.php?eqhwvautjqdnpp=455827106420826134173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=56044884556520414173581"
+          "value": "/test.php?eqhwvautjqdnpp=59344453575259994173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?eqhwvautjqdnpp=65432525336909714173581"
+          "value": "/test.php?eqhwvautjqdnpp=84631290845102014173581"
         }
       ]
     },

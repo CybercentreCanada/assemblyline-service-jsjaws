@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2171,
+    "score": 2201,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.ServerXMLHTTP.6.0)\n\n\t\tActiveXObject(Adodb.Stream)\n\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tActiveXObject(Schedule.service)\n\n\t\tvar ms = new ActiveXObject(_0x460ecf(0x11b, '$$e1')), ad = new ActiveXObject(_0x460ecf(0x145, J(0x19...\n\t\tvar mr = new ActiveXObject(_0x460ecf(0x148, 'uWoW'))",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tfunction _0x2f62(b, e) {\n\t\tvar f = _0x1f7f()\n\t\treturn _0x2f62 = function (g, h) {\n\t\t= k, b = arguments, _0x2f62[D(0x184, 'h1iX')] = !![]\n\t\t=== undefined && (_0x2f62[D(0x1bc, '^Hs8')] = !![]), i = _0x2f62[D(0x1f9, 'R04l')](i, h), b[m] = i) ...\n\t\t}, _0x2f62(b, e)\n\t\tvar _0x460ecf = _0x2f62\n\t\tvar E = d, f = _0x2f62, g = b()\n\t\t}(_0x1f7f, 0x7fb6c))\n\t\tvar _0xebf086 = (function () {\n\t\t}()), _0xebf086(this, function () {\n\t\tvar I = d, f = _0x2f62, g = new RegExp(f(0xfd, I(0x1a2, 'wmH4'))), h = new RegExp('\\x5c+\\x5c+\\x20*(?...\n\t\t!g[f(0x117, I(0x1e7, 'h1iX'))](i + f(0x139, I(0x1f6, '9Vfy'))) || !h['test'](i + f(0x132, I(0x199, '...\n\t\tvar ms = new ActiveXObject(_0x460ecf(0x11b, '$$e1')), ad = new ActiveXObject(_0x460ecf(0x145, J(0x19...\n\t\tcf[J(0x212, 'zN)8')](o[_0x460ecf(0x122, J(0x155, 'n&OJ'))](J(0x18a, 'GgrK')) + _0x460ecf(0x126, J(0x...\n\t\tvar t = o[_0x460ecf(0x12f, 'ibZK')](_0x460ecf(0x116, J(0x213, 'oW#]'))) + _0x460ecf(0x136, 'yJiq')\n\t\tfunction _0x1f7f() {\n\t\treturn _0x1f7f = function () {\n\t\t}, _0x1f7f()\n\t\t= 0x1, ad['Open'](), ad[_0x460ecf(0x144, J(0x176, '693l'))](ms[_0x460ecf(0xf7, '9sf4')]), ad[_0x460e...\n\t\tvar mr = new ActiveXObject(_0x460ecf(0x148, 'uWoW'))\n\t\tvar fr = mr[J(0x17d, 'n&OJ')]('\\x5c'), td = mr[_0x460ecf(0x138, J(0x201, '!MsZ'))](0x0), ri = td[_0x...\n\t\t= _0x460ecf(0x146, J(0x1d6, 'xzHP')), ri[_0x460ecf(0x10a, J(0x1e2, 'wmH4'))] = _0x460ecf(0xf8, J(0x1...\n\t\tvar st = td[_0x460ecf(0xf6, J(0x1dc, 'oW#]'))]\n\t\t= !![], st[_0x460ecf(0x113, J(0x1c4, 'nX6l'))] = !![], st[_0x460ecf(0x137, J(0x188, 'IINQ'))] = ![]\n\t\tvar tr = td[J(0x21a, 'n&OJ')], tgr = tr[_0x460ecf(0x112, J(0x19f, 'ItJw'))](0x1), date = new Date()\n\t\tdate[_0x460ecf(0x12b, J(0x192, '693l'))](date[_0x460ecf(0x13e, J(0x208, '^Hs8'))]() + (date[_0x460ec...\n\t\t= startTime, tgr[J(0x1db, 'n&OJ')] = endTime, tgr['Id'] = _0x460ecf(0xfb, 'hIx6'), tgr[_0x460ecf(0x1...\n\t\tvar ac = td[_0x460ecf(0x111, J(0x1ef, '83eM'))][_0x460ecf(0x141, ']M*I')](0x0)\n\t\t= t, fr[_0x460ecf(0x142, J(0x20b, 'NZqJ'))](_0x460ecf(0x12c, J(0x214, 'tp()')), td, 0x6, '', '', 0x3...\n\t\tfunction _0x1b8d29(b) {\n\t\tvar M = d, g = _0x2f62",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "_0x_prefix": 10
+          },
+          "signatures": {
+            "_0x_prefix": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.ServerXMLHTTP.6.0)\n\t\tActiveXObject(Adodb.Stream)\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tActiveXObject(Schedule.service)\n\t\tvar ms = new ActiveXObject(_0x460ecf(0x11b, '$$e1')), ad = new ActiveXObject(_0x460ecf(0x145, J(0x19...\n\t\tvar mr = new ActiveXObject(_0x460ecf(0x148, 'uWoW'))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +90,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[16].expandenvironmentstrings(\"%TEMP%\")\n",
+        "body": "JavaScript decodes a Uniform Resource Identifier\n\t\treturn decodeURIComponent(s)\n\t\treturn decodeURIComponent(q)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "decode_uri": 10
+          },
+          "signatures": {
+            "decode_uri": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DecodeURI",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[16].expandenvironmentstrings(\"%TEMP%\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +138,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\n\t\tnew Scripting.FileSystemObject[17]()\n\n\t\tScripting.FileSystemObject[17].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\t\tnew Scripting.FileSystemObject[17]()\n\t\tScripting.FileSystemObject[17].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -114,7 +162,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tSchedule.Service[20].GetFolder(\"\\\")\n",
+        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tSchedule.Service[20].GetFolder(\"\\\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -138,7 +186,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()\n",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -162,7 +210,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[13].setRequestHeader(\"User-Agent\", \"mozilla firefox\")\n",
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar g = -parseInt(A(0x15d, ']80x')) / 0x1 + -parseInt(A(0x196, 'fWX3')) / 0x2 * (-parseInt(A(0x1c1, ...\n\t\tvar h = parseInt(f(0x10b, E(0x216, '[fNV'))) / 0x1 * (parseInt(f(0x104, E(0x1f0, '83eM'))) / 0x2) + ...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[13].setRequestHeader(\"User-Agent\", \"mozilla firefox\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -210,7 +282,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\n\t\tWScript.CreateObject(\"Schedule.service\")\n\n\t\tnew Schedule.Service[20]()\n\n\t\tSchedule.Service[20].Connect()\n\n\t\tSchedule.Service[20].GetFolder(\"\\\")\n\n\t\tSchedule.Service[20].NewTask(0)\n",
+        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\t\tWScript.CreateObject(\"Schedule.service\")\n\t\tnew Schedule.Service[20]()\n\t\tSchedule.Service[20].Connect()\n\t\tSchedule.Service[20].GetFolder(\"\\\")\n\t\tSchedule.Service[20].NewTask(0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -412,6 +484,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "_0x_prefix"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "active_x_object"
         ]
       },
@@ -420,6 +499,13 @@
         "heur_id": 3,
         "signatures": [
           "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "decode_uri"
         ]
       },
       {
@@ -448,6 +534,13 @@
         "heur_id": 3,
         "signatures": [
           "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
         ]
       },
       {

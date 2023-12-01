@@ -44,7 +44,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\\x00\\x00\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tActiveXObject(System.Text.ASCIIEncoding)\n\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tActiveXObject(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)\n\n\t\tActiveXObject(System.Collections.ArrayList)\n\n\t\t)o+=a((s>>>(f-=8))%256)}return o}function bazSixFerToStreeeeamStranger(e){var r=new ActiveXObject(\"S...\n\t\tn=new ActiveXObject(\"System.Security.Cryptography.FromBase64Transform\").TransformFinalBlock(n,0,t)\n\t\tvar o=new ActiveXObject(\"System.IO.MemoryStream\")\n\t\t    var ObjectiveObjectiveReagValStrangerReagValStranger = new ActiveXObject(str)\n\t\t    var OPOIUY_BNMJUYH_GAGHGDHSJ_SGGSHSHS = new ActiveXObject(bts)\n\t\t    var CBBZCS_SGSWRW_NMKISG = new ActiveXObject(ats)",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\\x00\\x00\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(System.Text.ASCIIEncoding)\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\t\tActiveXObject(System.IO.MemoryStream)\n\t\tActiveXObject(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)\n\t\tActiveXObject(System.Collections.ArrayList)\n\t\t)o+=a((s>>>(f-=8))%256)}return o}function bazSixFerToStreeeeamStranger(e){var r=new ActiveXObject(\"S...\n\t\tn=new ActiveXObject(\"System.Security.Cryptography.FromBase64Transform\").TransformFinalBlock(n,0,t)\n\t\tvar o=new ActiveXObject(\"System.IO.MemoryStream\")\n\t\tvar ObjectiveObjectiveReagValStrangerReagValStranger = new ActiveXObject(str)\n\t\tvar OPOIUY_BNMJUYH_GAGHGDHSJ_SGGSHSHS = new ActiveXObject(bts)\n\t\tvar CBBZCS_SGSWRW_NMKISG = new ActiveXObject(ats)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -116,7 +116,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\n\t\tWScript.CreateObject(\"System.Security.Cryptography.FromBase64Transform\")\n\n\t\tnew System.Security.Cryptography.FromBase64Transform[21]()\n\n\t\tSystem.Security.Cryptography.FromBase64Transform[21].TransformFinalBlock([65, 65, 69, 65, 65, 65, 68...\n\t\tn=new ActiveXObject(\"System.Security.Cryptography.FromBase64Transform\").TransformFinalBlock(n,0,t)",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tActiveXObject(System.Security.Cryptography.FromBase64Transform)\n\t\tWScript.CreateObject(\"System.Security.Cryptography.FromBase64Transform\")\n\t\tnew System.Security.Cryptography.FromBase64Transform[21]()\n\t\tSystem.Security.Cryptography.FromBase64Transform[21].TransformFinalBlock([65, 65, 69, 65, 65, 65, 68...\n\t\tn=new ActiveXObject(\"System.Security.Cryptography.FromBase64Transform\").TransformFinalBlock(n,0,t)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -140,7 +140,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -164,7 +164,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tvbscript_4lXnn0Cv1hIsE1ThzvlhYX.setAttribute(\"innerText\", \"Function liboff(ByVal strInput) :  :   Se...\n\t\t    var BMZ_TTU_QAZ = GetObject(\"winmg\" + \"mts:\\\\\\\\.\\\\ro\" + \"ot\\\\Securi\"+\"tyCenter2\")",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\t\tvbscript_4lXnn0Cv1hIsE1ThzvlhYX.setAttribute(\"innerText\", \"Function liboff(ByVal strInput) :  :   Se...\n\t\tvar BMZ_TTU_QAZ = GetObject(\"winmg\" + \"mts:\\\\\\\\.\\\\ro\" + \"ot\\\\Securi\"+\"tyCenter2\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -212,7 +212,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\n\t\tWScript.CreateObject(\"System.IO.MemoryStream\")\n\n\t\tnew System.IO.MemoryStream[22]()\n\n\t\tSystem.IO.MemoryStream[22].Write([0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0, 0, 0, 0, 0, 0, 4, 1, 0...\n\t\tSystem.IO.MemoryStream[22].Position = 0\n\n\t\tSystem.IO.MemoryStream[22].toString()\n\n\t\t> System.IO.MemoryStream[22]\n\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[23].Deserialize_2(System.IO.MemoryStr...\n\t\tnew Delegate[25](System.IO.MemoryStream[22], undefined)(System.IO.MemoryStream[22])\n\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).toString()\n\n\t\t> Delegate[25](System.IO.MemoryStream[22], undefined)\n\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).DynamicInvoke([undefined])\n\n\t\tvar o=new ActiveXObject(\"System.IO.MemoryStream\")",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tActiveXObject(System.IO.MemoryStream)\n\t\tWScript.CreateObject(\"System.IO.MemoryStream\")\n\t\tnew System.IO.MemoryStream[22]()\n\t\tSystem.IO.MemoryStream[22].Write([0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0, 0, 0, 0, 0, 0, 4, 1, 0...\n\t\tSystem.IO.MemoryStream[22].Position = 0\n\t\tSystem.IO.MemoryStream[22].toString()\n\t\t> System.IO.MemoryStream[22]\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[23].Deserialize_2(System.IO.MemoryStr...\n\t\tnew Delegate[25](System.IO.MemoryStream[22], undefined)(System.IO.MemoryStream[22])\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).toString()\n\t\t> Delegate[25](System.IO.MemoryStream[22], undefined)\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).DynamicInvoke([undefined])\n\t\tvar o=new ActiveXObject(\"System.IO.MemoryStream\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -236,7 +236,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses classes found in .NET Runtime Assembly\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[23].Deserialize_2(System.IO.MemoryStr...\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).DynamicInvoke([undefined])\n\n\t\t    var HJUSD_HSKHDKS_LSHLLS = OPOIUY_BNMJUYH_GAGHGDHSJ_SGGSHSHS.Deserialize_2(TYIWSSD_HLSKDHLSSD)\n\t\t    var RTRW_NMBH_SHSHJSS_MNJKLK = HJUSD_HSKHDKS_LSHLLS.DynamicInvoke(CBBZCS_SGSWRW_NMKISG.ToArray()...",
+        "body": "JavaScript uses classes found in .NET Runtime Assembly\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[23].Deserialize_2(System.IO.MemoryStr...\n\t\tDelegate[25](System.IO.MemoryStream[22], undefined).DynamicInvoke([undefined])\n\t\tvar HJUSD_HSKHDKS_LSHLLS = OPOIUY_BNMJUYH_GAGHGDHSJ_SGGSHSHS.Deserialize_2(TYIWSSD_HLSKDHLSSD)\n\t\tvar RTRW_NMBH_SHSHJSS_MNJKLK = HJUSD_HSKHDKS_LSHLLS.DynamicInvoke(CBBZCS_SGSWRW_NMKISG.ToArray()).Cr...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -260,7 +260,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery => function () {?      ...\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select * From AntiVirus...",
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:\\\\.\\root\\SecurityCenter2, undefined)\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery => function () {?      ...\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select * From AntiVirus...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -284,7 +284,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery => function () {?      ...\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select * From AntiVirus...\n\t\t\tvar FNTJKI_LKIOUTS_LAJDLD_QWESTR = BMZ_TTU_QAZ.ExecQuery(peter, null, 48)",
+        "body": "JavaScript use Window Management Instrumentation\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery => function () {?      ...\n\t\tAutomationObject[15](winmgmts:\\\\.\\root\\SecurityCenter2, undefined).ExecQuery(Select * From AntiVirus...\n\t\tvar FNTJKI_LKIOUTS_LAJDLD_QWESTR = BMZ_TTU_QAZ.ExecQuery(peter, null, 48)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

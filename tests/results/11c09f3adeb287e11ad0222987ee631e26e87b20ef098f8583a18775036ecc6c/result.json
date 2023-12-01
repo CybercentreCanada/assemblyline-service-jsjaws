@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 140,
+    "score": 150,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,7 +38,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4f9b=['Click']\n\t\t(function(_0xb5a54d,_0x9a7955){var _0x531e9d=function(_0x5c5a69){while(--_0x5c5a69){_0xb5a54d['push'...\n\t\t_0x531e9d(++_0x9a7955)\n\t\t}(_0x4f9b,0xb3))\n\t\tvar _0x3667=function(_0x3bd949,_0x29f930){_0x3bd949=_0x3bd949-0x0\n\t\tvar _0x9eeca2=_0x4f9b[_0x3bd949]\n\t\treturn _0x9eeca2\n\t\tx[_0x3667('0x0')]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "_0x_prefix": 10
+          },
+          "signatures": {
+            "_0x_prefix": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -62,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\t ws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -86,7 +110,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\t ws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /...",
+        "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -150,6 +174,13 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "_0x_prefix"
+        ]
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
