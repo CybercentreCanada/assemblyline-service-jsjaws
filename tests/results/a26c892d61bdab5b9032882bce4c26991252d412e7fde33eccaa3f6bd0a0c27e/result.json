@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1111,
+    "score": 1131,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,6 +14,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript decodes a Uniform Resource Identifier\n\t\treturn decodeURIComponent(spatterdock)\n\t\treturn decodeURIComponent(unediblyknotberry)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "decode_uri": 10
+          },
+          "signatures": {
+            "decode_uri": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DecodeURI",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar sandastra = -parseInt(breathabilitycichlids(0x66f, 0x8ea, 0x86f, '0x8b2', 0x73d)) / (0x7d9 + -0x...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -161,6 +209,20 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "decode_uri"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
+        ]
       },
       {
         "attack_ids": [],

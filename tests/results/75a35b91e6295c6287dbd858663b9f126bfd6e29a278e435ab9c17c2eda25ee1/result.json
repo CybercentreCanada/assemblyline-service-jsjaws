@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2762,
+    "score": 2772,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 23 bytes\n\n\t\tdocument[6].write(content) 99 bytes\n",
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 23 bytes\n\t\tdocument[6].write(content) 99 bytes",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -58,6 +58,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\twhile(!![]){try{var iaissverttiue=-parseInt(hilinemu(0xb0))/0x1*(-parseInt(hilinemu(0x91))/0x2)+-par...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -362,6 +386,13 @@
         "heur_id": 3,
         "signatures": [
           "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
         ]
       },
       {

@@ -93,7 +93,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tActiveXObject(WScript.Shell)\n\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\n\t\tActiveXObject(shell.application)\n\n\t\tvar wshshell = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(WScript.Shell)\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(shell.application)\n\t\tvar wshshell = new ActiveXObject('WScript.Shell')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -117,7 +117,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n\n\t\tnew WScript.Shell[18]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n\t\tnew WScript.Shell[18]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -189,7 +189,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].shellexecute(\"rundll32\", \"C:\\ProgramData\\index1.png,Wind\", \"\", \"open\", 3)\n",
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].shellexecute(\"rundll32\", \"C:\\ProgramData\\index1.png,Wind\", \"\", \"open\", 3)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

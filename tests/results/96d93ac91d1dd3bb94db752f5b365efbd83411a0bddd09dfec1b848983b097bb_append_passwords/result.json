@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\t\treturn s.split(\"\").reverse().join(\"\")",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\treturn s.split(\"\").reverse().join(\"\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a uncommon method for de-obfuscating a string (split+reverse+join)\n\t\t\treturn s.split(\"\").reverse().join(\"\")",
+        "body": "JavaScript uses a uncommon method for de-obfuscating a string (split+reverse+join)\n\t\treturn s.split(\"\").reverse().join(\"\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

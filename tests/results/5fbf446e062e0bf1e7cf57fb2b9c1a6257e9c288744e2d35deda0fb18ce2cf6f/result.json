@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1111,
+    "score": 1131,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -38,6 +38,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript decodes a Uniform Resource Identifier\n\t\treturn decodeURIComponent(dominantscounterrefer)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "decode_uri": 10
+          },
+          "signatures": {
+            "decode_uri": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DecodeURI",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar gleamingly = -parseInt(baselessness(0x392, 0x31a, 0x32b, '0x398', 0x340, 0x318, 0x32c, '0x351', ...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -156,6 +204,20 @@
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "decode_uri"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
         ]
       },
       {

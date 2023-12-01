@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: windowsinstaller.installer\n\n\t\tActiveXObject(windowsinstaller.installer)\n\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: windowsinstaller.installer\n\t\tActiveXObject(windowsinstaller.installer)\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[13].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[13].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

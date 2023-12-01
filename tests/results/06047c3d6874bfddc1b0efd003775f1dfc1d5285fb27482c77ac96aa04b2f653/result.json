@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1122,
+    "score": 1142,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application\n",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -38,6 +38,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript decodes a Uniform Resource Identifier\n\t\treturn decodeURIComponent(gemmercricks)\n\t\treturn decodeURIComponent(recrowns)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "decode_uri": 10
+          },
+          "signatures": {
+            "decode_uri": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DecodeURI",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar viduities = -parseInt(crazedness(-0x16d, -'0x163', -'0x158', 'I0P(')) / (0x17bc + -0x1cfb * 0x1 ...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -258,6 +306,20 @@
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "decode_uri"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
         ]
       },
       {

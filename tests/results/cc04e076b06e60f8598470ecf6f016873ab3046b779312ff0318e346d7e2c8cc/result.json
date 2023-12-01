@@ -38,7 +38,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[14].send()\n",
+        "body": "Executing JavaScript from a string is an enormous security risk. It is far too easy for a bad actor to run arbitrary code when you use eval()\n\t\teval(get_script())",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "eval_usage": 10
+          },
+          "signatures": {
+            "eval_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: EvalUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[14].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -82,30 +106,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\teval(get_script())",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "suspicious_process": 10
-          },
-          "signatures": {
-            "suspicious_process": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
       },
       {
@@ -263,6 +263,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "eval_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "network_request"
         ]
       },
@@ -271,13 +278,6 @@
         "heur_id": 3,
         "signatures": [
           "prepare_network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "suspicious_process"
         ]
       },
       {

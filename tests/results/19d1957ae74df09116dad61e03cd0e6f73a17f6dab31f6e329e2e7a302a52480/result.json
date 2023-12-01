@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\n\t\tvar gref = ActiveXObject",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\t\tvar gref = ActiveXObject",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\t  document.getElementById(\"xz\").click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tdocument.getElementById(\"xz\").click()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -210,7 +210,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\twindow[4].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\twindow[4].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
