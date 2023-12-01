@@ -61,7 +61,7 @@ class SuspiciousUseOfCharCodes(Signature):
         super().__init__(
             heuristic_id=3,
             name="suspicious_char_codes",
-            description="JavaScript uses charCodeAt/charCodeFrom to obfuscate/de-obfuscate characters",
+            description="JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters",
             indicators=[".charCodeAt(", "fromCharCode("],
             severity=0,
         )
