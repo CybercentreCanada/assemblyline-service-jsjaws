@@ -82,8 +82,8 @@ class Signature:
                 and all(indicator.lower() in string.lower() for indicator in self.indicators)
                 and not any(item.lower() in string.lower() for item in self.safelist)
             ):
-                if safe_str(string) not in self.marks:
-                    self.marks.append(safe_str(string))
+                if safe_str(string).strip() not in self.marks:
+                    self.marks.append(safe_str(string).strip())
 
             # If we only want to match at least one indicator in a line, then mark it!
             if not match_all:
@@ -91,8 +91,8 @@ class Signature:
                     if indicator.lower() in string.lower() and not any(
                         item.lower() in string.lower() for item in self.safelist
                     ):
-                        if safe_str(string) not in self.marks:
-                            self.marks.append(safe_str(string))
+                        if safe_str(string).strip() not in self.marks:
+                            self.marks.append(safe_str(string).strip())
                         continue
 
     @staticmethod
@@ -121,8 +121,8 @@ class Signature:
         :return: A boolean indicating if the mark was added
         """
         if mark:
-            if safe_str(mark) not in self.marks:
-                self.marks.append(safe_str(mark))
+            if safe_str(mark).strip() not in self.marks:
+                self.marks.append(safe_str(mark).strip())
         else:
             return False
 
@@ -176,5 +176,5 @@ class Signature:
                         are_indicators_matched = False
 
             if are_indicators_matched and not any(item.lower() in string.lower() for item in self.safelist):
-                if safe_str(string) not in self.marks:
-                    self.marks.append(safe_str(string))
+                if safe_str(string).strip() not in self.marks:
+                    self.marks.append(safe_str(string).strip())
