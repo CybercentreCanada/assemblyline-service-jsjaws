@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WinHTTP.WinHTTPRequest.5.1\n",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WinHTTP.WinHTTPRequest.5.1",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].send()\n",
+        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

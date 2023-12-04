@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses atob to decode a base64-encoded URL\n\t\tatob was seen decoding a URI: 'https://darmstadt.heimatschatz.de/images/imgs/'\n",
+        "body": "JavaScript uses atob to decode a base64-encoded URL\n\t\tatob was seen decoding a URI: 'https://darmstadt.heimatschatz.de/images/imgs/'",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

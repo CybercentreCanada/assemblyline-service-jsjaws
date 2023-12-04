@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[79].click(undefined)\n\n\t\t        hWgcnjlRWVbB.click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[79].click(undefined)\n\t\thWgcnjlRWVbB.click()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a common base64 method for decoding characters\n\t\t            var jUVqAOisGJal = atob(pameAjsMTYht)",
+        "body": "JavaScript uses a common base64 method for decoding characters\n\t\tvar jUVqAOisGJal = atob(pameAjsMTYht)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0...\n\t\t            return new Blob(xrXkOsltcOME, { type: ali + 'ct################et-s############tre######...",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0...\n\t\treturn new Blob(xrXkOsltcOME, { type: ali + 'ct################et-s############tre###############am'...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\n\t\t        hWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\t\thWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -114,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses charCodeAt() obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

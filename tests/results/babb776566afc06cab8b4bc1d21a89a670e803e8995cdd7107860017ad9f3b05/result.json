@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: msxml2.xmlhttp\n",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: msxml2.xmlhttp",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\n\t\to.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\to.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

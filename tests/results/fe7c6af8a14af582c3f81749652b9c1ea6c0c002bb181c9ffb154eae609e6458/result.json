@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\n\t\tNew ActiveXObject: ADODB.Stream\n\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\n\t\tMSXML2.XMLHTTP[13].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\n\t\tMSXML2.XMLHTTP[13].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -114,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()\n",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -162,7 +162,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile\n\n\t\tADODB.Stream[15].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\n\t\tADODB.Stream[20].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n",
+        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile\n\t\tADODB.Stream[15].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\t\tADODB.Stream[20].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -186,7 +186,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n\n\t\tAutomationObject[24](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined)\n\t\tAutomationObject[24](winmgmts:{impersonationLevel=impersonate}!Win32_Process, undefined).Create(\"run...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

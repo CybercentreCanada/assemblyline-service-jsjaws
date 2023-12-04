@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -86,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -110,7 +110,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,7 +134,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe in a hidden window\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body": "JavaScript runs PowerShell via powershell.exe in a hidden window\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -158,7 +158,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -182,7 +182,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\t ws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hid...",
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

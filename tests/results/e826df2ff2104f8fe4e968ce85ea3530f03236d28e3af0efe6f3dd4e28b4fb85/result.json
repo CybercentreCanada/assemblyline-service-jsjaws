@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2781,
+    "score": 2801,
     "sections": [
       {
         "auto_collapse": false,
@@ -76,7 +76,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\n\t\tnew WScript.Shell[15]()\n\n\t\tnew WScript.Shell[17]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\t\tnew WScript.Shell[15]()\n\t\tnew WScript.Shell[17]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -100,7 +100,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\n\t\t if (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\"...",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -124,7 +124,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\n\t\tMSXML2.XMLHTTP[14].send()\n\n\t\tMSXML2.XMLHTTP[16].send()\n\n\t\t z.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\tMSXML2.XMLHTTP[14].send()\n\t\tMSXML2.XMLHTTP[16].send()\n\t\tz.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -148,7 +148,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep\n\t\tWScript.Sleep(\"23232\")\n\n\t\t if ((X.indexOf(\"@\"+C+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t } } else { WScript.sleep(11111)",
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar O = X.replace(/(\\d{2})/g, function (p) { return String.fromCharCode(parseInt(p,10)+30)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "parseint_usage": 10
+          },
+          "signatures": {
+            "parseint_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"23232\")\n\t\tif ((X.indexOf(\"@\"+C+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -172,6 +196,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tvar O = X.replace(/(\\d{2})/g, function (p) { return String.fromCharCode(parseInt(p,10)+30)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_char_codes": 10
+          },
+          "signatures": {
+            "suspicious_char_codes": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "CORP.ORGANIZATION.CA",
@@ -190,27 +238,27 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=51478231253416824173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=79105632873219264173581",
             "ioc_type": "uri_path"
           }
         ],
@@ -242,14 +290,14 @@
                 "www.travelettes.net"
               ],
               "uri": [
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
-                "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581",
-                "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+                "/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
+                "/xml.php?axkhpbmxwhmjuwt=51478231253416824173581",
+                "/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
               ]
             }
           }
@@ -262,15 +310,15 @@
         "body": [
           {
             "method": "GET",
-            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
           },
           {
             "method": "GET",
-            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581"
           },
           {
             "method": "GET",
-            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
           }
         ],
         "body_config": {
@@ -304,14 +352,14 @@
                 "www.thomadaneau.com"
               ],
               "uri": [
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581",
-                "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581",
-                "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+                "/xml.php?axkhpbmxwhmjuwt=79105632873219264173581",
+                "/xml.php?axkhpbmxwhmjuwt=309454944334772054173581",
+                "/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
               ]
             }
           }
@@ -374,7 +422,21 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "sleep"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_char_codes"
         ]
       },
       {
@@ -447,21 +509,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -470,21 +532,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=309454944334772054173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
         }
       ],
       "network.static.domain": [
@@ -513,34 +575,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=309454944334772054173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=2512577930202464173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=309454944334772054173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=31740150274140284173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=51478231253416824173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=85131483317588264173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=79105632873219264173581"
         }
       ]
     },

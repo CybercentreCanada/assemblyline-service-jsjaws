@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\n\t\tNew ActiveXObject: Msxml2.XMLHTTP\n\n\t\tNew ActiveXObject: ADODB.Stream\n\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tNew ActiveXObject: Msxml2.XMLHTTP\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tNew ActiveXObject: Scripting.FileSystemObject",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -86,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%TEMP%\")\n",
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%TEMP%\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -110,7 +110,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\n\t\tnew Scripting.FileSystemObject[17]()\n\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\n\t\tScripting.FileSystemObject[17].Drives => Drives\n",
+        "body": "Executing JavaScript from a string is an enormous security risk. It is far too easy for a bad actor to run arbitrary code when you use eval()\n\t\teval(s37)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "eval_usage": 10
+          },
+          "signatures": {
+            "eval_usage": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: EvalUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[17]()\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\t\tScripting.FileSystemObject[17].Drives => Drives",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,7 +158,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[14].send()\n",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[14].send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -158,7 +182,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 1, 0)\n\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 1, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"n...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Lo...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\"\", 0, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\"\", 0, 0)\n",
+        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 1, 0)\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 1, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"n...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Lo...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\"\", 0, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\"\", 0, 0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -182,7 +206,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 1, 0)\n\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 1, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V ...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\.crypted\" /ve /t REG_SZ /F /D \"Crypted\"\", 0, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"n...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%AppData%\\Desk...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%UserProfile%\\...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Lo...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\"\", 0, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\"\", 0, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\"\", 0, 0)\n\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\"\", 0, 0)\n",
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 1, 0)\n\t\tWScript.Shell[13].Run(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 1, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V ...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\.crypted\" /ve /t REG_SZ /F /D \"Crypted\"\", 0, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c REG ADD \"HKCR\\Crypted\\shell\\open\\command\" /ve /t REG_SZ /F /D \"n...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%AppData%\\Desk...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c copy /y \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\" \"%UserProfile%\\...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c C:\\Users\\User\\AppData\\Local\\Temp\\a.exe \"C:\\Users\\User\\AppData\\Lo...\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c notepad.exe \"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\"\", 0, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\"\", 0, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\"\", 0, 0)\n\t\tWScript.Shell[13].Run(\"%COMSPEC% /c DEL \"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\"\", 0, 0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -206,7 +230,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", 2)\n\n\t\t    \t   \t  var xnkt = 'xa.saveToFile'\n\t\t    \t   \t  var bczr = '.saveToFile('",
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", 2)\n\t\tvar xnkt = 'xa.saveToFile'\n\t\tvar bczr = '.saveToFile('",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -230,31 +254,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a suspicious process\n\t\t eval(s37)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "suspicious_process": 10
-          },
-          "signatures": {
-            "suspicious_process": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: SuspiciousProcess",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 2)\n\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 2)\n",
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a1.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a2.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\", 2)\n\t\tADODB.Stream[16].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\", 2)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -608,6 +608,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "eval_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "file_system_object"
         ]
       },
@@ -637,13 +644,6 @@
         "heur_id": 3,
         "signatures": [
           "save_to_file"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "suspicious_process"
         ]
       },
       {

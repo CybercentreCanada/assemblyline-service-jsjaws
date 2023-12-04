@@ -5,6 +5,7 @@ from signatures.abstracts import ALL, Signature
 
 
 class PrepareNetworkRequest(Signature):
+    # Supported by https://github.com/CYB3RMX/Qu1cksc0pe/blob/ad3105ab9d3363df013ff95bae218f5c374a93fb/Systems/Multiple/malicious_html_codes.json#L47
     def __init__(self):
         super().__init__(
             heuristic_id=3,

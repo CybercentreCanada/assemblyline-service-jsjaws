@@ -64,7 +64,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 103813 bytes\n",
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 103813 bytes",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
