@@ -23,13 +23,12 @@ resources:
 trigger: ["*"]
 pr: ["*"]
 
-pool:
-  vmImage: "ubuntu-20.04"
-
-container: cccs/assemblyline-v4-service-base
-
 jobs:
   - job: run_test
+    pool:
+      vmImage: "ubuntu-20.04"
+    container: cccs/assemblyline-v4-service-base
+
     strategy:
       matrix:
         Python3_9:
