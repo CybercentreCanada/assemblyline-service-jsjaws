@@ -55,6 +55,10 @@ jobs:
           # Let's check if node/npm exist already
           node --version
           npm --version
+          # If so, find where nodejs is installed
+          which node
+          # Attempt to remove nodejs from the system so that we can use our specific version
+          sudo apt-get remove nodejs -y
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           sudo apt-get update
