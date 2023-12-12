@@ -52,13 +52,28 @@ jobs:
         path: $(samples_location)
       - script: |
           set -x # echo on
+
           # Let's check if node/npm exist already
           node --version
           npm --version
-          # If so, find where nodejs is installed
-          which node
-          # Attempt to remove nodejs from the system so that we can use our specific version
+
+          # If so, find where nodejs is installed and remove it!
+          [ -f $(which node) ] && which node && sudo rm $(which node)
+          [ -f $(which npm) ] && which npm && sudo rm $(which npm)
+          # Just for sanity's sake
           sudo apt-get remove nodejs -y
+          node --version
+          npm --version
+
+          # Now let's install it and PURGE
+          sudo apt install nodejs -y
+          node --version
+          npm --version
+          which node
+          sudo apt-get purge --auto-remove nodejs -y
+          node --version
+          npm --version
+
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           sudo apt-get update
