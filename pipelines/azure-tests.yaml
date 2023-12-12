@@ -52,6 +52,9 @@ jobs:
         path: $(samples_location)
       - script: |
           set -x # echo on
+          # Let's check if node/npm exist already
+          node --version
+          npm --version
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           sudo apt-get update
