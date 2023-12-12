@@ -3877,8 +3877,8 @@ class JsJaws(ServiceBase):
                     except ValueError:
                         encoded_content = location_href.encode()
 
-                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                            out.write(encoded_content)
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                        out.write(encoded_content)
                     artifact = {
                         "name": sha256(encoded_content).hexdigest(),
                         "path": out.name,
