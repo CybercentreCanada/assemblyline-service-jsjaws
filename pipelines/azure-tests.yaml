@@ -13,12 +13,12 @@ variables:
 
 resources:
   repositories:
-  - repository: unittest-samples
-    type: github
-    name: $(unittest_samples_repository)
-    ref: main
-    endpoint: github-repo-sa
-    trigger: none
+    - repository: unittest-samples
+      type: github
+      name: $(unittest_samples_repository)
+      ref: main
+      endpoint: github-repo-sa
+      trigger: none
 
 trigger: ["*"]
 pr: ["*"]
@@ -67,7 +67,9 @@ jobs:
           sudo tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
           cd $currdir
           node --version
-          cd tools && npm install && cd ..
+          cd tools
+          npm install
+          cd ..
           sudo rm -rf /var/lib/apt/lists/*
           sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
           [ -f $(pwd)/requirements.txt ] && sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/requirements.txt
