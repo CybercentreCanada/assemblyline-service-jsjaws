@@ -68,7 +68,7 @@ jobs:
           cd $currdir
           node --version
           cd tools
-          npm install
+          npm install --verbose
           cd ..
           sudo rm -rf /var/lib/apt/lists/*
           sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
