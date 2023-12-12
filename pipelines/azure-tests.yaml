@@ -55,24 +55,41 @@ jobs:
 
           # Let's check if node/npm exist already
           node --version
+          # v18.19.0
           npm --version
+          # 10.2.3
 
           # If so, find where nodejs is installed and remove it!
           [ -f $(which node) ] && which node && sudo rm $(which node)
+          # /usr/local/bin/node
           [ -f $(which npm) ] && which npm && sudo rm $(which npm)
+          # /usr/local/bin/npm
+
           # Just for sanity's sake
           sudo apt-get remove nodejs -y
+          # Package 'nodejs' is not installed, so not removed
           node --version
+          # No such file or directory
           npm --version
+          # No such file or directory
+
+          # There is a temp file that is linking the node command with the
+          sudo ls -l /home/vsts/work/_temp/*\.sh
+          sudo cat /home/vsts/work/_temp/*\.sh
 
           # Now let's install it and PURGE
           sudo apt install nodejs -y
           node --version
+          # No such file or directory
           npm --version
+          # No such file or directory
           which node
+          # /usr/bin/node
           sudo apt-get purge --auto-remove nodejs -y
           node --version
+          # No such file or directory
           npm --version
+          # No such file or directory
 
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
