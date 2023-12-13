@@ -54,7 +54,6 @@ jobs:
       - script: |
           set -exv # echo on
           ls -al
-          export SAMPLES_PATH=$PWD/assemblyline-unittest-samples
           cd assemblyline-service-jsjaws
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
 
@@ -67,7 +66,8 @@ jobs:
       - script: |
           set -x # echo on
           ls -al
-          echo $SAMPLE_PATH
+          export SAMPLES_PATH=$PWD/assemblyline-unittest-samples
+          cd assemblyline-service-jsjaws
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           export REPO_NAME=${BUILD_REPOSITORY_NAME##*/}
           python -m pytest -p no:cacheprovider --durations=10 -rsx -xsvvv --disable-warnings
