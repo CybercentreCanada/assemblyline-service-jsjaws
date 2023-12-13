@@ -1,4 +1,4 @@
-FROM root-build-image AS base
+FROM cccstemp.azurecr.io/assemblyline-root-build:stable AS base
 
 # Install necessary packages for service testing
 RUN apt-get update
