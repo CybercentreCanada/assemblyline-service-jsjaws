@@ -54,8 +54,9 @@ jobs:
         fetchDepth: 1
         path: $(samples_location)
       - script: |
-          set -x # echo on
+          set -exv # echo on
           export currdir=$(pwd)
+          ls -al
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
 
           env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
