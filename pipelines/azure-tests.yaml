@@ -30,6 +30,7 @@ jobs:
     container:
       image: cccstemp.azurecr.io/assemblyline-root-build:stable
       endpoint: cccstemp
+      options: "--user root"
 
     strategy:
       matrix:
