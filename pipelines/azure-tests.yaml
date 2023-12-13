@@ -5,11 +5,11 @@ variables:
   - name: self_location
     value: "self_location"
   - name: full_self_location
-    value: "$(Agent.SourcesDirectory)/$(self_location)"
+    value: "$(Build.SourcesDirectory)/$(self_location)"
   - name: samples_location
     value: "samples_location"
   - name: full_samples_location
-    value: "$(Agent.SourcesDirectory)/$(samples_location)"
+    value: "$(Build.SourcesDirectory)/$(samples_location)"
 
 resources:
   repositories:
