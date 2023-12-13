@@ -49,10 +49,10 @@ jobs:
           versionSpec: "$(python.version)"
       - checkout: self
         fetchDepth: 1
-        path: $(self_location)
+        # path: $(self_location)
       - checkout: unittest-samples
         fetchDepth: 1
-        path: $(samples_location)
+        # path: $(samples_location)
       - script: |
           set -exv # echo on
           ls -al
