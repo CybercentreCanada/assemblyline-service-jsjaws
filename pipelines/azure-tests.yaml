@@ -2,14 +2,14 @@ name: tests
 
 variables:
   - group: unittest-samples
-  - name: self_location
-    value: "self_location"
-  - name: full_self_location
-    value: "$(Agent.BuildDirectory)/$(self_location)"
-  - name: samples_location
-    value: "samples_location"
-  - name: full_samples_location
-    value: "$(Agent.BuildDirectory)/$(samples_location)"
+  # - name: self_location
+  #   value: "self_location"
+  # - name: full_self_location
+  #   value: "$(Agent.SourcesDirectory)/$(self_location)"
+  # - name: samples_location
+  #   value: "samples_location"
+  # - name: full_samples_location
+  #   value: "$(Agent.SourcesDirectory)/$(samples_location)"
 
 resources:
   repositories:
@@ -55,7 +55,6 @@ jobs:
         path: $(samples_location)
       - script: |
           set -exv # echo on
-          export currdir=$(pwd)
           ls -al
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
 
