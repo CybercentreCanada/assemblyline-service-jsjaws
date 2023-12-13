@@ -33,3 +33,4 @@ stages:
               Dockerfile: pipelines/nightly.Dockerfile
               repository: cccstemp.azurecr.io/assemblyline-service-jsjaws-nightly
               tags: stable
+              buildContext: "."
