@@ -58,28 +58,28 @@ jobs:
           ls -al
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
-          sudo apt-get update
-          sudo apt-get install -y libfuzzy-dev libfuzzy2 curl
+          apt-get update
+          apt-get install -y libfuzzy-dev libfuzzy2 curl
           if [[ -f "$(pwd)/pkglist.txt" ]]; then
-            grep -vE '^#' "$(pwd)/pkglist.txt" | xargs sudo apt install -y
+            grep -vE '^#' "$(pwd)/pkglist.txt" | xargs apt install -y
           fi
           # Pinning to this version of Node
           export NODE_VERSION=19.7.0
           cd /usr/local
-          sudo curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
+          curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
           [ ! -f node-v${NODE_VERSION}-linux-x64.tar.xz ] && echo "Node did not download properly" && exit
-          sudo tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
+          tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
           cd $currdir
           node --version
           npm --version
           cd tools
           npm install --verbose
           cd ..
-          sudo rm -rf /var/lib/apt/lists/*
-          sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
-          [ -f $(pwd)/requirements.txt ] && sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/requirements.txt
-          [ -f $(pwd)/tests/requirements.txt ] && sudo env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/tests/requirements.txt
-          sudo rm -rf /tmp/* /var/lib/apt/lists/* ~/.cache/pip
+          rm -rf /var/lib/apt/lists/*
+          env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
+          [ -f $(pwd)/requirements.txt ] && env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/requirements.txt
+          [ -f $(pwd)/tests/requirements.txt ] && env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/tests/requirements.txt
+          rm -rf /tmp/* /var/lib/apt/lists/* ~/.cache/pip
         workingDirectory: $(full_self_location)
         displayName: Setup environment
       - script: |
