@@ -57,6 +57,8 @@ jobs:
       - script: |
           set -x # echo on
           ls -al
+          whoami
+          groups
           export currdir=$(pwd)
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           apt-get update
