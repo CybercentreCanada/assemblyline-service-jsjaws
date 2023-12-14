@@ -747,7 +747,7 @@ class JsJaws(ServiceBase):
         :param file_content: The content of the file
         :return: A tuple of the file path and the file content
         """
-        if request.file_type not in ["code/html", "code/hta"]:
+        if request.file_type not in ["code/html", "code/hta", "code/svg"]:
             # First check to see there is an obvious <html> tag somewhere
             html_start = re.search(HTML_START, file_content)
             html_comment = None
@@ -797,8 +797,7 @@ class JsJaws(ServiceBase):
                     "code/jscript",
                     "code/wsf",
                     "code/wsc",
-                    "image/svg",
-                ] and script_we_want_info["type"] in ["code/html", "code/hta"]:
+                ] and script_we_want_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     self.log.debug("Removed garbage from the file...")
                     # Backwards compatibility check with service base
                     if hasattr(request.task, "fileinfo"):
