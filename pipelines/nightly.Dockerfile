@@ -11,7 +11,4 @@ RUN curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x6
 RUN tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
 RUN node --version
 RUN npm --version
-COPY ./tools ./tools
-WORKDIR tools
-RUN npm install --verbose
 RUN rm -rf /var/lib/apt/lists/*
