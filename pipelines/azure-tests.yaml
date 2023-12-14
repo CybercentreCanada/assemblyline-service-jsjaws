@@ -75,7 +75,7 @@ jobs:
         displayName: Setup environment
       - script: |
           set -x # echo on
-          export SAMPLES_PATH=$PWD/assemblyline-unittest-samples
+          export FULL_SAMPLES_LOCATION=$PWD/assemblyline-unittest-samples
           cd assemblyline-service-jsjaws
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
           # Override the path to make sure Azure doesn't interfere
