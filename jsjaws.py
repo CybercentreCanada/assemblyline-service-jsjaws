@@ -579,6 +579,8 @@ class JsJaws(ServiceBase):
         self.safelist: Dict[str, Dict[str, List[str]]] = {}
         self.doc_write_hashes: Optional[Set[str]] = None
         self.gauntlet_runs: Optional[int] = None
+        # Used for maintaining the sample type as manipulations occur in the service per execution
+        self.sample_type: Optional[str] = None
         # Script sources that are NOT programatically created
         # (or at least, written to the DOM via code)
         self.initial_script_sources: Optional[Set[str]] = None
@@ -799,11 +801,7 @@ class JsJaws(ServiceBase):
                     "code/wsc",
                 ] and script_we_want_info["type"] in ["code/html", "code/hta", "image/svg"]:
                     self.log.debug("Removed garbage from the file...")
-                    # Backwards compatibility check with service base
-                    if hasattr(request.task, "fileinfo"):
-                        request.task.fileinfo.type = script_we_want_info["type"]
-                    else:
-                        request.file_type = script_we_want_info["type"]
+                    self.sample_type = script_we_want_info["type"]
                     return script_we_want_path, script_we_want
                 else:
                     # If there is more than one HTML comment, recursively remove
@@ -878,12 +876,13 @@ class JsJaws(ServiceBase):
     def execute(self, request: ServiceRequest) -> None:
         file_path = request.file_path
         file_content = request.file_contents
+        self.sample_type = request.file_type
 
         # Initial setup per sample
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
-        if request.file_type in ["code/javascript", "code/jscript"]:
+        if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
 
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(
@@ -1359,7 +1358,7 @@ class JsJaws(ServiceBase):
 
         # Determine the file type to be used for this gauntlet run
         if not subsequent_run:
-            file_type = request.file_type
+            file_type = self.sample_type
             file_type_details = dict(mime=None)
         else:
             file_type_details = self.identify.fileinfo(file_path, generate_hashes=False)
@@ -1617,7 +1616,7 @@ class JsJaws(ServiceBase):
         display_iocs = request.get_param("display_iocs")
         self._run_signatures(total_output, request.result, display_iocs)
 
-        if self.html_document_write and request.file_type == "code/html":
+        if self.html_document_write and self.sample_type == "code/html":
             doc_write_heur = Heuristic(23)
             _ = ResultSection(
                 doc_write_heur.name, doc_write_heur.description, heuristic=doc_write_heur, parent=request.result
@@ -1736,7 +1735,7 @@ class JsJaws(ServiceBase):
             soup, aggregated_js_script, js_content, request, insert_above_divider
         )
 
-        if request.file_type in ["code/html", "code/hta"]:
+        if self.sample_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(
                 soup, request, aggregated_js_script, js_content
             )
@@ -1911,11 +1910,10 @@ class JsJaws(ServiceBase):
             if count > 1:
                 self.multiple_scripts_with_unescape = True
 
-    def _skip_element(self, element: PageElement, file_type: str) -> bool:
+    def _skip_element(self, element: PageElement) -> bool:
         """
         This method is used for determining if we should dynamically create an element
         :param element: The BeautifulSoup element
-        :param file_type: The type of the file that the element is a part of
         :return: A flag indicating if we should skip creating the element
         """
         # We don't want these elements dynamically created
@@ -1923,11 +1921,11 @@ class JsJaws(ServiceBase):
             return True
 
         # If the file is code/wsf, skip the job and package elements
-        elif element.name in ["job", "package"] and file_type == "code/wsf":
+        elif element.name in ["job", "package"] and self.sample_type == "code/wsf":
             return True
 
         # If the file is code/wsc, skip the component element
-        elif element.name in ["component"] and file_type == "code/wsc":
+        elif element.name in ["component"] and self.sample_type == "code/wsc":
             return True
 
         # If there is a script element that just points at a src, we want it!
@@ -2620,7 +2618,7 @@ class JsJaws(ServiceBase):
         set_of_variable_names: Set[str] = set()
         for index, element in enumerate(elements):
             # Don't add an element to the script if it matches certain criteria
-            if self._skip_element(element, request.file_type):
+            if self._skip_element(element):
                 continue
 
             # Massage the element attributes
@@ -3231,7 +3229,7 @@ class JsJaws(ServiceBase):
         # If the initial file was identified as JavaScript, and there were elements written to the DOM, then
         # we should wrap the JavaScript with <script> tags so that it is correctly handled by the next run
         # of the gauntlet.
-        if request.file_type == "code/javascript":
+        if self.sample_type == "code/javascript":
             total_dom_contents = b"<script>" + request.file_contents + b"</script>"
         else:
             total_dom_contents = request.file_contents
