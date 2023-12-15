@@ -5,6 +5,7 @@ from binascii import Error as BinasciiError
 from glob import glob
 from hashlib import sha256
 from inspect import getmembers, isclass
+from io import BytesIO
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
@@ -18,6 +19,7 @@ from urllib.parse import urlparse
 import signatures
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
+from assemblyline.common.entropy import calculate_partition_entropy
 from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
@@ -33,6 +35,7 @@ from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import (
     Heuristic,
     Result,
+    ResultGraphSection,
     ResultSection,
     ResultTableSection,
     ResultTextSection,
@@ -626,6 +629,8 @@ class JsJaws(ServiceBase):
         self.password_input_and_no_form_action: Optional[bool] = None
         # List of URLs found in suspicious forms, used for heuristic 27
         self.sus_form_actions: Set[str] = set()
+        # Map of scripts found and their corresponding entropies
+        self.script_entropies: Dict[str, Any] = dict()
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -669,6 +674,7 @@ class JsJaws(ServiceBase):
         self.html_phishing_title = set()
         self.phishing_inputs = set()
         self.sus_form_actions = set()
+        self.script_entropies = dict()
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1456,6 +1462,14 @@ class JsJaws(ServiceBase):
             for item in sorted(self.sus_form_actions):
                 sus_form_action_sec.add_line(f"\t- {item}")
                 _ = add_tag(sus_form_action_sec, "network.static.uri", item)
+
+        if self.script_entropies:
+            script_entropies_sec = ResultSection("Script Entropies", parent=request.result, auto_collapse=True)
+            for value in self.script_entropies.values():
+                sub_entropy_section = ResultGraphSection(f"Script: {value['preview']}", parent=script_entropies_sec)
+                sub_entropy_section.set_colormap(
+                    cmap_min=0, cmap_max=8, values=[round(x, 5) for x in value["entropy"][1]]
+                )
 
         # We don't want files that have leading or trailing null bytes as this can affect execution
         file_path, file_content = self._strip_null_bytes(file_path, file_content)
@@ -2685,6 +2699,14 @@ class JsJaws(ServiceBase):
 
                 if not body:
                     continue
+
+            # Inspired by https://github.com/viper-framework/viper-modules/blob/00ee6cd2b2ad4ed278279ca9e383e48bc23a2555/htmlparser.py#L68
+            script_entropy = calculate_partition_entropy(BytesIO(body.encode()))
+            if script_entropy[0] >= 4:
+                self.script_entropies[get_id_from_data(body)] = {
+                    "preview": truncate(body, 50),
+                    "entropy": script_entropy,
+                }
 
             if script.get("language", "").lower() in ["vbscript"]:
                 js_content, aggregated_js_script = self._handle_vbscript(

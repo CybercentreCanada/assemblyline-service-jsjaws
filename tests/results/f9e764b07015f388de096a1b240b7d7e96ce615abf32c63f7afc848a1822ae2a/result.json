@@ -44,6 +44,68 @@
         "zeroize_on_tag_safe": false
       },
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.35905,
+              3.72209,
+              4.0777,
+              3.84788,
+              3.85275,
+              4.34679,
+              3.52742,
+              3.38417,
+              3.54021,
+              4.44067,
+              4.61742,
+              4.7638,
+              4.85926,
+              3.93332,
+              3.32175,
+              3.17934,
+              3.49145,
+              3.79863,
+              3.95578,
+              3.10014,
+              3.13451,
+              3.8333,
+              3.94288,
+              2.7512,
+              4.0052,
+              4.01893
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: let q_process = \"https://www.moneyminerxyx.xyz/dud...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": null,
         "body_config": {},
