@@ -30,6 +30,150 @@
         "zeroize_on_tag_safe": false
       },
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              6.16728,
+              5.97133,
+              5.9772,
+              5.97932,
+              5.97022,
+              5.98134,
+              5.97549,
+              5.97434,
+              5.97046,
+              5.96821,
+              5.97484,
+              5.98193,
+              5.97186,
+              5.97095,
+              5.9804,
+              5.9812,
+              5.97583,
+              5.98614,
+              5.97761,
+              5.98108,
+              5.95566,
+              5.97667,
+              5.96058,
+              5.97969,
+              5.97877,
+              5.95552,
+              5.97192,
+              5.97436,
+              5.97277,
+              5.97573,
+              5.9657,
+              5.97086,
+              5.98331,
+              5.97075,
+              5.95331,
+              5.67937,
+              3.77005,
+              4.41792,
+              4.21548,
+              4.31846,
+              5.32093,
+              5.457,
+              5.22097,
+              4.47589,
+              4.45844,
+              4.46413,
+              4.42138,
+              4.52063,
+              3.12589,
+              2.87237
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window.resizeTo(0,0);\nfunction FNTJKI_LKIOUTS(e){v...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.00211,
+              5.4653,
+              5.52454,
+              4.85912
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: Function liboff(ByVal strInput)\n\n  Set dp01 = Crea...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.95366,
+              5.64554,
+              5.61532,
+              5.61503,
+              4.90748,
+              5.2762,
+              4.96411,
+              5.53166
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: try {\n\tvar str  = FNTJKI_LKIOUTS('V1NjcmlwdC5TaGVs...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": null,
         "body_config": {},

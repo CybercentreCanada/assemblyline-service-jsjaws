@@ -78,6 +78,455 @@
         "zeroize_on_tag_safe": false
       },
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.71761,
+              4.61865
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: function signOn() {\n\n\n\n\t\tu = document.index2.Email...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.75112,
+              4.48768,
+              3.44702,
+              3.96258,
+              4.54583,
+              4.64345,
+              4.37685,
+              4.33751,
+              3.8286
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: (function(){\n\n  var splitByFirstChar = function(to...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.41334
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var gaia_attachEvent = function(element, event, ca...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.0052,
+              4.89169,
+              5.01687,
+              5.315,
+              4.9661,
+              4.96111,
+              4.99606,
+              5.11972,
+              5.18745,
+              4.93294,
+              5.43237,
+              5.27869,
+              5.10168,
+              5.19208,
+              4.98126,
+              4.93558,
+              5.0449,
+              4.93531,
+              5.28272,
+              5.10492,
+              5.10355,
+              5.34789,
+              5.37403,
+              4.99769
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var G;var Gb=function(a,b){var c=a;a&&\"string\"==ty...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.44342,
+              4.78132
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window.__CHECK_CONNECTION_CONFIG = {\n\n  newResultE...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.44477,
+              5.09002,
+              4.88603,
+              4.74004,
+              4.88671,
+              5.3075,
+              4.71047,
+              4.85558,
+              4.96822,
+              5.10027,
+              5.11527,
+              4.9965,
+              5.00199,
+              5.04948,
+              4.52884,
+              5.06606,
+              4.88759,
+              4.99206,
+              5.19183,
+              5.06517,
+              4.81913,
+              5.10889,
+              5.13386,
+              4.81419,
+              4.47133,
+              4.32041,
+              4.25004,
+              4.08653,
+              4.51404,
+              3.9805,
+              4.80549,
+              4.77456,
+              4.96126,
+              4.56435,
+              4.6276,
+              4.58608,
+              5.17113,
+              4.9381
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: /* Anti-spam. Want to say hello? Contact (base64) ...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.86347,
+              5.84915,
+              5.82683,
+              5.737,
+              5.87224,
+              5.65604,
+              5.83549,
+              5.78978,
+              5.79778,
+              5.82636,
+              5.85531,
+              5.85881,
+              5.85732,
+              5.79611,
+              5.75854,
+              5.90162,
+              5.73876,
+              5.81778,
+              5.8149,
+              5.77035,
+              5.86746,
+              5.8189,
+              5.74622,
+              5.73298,
+              5.73626,
+              5.79574,
+              5.82106,
+              5.81595,
+              5.84007,
+              5.77928,
+              5.89247,
+              5.74127,
+              5.77355,
+              5.84294
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: document.bg = new botguard.bg('cfb6zLiG2O2pRuZUuvi...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.63769,
+              4.49549,
+              4.40288,
+              4.28717
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: function gaia_parseFragment() {\n\n  var hash = loca...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.59179,
+              4.58322,
+              4.40306,
+              4.66294,
+              4.36681,
+              3.67656,
+              4.0854
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: function gaia_setFocus() {\n\n  var form = null;\n\n  ...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.41835,
+              4.56085
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var gaia_scrollToElement = function(element) {\n\n  ...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.91215,
+              4.72496,
+              4.85901,
+              4.76053,
+              4.84516
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: (function() {\n\n  var $ = function(id) { return doc...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.64905,
+              4.63069,
+              4.74271
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: (function(){\n\n  var signinInput = document.getElem...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.03112,
+              4.92947,
+              5.16703,
+              5.14122,
+              5.12439,
+              4.91109
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var BrowserSupport_={IsBrowserSupported:function()...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": "Low number of body elements.",
         "body_config": {},

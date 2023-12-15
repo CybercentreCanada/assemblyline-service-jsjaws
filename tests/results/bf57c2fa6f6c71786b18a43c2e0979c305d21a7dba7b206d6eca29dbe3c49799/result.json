@@ -24,6 +24,229 @@
         "zeroize_on_tag_safe": false
       },
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              6.0002,
+              5.99453,
+              5.99378,
+              5.991,
+              5.99085,
+              5.99274,
+              5.98995,
+              5.99096,
+              5.99119,
+              5.99316,
+              5.99445,
+              5.99311,
+              5.99335,
+              5.99135,
+              5.99204,
+              5.99159,
+              5.99427,
+              5.99421,
+              5.9921,
+              5.99158,
+              5.99226,
+              5.99015,
+              5.99194,
+              5.99287,
+              5.99299,
+              5.9961,
+              5.99094,
+              5.99235,
+              5.99236,
+              5.99114,
+              5.99449,
+              5.9896,
+              5.99463,
+              5.99378,
+              5.98949,
+              5.9932,
+              5.99194,
+              5.99346,
+              5.9912,
+              5.99199,
+              5.99196,
+              5.99434,
+              5.99114,
+              5.99332,
+              5.99334,
+              5.99049,
+              5.99057,
+              5.98983,
+              5.9929,
+              5.99492
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window[\"BfhvuHHijQ\"] = 'UEsDBBQACwAIAAOTWVXlBl9EVY...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.23461,
+              5.15397,
+              4.89376,
+              4.59026,
+              4.90446,
+              4.84356,
+              5.16692,
+              4.77168
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var a0_0x3ebbd1=a0_0x7e8d;function a0_0x3d80(){var...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.32242
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window[\"tuUuHKdOd_\"]('q5ea35mWk5rflozfkZCL35uWjI+T...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.03788
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window[\"tuUuHKdOd_\"]('u5CcipKakYvfr56MjIiQjZvR');",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.60771
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: window[\"tuUuHKdOd_\"]('u4mWmJimyI0=');",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.56637,
+              5.21513,
+              5.29757,
+              4.82825,
+              4.99441,
+              4.89612,
+              4.68755,
+              5.0779,
+              4.72837,
+              4.93455,
+              4.89867
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: function a0_0x3e7c(_0x1933b1,_0x1443c1){var _0x531...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": null,
         "body_config": {},

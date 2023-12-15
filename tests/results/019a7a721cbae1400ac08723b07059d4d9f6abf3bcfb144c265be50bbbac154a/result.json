@@ -44,6 +44,153 @@
         "zeroize_on_tag_safe": false
       },
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              6.01192,
+              5.99627,
+              5.99795,
+              5.99617,
+              5.99724,
+              5.99579,
+              5.99623,
+              5.99711,
+              5.99676,
+              5.99784,
+              5.99701,
+              5.99679,
+              5.99692,
+              5.99724,
+              5.99669,
+              5.99625,
+              5.99762,
+              5.9977,
+              5.99768,
+              5.99673,
+              5.99735,
+              5.99651,
+              5.99654,
+              5.99731,
+              5.99706,
+              5.9971,
+              5.99775,
+              5.99764,
+              5.99736,
+              5.99749,
+              5.99661,
+              5.99749,
+              5.9971,
+              5.99667,
+              5.9968,
+              5.9973,
+              5.9972,
+              5.99764,
+              5.9964,
+              5.99704,
+              5.99676,
+              5.99729,
+              5.99741,
+              5.99603,
+              5.99717,
+              5.99711,
+              5.9973,
+              5.99751,
+              5.99691,
+              6.06569
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var _0x16c1b5=_0x495e;function _0x5d86(){var _0x3b...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.6999,
+              4.94678,
+              4.48255,
+              5.01872,
+              5.29475,
+              5.41532
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: var _0x22917c=_0x3835;function _0x3835(_0x474de7,_...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.92611,
+              4.97324,
+              4.81681,
+              4.94172,
+              5.3181,
+              5.24748,
+              4.64987,
+              4.66756,
+              4.89127
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: (function(_0x17d8e9,_0x559430){var _0x555db2=_0x42...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": null,
         "body_config": {},
