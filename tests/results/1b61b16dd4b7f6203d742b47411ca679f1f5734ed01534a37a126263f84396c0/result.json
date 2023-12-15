@@ -4,6 +4,64 @@
     "score": 1553,
     "sections": [
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.79819,
+              5.54957,
+              5.47768,
+              5.1587,
+              5.20869,
+              5.47835,
+              5.54605,
+              5.00356,
+              4.82528,
+              4.85212,
+              4.88219,
+              4.77272,
+              4.91775,
+              4.28627,
+              4.39452,
+              4.66995,
+              4.59876,
+              4.49295,
+              4.79396,
+              5.05896,
+              5.14988,
+              5.11387
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: function a0_0x2869(){var _0x4753e9=['BV0g7f6sAT+yk...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": "Sample consists of a long single line of code",
         "body_config": {},

@@ -2,7 +2,52 @@
   "extra": {
     "drop_file": false,
     "score": 0,
-    "sections": []
+    "sections": [
+      {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.12732,
+              4.14406,
+              4.29717,
+              4.31836,
+              4.32682,
+              4.99881,
+              5.46748,
+              5.26954
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: /**\n\tstairs, in great fear lest she should meet th...",
+        "zeroize_on_tag_safe": false
+      }
+    ]
   },
   "files": {
     "extracted": [
