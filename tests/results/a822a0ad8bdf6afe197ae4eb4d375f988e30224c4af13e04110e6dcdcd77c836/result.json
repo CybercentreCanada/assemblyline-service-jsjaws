@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 710,
+    "score": 1010,
     "sections": [
       {
         "auto_collapse": false,
@@ -34,7 +34,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 25,
-          "score": 0,
+          "score": 100,
           "score_map": {},
           "signatures": {}
         },
@@ -88,7 +88,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 22,
-          "score": 0,
+          "score": 100,
           "score_map": {},
           "signatures": {}
         },
@@ -409,7 +409,7 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 23,
-          "score": 0,
+          "score": 100,
           "score_map": {},
           "signatures": {}
         },
