@@ -254,31 +254,31 @@ heuristics:
 
   - heur_id: 22
     name: Detected JavaScript Redirector / Loader
-    score: 0
+    score: 100
     filetype: '.*'
     description: Low number of body elements.
 
   - heur_id: 23
     name: document.write usage found in HTML
-    score: 0
+    score: 100
     filetype: 'code/html'
     description: Suspicious JavaScript code found in HTML file
 
   - heur_id: 24
     name: HTML document with suspicious title
-    score: 0
+    score: 100
     filetype: 'code/html'
     description: HTML document has title containing common phishing terms
 
   - heur_id: 25
     name: HTML document queries sensitive user data
-    score: 0
+    score: 100
     filetype: 'code/html'
     description: HTML document has password / email / username input fields
 
   - heur_id: 26
     name: HTML document contains password input but no form action
-    score: 0
+    score: 100
     filetype: 'code/html'
     description: <input type="password"/> found but no <form action="..."/>
 
