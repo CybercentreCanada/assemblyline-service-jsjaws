@@ -3460,7 +3460,7 @@ class JsJaws(ServiceBase):
                 elif sig_that_hit.name == "base64_encoded_url":
                     for mark in sig_that_hit.marks:
                         uri = re.match(ATOB_URI_REGEX, mark)
-                        if len(uri.regs) == 2:
+                        if uri and len(uri.regs) == 2:
                             self.base64_encoded_urls.append(uri.group(1))
                 elif sig_that_hit.name == "form_action_uri":
                     phishing_form = True
