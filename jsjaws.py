@@ -25,7 +25,11 @@ from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
 from assemblyline.odm.base import DOMAIN_ONLY_REGEX, FULL_URI, URI_REGEX
-from assemblyline_service_utilities.common.dynamic_service_helper import OntologyResults, extract_iocs_from_text_blob
+from assemblyline_service_utilities.common.dynamic_service_helper import (
+    COMMON_FP_DOMAINS,
+    OntologyResults,
+    extract_iocs_from_text_blob,
+)
 from assemblyline_service_utilities.common.extractor.base64 import BASE64_RE
 from assemblyline_service_utilities.common.safelist_helper import is_tag_safelisted
 from assemblyline_service_utilities.common.tag_helper import add_tag
@@ -3297,8 +3301,9 @@ class JsJaws(ServiceBase):
                             params["json"] = item.get("request_body", None)
                         else:
                             params["data"] = item.get("request_body", None)
-                        self.log.debug(f"Extracting URI file for '{item['url']}'")
-                        request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
+                        if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
+                            self.log.debug(f"Extracting URI file for '{item['url']}'")
+                            request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
                     if dumps(item) not in items_seen:
                         items_seen.add(dumps(item))
                         urls_rows.append(TableRow(**item))
@@ -3323,8 +3328,9 @@ class JsJaws(ServiceBase):
                                 params["json"] = item.get("request_body", None)
                             else:
                                 params["data"] = item.get("request_body", None)
-                            self.log.debug(f"Extracting URI file for '{item['url']}'")
-                            request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
+                            if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
+                                self.log.debug(f"Extracting URI file for '{item['url']}'")
+                                request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
                         if dumps(item) not in items_seen:
                             items_seen.add(dumps(item))
                             urls_rows.append(TableRow(**item))

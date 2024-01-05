@@ -248,7 +248,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "Redirection to:\nhttp://example.com/?search",
+        "body": "Redirection to:\nhttp://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -269,10 +269,10 @@
                 "example.com"
               ],
               "uri": [
-                "http://example.com/?search"
+                "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
               ],
               "uri_path": [
-                "/?search"
+                "/?search#YmxhaC5ibGFoQGJsYWguY29t"
               ]
             }
           }
@@ -358,14 +358,14 @@
         {
           "heur_id": 6,
           "signatures": [],
-          "value": "http://example.com/?search"
+          "value": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 6,
           "signatures": [],
-          "value": "/?search"
+          "value": "/?search#YmxhaC5ibGFoQGJsYWguY29t"
         }
       ]
     },

