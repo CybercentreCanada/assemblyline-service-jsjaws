@@ -7,11 +7,11 @@
         "auto_collapse": false,
         "body": [
           {
-            "ioc": "http://example.com/?search",
+            "ioc": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/?search",
+            "ioc": "/?search#YmxhaC5ibGFoQGJsYWguY29t",
             "ioc_type": "uri_path"
           }
         ],
@@ -40,10 +40,10 @@
                 "example.com"
               ],
               "uri": [
-                "http://example.com/?search"
+                "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
               ],
               "uri_path": [
-                "/?search"
+                "/?search#YmxhaC5ibGFoQGJsYWguY29t"
               ]
             }
           }
@@ -77,14 +77,14 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "http://example.com/?search"
+          "value": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/?search"
+          "value": "/?search#YmxhaC5ibGFoQGJsYWguY29t"
         }
       ]
     },
