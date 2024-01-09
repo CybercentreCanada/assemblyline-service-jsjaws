@@ -3791,6 +3791,7 @@ class JsJaws(ServiceBase):
             extract_iocs_from_text_blob(
                 log_line,
                 malware_jail_res_sec,
+                enforce_char_min=True,
                 enforce_domain_char_max=True,
                 is_network_static=True,
                 safelist=self.safelist,
