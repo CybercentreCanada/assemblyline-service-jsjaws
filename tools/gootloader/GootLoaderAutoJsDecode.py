@@ -94,7 +94,6 @@ def convertConcatToString(inputConcatMatches, inputVarsDict, noEquals=False):
 
     for index, concatItem in enumerate(inputConcatMatches):
         # Remove any unwanted characters and split on '='
-
         splitItem = re.sub(r"[;\s\(\)]", "", concatItem).split("=")
 
         currentLineString = ""
@@ -168,7 +167,7 @@ def findFileInStr(fileExtension, stringToSearch):
     return dataFound
 
 
-def getGootVersion(topFileData):
+def getGootVersion(topFileData, log: Logger = print):
     goot3linesRegex = """GOOT3"""
     goot3linesPattern = re.compile(goot3linesRegex, re.MULTILINE)
 
@@ -176,23 +175,23 @@ def getGootVersion(topFileData):
     gloader21sample = False
 
     if re.search(r"jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$", topFileData):
-        print("\nGootLoader Obfuscation Variant 2.0 detected")
+        log("\nGootLoader Obfuscation Variant 2.0 detected")
         gloader21sample = False
     elif goot3linesPattern.match(topFileData):
-        print(
+        log(
             '\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the file first.'
         )
         gloader3sample = True
         # 3 and 2 have some overlap so enabling both flags for simplicity
         gloader21sample = True
     else:
-        print("\nGootLoader Obfuscation Variant 2.1 or higher detected")
+        log("\nGootLoader Obfuscation Variant 2.1 or higher detected")
         gloader21sample = True
 
     return gloader21sample, gloader3sample
 
 
-def getFileandTaskData(inputString):
+def getFileandTaskData(inputString, log: Logger = print):
     # Check to see if the code has been reversed, and reverse it back to normal if so
     if "noitcnuf" in inputString:
         inputString = inputString[::-1]
@@ -247,18 +246,18 @@ def getFileandTaskData(inputString):
 
     Stage2Data = "File and Scheduled task data:\n"
 
-    FileTaskFileName = "FileAndTaskData.txt"
+    # FileTaskFileName = "FileAndTaskData.txt"
 
     Stage2Data += "\nFirst File Name:       " + s2FirstFileName
     Stage2Data += "\nJS File Name:          " + s2JsFileName
     Stage2Data += "\nScheduled Task Name:   " + scheduledTaskName
 
-    with open(FileTaskFileName, mode="w") as file:
-        file.write(Stage2Data)
+    # with open(FileTaskFileName, mode="w") as file:
+    #     file.write(Stage2Data)
 
-    Stage2Data += "\n\nData Saved to: " + FileTaskFileName
+    # Stage2Data += "\n\nData Saved to: " + FileTaskFileName
 
-    print("\n" + Stage2Data + "\n")
+    log("\n" + Stage2Data + "\n")
 
 
 def invokeStage2Decode(inputString, inputVarsDict):
@@ -363,15 +362,21 @@ def getDataToDecode(isGloader21Sample, inputData):
 
 
 def parseRound2Data(
-    round2InputStr, round1InputStr, variablesDict, isGootloader3sample, unsafe_uris: bool = True, payload_path: str = ""
+    round2InputStr,
+    round1InputStr,
+    variablesDict,
+    isGootloader3sample,
+    unsafe_uris: bool = True,
+    payload_path: str = "",
+    log: Logger = print,
 ):
     output_domains = list()
 
     if round2InputStr.startswith("function"):
-        print("GootLoader Obfuscation Variant 3.0 sample detected.")
+        log("GootLoader Obfuscation Variant 3.0 sample detected.")
 
         # File Names and scheduled task
-        getFileandTaskData(decodeString(round1InputStr.encode("raw_unicode_escape").decode("unicode_escape")))
+        getFileandTaskData(decodeString(round1InputStr.encode("raw_unicode_escape").decode("unicode_escape")), log=log)
 
         global goot3detected
         goot3detected = True
@@ -385,8 +390,8 @@ def parseRound2Data(
         else:
             outputFileName = payload_path
 
-        print("\nScript output Saved to: %s\n" % outputFileName)
-        print("\nThe script will new attempt to deobfuscate the %s file." % outputFileName)
+        log("\nScript output Saved to: %s\n" % outputFileName)
+        log("\nThe script will new attempt to deobfuscate the %s file." % outputFileName)
     else:
         if isGootloader3sample:
             outputCode = round2InputStr.replace("'+'", "").replace("')+('", "").replace("+()+", "").replace("?+?", "")
@@ -422,11 +427,11 @@ def parseRound2Data(
 
         outputFileName = "DecodedJsPayload.js_"
         # Print to screen
-        print("\nScript output Saved to: %s\n" % outputFileName)
+        log("\nScript output Saved to: %s\n" % outputFileName)
         outputDomains = ""
         for dom in maliciousDomains:
             outputDomains += defang(dom) + "\n"
-        print("\nMalicious Domains: \n\n%s" % outputDomains)
+        log("\nMalicious Domains: \n\n%s" % outputDomains)
     return outputCode, outputFileName, output_domains
 
 
@@ -438,7 +443,7 @@ def gootDecode(
         # Check for the GootLoader obfuscation variant
         fileTopLines = "".join(file.readlines(5))
 
-        gootloader21sample, gootloader3sample = getGootVersion(fileTopLines)
+        gootloader21sample, gootloader3sample = getGootVersion(fileTopLines, log=log)
 
         # reset cursor to read again
         file.seek(0)
@@ -479,7 +484,7 @@ def gootDecode(
     round2Result = decodeString(CodeMatch.encode("raw_unicode_escape").decode("unicode_escape"))
 
     round2Code, round2FileName, output_domains = parseRound2Data(
-        round2Result, round1Result, VarsDict, gootloader3sample, unsafe_uris, payload_path
+        round2Result, round1Result, VarsDict, gootloader3sample, unsafe_uris, payload_path, log=log
     )
 
     # If we have specified an alternative file path to save next stage output ; Overwrite it the variable
