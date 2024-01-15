@@ -21,7 +21,6 @@ class Unescape(Signature):
 
 
 class DecodeURI(Signature):
-    # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/unescape
     # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
     # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURI
     def __init__(self):
