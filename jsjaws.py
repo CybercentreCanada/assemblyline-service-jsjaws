@@ -1062,7 +1062,7 @@ class JsJaws(ServiceBase):
             # Fake file name to use for the sample being analyzed. Can be a full path or just
             # the file name to use. If you have '\' in the path escape them as '\\' in this
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
-            # f"--fake-sample-name={path.basename(request.task.file_name)}",
+            f"--fake-sample-name={path.basename(request.task.file_name)}",
             # Fake that HTTP requests work and have them return a fake payload
             # "--fake-download",
             # Throttle reporting and data tracking of file writes that write a LOT of data
