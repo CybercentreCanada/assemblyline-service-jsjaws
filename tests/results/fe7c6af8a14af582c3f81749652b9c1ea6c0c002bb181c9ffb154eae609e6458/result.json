@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 83,
+    "score": 93,
     "sections": [
       {
         "auto_collapse": true,
@@ -128,6 +128,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: WinMgmtsAutoObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to the console\n\t\tReturning HTTP 200 (Success) with fake response payload 'console.log(\"EXECUTED DOWNLOADED PAYLOAD\");...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "console_output": 10
+          },
+          "signatures": {
+            "console_output": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ConsoleOutput",
         "zeroize_on_tag_safe": false
       },
       {
@@ -390,7 +414,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a",
+        "sha256": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -434,6 +463,13 @@
         "heur_id": 3,
         "signatures": [
           "auto_object_winmgmts"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "console_output"
         ]
       },
       {

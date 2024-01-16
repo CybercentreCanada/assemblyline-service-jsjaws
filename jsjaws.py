@@ -1064,7 +1064,7 @@ class JsJaws(ServiceBase):
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
             f"--fake-sample-name={path.basename(request.task.file_name)}",
             # Fake that HTTP requests work and have them return a fake payload
-            # "--fake-download",
+            "--fake-download",
             # Throttle reporting and data tracking of file writes that write a LOT of data
             # "--throttle-writes",
             # Rewrite == checks so that comparisons of the current script name to a hard coded
