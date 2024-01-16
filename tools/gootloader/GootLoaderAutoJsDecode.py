@@ -4,8 +4,8 @@
 # author            : @andy2002a - Andy Morales
 # author            : @g0vandS - Govand Sinjari
 # date              : 2023-01-13
-# updated           : 2023-02-09
-# version           : 3.1.1
+# updated           : 2024-01-08
+# version           : 3.7
 # usage             : python GootLoaderAutoJsDecode.py malicious.js
 # output            : DecodedJsPayload.js_ and GootLoader3Stage2.js_
 # py version        : 3
@@ -94,7 +94,7 @@ def convertConcatToString(inputConcatMatches, inputVarsDict, noEquals=False):
 
     for index, concatItem in enumerate(inputConcatMatches):
         # Remove any unwanted characters and split on '='
-        splitItem = concatItem.replace(";", "").replace(" ", "").replace("\t", "").split("=")
+        splitItem = re.sub(r"[;\s\(\)]", "", concatItem).split("=")
 
         currentLineString = ""
 
@@ -126,6 +126,12 @@ def decodeString(scripttext):
     return ans
 
 
+def rotateSplitText(string, count):
+    for i in range(count + 1):
+        string = string[1:] + string[0]
+    return str(string)
+
+
 # V3 Decoding scripts converted from their JS versions
 def remainder(v1, v2, v3):
     # The 3 and the 1 could possibly change in the future
@@ -149,85 +155,305 @@ def workFunc(inputStr):
     return outputStr
 
 
-def save_file(output_filename, output_code, log: Logger):
-    """Save the output file - We may need it for the second iteration"""
-    log(f"\nScript output Saved to: {output_filename}\n")
-    log(f"\nThe script will now attempt to deobfuscate the {output_filename} file.")
-    out_file = open(output_filename, "w")
-    out_file.write(output_code)
-    out_file.close()
+def findFileInStr(fileExtension, stringToSearch):
+    fileExtensionPattern = re.compile(
+        """["']([a-zA-Z0-9_\-\s]+\.""" + fileExtension + """)["']"""
+    )  ## Find: "Example Engineering.log"
+    regexMatch = fileExtensionPattern.search(stringToSearch)
+    if regexMatch:
+        dataFound = regexMatch.group(1)
+    else:
+        dataFound = "NOT FOUND"
+    return dataFound
 
 
-def gootDecode(path, unsafe_uris=False, payload_path=None, stage2_path=None, log: Logger = print):
-    # Open File
-    outputDomains = list()
-    OutputCode: str = ""
-    file = open(path, mode="r", encoding="utf-8")
-
-    # Check for the GootLoader obfuscation variant
-    fileTopLines = "".join(file.readlines(5))
-
-    goot3linesRegex = """//GOOT3"""
+def getGootVersion(topFileData, log: Logger = print):
+    goot3linesRegex = """GOOT3"""
     goot3linesPattern = re.compile(goot3linesRegex, re.MULTILINE)
 
-    gootloader3sample = False
+    gloader3sample = False
+    gloader21sample = False
 
-    if re.search(r"jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$", fileTopLines):
+    if re.search(r"jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$", topFileData):
         log("\nGootLoader Obfuscation Variant 2.0 detected")
-        gootloader21sample = False
-    elif goot3linesPattern.match(fileTopLines):
+        gloader21sample = False
+    elif goot3linesPattern.match(topFileData):
         log(
-            '\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the %s file first.'
-            % path
+            '\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the file first.'
         )
-        gootloader3sample = True
+        gloader3sample = True
         # 3 and 2 have some overlap so enabling both flags for simplicity
-        gootloader21sample = True
+        gloader21sample = True
     else:
-        log("\nSample could be either not Gootloader, or could be GootLoader Obfuscation Variant 2.1+")
-        gootloader21sample = True
+        log("\nGootLoader Obfuscation Variant 2.1 or higher detected")
+        gloader21sample = True
 
-    # reset cursor to read again
-    file.seek(0)
+    return gloader21sample, gloader3sample
 
-    fileData = file.read()
 
-    if gootloader21sample:
+def getFileandTaskData(inputString, log: Logger = print):
+    # Check to see if the code has been reversed, and reverse it back to normal if so
+    if "noitcnuf" in inputString:
+        inputString = inputString[::-1]
+
+    # Find the '|' separated string
+    splitTextPattern = re.compile(""""((?:.{3,30}?\|.{3,30}){5,})";""")  # Find: "text|text2|text3";
+
+    splitTextArray = splitTextPattern.search(inputString).group(1).split("|")
+
+    # un-rotate the strings
+    fixedStrings = []
+    for i in range(len(splitTextArray)):
+        fixedStrings.append(rotateSplitText(splitTextArray[i], i))
+
+    # Find the file names in the array
+    for str in fixedStrings:
+        if str.endswith(".log") or str.endswith(".dat"):
+            s2FirstFileName = str
+        elif str.endswith(".js"):
+            s2JsFileName = str
+
+    # In some instances the .log/.js file was outside of the "|" separated string. Try to find it outside
+    if "s2FirstFileName" not in locals():
+        s2FirstFileName = findFileInStr("(?:log|dat)", inputString)
+    if "s2JsFileName" not in locals():
+        s2JsFileName = findFileInStr("js", inputString)
+
+    # Find the offset of the scheduled task name
+    taskCreationRegexPattern = re.compile(
+        """\((\w+),\s?(\w+),\s?6,\s['"]{2}\s?,\s?['"]{2}\s?,\s?3\s?\)"""  # Find: (str1, str2, 6, "" , "" , 3)
+    )
+    taskCreationVarname = taskCreationRegexPattern.search(inputString).group(1)
+    taskNameOffsetPattern = re.compile(
+        """\}""" + taskCreationVarname + """\s?=\s\w{1,2}\((\d{1,3})\);"""  # Find: }str1 = Z(41);
+    )
+
+    taskNameOffsetMatch = taskNameOffsetPattern.search(inputString)
+
+    if taskNameOffsetMatch:
+        taskNameOffset = int(taskNameOffsetMatch.group(1))
+        scheduledTaskName = fixedStrings[taskNameOffset]
+    else:
+        # MD5 9565187442f857bd47c8ab0859009752 had the task name in plain text
+        taskNameStrPattern = re.compile(
+            """\}""" + taskCreationVarname + """\s?=\s"(.{10,232})";"""  # Find: }str1 = "Task Name";
+        )
+        taskNameStrMatch = taskNameStrPattern.search(inputString)
+        if taskNameStrMatch:
+            scheduledTaskName = taskNameStrMatch.group(1)
+        else:
+            scheduledTaskName = "NOT FOUND"
+
+    Stage2Data = "File and Scheduled task data:\n"
+
+    # FileTaskFileName = "FileAndTaskData.txt"
+
+    Stage2Data += "\nFirst File Name:       " + s2FirstFileName
+    Stage2Data += "\nJS File Name:          " + s2JsFileName
+    Stage2Data += "\nScheduled Task Name:   " + scheduledTaskName
+
+    # with open(FileTaskFileName, mode="w") as file:
+    #     file.write(Stage2Data)
+
+    # Stage2Data += "\n\nData Saved to: " + FileTaskFileName
+
+    log("\n" + Stage2Data + "\n")
+
+
+def invokeStage2Decode(inputString, inputVarsDict):
+    # Get all the relevant variables from the sample
+    v3workFuncVarsPattern = re.compile(
+        """(?:\((?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,}\))"""  # Find: (var1+var2+var3)
+    )
+    v3WorkFuncVars = v3workFuncVarsPattern.search(inputString)[0]
+
+    stage2JavaScript = workFunc(convertConcatToString(v3WorkFuncVars, inputVarsDict, True))
+
+    # Get all the string variables on their own line
+    strVarPattern = re.compile(
+        r"""([a-zA-Z0-9_]{2,}\s{0,}=(["'])((?:\\\2|(?:(?!\2)).)*)(\2);)(?=([a-zA-Z0-9_]{2,}\s{0,}=)|function)"""  # Find: var='xxxxx';[var2=|function]
+    )
+    strVarsNewLine = re.sub(strVarPattern, r"\n\1\n", stage2JavaScript)
+
+    # Get all the var concat on their own line
+    strConcPattern = re.compile(
+        """([a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,};)"""  # Find: var1 = var2+var3
+    )
+    strConcatNewLine = re.sub(strConcPattern, r"\n\1\n", strVarsNewLine)
+
+    # Attempt to find the last variable and add a tab in front of it. This search is imperfect since the line could be shorter than what this regex picks up.
+    finalStrConcPattern = re.compile(
+        """([a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){5,}[a-zA-Z0-9_]{2,}\s{0,};)"""  # Find: var0 = var1+var2+var3+var4+var5+var6
+    )
+    finalStrConcNewLine = re.sub(finalStrConcPattern, r"\n\t\1\n", strConcatNewLine)
+
+    # put 1:1 variables on their own lines
+    strVar1to1Pattern = re.compile("""((?:\n|^)[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,};)""")  # Find: var = var2;
+    str1to1NewLine = re.sub(strVar1to1Pattern, r"\n\1\n", finalStrConcNewLine)
+
+    # put long digits on their own lines
+    strLongDigitPattern = re.compile(""";(\d{15,};)""")  # Find: ;216541846845465456465121312313221456456465;
+
+    finalRegexStr = re.sub(strLongDigitPattern, r";\n\1\n", str1to1NewLine)
+
+    outputString = []
+
+    for line in finalRegexStr.splitlines():
+        # clean up the empty lines
+        if line.strip():
+            outputString.append(line)
+
+    outputString = "\n".join(outputString)
+
+    return outputString
+
+
+def findCodeMatchInRound1Result(inputStr):
+    # Find code text in the result of the first decode round
+    findCodeinQuotePattern = re.compile(r"(?<!\\)(?:\\\\)*'([^'\\]*(?:\\.[^'\\]*)*)'")
+
+    outputStr = findCodeinQuotePattern.findall(inputStr)[0]
+
+    return outputStr
+
+
+def getVariableAndConcatPatterns(isGloader21Sample):
+    if isGloader21Sample:
         # 2.1 sample
-        dataToDecode = fileData
-
         # Regex Group 1 = variable name
         # Regex Group 2 = string
-        variables21Regex = (
+        varPattern = re.compile(
             """(?:^([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}'(.*)'\s{0,};)|"""  # Find: var='str';
             """(?:^([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}"(.*)"\s{0,};)|"""  # Find: var = "str";
-            """(?:^([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}(\d{1,});)"""
-        )  # Find: var = 1234;
-        variablesPattern = re.compile(variables21Regex, re.MULTILINE)
+            """(?:^([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}(\d{1,});)""",  # Find: var = 1234;
+            re.MULTILINE,
+        )
 
-        concat21Regex = (
-            """(?:^[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,};)|"""  # Find: var1 = var2+var3+var4;
-            """(?:^[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,}\s{0,};)"""
-        )  # Find: var1 = var2;
-        concatPattern = re.compile(concat21Regex, re.MULTILINE)
+        concPattern = re.compile(
+            """(?:^[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:\(?[a-zA-Z0-9_]{2,}\)?\s{0,}(?:\+|\-)\s{0,}){1,}\(?[a-zA-Z0-9_]{2,}\)?\s{0,};)|"""  # Find: var1 = var2+var3+(var4);
+            """(?:^[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,}\s{0,};)""",  # Find: var1 = var2;
+            re.MULTILINE,
+        )
     else:
         # pre-2.1 sample
-
         # Find the obfuscated code line
-        findObfuscatedPattern = re.compile("""((?<=\t)|(?<=\;))(.{800,})(\n.*\=.*\+.*)*""")
-        dataToDecode = findObfuscatedPattern.search(fileData)[0].replace("\n", " ").replace("\r", " ")
-
-        variables2Regex = (
+        varPattern = re.compile(
             """(?:([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}'(.+?)'\s{0,};)|"""  # Find: var = 'str';
-            """(?:([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}"(.+?)"\s{0,};)"""
-        )  # Find: var = "str";
-        variablesPattern = re.compile(variables2Regex, re.MULTILINE)
+            """(?:([a-zA-Z0-9_]{2,})\s{0,}=\s{0,}"(.+?)"\s{0,};)""",  # Find: var = "str";
+            re.MULTILINE,
+        )
 
-        concat2Regex = (
+        concPattern = re.compile(
             """(?:[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,};)|"""  # Find: var1 = var2+var3+var4;
-            """(?:[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,}\s{0,};)"""
-        )  # Find: var1 = var2;
-        concatPattern = re.compile(concat2Regex, re.MULTILINE)
+            """(?:[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,}\s{0,};)""",  # Find: var1 = var2;
+            re.MULTILINE,
+        )
+
+    return varPattern, concPattern
+
+
+def getDataToDecode(isGloader21Sample, inputData):
+    if isGloader21Sample:
+        outputData = inputData
+    else:
+        findObfuscatedPattern = re.compile("""((?<=\t)|(?<=\;))(.{800,})(\n.*\=.*\+.*)*""")
+        outputData = findObfuscatedPattern.search(inputData)[0].replace("\n", " ").replace("\r", " ")
+    return outputData
+
+
+def parseRound2Data(
+    round2InputStr,
+    round1InputStr,
+    variablesDict,
+    isGootloader3sample,
+    unsafe_uris: bool = True,
+    payload_path: str = "",
+    log: Logger = print,
+):
+    output_domains = list()
+
+    if round2InputStr.startswith("function"):
+        log("GootLoader Obfuscation Variant 3.0 sample detected.")
+
+        # File Names and scheduled task
+        getFileandTaskData(decodeString(round1InputStr.encode("raw_unicode_escape").decode("unicode_escape")), log=log)
+
+        global goot3detected
+        goot3detected = True
+
+        outputCode = "GOOT3\n" + invokeStage2Decode(round2InputStr, variablesDict)
+
+        # If we have specified an alternative file path to save the final stage ; Overwrite it the variable
+        outputFileName = "GootLoader3Stage2.js_"
+        if not payload_path:
+            payload_path = outputFileName
+        else:
+            outputFileName = payload_path
+
+        log("\nScript output Saved to: %s\n" % outputFileName)
+        log("\nThe script will new attempt to deobfuscate the %s file." % outputFileName)
+    else:
+        if isGootloader3sample:
+            outputCode = round2InputStr.replace("'+'", "").replace("')+('", "").replace("+()+", "").replace("?+?", "")
+
+            # Check to see if the code has been reversed, and reverse it back to normal if so
+            # Sample MD5: 2e6e43e846c5de3ecafdc5f416b72897
+            if "sptth" in outputCode:
+                outputCode = outputCode[::-1]
+
+            v3DomainRegex = re.compile("""(?:(?:https?):\/\/)[^\[|^\]|^\/|^\\|\s]*\.[^'"]+""")
+
+            maliciousDomains = re.findall(v3DomainRegex, outputCode)
+        else:
+            outputCode = round2InputStr
+
+            v2DomainRegex = re.compile(r"(.*)(\[\".*?\"\])(.*)")
+            domainsMatch = v2DomainRegex.search(round2InputStr)[2]
+            maliciousDomains = (
+                domainsMatch.replace("[", "")
+                .replace("]", "")
+                .replace('"', "")
+                .replace("+(", "")
+                .replace(")+", "")
+                .split(",")
+            )
+
+        # Store the malicious domains and return the list.s
+        for domain in maliciousDomains:
+            if not unsafe_uris:
+                output_domains.append(defang(domain))
+                continue
+            output_domains.append(domain)
+
+        outputFileName = "DecodedJsPayload.js_"
+        # Print to screen
+        log("\nScript output Saved to: %s\n" % outputFileName)
+        outputDomains = ""
+        for dom in maliciousDomains:
+            outputDomains += defang(dom) + "\n"
+        log("\nMalicious Domains: \n\n%s" % outputDomains)
+    return outputCode, outputFileName, output_domains
+
+
+def gootDecode(
+    path: str, unsafe_uris: bool = False, payload_path: str = None, stage2_path: str = None, log: Logger = print
+):
+    # Open File
+    with open(path, mode="r", encoding="utf-8") as file:
+        # Check for the GootLoader obfuscation variant
+        fileTopLines = "".join(file.readlines(5))
+
+        gootloader21sample, gootloader3sample = getGootVersion(fileTopLines, log=log)
+
+        # reset cursor to read again
+        file.seek(0)
+        fileData = file.read()
+
+    # Extract the relevant data that will be decoded
+    dataToDecode = getDataToDecode(gootloader21sample, fileData)
+
+    # Get the regex patterns that will be used to find variables and concat lines
+    variablesPattern, concatPattern = getVariableAndConcatPatterns(gootloader21sample)
 
     # Find all the variables
     variablesAllmatches = variablesPattern.findall(dataToDecode)
@@ -239,124 +465,35 @@ def gootDecode(path, unsafe_uris=False, payload_path=None, stage2_path=None, log
 
     if gootloader21sample:
         # Some variants have the final variable in the middle of the code. Search for it separately so that it shows up last.
-        lastConcat21Regex = """(?:^\t[a-zA-Z0-9_]{2,}\s{0,}=(?:\s{0,}[a-zA-Z0-9_]{2,}\s{0,}\+?\s{0,}){5,}\s{0,};)"""  # Find: [tab]var1 = var2+var3+var4+var5+var6+var7;
-        lastConcatPattern = re.compile(lastConcat21Regex, re.MULTILINE)
+        lastConcatPattern = re.compile(
+            """(?:^\t[a-zA-Z0-9_]{2,}\s{0,}=(?:\s{0,}[a-zA-Z0-9_]{2,}\s{0,}\+?\s{0,}){5,}\s{0,};)""",  # Find: [tab]var1 = var2+var3+var4+var5+var6+var7;
+            re.MULTILINE,
+        )
 
         concatAllmatches += list(sorted(lastConcatPattern.findall(fileData), key=len))
 
     Obfuscated1Text = convertConcatToString(concatAllmatches, VarsDict)
 
-    file.close()
-
-    if not Obfuscated1Text:
-        return False, outputDomains, OutputCode
-
     # run the decoder
     round1Result = decodeString(Obfuscated1Text)
 
     # Find code text in the result of the first decode round
-    findCodeinQuotePattern = re.compile(r"(?<!\\)(?:\\\\)*'([^'\\]*(?:\\.[^'\\]*)*)'")
-
-    CodeMatch = findCodeinQuotePattern.findall(round1Result)[0]
+    CodeMatch = findCodeMatchInRound1Result(round1Result)
 
     # run the decode function against the previous result
     round2Result = decodeString(CodeMatch.encode("raw_unicode_escape").decode("unicode_escape"))
 
-    if round2Result.startswith("function"):
-        log("GootLoader Obfuscation Variant 3.0 sample detected.")
+    round2Code, round2FileName, output_domains = parseRound2Data(
+        round2Result, round1Result, VarsDict, gootloader3sample, unsafe_uris, payload_path, log=log
+    )
 
-        global goot3detected
-        goot3detected = True
-
-        # Get all the relevant variables from the sample
-        v3workFuncVarsPattern = re.compile(
-            """(?:\((?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,}\))"""
-        )  # Find: (var1+var2+var3)
-        v3WorkFuncVars = v3workFuncVarsPattern.search(round2Result)[0]
-
-        stage2JavaScript = workFunc(convertConcatToString(v3WorkFuncVars, VarsDict, True))
-
-        # Get all the string variables on their own line
-        strVarPattern = re.compile(
-            """([a-zA-Z0-9_]{2,}\s{0,}=('|").*?('|");)(?=([a-zA-Z0-9_]{2,}\s{0,}=)|function)"""
-        )  # Find: var='xxxxx';[var2=|function]
-        strVarsNewLine = re.sub(strVarPattern, r"\n\1\n", stage2JavaScript)
-
-        # Get all the var concat on their own line
-        strConcPattern = re.compile(
-            """([a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){1,}[a-zA-Z0-9_]{2,}\s{0,};)"""
-        )  # Find: var1 = var2+var3
-        strConcatNewLine = re.sub(strConcPattern, r"\n\1\n", strVarsNewLine)
-
-        # Attempt to find the last variable and add a tab in front of it. This search is imperfect since the line could be shorter than what this regex picks up.
-        finalStrConcPattern = re.compile(
-            """([a-zA-Z0-9_]{2,}\s{0,}=\s{0,}(?:[a-zA-Z0-9_]{2,}\s{0,}\+\s{0,}){5,}[a-zA-Z0-9_]{2,}\s{0,};)"""
-        )  # Find: var0 = var1+var2+var3+var4+var5+var6
-        finalStrConcNewLine = re.sub(finalStrConcPattern, r"\n\t\1\n", strConcatNewLine)
-
-        # put 1:1 variables on their own lines
-        strVar1to1Pattern = re.compile(
-            """((?:\n|^)[a-zA-Z0-9_]{2,}\s{0,}=\s{0,}[a-zA-Z0-9_]{2,};)"""
-        )  # Find: var = var2;
-        str1to1NewLine = re.sub(strVar1to1Pattern, r"\n\1\n", finalStrConcNewLine)
-
-        # put long digits on their own lines
-        strLongDigitPattern = re.compile(""";(\d{15,};)""")  # Find: ;216541846845465456465121312313221456456465;
-        finalRegexStr = re.sub(strLongDigitPattern, r";\n\1\n", str1to1NewLine)
-
-        OutputCode = "//GOOT3\n"
-
-        for line in finalRegexStr.splitlines():
-            # clean up the empty lines
-            if line.strip():
-                OutputCode += line + "\n"
-
-        if not stage2_path:
-            OutputFileName = "GootLoader3Stage2.js_"
-        else:
-            OutputFileName = stage2_path
-
-        log("\nScript output Saved to: %s\n" % OutputFileName)
-        log("\nThe script will now attempt to deobfuscate the %s file." % OutputFileName)
-        save_file(OutputFileName, OutputCode, log)
-        return True, outputDomains, OutputCode
-
+    # If we have specified an alternative file path to save next stage output ; Overwrite it the variable
+    if not stage2_path:
+        stage2_path = round2FileName
     else:
-        if gootloader3sample:
-            OutputCode = round2Result.replace("'+'", "").replace("')+('", "").replace("+()+", "")
+        round2FileName = stage2_path
 
-            v3DomainRegex = re.compile("""(?:(?:https?):\/\/)[^\[|^\]|^\/|^\\|\s]*\.[^'"]+""")
-
-            maliciousDomains = re.findall(v3DomainRegex, OutputCode)
-        else:
-            OutputCode = round2Result
-
-            v2DomainRegex = re.compile(r"(.*)(\[\".*?\"\])(.*)")
-            domainsMatch = v2DomainRegex.search(round2Result)[2]
-            maliciousDomains = (
-                domainsMatch.replace("[", "")
-                .replace("]", "")
-                .replace('"', "")
-                .replace("+(", "")
-                .replace(")+", "")
-                .split(",")
-            )
-
-        if not payload_path:
-            OutputFileName = "DecodedJsPayload.js_"
-        else:
-            OutputFileName = payload_path
-
-        # Print to screen
-        log("\nScript output Saved to: %s\n" % OutputFileName)
-
-        for dom in maliciousDomains:
-            if not unsafe_uris:
-                outputDomains.append(defang(dom))
-            else:
-                outputDomains.append(dom)
-
-        log("\nMalicious Domains: \n\n%s" % "\n".join(outputDomains))
-
-    save_file(OutputFileName, OutputCode, log)
-    return False, outputDomains, OutputCode
+    # Write output file
+    with open(round2FileName, mode="w") as file:
+        file.write(round2Code)
+    return round2FileName, output_domains, round2Code
