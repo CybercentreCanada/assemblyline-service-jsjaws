@@ -1065,13 +1065,6 @@ class JsJaws(ServiceBase):
             f"--fake-sample-name={path.basename(request.task.file_name)}",
             # Fake that HTTP requests work and have them return a fake payload
             "--fake-download",
-            # Throttle reporting and data tracking of file writes that write a LOT of data
-            # "--throttle-writes",
-            # Rewrite == checks so that comparisons of the current script name to a hard coded
-            # script name always return true.
-            # "--loose-script-name",
-            # Ignore calls to WSCript.Quit() and continue execution.
-            # "--ignore-wscript-quit",
         ]
 
         no_shell_error = request.get_param("no_shell_error")
