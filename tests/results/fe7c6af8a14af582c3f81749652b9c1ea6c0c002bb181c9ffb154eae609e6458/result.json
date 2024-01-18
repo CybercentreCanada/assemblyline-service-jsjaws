@@ -296,6 +296,27 @@
       },
       {
         "auto_collapse": false,
+        "body": "rundll32 C:\\ProgramData\\wJPBCKy.HoGKdJI,Wind",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "rundll32 C:\\ProgramData\\wJPBCKy.HoGKdJI,Wind"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "C:/ProgramData/wJPBCKy.HoGKdJI",
         "body_config": {},
         "body_format": "TEXT",
@@ -313,6 +334,49 @@
           }
         },
         "title_text": "The script wrote the following files",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "path": "C:/ProgramData/wJPBCKy.HoGKdJI",
+              "url": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:/ProgramData/wJPBCKy.HoGKdJI"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "gkjdepok.org"
+              ],
+              "uri": [
+                "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+              ],
+              "uri_path": [
+                "/crtfc/TsCw3rCG.dll"
+              ]
+            }
+          }
+        },
+        "title_text": "The script created the following resources associated with a URL",
         "zeroize_on_tag_safe": false
       },
       {
@@ -416,6 +480,10 @@
   "files": {
     "extracted": [
       {
+        "name": "boxjs_cmds.bat",
+        "sha256": "371c59b411db032c8668d9324a40e50a135d574cd34a24989d5c0548d32b7053"
+      },
+      {
         "name": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a",
         "sha256": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a"
       }
@@ -509,7 +577,19 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "rundll32 C:\\ProgramData\\wJPBCKy.HoGKdJI,Wind"
+        }
+      ],
       "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:/ProgramData/wJPBCKy.HoGKdJI"
+        },
         {
           "heur_id": null,
           "signatures": [],
@@ -518,6 +598,11 @@
       ],
       "network.dynamic.domain": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "gkjdepok.org"
+        },
+        {
           "heur_id": 1,
           "signatures": [],
           "value": "gkjdepok.org"
@@ -525,12 +610,22 @@
       ],
       "network.dynamic.uri": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+        },
+        {
           "heur_id": 1,
           "signatures": [],
           "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/crtfc/TsCw3rCG.dll"
+        },
         {
           "heur_id": 1,
           "signatures": [],

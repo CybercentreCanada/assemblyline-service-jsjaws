@@ -281,6 +281,36 @@
       },
       {
         "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script created a resource.",
+              "type": "NewResource",
+              "value": {
+                "latestUrl": "",
+                "md5": "c7f02b93dd5d6fd8bb467b870e958b70",
+                "path": "URL_Blob_file_0",
+                "sha1": "65fdb009507f70cce46f07c7dc22d180117c6a5a",
+                "sha256": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc",
+                "type": "Zip archive data, at least v1.0 to extract, compression method=store"
+              }
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "The script did the following other interesting things",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_config": {},
         "body_format": "TEXT",

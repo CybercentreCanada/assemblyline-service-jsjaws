@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1632,
+    "score": 1633,
     "sections": [
       {
         "auto_collapse": false,
@@ -322,6 +322,64 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "registry_key": [
+              "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
+            ]
+          }
+        },
+        "title_text": "The script read the following registry keys",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "registry_key": [
+              "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
+            ]
+          }
+        },
+        "title_text": "The script wrote the following registry keys",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "google.com",
@@ -513,6 +571,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -583,6 +646,18 @@
             "wscript_curl_url"
           ],
           "value": "taskkill /f /im mshta.exe"
+        }
+      ],
+      "dynamic.registry_key": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
         }
       ],
       "file.behavior": [

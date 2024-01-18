@@ -320,6 +320,70 @@
       },
       {
         "auto_collapse": false,
+        "body": "C:\\ProgramData\\Trdce",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:\\ProgramData\\Trdce"
+              ]
+            }
+          }
+        },
+        "title_text": "The script checked if the following files/folders existed",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "path": "C:\\ProgramData\\Trdce\\desired.dll",
+              "url": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:\\ProgramData\\Trdce\\desired.dll"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "orthodentrics.com"
+              ],
+              "uri": [
+                "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+              ],
+              "uri_path": [
+                "/8GE/fdsfdsfewwwe23"
+              ]
+            }
+          }
+        },
+        "title_text": "The script created the following resources associated with a URL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "orthodentrics.com",
@@ -535,10 +599,25 @@
         {
           "heur_id": null,
           "signatures": [],
+          "value": "C:\\ProgramData\\Trdce"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:\\ProgramData\\Trdce\\desired.dll"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
           "value": "C:\\ProgramData\\Trdce\\desired.dll"
         }
       ],
       "network.dynamic.domain": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "orthodentrics.com"
+        },
         {
           "heur_id": 1,
           "signatures": [
@@ -549,6 +628,11 @@
       ],
       "network.dynamic.uri": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+        },
+        {
           "heur_id": 1,
           "signatures": [
             "url_used_for_suspicious_exec"
@@ -557,6 +641,11 @@
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/8GE/fdsfdsfewwwe23"
+        },
         {
           "heur_id": 1,
           "signatures": [

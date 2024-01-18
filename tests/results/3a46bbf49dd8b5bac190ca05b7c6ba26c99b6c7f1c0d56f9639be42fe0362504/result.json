@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1663,
+    "score": 1664,
     "sections": [
       {
         "auto_collapse": true,
@@ -364,6 +364,47 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt"
+              ]
+            }
+          }
+        },
+        "title_text": "The script checked if the following files/folders existed",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "blockchain.info",
@@ -671,6 +712,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -746,6 +792,13 @@
       }
     ],
     "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt"
+        }
+      ],
       "network.dynamic.domain": [
         {
           "heur_id": 1,

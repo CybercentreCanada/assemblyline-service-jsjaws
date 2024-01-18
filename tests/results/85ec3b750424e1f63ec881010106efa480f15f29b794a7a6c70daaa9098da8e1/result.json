@@ -66,6 +66,53 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "https://acehphonnajaya.com/css/ke.msi",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "acehphonnajaya.com"
+              ],
+              "uri": [
+                "https://acehphonnajaya.com/css/ke.msi"
+              ],
+              "uri_path": [
+                "/css/ke.msi"
+              ]
+            }
+          }
+        },
+        "title_text": "The script contains the following Windows Installers",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "acehphonnajaya.com",
@@ -295,6 +342,11 @@
       ],
       "network.dynamic.domain": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        },
+        {
           "heur_id": 1,
           "signatures": [],
           "value": "acehphonnajaya.com"
@@ -307,6 +359,11 @@
       ],
       "network.dynamic.uri": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        },
+        {
           "heur_id": 1,
           "signatures": [],
           "value": "https://acehphonnajaya.com/css/ke.msi"
@@ -318,6 +375,11 @@
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/css/ke.msi"
+        },
         {
           "heur_id": 1,
           "signatures": [],

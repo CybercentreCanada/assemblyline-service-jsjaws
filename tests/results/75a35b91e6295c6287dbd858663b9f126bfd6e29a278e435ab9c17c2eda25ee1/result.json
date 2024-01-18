@@ -157,6 +157,59 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "https://tapasyaevents.com/fmu/fmu.php?55724\nhttps://iscast.com.br/udit/udit.php?68977\nhttps://dealsontrainers.org/tete/tete.php?85434",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "tapasyaevents.com",
+                "iscast.com.br",
+                "dealsontrainers.org"
+              ],
+              "uri": [
+                "https://tapasyaevents.com/fmu/fmu.php?55724",
+                "https://iscast.com.br/udit/udit.php?68977",
+                "https://dealsontrainers.org/tete/tete.php?85434"
+              ],
+              "uri_path": [
+                "/fmu/fmu.php?55724",
+                "/udit/udit.php?68977",
+                "/tete/tete.php?85434"
+              ]
+            }
+          }
+        },
+        "title_text": "The script contains the following remote scripts",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "dealsontrainers.org",
@@ -436,6 +489,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "document_write"
@@ -479,6 +537,11 @@
     "tags": {
       "network.dynamic.domain": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "dealsontrainers.org"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "dealsontrainers.org"
@@ -492,6 +555,11 @@
           "value": "dealsontrainers.org"
         },
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "iscast.com.br"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "iscast.com.br"
@@ -503,6 +571,11 @@
             "obfuscator_io_usage_url"
           ],
           "value": "iscast.com.br"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "tapasyaevents.com"
         },
         {
           "heur_id": 18,
@@ -520,6 +593,11 @@
       ],
       "network.dynamic.uri": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://dealsontrainers.org/tete/tete.php?85434"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
@@ -533,6 +611,11 @@
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
         },
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://iscast.com.br/udit/udit.php?68977"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "https://iscast.com.br/udit/udit.php?68977"
@@ -544,6 +627,11 @@
             "obfuscator_io_usage_url"
           ],
           "value": "https://iscast.com.br/udit/udit.php?68977"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
         },
         {
           "heur_id": 18,
@@ -561,6 +649,11 @@
       ],
       "network.dynamic.uri_path": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/fmu/fmu.php?55724"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "/fmu/fmu.php?55724"
@@ -574,6 +667,11 @@
           "value": "/fmu/fmu.php?55724"
         },
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/tete/tete.php?85434"
+        },
+        {
           "heur_id": 18,
           "signatures": [],
           "value": "/tete/tete.php?85434"
@@ -585,6 +683,11 @@
             "obfuscator_io_usage_url"
           ],
           "value": "/tete/tete.php?85434"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/udit/udit.php?68977"
         },
         {
           "heur_id": 18,
