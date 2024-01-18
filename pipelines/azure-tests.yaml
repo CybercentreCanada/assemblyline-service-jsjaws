@@ -69,6 +69,7 @@ jobs:
           # Install Node packages
           cd tools
           npm install
+          npm list
         displayName: Setup environment
       - script: |
           set -x # echo on
