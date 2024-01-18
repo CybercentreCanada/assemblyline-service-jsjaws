@@ -177,7 +177,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "https://tapasyaevents.com/fmu/fmu.php?55724\nhttps://iscast.com.br/udit/udit.php?68977\nhttps://dealsontrainers.org/tete/tete.php?85434",
+        "body": "https://dealsontrainers.org/tete/tete.php?85434\nhttps://iscast.com.br/udit/udit.php?68977\nhttps://tapasyaevents.com/fmu/fmu.php?55724",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -188,19 +188,19 @@
           "network": {
             "dynamic": {
               "domain": [
-                "tapasyaevents.com",
+                "dealsontrainers.org",
                 "iscast.com.br",
-                "dealsontrainers.org"
+                "tapasyaevents.com"
               ],
               "uri": [
-                "https://tapasyaevents.com/fmu/fmu.php?55724",
+                "https://dealsontrainers.org/tete/tete.php?85434",
                 "https://iscast.com.br/udit/udit.php?68977",
-                "https://dealsontrainers.org/tete/tete.php?85434"
+                "https://tapasyaevents.com/fmu/fmu.php?55724"
               ],
               "uri_path": [
-                "/fmu/fmu.php?55724",
+                "/tete/tete.php?85434",
                 "/udit/udit.php?68977",
-                "/tete/tete.php?85434"
+                "/fmu/fmu.php?55724"
               ]
             }
           }

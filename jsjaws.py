@@ -3671,70 +3671,77 @@ class JsJaws(ServiceBase):
             file_writes_result_section = ResultTextSection(
                 "The script wrote the following files", parent=ioc_result_section
             )
-            file_writes_result_section.add_lines(list(file_writes))
+            sorted_file_writes = sorted(file_writes)
+            file_writes_result_section.add_lines(sorted_file_writes)
             [
                 file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
-                for file_write in list(file_writes)
+                for file_write in sorted_file_writes
             ]
 
         if file_reads:
             file_reads_result_section = ResultTextSection(
                 "The script read the following files", parent=ioc_result_section
             )
-            file_reads_result_section.add_lines(list(file_reads))
+            sorted_file_reads = sorted(file_reads)
+            file_reads_result_section.add_lines(sorted_file_reads)
             [
                 file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
-                for file_read in list(file_reads)
+                for file_read in sorted_file_reads
             ]
 
         if file_folder_exists:
             file_folder_exists_result_section = ResultTextSection(
                 "The script checked if the following files/folders existed", parent=ioc_result_section
             )
-            file_folder_exists_result_section.add_lines(list(file_folder_exists))
+            sorted_file_folder_exists = sorted(file_folder_exists)
+            file_folder_exists_result_section.add_lines(sorted_file_folder_exists)
             [
                 file_folder_exists_result_section.add_tag("dynamic.process.file_name", file_folder_exist)
-                for file_folder_exist in list(file_folder_exists)
+                for file_folder_exist in sorted_file_folder_exists
             ]
 
         if remote_scripts:
             remote_scripts_result_section = ResultTextSection(
                 "The script contains the following remote scripts", parent=ioc_result_section
             )
-            remote_scripts_result_section.add_lines(list(remote_scripts))
+            sorted_remote_scripts = sorted(remote_scripts)
+            remote_scripts_result_section.add_lines(sorted_remote_scripts)
             [
                 add_tag(remote_scripts_result_section, "network.dynamic.uri", remote_script)
-                for remote_script in list(remote_scripts)
+                for remote_script in sorted_remote_scripts
             ]
 
         if windows_installers:
             windows_installers_result_section = ResultTextSection(
                 "The script contains the following Windows Installers", parent=ioc_result_section
             )
-            windows_installers_result_section.add_lines(list(windows_installers))
+            sorted_windows_installers = sorted(windows_installers)
+            windows_installers_result_section.add_lines(sorted_windows_installers)
             [
                 add_tag(windows_installers_result_section, "network.dynamic.uri", windows_installer)
-                for windows_installer in list(windows_installers)
+                for windows_installer in sorted_windows_installers
             ]
 
         if regkey_reads:
             regkey_reads_result_section = ResultTextSection(
                 "The script read the following registry keys", parent=ioc_result_section
             )
-            regkey_reads_result_section.add_lines(list(windows_installers))
+            sorted_regkey_reads = sorted(regkey_reads)
+            regkey_reads_result_section.add_lines(sorted_regkey_reads)
             [
                 regkey_reads_result_section.add_tag("dynamic.registry_key", regkey_read)
-                for regkey_read in list(regkey_reads)
+                for regkey_read in sorted_regkey_reads
             ]
 
         if regkey_writes:
             regkey_writes_result_section = ResultTextSection(
                 "The script wrote the following registry keys", parent=ioc_result_section
             )
-            regkey_writes_result_section.add_lines(list(windows_installers))
+            sorted_regkey_writes = sorted(regkey_writes)
+            regkey_writes_result_section.add_lines(sorted_regkey_writes)
             [
                 regkey_writes_result_section.add_tag("dynamic.registry_key", regkey_write)
-                for regkey_write in list(regkey_writes)
+                for regkey_write in sorted_regkey_writes
             ]
 
         if new_resources_associated_with_url:
@@ -3742,7 +3749,7 @@ class JsJaws(ServiceBase):
                 "The script created the following resources associated with a URL", parent=ioc_result_section
             )
 
-            for new_resource in list(new_resources_associated_with_url):
+            for new_resource in sorted(new_resources_associated_with_url):
                 nr = loads(new_resource)
                 new_resources_associated_with_url_result_section.add_tag("dynamic.process.file_name", nr["path"])
                 add_tag(new_resources_associated_with_url_result_section, "network.dynamic.uri", nr["url"])

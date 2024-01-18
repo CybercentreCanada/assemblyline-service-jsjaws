@@ -342,7 +342,7 @@
       },
       {
         "auto_collapse": false,
-        "body": null,
+        "body": "HKCU\\SOFTWARE\\Andysoftware\\pdf2html\\register",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -361,7 +361,7 @@
       },
       {
         "auto_collapse": false,
-        "body": null,
+        "body": "HKCU\\SOFTWARE\\Andysoftware\\pdf2html\\register",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

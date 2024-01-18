@@ -342,7 +342,7 @@
       },
       {
         "auto_collapse": false,
-        "body": null,
+        "body": "HKCU\\SOFTWARE\\Firm\\Soft\\Name",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -361,7 +361,7 @@
       },
       {
         "auto_collapse": false,
-        "body": null,
+        "body": "HKCU\\SOFTWARE\\Firm\\Soft\\Name",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
