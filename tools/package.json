@@ -14,10 +14,10 @@
         "node": ">=6.0.0"
     },
     "dependencies": {
-        "@nodesecure/js-x-ray": ">=6.1.1",
+        "@nodesecure/js-x-ray": ">=6.3.0",
         "box-js": ">=1.9.25",
         "crypto-js": ">=4.2.0",
-        "deobfuscator": ">=2.4.4",
+        "deobfuscator": ">=2.4.5",
         "entities": ">=4.5.0",
         "iconv-lite": ">=0.6.3",
         "log-timestamp": ">=0.3.0",
