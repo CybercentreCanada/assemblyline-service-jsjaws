@@ -224,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body": "JavaScript writes archive file to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
