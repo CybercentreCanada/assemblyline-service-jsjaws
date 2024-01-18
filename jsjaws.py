@@ -3209,7 +3209,7 @@ class JsJaws(ServiceBase):
 
                 # Add a signature for the number of times the gauntlet has been run
                 if self.gauntlet_runs == 2:
-                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_2")
+                    heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_2", 0)
                 elif self.gauntlet_runs == 3:
                     heur15_res_sec.heuristic.add_signature_id("dom_writes_equal_3")
                 elif self.gauntlet_runs in [4, 5]:
