@@ -52,13 +52,14 @@ from dateutil.parser import parse as dtparse
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
 from signatures.abstracts import Signature
-from thug.ThugAPI import ThugAPI
 from tinycss2 import parse_stylesheet
 from tools import tinycss2_helper
 from tools.gootloader.run import run as gootloader_run
 from yaml import safe_load as yaml_safe_load
 from yara import Error as YARAError
 from yara import compile as yara_compile
+
+from thug.ThugAPI import ThugAPI
 
 # Execution constants
 
@@ -893,8 +894,7 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
-        tapi = ThugAPI()
-        self._analyze_via_thug(tapi, file_path)
+        self._analyze_via_thug(file_path)
 
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
@@ -1669,6 +1669,8 @@ class JsJaws(ServiceBase):
         _ = responses.get(SYNCHRONY)
 
         self._extract_synchrony(request)
+
+        self._extract_thug_dumps()
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
@@ -4442,18 +4444,18 @@ class JsJaws(ServiceBase):
                     self.password_input_and_no_form_action = True
 
     # https://thug-honeyclient.readthedocs.io/en/latest/api.html#thug-api
-    def _analyze_via_thug(self, tapi, file_path):
-        # Set useragent to Internet Explorer 9.0 (Windows 7)
-        # tapi.set_useragent('win7ie90')
+    def _analyze_via_thug(self, file_path):
+        tapi = ThugAPI()
+        tapi.set_useragent("osx10chrome97")
 
         # Set referer to http://www.honeynet.org
         # tapi.set_referer('http://www.honeynet.org')
 
         # Enable file logging mode
-        # tapi.set_file_logging()
+        tapi.set_file_logging()
 
         # Enable JSON logging mode (requires file logging mode enabled)
-        # tapi.set_json_logging()
+        tapi.set_json_logging()
 
         # [IMPORTANT] The following three steps should be implemented (in the exact
         # order of this example) almost in every situation when you are going to
@@ -4464,7 +4466,7 @@ class JsJaws(ServiceBase):
         tapi.set_log_dir(self.working_directory)
         tapi.set_log_verbose()
         # tapi.set_attachment()
-        tapi.set_image_processing()
+        # tapi.set_image_processing()
         # tapi.set_features_logging()
         tapi.set_verbose()
         tapi.set_debug()
@@ -4475,8 +4477,40 @@ class JsJaws(ServiceBase):
         tapi.enable_screenshot()
         tapi.set_no_fetch()
 
-        # Run analysis
-        tapi.run_local(file_path)
+        if self.sample_type in ["code/javascript", "code/jscript", "code/jse", "code/vbe"]:
+            import shutil
+
+            shutil.copyfile(file_path, f"{file_path}.js")
+            new_file_path = f"{file_path}.js"
+            tapi.run_local(new_file_path)
+        else:
+            # Run analysis
+            tapi.run_local(file_path)
         # Log analysis results
         tapi.log_event()
+
+        with open(path.join(self.working_directory, "analysis", "json", "analysis.json"), "r") as f:
+            for line in f.readlines():
+                print(truncate(line, 200))
         pass
+
+    def _extract_thug_dumps(self):
+        # Writes dumps to disk then extract them
+        with open(path.join(self.working_directory, "analysis", "json", "analysis.json"), "r") as f:
+            data = loads(f.read())
+            for index, extracted_file in enumerate(data["files"]):
+                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as t:
+                    file_bytes = b64decode(extracted_file["data"])
+                    # For some reason, the data is b64-encoded in an incorrect way
+                    if file_bytes.startswith(b"b'") and file_bytes.endswith(b"'"):
+                        file_bytes = file_bytes[2:-1]
+                    t.write(file_bytes)
+                    thug_dump_path = t.name
+                artifact = {
+                    "name": extracted_file.get("url", f"thug_dump_{index}"),
+                    "path": thug_dump_path,
+                    "description": "Extracted Payload from Thug",
+                    "to_be_extracted": True,
+                }
+                self.log.debug(f"Adding extracted file: {thug_dump_path}")
+                self.artifact_list.append(artifact)
