@@ -1385,7 +1385,9 @@ class JsJaws(ServiceBase):
             file_path, file_content, css_path = self.extract_using_soup(request, file_content)
 
         # If at this point the file path is None, there is nothing to analyze and we can go home
-        if file_path is None:
+        # Note: There may not be any JavaScript to execute, but if there is a suspicious form action, then we should
+        # generate a result.
+        if file_path is None and not self.sus_form_actions:
             self.log.debug("No JavaScript file to analyze...")
             return
 
@@ -1393,7 +1395,7 @@ class JsJaws(ServiceBase):
         # then we want to run that. If not, then get outta here!
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
             _, script_we_did_not_generate = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
-            if script_we_did_not_generate == b"":
+            if script_we_did_not_generate == b"" and not self.sus_form_actions:
                 self.log.debug("No JavaScript file to analyze...")
                 return
 
@@ -4323,9 +4325,14 @@ class JsJaws(ServiceBase):
             # Do not start with tags
             elif title.startswith("<") and title.endswith(">"):
                 continue
+            # Are not CSS
+            elif title.startswith("/*") and title.endswith("*/") or title.startswith("."):
+                continue
 
             # Let's start the threshold with two or more phishing terms in the title
             hits = re.findall(PHISHING_TITLE_TERMS_REGEX, title, re.IGNORECASE)
+            # Also, look for passwords
+            hits.extend([item for item in PASSWORD_WORDS if item.lower() in title.lower()])
             if len(hits) >= 2:
                 self.html_phishing_title.add(title)
 
@@ -4405,6 +4412,9 @@ class JsJaws(ServiceBase):
                             # A form with an action was created from a single script that used an unescape AND the form
                             # contains a password input field
                             self.sus_form_actions.add(value)
+                        elif self.html_phishing_title and self.phishing_inputs:
+                            # We have a suspicious doc title and inputs, plus we have a form that submits? That's enough
+                            self.sus_form_actions.add(value)
                         break
 
                 if form_has_action:
@@ -4428,6 +4438,8 @@ class JsJaws(ServiceBase):
                                     if self.single_script_with_unescape:
                                         # A form with an action was created from a single script that used an
                                         # unescape AND the form contains a password input field
+                                        self.sus_form_actions.add(value)
+                                    elif self.html_phishing_title and self.phishing_inputs:
                                         self.sus_form_actions.add(value)
                                     break
 
