@@ -67,6 +67,7 @@ class PhishingLogoDownload(Signature):
                 "img.freepik.com",
                 "splash247.com",
                 "companieslogo.com",
+                "upload.wikimedia.org",
             ],
             severity=1,
         )
