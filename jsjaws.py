@@ -52,6 +52,7 @@ from dateutil.parser import parse as dtparse
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
 from signatures.abstracts import Signature
+from thug.ThugAPI import ThugAPI
 from tinycss2 import parse_stylesheet
 from tools import tinycss2_helper
 from tools.gootloader.run import run as gootloader_run
@@ -891,6 +892,9 @@ class JsJaws(ServiceBase):
         # Initial setup per sample
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
+
+        tapi = ThugAPI()
+        self._analyze_via_thug(tapi, file_path)
 
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
@@ -4436,3 +4440,43 @@ class JsJaws(ServiceBase):
 
                 if not form_has_action:
                     self.password_input_and_no_form_action = True
+
+    # https://thug-honeyclient.readthedocs.io/en/latest/api.html#thug-api
+    def _analyze_via_thug(self, tapi, file_path):
+        # Set useragent to Internet Explorer 9.0 (Windows 7)
+        # tapi.set_useragent('win7ie90')
+
+        # Set referer to http://www.honeynet.org
+        # tapi.set_referer('http://www.honeynet.org')
+
+        # Enable file logging mode
+        # tapi.set_file_logging()
+
+        # Enable JSON logging mode (requires file logging mode enabled)
+        # tapi.set_json_logging()
+
+        # [IMPORTANT] The following three steps should be implemented (in the exact
+        # order of this example) almost in every situation when you are going to
+        # analyze a remote site.
+
+        # Initialize logging
+        tapi.log_init(file_path)
+        tapi.set_log_dir(self.working_directory)
+        tapi.set_log_verbose()
+        # tapi.set_attachment()
+        tapi.set_image_processing()
+        # tapi.set_features_logging()
+        tapi.set_verbose()
+        tapi.set_debug()
+        tapi.set_http_debug()
+        tapi.set_extensive()
+        tapi.enable_code_logging()
+        tapi.disable_cert_logging()
+        tapi.enable_screenshot()
+        tapi.set_no_fetch()
+
+        # Run analysis
+        tapi.run_local(file_path)
+        # Log analysis results
+        tapi.log_event()
+        pass

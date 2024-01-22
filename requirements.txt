@@ -5,3 +5,4 @@ yara-python
 PyYAML
 multidecoder==1.0.0
 assemblyline-service-utilities
+thug
