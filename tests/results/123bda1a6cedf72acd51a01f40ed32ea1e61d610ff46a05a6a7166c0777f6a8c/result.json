@@ -80,10 +80,6 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "toolkit.telemetry.pioneer",
-            "ioc_type": "domain"
-          },
-          {
             "ioc": "http://centarial.com/documento.php",
             "ioc_type": "uri"
           },
@@ -120,8 +116,7 @@
               "domain": [
                 "centarial.com",
                 "google.com",
-                "permissions.default.camera",
-                "toolkit.telemetry.pioneer"
+                "permissions.default.camera"
               ],
               "uri": [
                 "http://centarial.com/documento.php",
@@ -275,11 +270,6 @@
           "heur_id": 2,
           "signatures": [],
           "value": "permissions.default.camera"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "toolkit.telemetry.pioneer"
         }
       ],
       "network.static.uri": [

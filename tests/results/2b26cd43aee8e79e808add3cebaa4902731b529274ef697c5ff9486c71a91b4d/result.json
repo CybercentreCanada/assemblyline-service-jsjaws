@@ -181,6 +181,10 @@
         "auto_collapse": false,
         "body": [
           {
+            "ioc": "Booking.com",
+            "ioc_type": "domain"
+          },
+          {
             "ioc": "www.protware.com",
             "ioc_type": "domain"
           },
@@ -211,6 +215,7 @@
           "network": {
             "static": {
               "domain": [
+                "Booking.com",
                 "www.protware.com"
               ],
               "uri": [
@@ -299,6 +304,11 @@
         }
       ],
       "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "Booking.com"
+        },
         {
           "heur_id": 2,
           "signatures": [],
