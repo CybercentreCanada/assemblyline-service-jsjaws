@@ -342,7 +342,7 @@ ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)\w*_jsjaws = ")
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
 VBSCRIPT_ENV_SETTING_REGEX = (
-    b"\((?P<property_name>[\w\s()'\"+\\\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+    b"[^;]\((?P<property_name>[\w\s()'\"+\\\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
 )
 
 # Example:
@@ -861,7 +861,7 @@ class JsJaws(ServiceBase):
             if ")(" in property_name:
                 # Therefore split
                 split_property_name = match.group(0).split(b")(")[-1]
-                another_match = re.search(VBSCRIPT_ENV_SETTING_REGEX, b"(" + split_property_name)
+                another_match = re.search(VBSCRIPT_ENV_SETTING_REGEX, b"test(" + split_property_name)
                 if another_match:
                     property_name = another_match.group("property_name").decode()
                     property_value = another_match.group("property_value").decode()
@@ -872,7 +872,10 @@ class JsJaws(ServiceBase):
                 return
 
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
-            return f"[{property_name}] = {property_value};".encode()
+            # Since we are looking for the character prior to this assignment, we need to add it again
+            leading_char_index = match.regs[0][0]
+            leading_char = match.string.decode()[leading_char_index]
+            return f"{leading_char}[{property_name}] = {property_value};".encode()
 
         new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
         if new_content != file_content:
