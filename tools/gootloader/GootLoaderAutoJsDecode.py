@@ -496,4 +496,5 @@ def gootDecode(
     # Write output file
     with open(round2FileName, mode="w") as file:
         file.write(round2Code)
+
     return round2FileName, output_domains, round2Code
