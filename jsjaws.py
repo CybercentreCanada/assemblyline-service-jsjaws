@@ -874,7 +874,11 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
             # Since we are looking for the character prior to this assignment, we need to add it again
             leading_char_index = match.regs[0][0]
-            leading_char = match.string.decode()[leading_char_index]
+            try:
+                decoded_match_string = match.string.decode()
+            except UnicodeDecodeError:
+                return
+            leading_char = decoded_match_string[leading_char_index]
             return f"{leading_char}[{property_name}] = {property_value};".encode()
 
         new_content = re.sub(VBSCRIPT_ENV_SETTING_REGEX, log_and_replace, file_content)
