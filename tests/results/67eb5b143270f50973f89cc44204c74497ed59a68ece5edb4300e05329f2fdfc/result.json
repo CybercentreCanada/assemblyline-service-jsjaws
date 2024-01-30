@@ -238,27 +238,27 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581",
+            "ioc": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581",
+            "ioc": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581",
+            "ioc": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/test.php?mhsctaxsmkzg=362377775593761834173581",
+            "ioc": "/test.php?mhsctaxsmkzg=414706729150713164173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?mhsctaxsmkzg=8676787013426854173581",
+            "ioc": "/test.php?mhsctaxsmkzg=79328516441481444173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?mhsctaxsmkzg=98530989229652734173581",
+            "ioc": "/test.php?mhsctaxsmkzg=82826119158966494173581",
             "ioc_type": "uri_path"
           }
         ],
@@ -290,14 +290,14 @@
                 "www.lohevisto.com"
               ],
               "uri": [
-                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581",
-                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581",
-                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581"
+                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581",
+                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581",
+                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581"
               ],
               "uri_path": [
-                "/test.php?mhsctaxsmkzg=362377775593761834173581",
-                "/test.php?mhsctaxsmkzg=8676787013426854173581",
-                "/test.php?mhsctaxsmkzg=98530989229652734173581"
+                "/test.php?mhsctaxsmkzg=414706729150713164173581",
+                "/test.php?mhsctaxsmkzg=79328516441481444173581",
+                "/test.php?mhsctaxsmkzg=82826119158966494173581"
               ]
             }
           }
@@ -310,15 +310,15 @@
         "body": [
           {
             "method": "GET",
-            "url": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581"
+            "url": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581"
           },
           {
             "method": "GET",
-            "url": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581"
+            "url": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581"
           },
           {
             "method": "GET",
-            "url": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581"
+            "url": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581"
           }
         ],
         "body_config": {
@@ -352,14 +352,14 @@
                 "www.location-atelier-garage.com"
               ],
               "uri": [
-                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581",
-                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581",
-                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581"
+                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581",
+                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581",
+                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581"
               ],
               "uri_path": [
-                "/test.php?mhsctaxsmkzg=98530989229652734173581",
-                "/test.php?mhsctaxsmkzg=362377775593761834173581",
-                "/test.php?mhsctaxsmkzg=8676787013426854173581"
+                "/test.php?mhsctaxsmkzg=414706729150713164173581",
+                "/test.php?mhsctaxsmkzg=79328516441481444173581",
+                "/test.php?mhsctaxsmkzg=82826119158966494173581"
               ]
             }
           }
@@ -370,12 +370,7 @@
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "DecodedJsPayload.js_",
-        "sha256": "71dc46737656851e261beb36daf91089b634344e68b062930bf6a38807f395fe"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -509,21 +504,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581"
+          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581"
+          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581"
+          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581"
         }
       ],
       "network.dynamic.uri_path": [
@@ -532,21 +527,21 @@
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?mhsctaxsmkzg=362377775593761834173581"
+          "value": "/test.php?mhsctaxsmkzg=414706729150713164173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?mhsctaxsmkzg=8676787013426854173581"
+          "value": "/test.php?mhsctaxsmkzg=79328516441481444173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?mhsctaxsmkzg=98530989229652734173581"
+          "value": "/test.php?mhsctaxsmkzg=82826119158966494173581"
         }
       ],
       "network.static.domain": [
@@ -575,34 +570,34 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=362377775593761834173581"
+          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=79328516441481444173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=8676787013426854173581"
+          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=82826119158966494173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=98530989229652734173581"
+          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=414706729150713164173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=362377775593761834173581"
+          "value": "/test.php?mhsctaxsmkzg=414706729150713164173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=8676787013426854173581"
+          "value": "/test.php?mhsctaxsmkzg=79328516441481444173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=98530989229652734173581"
+          "value": "/test.php?mhsctaxsmkzg=82826119158966494173581"
         }
       ]
     },

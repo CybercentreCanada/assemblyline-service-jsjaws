@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2030,
+    "score": 2021,
     "sections": [
       {
         "auto_collapse": false,
@@ -98,31 +98,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript file managed to delay execution until the sandbox timed out\n\t\tException occurred in d1395642601f682797e86896c9be85e5a176019bc519b39f99bf524b81d2d89d: object Error...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "antisandbox_timeout": 10
-          },
-          "signatures": {
-            "antisandbox_timeout": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: AntiSandboxTimeout",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction szxwJG($PQNgWB){$JUxiC = [System.IO.MemoryStream]::new()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\t\"function LtGEs($XGqbLJV){$xamrMR=\"A8AFCE8D37\";function szxwJG($PQNgWB){$JUxiC = [System.IO.MemorySt...\n\t\tTypeError: \"function LtGEs($XGqbLJV){$xamrMR=\"A8AFCE8D37\";function szxwJG($PQNgWB){$JUxiC = [System....\n\t\tfunction szxwJG($PQNgWB){$JUxiC = [System.IO.MemoryStream]::new()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -167,20 +143,157 @@
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "71397454a0.url-de-test.ws",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "architecturalsankul.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "funnelslive.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "iadnews.in",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "lamaa.sa",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "spkp.com.au",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "thesmithrestaurant.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "tottstore.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "trueteenbabes.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "wototvet.ru",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://71397454a0.url-de-test.ws/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://architecturalsankul.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://funnelslive.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://iadnews.in/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://lamaa.sa/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://spkp.com.au/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://thesmithrestaurant.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://tottstore.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://trueteenbabes.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://wototvet.ru/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/xmlrpc.php",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "71397454a0.url-de-test.ws",
+                "architecturalsankul.com",
+                "funnelslive.com",
+                "iadnews.in",
+                "lamaa.sa",
+                "spkp.com.au",
+                "thesmithrestaurant.com",
+                "tottstore.com",
+                "trueteenbabes.com",
+                "wototvet.ru"
+              ],
+              "uri": [
+                "http://71397454a0.url-de-test.ws/xmlrpc.php",
+                "https://architecturalsankul.com/xmlrpc.php",
+                "https://funnelslive.com/xmlrpc.php",
+                "https://iadnews.in/xmlrpc.php",
+                "https://lamaa.sa/xmlrpc.php",
+                "https://spkp.com.au/xmlrpc.php",
+                "https://thesmithrestaurant.com/xmlrpc.php",
+                "https://tottstore.com/xmlrpc.php",
+                "https://trueteenbabes.com/xmlrpc.php",
+                "https://wototvet.ru/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "DecodedJsPayload.js_",
-        "sha256": "6bd22c77d2c69b931a2d5545ac64e2aa5ad74a8294be2a15cee55405840cfbd9"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "d1395642601f682797e86896c9be85e5a176019bc519b39f99bf524b81d2d89d"
+        "sha256": "6bd22c77d2c69b931a2d5545ac64e2aa5ad74a8294be2a15cee55405840cfbd9"
       }
     ]
   },
@@ -188,10 +301,8 @@
     "heuristics": [
       {
         "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "antisandbox_timeout"
-        ]
+        "heur_id": 2,
+        "signatures": []
       },
       {
         "attack_ids": [],
@@ -340,6 +451,117 @@
       "network.dynamic.uri_path": [
         {
           "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "71397454a0.url-de-test.ws"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "architecturalsankul.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "funnelslive.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "iadnews.in"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "lamaa.sa"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "spkp.com.au"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "thesmithrestaurant.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "tottstore.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "trueteenbabes.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "wototvet.ru"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://71397454a0.url-de-test.ws/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://architecturalsankul.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://funnelslive.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://iadnews.in/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://lamaa.sa/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://spkp.com.au/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://thesmithrestaurant.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://tottstore.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://trueteenbabes.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://wototvet.ru/xmlrpc.php"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
           "signatures": [],
           "value": "/xmlrpc.php"
         }

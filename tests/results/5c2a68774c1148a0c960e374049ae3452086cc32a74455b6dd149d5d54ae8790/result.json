@@ -295,12 +295,7 @@
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "DecodedJsPayload.js_",
-        "sha256": "d6d75d4f2c59d85d280a7d503b2597401e83e8d7c239dcb9df1a4ddac04bbbc5"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
