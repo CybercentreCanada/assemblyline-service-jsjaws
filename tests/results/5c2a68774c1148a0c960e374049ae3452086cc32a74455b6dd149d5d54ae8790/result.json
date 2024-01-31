@@ -5,9 +5,39 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://alivedesktop.com/xmlrpc.php\n\t-\thttps://picklebums.com/xmlrpc.php\n\t-\thttps://whatifshow.com/xmlrpc.php\n\t-\thttps://inalto.cl/xmlrpc.php\n\t-\thttps://dasanderetheater.at/xmlrpc.php\n\t-\thttps://shega.co/xmlrpc.php\n\t-\thttps://templatesjungle.com/xmlrpc.php\n\t-\thttps://prijuutti.fi/xmlrpc.php\n\t-\thttps://itrust-digital.com/xmlrpc.php\n\t-\thttps://michaelcasado.com/tempdump/xmlrpc.php",
+        "body": [
+          [
+            "TEXT",
+            "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Common library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Persistence data:",
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "js_file_name": "Political Sociology.js",
+              "original_file_name": "Financial Product Development.dat",
+              "scheduled_task_name": "Social Informatics"
+            },
+            {}
+          ],
+          [
+            "TEXT",
+            "Gootloader IOCs:\n\t-\thttps://alivedesktop.com/xmlrpc.php\n\t-\thttps://picklebums.com/xmlrpc.php\n\t-\thttps://whatifshow.com/xmlrpc.php\n\t-\thttps://inalto.cl/xmlrpc.php\n\t-\thttps://dasanderetheater.at/xmlrpc.php\n\t-\thttps://shega.co/xmlrpc.php\n\t-\thttps://templatesjungle.com/xmlrpc.php\n\t-\thttps://prijuutti.fi/xmlrpc.php\n\t-\thttps://itrust-digital.com/xmlrpc.php\n\t-\thttps://michaelcasado.com/tempdump/xmlrpc.php",
+            {}
+          ]
+        ],
         "body_config": {},
-        "body_format": "TEXT",
+        "body_format": "MULTI",
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
@@ -27,6 +57,14 @@
             "implant": [
               "GOOTLOADER"
             ]
+          },
+          "file": {
+            "name": {
+              "extracted": [
+                "Political Sociology.js",
+                "Financial Product Development.dat"
+              ]
+            }
           },
           "network": {
             "dynamic": {
@@ -348,6 +386,18 @@
           "heur_id": 4,
           "signatures": [],
           "value": "GOOTLOADER"
+        }
+      ],
+      "file.name.extracted": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Financial Product Development.dat"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Political Sociology.js"
         }
       ],
       "network.dynamic.domain": [

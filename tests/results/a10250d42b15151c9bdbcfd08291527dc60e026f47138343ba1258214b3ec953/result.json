@@ -5,9 +5,39 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://cfkr.dk/xmlrpc.php\n\t-\thttps://toitumine.ee/xmlrpc.php\n\t-\thttps://thepatriotnation.net/xmlrpc.php\n\t-\thttp://cambridgehs76.org/xmlrpc.php\n\t-\thttps://busoken.com/xmlrpc.php\n\t-\thttps://pinoymoviepedia.ru/xmlrpc.php\n\t-\thttps://pornostreaming.net/xmlrpc.php\n\t-\thttp://card.abcmamma.tv/xmlrpc.php\n\t-\thttps://financialissues.org/xmlrpc.php\n\t-\thttps://candidteens.top/xmlrpc.php",
+        "body": [
+          [
+            "TEXT",
+            "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Common library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Persistence data:",
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "js_file_name": "Microsoft Office Accounting.js",
+              "original_file_name": "Performance Attribution.log",
+              "scheduled_task_name": "Television Studies"
+            },
+            {}
+          ],
+          [
+            "TEXT",
+            "Gootloader IOCs:\n\t-\thttps://cfkr.dk/xmlrpc.php\n\t-\thttps://toitumine.ee/xmlrpc.php\n\t-\thttps://thepatriotnation.net/xmlrpc.php\n\t-\thttp://cambridgehs76.org/xmlrpc.php\n\t-\thttps://busoken.com/xmlrpc.php\n\t-\thttps://pinoymoviepedia.ru/xmlrpc.php\n\t-\thttps://pornostreaming.net/xmlrpc.php\n\t-\thttp://card.abcmamma.tv/xmlrpc.php\n\t-\thttps://financialissues.org/xmlrpc.php\n\t-\thttps://candidteens.top/xmlrpc.php",
+            {}
+          ]
+        ],
         "body_config": {},
-        "body_format": "TEXT",
+        "body_format": "MULTI",
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
@@ -27,6 +57,14 @@
             "implant": [
               "GOOTLOADER"
             ]
+          },
+          "file": {
+            "name": {
+              "extracted": [
+                "Microsoft Office Accounting.js",
+                "Performance Attribution.log"
+              ]
+            }
           },
           "network": {
             "dynamic": {
@@ -342,6 +380,18 @@
           "heur_id": 4,
           "signatures": [],
           "value": "GOOTLOADER"
+        }
+      ],
+      "file.name.extracted": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Microsoft Office Accounting.js"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Performance Attribution.log"
         }
       ],
       "network.dynamic.domain": [

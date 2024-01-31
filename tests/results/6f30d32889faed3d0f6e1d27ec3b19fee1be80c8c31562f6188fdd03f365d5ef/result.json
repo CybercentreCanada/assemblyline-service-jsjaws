@@ -5,9 +5,39 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://redshirtsalwaysdie.com/xmlrpc.php\n\t-\thttps://edelson.com/xmlrpc.php\n\t-\thttps://handicapformidlingen.dk/xmlrpc.php\n\t-\thttps://enscape3d.com/xmlrpc.php\n\t-\thttps://autoconvo.com/xmlrpc.php\n\t-\thttps://javgiga.com/xmlrpc.php\n\t-\thttps://sinarlampung.co/xmlrpc.php\n\t-\thttp://mmckmusic.com/xmlrpc.php\n\t-\thttps://hopejoyinchrist.com/xmlrpc.php\n\t-\thttps://villasunflower.com/xmlrpc.php",
+        "body": [
+          [
+            "TEXT",
+            "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Common library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Persistence data:",
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "js_file_name": "Grass Valley Switcher.js",
+              "original_file_name": "Technical Specialists.dat",
+              "scheduled_task_name": "Ion Chromatography"
+            },
+            {}
+          ],
+          [
+            "TEXT",
+            "Gootloader IOCs:\n\t-\thttps://redshirtsalwaysdie.com/xmlrpc.php\n\t-\thttps://edelson.com/xmlrpc.php\n\t-\thttps://handicapformidlingen.dk/xmlrpc.php\n\t-\thttps://enscape3d.com/xmlrpc.php\n\t-\thttps://autoconvo.com/xmlrpc.php\n\t-\thttps://javgiga.com/xmlrpc.php\n\t-\thttps://sinarlampung.co/xmlrpc.php\n\t-\thttp://mmckmusic.com/xmlrpc.php\n\t-\thttps://hopejoyinchrist.com/xmlrpc.php\n\t-\thttps://villasunflower.com/xmlrpc.php",
+            {}
+          ]
+        ],
         "body_config": {},
-        "body_format": "TEXT",
+        "body_format": "MULTI",
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
@@ -27,6 +57,14 @@
             "implant": [
               "GOOTLOADER"
             ]
+          },
+          "file": {
+            "name": {
+              "extracted": [
+                "Grass Valley Switcher.js",
+                "Technical Specialists.dat"
+              ]
+            }
           },
           "network": {
             "dynamic": {
@@ -373,6 +411,18 @@
           "heur_id": 4,
           "signatures": [],
           "value": "GOOTLOADER"
+        }
+      ],
+      "file.name.extracted": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Grass Valley Switcher.js"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Technical Specialists.dat"
         }
       ],
       "network.dynamic.domain": [

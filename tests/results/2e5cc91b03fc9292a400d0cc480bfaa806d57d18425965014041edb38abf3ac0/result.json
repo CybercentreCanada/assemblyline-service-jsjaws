@@ -5,9 +5,39 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttp://andrzejczyk.net/xmlrpc.php\n\t-\thttps://grayhouse.co/xmlrpc.php\n\t-\thttps://ideotvojezdravie.sk/xmlrpc.php\n\t-\thttps://exystence.net/xmlrpc.php\n\t-\thttps://starsetonline.com/xmlrpc.php\n\t-\thttps://funnnyfunny.com/xmlrpc.php\n\t-\thttps://uchilka.in.ua/xmlrpc.php\n\t-\thttps://aspencontractingventura.com/xmlrpc.php\n\t-\thttps://dolanyok.com/xmlrpc.php\n\t-\thttps://wlext.is/xmlrpc.php",
+        "body": [
+          [
+            "TEXT",
+            "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Common library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Persistence data:",
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "js_file_name": "Clinical Consulting.js",
+              "original_file_name": "Experimental Analysis.log",
+              "scheduled_task_name": "Small Business Marketing"
+            },
+            {}
+          ],
+          [
+            "TEXT",
+            "Gootloader IOCs:\n\t-\thttp://andrzejczyk.net/xmlrpc.php\n\t-\thttps://grayhouse.co/xmlrpc.php\n\t-\thttps://ideotvojezdravie.sk/xmlrpc.php\n\t-\thttps://exystence.net/xmlrpc.php\n\t-\thttps://starsetonline.com/xmlrpc.php\n\t-\thttps://funnnyfunny.com/xmlrpc.php\n\t-\thttps://uchilka.in.ua/xmlrpc.php\n\t-\thttps://aspencontractingventura.com/xmlrpc.php\n\t-\thttps://dolanyok.com/xmlrpc.php\n\t-\thttps://wlext.is/xmlrpc.php",
+            {}
+          ]
+        ],
         "body_config": {},
-        "body_format": "TEXT",
+        "body_format": "MULTI",
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
@@ -27,6 +57,14 @@
             "implant": [
               "GOOTLOADER"
             ]
+          },
+          "file": {
+            "name": {
+              "extracted": [
+                "Clinical Consulting.js",
+                "Experimental Analysis.log"
+              ]
+            }
           },
           "network": {
             "dynamic": {
@@ -315,6 +353,18 @@
           "heur_id": null,
           "signatures": [],
           "value": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\""
+        }
+      ],
+      "file.name.extracted": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Clinical Consulting.js"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Experimental Analysis.log"
         }
       ],
       "network.dynamic.domain": [

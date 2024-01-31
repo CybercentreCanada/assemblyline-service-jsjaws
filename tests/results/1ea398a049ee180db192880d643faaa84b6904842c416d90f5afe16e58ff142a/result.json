@@ -5,9 +5,39 @@
     "sections": [
       {
         "auto_collapse": false,
-        "body": "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.\nCommon library used: Unknown. We used GootLoaderAutoJsDecode to decode.\nGOOTLOADER IOCs:\n\t-\thttps://tottstore.com/xmlrpc.php\n\t-\thttps://trueteenbabes.com/xmlrpc.php\n\t-\thttps://thesmithrestaurant.com/xmlrpc.php\n\t-\thttps://lamaa.sa/xmlrpc.php\n\t-\thttps://architecturalsankul.com/xmlrpc.php\n\t-\thttp://71397454a0.url-de-test.ws/xmlrpc.php\n\t-\thttps://funnelslive.com/xmlrpc.php\n\t-\thttps://iadnews.in/xmlrpc.php\n\t-\thttps://wototvet.ru/xmlrpc.php\n\t-\thttps://spkp.com.au/xmlrpc.php",
+        "body": [
+          [
+            "TEXT",
+            "Embedded code was discovered in a file posing as a common library. Seen frequently in Gootloader.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Common library used: Unknown. We used GootLoaderAutoJsDecode to decode.",
+            {}
+          ],
+          [
+            "TEXT",
+            "Persistence data:",
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "js_file_name": "Qualifying Prospects.js",
+              "original_file_name": "Derivative Operations.log",
+              "scheduled_task_name": "New Hire Orientations"
+            },
+            {}
+          ],
+          [
+            "TEXT",
+            "Gootloader IOCs:\n\t-\thttps://tottstore.com/xmlrpc.php\n\t-\thttps://trueteenbabes.com/xmlrpc.php\n\t-\thttps://thesmithrestaurant.com/xmlrpc.php\n\t-\thttps://lamaa.sa/xmlrpc.php\n\t-\thttps://architecturalsankul.com/xmlrpc.php\n\t-\thttp://71397454a0.url-de-test.ws/xmlrpc.php\n\t-\thttps://funnelslive.com/xmlrpc.php\n\t-\thttps://iadnews.in/xmlrpc.php\n\t-\thttps://wototvet.ru/xmlrpc.php\n\t-\thttps://spkp.com.au/xmlrpc.php",
+            {}
+          ]
+        ],
         "body_config": {},
-        "body_format": "TEXT",
+        "body_format": "MULTI",
         "classification": "TLP:C",
         "depth": 0,
         "heuristic": {
@@ -27,6 +57,14 @@
             "implant": [
               "GOOTLOADER"
             ]
+          },
+          "file": {
+            "name": {
+              "extracted": [
+                "Qualifying Prospects.js",
+                "Derivative Operations.log"
+              ]
+            }
           },
           "network": {
             "dynamic": {
@@ -342,6 +380,18 @@
           "heur_id": 4,
           "signatures": [],
           "value": "GOOTLOADER"
+        }
+      ],
+      "file.name.extracted": [
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Derivative Operations.log"
+        },
+        {
+          "heur_id": 4,
+          "signatures": [],
+          "value": "Qualifying Prospects.js"
         }
       ],
       "network.dynamic.domain": [

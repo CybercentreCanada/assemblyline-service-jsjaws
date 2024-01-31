@@ -38,12 +38,15 @@ from assemblyline_v4_service.common.base import ServiceBase
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import (
     Heuristic,
+    KVSectionBody,
     Result,
     ResultGraphSection,
+    ResultMultiSection,
     ResultSection,
     ResultTableSection,
     ResultTextSection,
     TableRow,
+    TextSectionBody,
 )
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
@@ -603,10 +606,8 @@ class JsJaws(ServiceBase):
         self.embedded_code_in_lib: Optional[str] = None
         # List of malicious domains detected from a gootloader sample
         self.gootloader_uris: Optional[List[str]] = None
-        self.decoded_gootloader: Optional[str] = None
-        self.gootloader_stage2: Optional[str] = None
-        self.decoded_gootloader_path: Optional[str] = None
-        self.gootloader_stage2_path: Optional[str] = None
+        # Persistence data from a gootloader sample
+        self.gootloader_persistence: Optional[Dict[str, str]] = None
         # Flag that the sample contains a single script that writes unescaped values to the DOM
         self.single_script_with_unescape: Optional[bool] = None
         # Flag that the sample contains multiple scripts that write unescaped values to the DOM
@@ -659,6 +660,7 @@ class JsJaws(ServiceBase):
         self.doc_write_hashes = set()
         self.embedded_code_in_lib = None
         self.gootloader_uris = list()
+        self.gootloader_persistence = dict()
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
@@ -700,17 +702,13 @@ class JsJaws(ServiceBase):
         :param file_content: The content of the file
         :return: A tuple of the file path and the file content
         """
-        self.decoded_gootloader = "DecodedJsPayload.js_"
-        self.gootloader_stage2 = "GootLoader3Stage2.js_"
-        self.decoded_gootloader_path = path.join(self.working_directory, self.decoded_gootloader)
-        self.gootloader_stage2_path = path.join(self.working_directory, self.gootloader_stage2)
-
         # Let's try using the Gootloader-decoder lib first
         gootloader_config = gootloader_run(
             file_path,
             unsafe_uris=True,
-            payload_path=self.decoded_gootloader_path,
-            stage2_path=self.gootloader_stage2_path,
+            # The only reason we pass these variables is so that task cleanup is done
+            payload_path=path.join(self.working_directory, "DecodedJsPayload.js_"),
+            stage2_path=path.join(self.working_directory, "GootLoader3Stage2.js_"),
             log=self.log.debug,
         )
 
@@ -729,11 +727,10 @@ class JsJaws(ServiceBase):
             if self.gootloader_uris:
                 self.log.debug(f"Extracted malicious URIs from a GOOTLOADER sample using {GOOTLOADERAUTOJSDECODER}")
                 self.embedded_code_in_lib = f"Unknown. We used {GOOTLOADERAUTOJSDECODER} to decode."
+                if gootloader_config.persistence:
+                    self.gootloader_persistence = gootloader_config.persistence.__dict__
                 if gootloader_config.code:
-                    if path.exists(self.gootloader_stage2_path):
-                        return self.gootloader_stage2_path, gootloader_config.code.encode()
-                    elif path.exists(self.decoded_gootloader_path):
-                        return self.decoded_gootloader_path, gootloader_config.code.encode()
+                    return gootloader_config.final_stage_path, gootloader_config.code.encode()
 
         # Looks like the Gootloader-decoder did not work (at least for extracting the malicious code from the common
         # library). Let's try to use the libraries we manually extracted.
@@ -970,31 +967,31 @@ class JsJaws(ServiceBase):
         :return: None
         """
         heur = Heuristic(4)
-        embedded_code_in_lib_res_sec = ResultTextSection(
-            heur.name, heuristic=heur, parent=request.result, body=heur.description
-        )
-        embedded_code_in_lib_res_sec.add_line(f"Common library used: {self.embedded_code_in_lib}")
+        embedded_code_in_lib_res_sec = ResultMultiSection(heur.name, heuristic=heur, parent=request.result)
+        desc_body = TextSectionBody(heur.description)
+        embedded_code_in_lib_res_sec.add_section_part(desc_body)
+        lib_body = TextSectionBody(f"Common library used: {self.embedded_code_in_lib}")
+        embedded_code_in_lib_res_sec.add_section_part(lib_body)
+        if self.gootloader_persistence:
+            title_body = TextSectionBody("Persistence data:")
+            embedded_code_in_lib_res_sec.add_section_part(title_body)
+            kv_body = KVSectionBody(**self.gootloader_persistence)
+            embedded_code_in_lib_res_sec.add_section_part(kv_body)
+            embedded_code_in_lib_res_sec.add_tag("file.name.extracted", self.gootloader_persistence.get("js_file_name"))
+            embedded_code_in_lib_res_sec.add_tag(
+                "file.name.extracted", self.gootloader_persistence.get("original_file_name")
+            )
         embedded_code_in_lib_res_sec.add_tag("attribution.implant", "GOOTLOADER")
         embedded_code_in_lib_res_sec.add_tag("attribution.family", "GOOTLOADER")
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.uri", self.gootloader_uris)
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.domain", self.gootloader_uris)
         _ = add_tag(embedded_code_in_lib_res_sec, "network.dynamic.ip", self.gootloader_uris)
         if self.gootloader_uris:
-            embedded_code_in_lib_res_sec.add_line("GOOTLOADER IOCs:")
+            ioc_body = TextSectionBody()
+            ioc_body.add_line("Gootloader IOCs:")
             for uri in self.gootloader_uris:
-                embedded_code_in_lib_res_sec.add_line(f"\t-\t{safe_str(uri)}")
-
-        if not path.exists(self.decoded_gootloader_path) or not path.getsize(self.decoded_gootloader_path):
-            return
-
-        artifact = {
-            "name": self.decoded_gootloader,
-            "path": self.decoded_gootloader_path,
-            "description": f"Extracted Payload from {GOOTLOADERAUTOJSDECODER}",
-            "to_be_extracted": True,
-        }
-        self.log.debug(f"Adding extracted file: {self.decoded_gootloader}")
-        self.artifact_list.append(artifact)
+                ioc_body.add_line(f"\t-\t{safe_str(uri)}")
+            embedded_code_in_lib_res_sec.add_section_part(ioc_body)
 
     def _strip_null_bytes(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
         """
