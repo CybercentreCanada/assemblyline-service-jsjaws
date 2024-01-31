@@ -1,7 +1,17 @@
+from dataclasses import dataclass
 from typing import List
 
 
+@dataclass
+class PersistenceInformation:
+    js_file_name: str
+    scheduled_task_name: str
+    original_file_name: str
+
+
+@dataclass
 class GootLoaderConfig:
-    def __init__(self, code: str, urls: List[str]):
-        self.code = code
-        self.urls = urls
+    code: str
+    urls: List[str]
+    final_stage_path: str
+    persistence: PersistenceInformation

@@ -43,10 +43,10 @@ def run(
     code: str = ""
     third_generation: bool = False
     try:
-        next_stage, urls, code = gootDecode(js_file_path, unsafe_uris, payload_path, stage2_path, log)
+        final_stage, urls, code, persistence = gootDecode(js_file_path, unsafe_uris, payload_path, stage2_path, log)
         if not urls:
             third_generation = True
-            _, urls, code = gootDecode(next_stage, unsafe_uris, payload_path, stage2_path, log)
+            final_stage, urls, code, _ = gootDecode(final_stage, unsafe_uris, payload_path, stage2_path, log)
 
     except Exception as e:
         log(f"Error when running GootLoaderAutoJsDecode due to {e}")
@@ -55,5 +55,5 @@ def run(
         if validate_extraction(code) and (
             (third_generation and len(urls) == 10) or (not third_generation and len(urls) == 3)
         ):
-            return GootLoaderConfig(code, urls)
+            return GootLoaderConfig(code, urls, final_stage, persistence)
     return None

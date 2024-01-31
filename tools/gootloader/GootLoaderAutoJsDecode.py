@@ -26,8 +26,12 @@
 #
 ############################
 
+
 import re
 from logging import Logger
+from os import path as os_path
+
+from tools.gootloader.utils.config import PersistenceInformation
 
 goot3detected = False
 
@@ -247,7 +251,7 @@ def getFileandTaskData(inputString, log: Logger = print):
     Stage2Data = "File and Scheduled task data:\n"
 
     # FileTaskFileName = "FileAndTaskData.txt"
-
+    persistence = PersistenceInformation(s2JsFileName, scheduledTaskName, s2FirstFileName)
     Stage2Data += "\nFirst File Name:       " + s2FirstFileName
     Stage2Data += "\nJS File Name:          " + s2JsFileName
     Stage2Data += "\nScheduled Task Name:   " + scheduledTaskName
@@ -258,6 +262,7 @@ def getFileandTaskData(inputString, log: Logger = print):
     # Stage2Data += "\n\nData Saved to: " + FileTaskFileName
 
     log("\n" + Stage2Data + "\n")
+    return persistence
 
 
 def invokeStage2Decode(inputString, inputVarsDict):
@@ -371,12 +376,15 @@ def parseRound2Data(
     log: Logger = print,
 ):
     output_domains = list()
+    persistence = None
 
     if round2InputStr.startswith("function"):
         log("GootLoader Obfuscation Variant 3.0 sample detected.")
 
         # File Names and scheduled task
-        getFileandTaskData(decodeString(round1InputStr.encode("raw_unicode_escape").decode("unicode_escape")), log=log)
+        persistence = getFileandTaskData(
+            decodeString(round1InputStr.encode("raw_unicode_escape").decode("unicode_escape")), log=log
+        )
 
         global goot3detected
         goot3detected = True
@@ -432,7 +440,7 @@ def parseRound2Data(
         for dom in maliciousDomains:
             outputDomains += defang(dom) + "\n"
         log("\nMalicious Domains: \n\n%s" % outputDomains)
-    return outputCode, outputFileName, output_domains
+    return outputCode, outputFileName, output_domains, persistence
 
 
 def gootDecode(
@@ -483,7 +491,7 @@ def gootDecode(
     # run the decode function against the previous result
     round2Result = decodeString(CodeMatch.encode("raw_unicode_escape").decode("unicode_escape"))
 
-    round2Code, round2FileName, output_domains = parseRound2Data(
+    round2Code, round2FileName, output_domains, persistence_info = parseRound2Data(
         round2Result, round1Result, VarsDict, gootloader3sample, unsafe_uris, payload_path, log=log
     )
 
@@ -496,5 +504,5 @@ def gootDecode(
     # Write output file
     with open(round2FileName, mode="w") as file:
         file.write(round2Code)
-
-    return round2FileName, output_domains, round2Code
+    abs_path = os_path.abspath(stage2_path)
+    return abs_path, output_domains, round2Code, persistence_info
