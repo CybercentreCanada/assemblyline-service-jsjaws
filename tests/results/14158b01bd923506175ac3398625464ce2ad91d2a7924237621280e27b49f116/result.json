@@ -278,27 +278,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "command_line": [
-                "rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var"
-              ]
-            }
-          }
-        },
-        "title_text": "The script ran the following commands",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "C:\\ProgramData\\Trdce\\desired.dll",
         "body_config": {},
         "body_format": "TEXT",
@@ -491,7 +470,7 @@
         "sha256": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a"
       },
       {
-        "name": "boxjs_cmds.bat",
+        "name": "extracted_wscript.bat",
         "sha256": "b20d210cb0e10059d191871493db534e3b2b95eb3d8ecb109734de2cb3446935"
       }
     ],
@@ -588,13 +567,6 @@
       }
     ],
     "tags": {
-      "dynamic.process.command_line": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var"
-        }
-      ],
       "dynamic.process.file_name": [
         {
           "heur_id": null,
