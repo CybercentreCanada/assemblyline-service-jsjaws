@@ -381,6 +381,7 @@ def parseRound2Data(
 ):
     output_domains = list()
     persistence = None
+    maliciousDomains = list()
 
     if round2InputStr.startswith("function"):
         log("GootLoader Obfuscation Variant 3.0 sample detected.")
