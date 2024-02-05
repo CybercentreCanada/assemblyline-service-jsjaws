@@ -3089,6 +3089,7 @@ class JsJaws(ServiceBase):
 
             box_js_payloads = []
             for file in sorted(listdir(boxjs_output_dir)):
+                print(file)
                 if file not in snippet_keys:
                     box_js_payloads.append((file, path.join(boxjs_output_dir, file)))
 
@@ -3417,7 +3418,7 @@ class JsJaws(ServiceBase):
                 "description": f"{BOX_JS} Output",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {boxjs_analysis_log}")
+            self.log.debug(f"Adding supplementary file: {boxjs_analysis_log['path']}")
             self.artifact_list.append(boxjs_analysis_log)
 
     def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
