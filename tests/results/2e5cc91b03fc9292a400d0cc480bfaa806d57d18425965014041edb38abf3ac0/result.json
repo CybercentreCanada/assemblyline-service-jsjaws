@@ -252,7 +252,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\"",
+        "body": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\"",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -263,7 +263,7 @@
           "dynamic": {
             "process": {
               "command_line": [
-                "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\""
+                "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\""
               ]
             }
           }
@@ -277,7 +277,7 @@
     "extracted": [
       {
         "name": "boxjs_cmds.bat",
-        "sha256": "f8cc51983cf9a74f49d3dee2ca65f933cfa27152e61c58b2fa24a2be1f762fc4"
+        "sha256": "de0cabd9595cf2419dc88b738f121534c43e82463c7b2a91575cd0caca5dd1a0"
       }
     ],
     "supplementary": [
@@ -352,7 +352,7 @@
         {
           "heur_id": null,
           "signatures": [],
-          "value": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"CURRENT_SCRIPT_IN_FAKED_DIR.js\""
+          "value": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\""
         }
       ],
       "file.name.extracted": [
