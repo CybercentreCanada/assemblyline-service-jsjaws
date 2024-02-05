@@ -1310,6 +1310,7 @@ class JsJaws(ServiceBase):
                     if line.startswith("[verb] Code saved to"):
                         continue
                     else:
+                        print(line)
                         boxjs_output.append(line)
 
         return boxjs_output

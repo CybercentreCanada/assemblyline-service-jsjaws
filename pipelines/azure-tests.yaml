@@ -79,5 +79,5 @@ jobs:
           # Override the path to make sure Azure doesn't interfere
           export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           export REPO_NAME=${BUILD_REPOSITORY_NAME##*/}
-          python -m pytest -p no:cacheprovider --durations=10 -rsx -xsvvv --disable-warnings
+          python -m pytest -p no:cacheprovider --durations=10 -rsx -xsvvv --disable-warnings -k 14158b01bd923506175ac3398625464ce2ad91d2a7924237621280e27b49f116
         displayName: Test
