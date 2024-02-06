@@ -52,6 +52,7 @@ jobs:
       - script: |
           set -exv # echo on
           cd assemblyline-service-jsjaws
+          apt-get install git
           [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
 
           # Override the path to make sure Azure doesn't interfere
