@@ -1064,7 +1064,7 @@ class JsJaws(ServiceBase):
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
             # f"--fake-sample-name={path.basename(request.task.file_name)}",
             # Fake that HTTP requests work and have them return a fake payload
-            # "--fake-download",
+            "--fake-download",
         ]
 
         no_shell_error = request.get_param("no_shell_error")
