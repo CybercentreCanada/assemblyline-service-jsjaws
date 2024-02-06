@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@nodesecure/js-x-ray": ">=6.3.0",
-        "box-js": "github:cccs-kevin/box-js",
+        "box-js": "git://github.com/cccs-kevin/box-js.git#13440fe",
         "crypto-js": ">=4.2.0",
         "deobfuscator": ">=2.4.5",
         "entities": ">=4.5.0",
