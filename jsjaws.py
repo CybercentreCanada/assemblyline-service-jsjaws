@@ -3318,7 +3318,11 @@ class JsJaws(ServiceBase):
             boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
             with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
-                ioc_json = loads(file_contents)
+                ioc_json: List[Dict[str, Any]] = []
+                try:
+                    ioc_json = loads(file_contents)
+                except JSONDecodeError as e:
+                    self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
                 for ioc in ioc_json:
                     value = ioc.get("value", "")
                     if ioc["type"] == "UrlFetch":
