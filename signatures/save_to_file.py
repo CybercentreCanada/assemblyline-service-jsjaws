@@ -1,6 +1,7 @@
 """
 These are all of the signatures related to saving a file
 """
+
 from assemblyline.common.str_utils import safe_str
 from signatures.abstracts import ANY, Signature
 
@@ -60,6 +61,8 @@ class WritesArchive(Signature):
             split_line = line.split("] ")
             if len(split_line) == 2:
                 string = split_line[1]
+            else:
+                string = line
             if self.check_regex(extension_regex, string.lower()):
                 extension_results.append(string)
 
