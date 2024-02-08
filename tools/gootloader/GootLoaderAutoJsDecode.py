@@ -122,6 +122,8 @@ def convertConcatToString(inputConcatMatches, inputVarsDict, noEquals=False):
 def decodeString(scripttext):
     # Gootloader decode function
     ans = ""
+    if not scripttext:
+        return ans
     for i in range(0, len(scripttext)):
         if i % 2 == 1:
             ans += scripttext[i]
