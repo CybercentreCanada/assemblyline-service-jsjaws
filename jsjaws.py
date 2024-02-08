@@ -3712,6 +3712,11 @@ class JsJaws(ServiceBase):
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
+            elif kind == "shady-link":
+                if not re.match(FULL_URI, val) and not re.match(DOMAIN_ONLY_REGEX, val):
+                    continue
+                else:
+                    add_tag(jsxray_iocs_result_section, "network.static.uri", val, self.safelist)
             elif kind in ["suspicious-literal", "short-identifiers", "suspicious-file", "unsafe-regex"]:
                 # We don't care about these warnings
                 continue
