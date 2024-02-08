@@ -134,7 +134,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger",
+        "body": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f\" argentometry petalledPneumonoparesis Kankedort acknowledger",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -145,7 +145,7 @@
           "dynamic": {
             "process": {
               "command_line": [
-                "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger"
+                "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f\" argentometry petalledPneumonoparesis Kankedort acknowledger"
               ]
             }
           }
@@ -183,7 +183,7 @@
       },
       {
         "name": "boxjs_cmds.bat",
-        "sha256": "9b64b7d8cee577d55fe9008941646643c052a22607e92bf7cd0ca0452b5a1cb4"
+        "sha256": "a23ec6fe003760833455c6e87781d3b6779d338baa5d3bc3637d6219783646cb"
       },
       {
         "name": "5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned",
@@ -238,7 +238,7 @@
         {
           "heur_id": null,
           "signatures": [],
-          "value": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\CURRENT_SCRIPT_IN_FAKED_DIR.js\" argentometry petalledPneumonoparesis Kankedort acknowledger"
+          "value": "wscript \"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f\" argentometry petalledPneumonoparesis Kankedort acknowledger"
         }
       ]
     },

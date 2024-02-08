@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1131,
+    "score": 1142,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,6 +14,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -114,6 +138,47 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "reg add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniridescently /d qwkpoOQavfDtuJpiIGvlQQUsrqHKIraZiVPmfLOOSllIcYXwYQbfKekUPCfZlfjTJoZLxENPyctMporxEleWgHlKGlShkUNSwrKrQyITvoMgVJNwqmgrYTxliZzeRUUekXIDpUlxMoGPQdogntnFAKOxswviEHWqXgqAepSXUdpQZHnedntgANtfmRGruyfVbdUFlKyefXVOdIbEYciQpnhPKFAGhcIzFdIzPONVVsYlkNaLkxGBFwzWgaOTapGNvWobNtZHsZEBeulRazmjuHmNaxrDYFbGAVEjJHAxYxgRyYWjLQsRDHfKSlaFFxksKdaBBLtiwmmbYGgXXUvrdDpDUKvgdtnxwTkBSBvzwAVpCEWswyHvbHDnQqiiHKvwcXFizIardqLQVgHXtSx",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "reg add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniridescently /d qwkpoOQavfDtuJpiIGvlQQUsrqHKIraZiVPmfLOOSllIcYXwYQbfKekUPCfZlfjTJoZLxENPyctMporxEleWgHlKGlShkUNSwrKrQyITvoMgVJNwqmgrYTxliZzeRUUekXIDpUlxMoGPQdogntnFAKOxswviEHWqXgqAepSXUdpQZHnedntgANtfmRGruyfVbdUFlKyefXVOdIbEYciQpnhPKFAGhcIzFdIzPONVVsYlkNaLkxGBFwzWgaOTapGNvWobNtZHsZEBeulRazmjuHmNaxrDYFbGAVEjJHAxYxgRyYWjLQsRDHfKSlaFFxksKdaBBLtiwmmbYGgXXUvrdDpDUKvgdtnxwTkBSBvzwAVpCEWswyHvbHDnQqiiHKvwcXFizIardqLQVgHXtSx"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "support.microsoft.com",
@@ -199,6 +264,10 @@
       {
         "name": "a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned",
         "sha256": "369c60837a3cd55697de80a4f0d09aae6026da2be89c8d617b8d581bcad19b10"
+      },
+      {
+        "name": "boxjs_cmds.bat",
+        "sha256": "a3eda370b58b3bb21be402bbdebd57b0329dcdf71903e1882cbf31923c52efb2"
       }
     ],
     "supplementary": []
@@ -209,6 +278,18 @@
         "attack_ids": [],
         "heur_id": 2,
         "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
       },
       {
         "attack_ids": [],
@@ -245,6 +326,13 @@
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "reg add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUniridescently /d qwkpoOQavfDtuJpiIGvlQQUsrqHKIraZiVPmfLOOSllIcYXwYQbfKekUPCfZlfjTJoZLxENPyctMporxEleWgHlKGlShkUNSwrKrQyITvoMgVJNwqmgrYTxliZzeRUUekXIDpUlxMoGPQdogntnFAKOxswviEHWqXgqAepSXUdpQZHnedntgANtfmRGruyfVbdUFlKyefXVOdIbEYciQpnhPKFAGhcIzFdIzPONVVsYlkNaLkxGBFwzWgaOTapGNvWobNtZHsZEBeulRazmjuHmNaxrDYFbGAVEjJHAxYxgRyYWjLQsRDHfKSlaFFxksKdaBBLtiwmmbYGgXXUvrdDpDUKvgdtnxwTkBSBvzwAVpCEWswyHvbHDnQqiiHKvwcXFizIardqLQVgHXtSx"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,

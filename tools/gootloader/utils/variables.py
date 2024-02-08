@@ -129,7 +129,10 @@ class VariablesParser:
         self.__parse_concat_variable_definition(file_data)
         self.__assign_strings()
         self.__assign_concats()
-        return max(self.__get_all_blocks(), key=len)
+        blocks = self.__get_all_blocks()
+        if not blocks:
+            return None
+        return max(blocks, key=len)
 
 
 def grab_longest_string(content: str):
