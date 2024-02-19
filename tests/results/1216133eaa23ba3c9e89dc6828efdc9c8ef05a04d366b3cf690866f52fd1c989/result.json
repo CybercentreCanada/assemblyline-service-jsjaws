@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 911,
+    "score": 912,
     "sections": [
       {
         "auto_collapse": false,
@@ -250,6 +250,40 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "badwebsiteurl.com"
+              ],
+              "uri": [
+                "https://badwebsiteurl.com/postrcv/bad.php"
+              ],
+              "uri_path": [
+                "/postrcv/bad.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t-\thttps://badwebsiteurl.com/postrcv/bad.php",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
           "score": 500,
           "score_map": {
             "is_phishing_url": 500
@@ -274,7 +308,7 @@
             }
           }
         },
-        "title_text": "URLs",
+        "title_text": "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
         "zeroize_on_tag_safe": false
       }
     ]
@@ -299,6 +333,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 1,
@@ -352,6 +391,11 @@
       "network.dynamic.domain": [
         {
           "heur_id": 1,
+          "signatures": [],
+          "value": "badwebsiteurl.com"
+        },
+        {
+          "heur_id": 1,
           "signatures": [
             "is_phishing_url"
           ],
@@ -361,6 +405,11 @@
       "network.dynamic.uri": [
         {
           "heur_id": 1,
+          "signatures": [],
+          "value": "https://badwebsiteurl.com/postrcv/bad.php"
+        },
+        {
+          "heur_id": 1,
           "signatures": [
             "is_phishing_url"
           ],
@@ -368,6 +417,11 @@
         }
       ],
       "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/postrcv/bad.php"
+        },
         {
           "heur_id": 1,
           "signatures": [

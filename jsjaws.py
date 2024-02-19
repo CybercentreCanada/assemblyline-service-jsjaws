@@ -3289,7 +3289,7 @@ class JsJaws(ServiceBase):
         urls_result_section.set_column_order(["url", "method", "request_body"])
         urls_rows: List[TableRow] = []
         items_seen: Set[str] = set()
-        post_seen = False
+        posts_seen: List[str] = []
 
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
@@ -3301,7 +3301,7 @@ class JsJaws(ServiceBase):
                     if not add_tag(urls_result_section, "network.dynamic.uri", item["url"], self.safelist):
                         continue
                     if item.get("method", "").lower() == "post":
-                        post_seen = True
+                        posts_seen.append(item["url"])
                         params = {"method": "POST", "headers": item.get("headers", {})}
                         if isinstance(item.get("request_body"), dict):
                             params["json"] = item.get("request_body", None)
@@ -3332,7 +3332,7 @@ class JsJaws(ServiceBase):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
                         if item.get("method", "").lower() == "post":
-                            post_seen = True
+                            posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
                                 params["json"] = item.get("request_body", None)
@@ -3362,9 +3362,6 @@ class JsJaws(ServiceBase):
             if self.split_reverse_join:
                 urls_result_section.heuristic.add_signature_id("split_reverse_join_url", 500)
 
-            if self.is_phishing and post_seen:
-                urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
-
             if self.weird_base64_value_set:
                 urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
 
@@ -3373,6 +3370,17 @@ class JsJaws(ServiceBase):
 
             if self.url_used_for_suspicious_exec:
                 urls_result_section.heuristic.add_signature_id("url_used_for_suspicious_exec", 500)
+
+            if self.is_phishing and posts_seen:
+                phishing_post_urls_result_section = ResultTextSection(
+                    "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
+                    parent=urls_result_section,
+                )
+                phishing_post_urls_result_section.set_heuristic(1)
+                for post_seen in posts_seen:
+                    phishing_post_urls_result_section.add_line(f"\t-\t{post_seen}")
+                    add_tag(phishing_post_urls_result_section, "network.dynamic.uri", post_seen, self.safelist)
+                phishing_post_urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
 
             request.result.add_section(urls_result_section)
 
