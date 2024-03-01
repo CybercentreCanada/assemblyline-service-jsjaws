@@ -4435,7 +4435,7 @@ class JsJaws(ServiceBase):
                     if not value:
                         continue
                     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
-                    if key == "action":
+                    if key == "action" and re.match(FULL_URI, value):
                         form_has_action = True
                         if self.single_script_with_unescape:
                             # A form with an action was created from a single script that used an unescape AND the form
@@ -4462,7 +4462,7 @@ class JsJaws(ServiceBase):
                                 if not value:
                                     continue
                                 # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
-                                if key == "formaction":
+                                if key == "formaction" and re.match(FULL_URI, value):
                                     form_has_action = True
                                     if self.single_script_with_unescape:
                                         # A form with an action was created from a single script that used an
