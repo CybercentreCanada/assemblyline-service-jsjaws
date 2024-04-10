@@ -2224,7 +2224,7 @@ class JsJaws(ServiceBase):
         if '"' in attr_val:
             attr_val = attr_val.replace('"', '\\"')
 
-        if "\\" in attr_val:
+        if "\\" in attr_val and "url(" not in attr_val:
             attr_val = attr_val.replace("\\", "\\\\")
 
         return f'{random_element_varname}.setAttribute("{attr_id}", "{attr_val}");\n'
