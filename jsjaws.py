@@ -875,6 +875,8 @@ class JsJaws(ServiceBase):
                 decoded_match_string = match.string.decode()
             except UnicodeDecodeError:
                 return
+            if leading_char_index > len(decoded_match_string):
+                return
             leading_char = decoded_match_string[leading_char_index]
             return f"{leading_char}[{property_name}] = {property_value};".encode()
 
