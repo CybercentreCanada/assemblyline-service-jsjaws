@@ -742,6 +742,10 @@
       {
         "name": "temp_css.css",
         "sha256": "58d605d21fd8fe8fd83d07befafad7fe0f8ba6fcf3ae91296e0d000b9302b0cf"
+      },
+      {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "b7536052eaef16d5fad17897af6786f1dc163846beb81ba9c8c1a589c5761b1e"
       }
     ]
   },
