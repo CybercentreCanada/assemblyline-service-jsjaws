@@ -402,6 +402,10 @@
     ],
     "supplementary": [
       {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "018facd890ec4d579bba270d73d22ef4cc29a731697b2526d2bb45072b1379f9"
+      },
+      {
         "name": "temp_css.css",
         "sha256": "a7dca8914262c6efede3092981d3b5d1b475ba5ac58295559893669d386fbe03"
       },
