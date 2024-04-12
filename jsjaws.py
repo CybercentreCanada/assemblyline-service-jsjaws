@@ -171,6 +171,12 @@ PHISHING_TITLE_TERMS = [
     "dropbox",
     "google drive",
     "outlook",
+    # https://github.com/CAPESandbox/community/blob/d010d2c8a8343a37e176133edb26e901c2c8ced9/modules/signatures/suspicious_html.py
+    "please wait",
+    "redirecting",
+    "remittence",
+    "remittance",
+    "voicemail",
     # Other
     "paypal",
     "instagram",
