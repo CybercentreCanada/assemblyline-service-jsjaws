@@ -3265,6 +3265,13 @@ class JsJaws(ServiceBase):
 
             if new_passwords:
                 self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
+                passwords_extracted_file = "passwords_extracted_from_html.json"
+                password_extracted_path = path.join(self.working_directory, passwords_extracted_file)
+                with open(password_extracted_path, "w") as f:
+                    f.write(dumps(sorted(list(new_passwords))))
+                request.add_supplementary(
+                    password_extracted_path, passwords_extracted_file, "Passwords extracted from HTML file"
+                )
                 # It is technically not required to sort them, but it makes the output of the module predictable
                 if "passwords" in request.temp_submission_data:
                     new_passwords.update(set(request.temp_submission_data["passwords"]))

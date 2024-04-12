@@ -875,6 +875,10 @@
       {
         "name": "temp_javascript.js",
         "sha256": "541aece803df3ecffce95878233fe68e521b3fbbed5569cf6e5da61047cfa6a8"
+      },
+      {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "8e38a429ea15cf7a22645adfd3b1256078d4fd90ac71a1b8a563697b846cb7ed"
       }
     ]
   },

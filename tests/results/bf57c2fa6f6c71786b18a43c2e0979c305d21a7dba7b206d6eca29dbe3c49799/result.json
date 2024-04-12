@@ -600,6 +600,10 @@
         "sha256": "220208c96baccf34ed328640343469db935482bb9fadddb67d061994252886e1"
       },
       {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "35d9389f7c24c7baaed4c5e82f566451384636e78bd66a1db60820bbba7e9dba"
+      },
+      {
         "name": "temp_css.css",
         "sha256": "965cce5ade224dd7e99f0fcd751202d236782be8b30504cabf443fc6bac191dc"
       }
