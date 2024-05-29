@@ -512,7 +512,7 @@ DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
 
 # Example:
 # document.write(atob(val));
-DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
+DOM_WRITE_ATOB_REGEX = "(document\.write\((window\.)?atob\(.+\))"
 
 # Example:
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
@@ -3407,6 +3407,11 @@ class JsJaws(ServiceBase):
                     add_tag(phishing_post_urls_result_section, "network.dynamic.uri", post_seen, self.safelist)
                 phishing_post_urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
 
+            # Special case where we are going to flag the GETs because this file is most likely phishing.
+            elif self.is_phishing and (
+                self.html_document_write and self.sample_type == "code/html" or self.gauntlet_runs > 1
+            ):
+                urls_result_section.heuristic.add_signature_id("possible_phishing_urls", 400)
             request.result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
@@ -3539,10 +3544,17 @@ class JsJaws(ServiceBase):
                 if http_res.body and http_res.tags.get("network.dynamic.uri"):
                     http_res.set_heuristic(13)
                     http_res.heuristic.add_signature_id("suspicious_pwsh_url", 500)
+            # These are common phishing techniques used together for obfuscation
+            # Step 1: Base64 decoding
+            # Step 2: DOM Write
+            elif "base64_decoding" in sig_hit_names and (
+                self.html_document_write and self.sample_type == "code/html" or self.gauntlet_runs > 1
+            ):
+                self.is_phishing = True
 
             result.add_section(sigs_res_sec)
 
-        if phishing_terms and (phishing_logos or phishing_form):
+        if not self.is_phishing and phishing_terms and (phishing_logos or phishing_form):
             self.is_phishing = True
 
     @staticmethod
