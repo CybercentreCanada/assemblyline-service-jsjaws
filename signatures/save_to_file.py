@@ -47,7 +47,8 @@ class WritesArchive(Signature):
             heuristic_id=3,
             name="writes_archive",
             description="JavaScript writes archive file to disk",
-            indicators=["\\.zip", "\\.iso"],
+            # File extensions based on https://github.com/CybercentreCanada/assemblyline-service-cape/blob/2412416fd8040897d25d00bdaba6356d514398f4/cape/cape_main.py#L1343
+            indicators=["\\.zip", "\\.iso", "\\.rar", "\\.vhd", "\\.udf", "\\.7z"],
             severity=3,
         )
 
