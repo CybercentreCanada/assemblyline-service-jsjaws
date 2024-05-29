@@ -204,6 +204,10 @@ class ObfuscationPrefix(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+        marks_len = len(self.marks)
+        if marks_len > 10:
+            self.marks = self.marks[:10]
+            self.add_mark(f"[{marks_len - 10} Mark(s) Truncated]")
 
 
 class ParseIntUsage(Signature):
