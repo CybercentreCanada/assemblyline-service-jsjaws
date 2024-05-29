@@ -1,7 +1,8 @@
 """
 These are all of the signatures related to decoding
 """
-from signatures.abstracts import Signature
+
+from signatures.abstracts import ALL, Signature
 
 
 class Unescape(Signature):
@@ -147,12 +148,15 @@ class WriteBase64ContentFromElement(Signature):
             heuristic_id=3,
             name="write_base64_content_from_element",
             description="JavaScript writes content to the DOM by base64-decoding a value from an element",
-            indicators=["document.write(atob(document.getElementById("],
+            indicators=["document.write(", "atob(", "document.getElementById("],
             severity=3,
         )
 
     def process_output(self, output):
-        self.check_indicators_in_list(output)
+        indicator_list = [
+            {"method": ALL, "indicators": self.indicators},
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
 
 
 class Base64EncodedURL(Signature):
@@ -176,12 +180,15 @@ class Base64Redirect(Signature):
             heuristic_id=3,
             name="base64_redirect",
             description="JavaScript uses atob to decode a base64-encoded URL then redirect to it",
-            indicators=["window.location.replace(atob("],
+            indicators=["window.location.replace(", "atob("],
             severity=2,
         )
 
     def process_output(self, output):
-        self.check_indicators_in_list(output)
+        indicator_list = [
+            {"method": ALL, "indicators": self.indicators},
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
 
 
 class ObfuscationPrefix(Signature):
@@ -213,3 +220,20 @@ class ParseIntUsage(Signature):
 
     def process_output(self, output):
         self.check_indicators_in_list(output)
+
+
+class WriteDecodedURIComponentFromBase64Content(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="write_decoded_uri_component_from_base64",
+            description="JavaScript writes content to the DOM by base64-decoding a value from an element",
+            indicators=["document.write(", "decodeURI", "atob("],
+            severity=0,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": self.indicators},
+        ]
+        self.check_multiple_indicators_in_list(output, indicator_list)
