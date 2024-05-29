@@ -3554,7 +3554,14 @@ class JsJaws(ServiceBase):
 
             result.add_section(sigs_res_sec)
 
-        if not self.is_phishing and phishing_terms and (phishing_logos or phishing_form):
+        # A regular form asking for credentials is not phishing, so we need more than just
+        # phishing terms + one of phishing logos and phishing form
+        if (
+            not self.is_phishing
+            and phishing_terms
+            and (phishing_logos or phishing_form)
+            and len(signatures_that_hit) > 2
+        ):
             self.is_phishing = True
 
     @staticmethod
