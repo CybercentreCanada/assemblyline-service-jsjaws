@@ -1,6 +1,7 @@
 """
 These are all of the signatures related to phishing
 """
+
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS
 from jsjaws import PHISHING_INPUTS
 from signatures.abstracts import ALL, ANY, Signature
@@ -68,6 +69,7 @@ class PhishingLogoDownload(Signature):
                 "splash247.com",
                 "companieslogo.com",
                 "upload.wikimedia.org",
+                "i.gyazo.com",
             ],
             severity=1,
         )
