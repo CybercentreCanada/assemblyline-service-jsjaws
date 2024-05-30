@@ -82,8 +82,7 @@ class Signature:
                 and all(indicator.lower() in string.lower() for indicator in self.indicators)
                 and not any(item.lower() in string.lower() for item in self.safelist)
             ):
-                if safe_str(string).strip() not in self.marks:
-                    self.marks.append(safe_str(string).strip())
+                self.add_mark(string)
 
             # If we only want to match at least one indicator in a line, then mark it!
             if not match_all:
@@ -91,9 +90,7 @@ class Signature:
                     if indicator.lower() in string.lower() and not any(
                         item.lower() in string.lower() for item in self.safelist
                     ):
-                        if safe_str(string).strip() not in self.marks:
-                            self.marks.append(safe_str(string).strip())
-                        continue
+                        self.add_mark(string)
 
     @staticmethod
     def check_regex(regex: str, string: str) -> List[str]:
@@ -122,7 +119,9 @@ class Signature:
         """
         if mark:
             if safe_str(mark).strip() not in self.marks:
-                self.marks.append(safe_str(mark).strip())
+                # Sometimes lines end with trailing semi-colons and sometimes they do not. These are not unique marks
+                if safe_str(mark).strip() + ";" not in self.marks:
+                    self.marks.append(safe_str(mark).strip())
         else:
             return False
 
@@ -176,5 +175,4 @@ class Signature:
                         are_indicators_matched = False
 
             if are_indicators_matched and not any(item.lower() in string.lower() for item in self.safelist):
-                if safe_str(string).strip() not in self.marks:
-                    self.marks.append(safe_str(string).strip())
+                self.add_mark(string)
