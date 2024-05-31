@@ -114,3 +114,88 @@ class PhishingPostPassword(Signature):
         ]
 
         self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostLocation(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_location",
+            description="JavaScript makes network request via POST with location data.",
+            severity=1,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    # Ottawa + Ottawa b64'd + ottawa b64'd
+                    "Ottawa",
+                    "T3R0YXdh",
+                    "b3R0YXdh",
+                    # Canada + Canada b64'd + canada b64'd
+                    "Canada",
+                    "Q2FuYWRh",
+                    "Y2FuYWRh",
+                    # 1A1 A1A + 1A1 A1A b64'd + 1a1 a1a b64'd
+                    "1A1 A1A",
+                    "MUExIEExQQ==",
+                    "MWExIGExYQ==",
+                ],
+            },
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostHost(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_host",
+            description="JavaScript makes network request via POST with host data.",
+            severity=1,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    # USER-PC + USER-PC b64'd + user-pc b64'd
+                    "USER-PC",
+                    "VVNFUi1QQw==",
+                    "dXNlci1wYw==",
+                ],
+            },
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostCCInfo(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_cc_info",
+            description="JavaScript makes network request via POST with credit card data.",
+            severity=0,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    "maiden",
+                    "expiry",
+                    "billing",
+                ],
+            },
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
