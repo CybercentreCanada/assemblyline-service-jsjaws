@@ -1,5 +1,10 @@
 import re
 import tempfile
+import subprocess
+import sys
+import os
+import json
+
 from base64 import b64decode
 from binascii import Error as BinasciiError
 from glob import glob
@@ -906,6 +911,36 @@ class JsJaws(ServiceBase):
 
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
+
+
+        #Geek Week 9 Team:2.2 Exracting Asar files aswell as reuploading files to ALv4.
+
+        elif self.sample_type in ["archive/asar"]:
+            request.result=Result()
+
+            try:
+
+                extracted = subprocess.check_call(['asar', 'extract', file_path, self.working_directory])
+
+                text_section = ResultSection('example of a default section')
+                request.result.add_section(text_section)
+
+            except Exception as e:
+
+                error_section = ResultSection(f"An Error occured when extracting the asar file: {e}", file_path)
+                request.result.add_section(error_section)
+
+                return
+
+            print(self.working_directory)
+            print(os.listdir(self.working_directory))
+
+            for file in os.listdir(self.working_directory):
+                if os.path.isfile(os.path.join(self.working_directory, file)):
+                    request.add_extracted(os.path.join(self.working_directory, file),file, "extracted with asar")
+
+            return
+
 
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(
             request, file_path, file_content
