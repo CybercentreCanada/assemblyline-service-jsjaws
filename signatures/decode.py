@@ -233,7 +233,7 @@ class WriteDecodedURIComponentFromBase64Content(Signature):
             name="write_decoded_uri_component_from_base64",
             description="JavaScript writes content to the DOM by base64-decoding a value from an element",
             indicators=["document.write(", "decodeURI", "atob("],
-            severity=0,
+            severity=3,
         )
 
     def process_output(self, output):
