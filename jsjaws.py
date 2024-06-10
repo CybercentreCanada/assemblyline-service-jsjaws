@@ -3356,7 +3356,12 @@ class JsJaws(ServiceBase):
                         elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
-                        if item.get("method", "").lower() == "post":
+                        # For some reason BoxJS allows method to be a string and also a list of strings
+                        if (isinstance(item.get("method"), str) and item["method"].lower() == "post") or (
+                            isinstance(item.get("method"), list)
+                            and len(item["method"]) == 1
+                            and any(method == "post" for method in item["method"])
+                        ):
                             posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
