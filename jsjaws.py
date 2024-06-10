@@ -1841,7 +1841,24 @@ class JsJaws(ServiceBase):
         embed_srcs: Set[str] = set()
 
         # https://www.w3schools.com/tags/att_src.asp
-        elements_with_src_attr = ["audio", "embed", "iframe", "img", "input", "script", "source", "track", "video"]
+        # Supported by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L60
+        elements_with_src_attr = [
+            "audio",
+            "embed",
+            "frame",
+            "iframe",
+            "img",
+            "input",
+            "script",
+            "source",
+            "track",
+            "v:fill",
+            "v:image",
+            "v:oval",
+            "v:rect",
+            "v:roundrect",
+            "video",
+        ]
 
         # https://www.w3schools.com/tags/att_href.asp
         elements_with_href_attr = ["a", "area", "base", "link"]
