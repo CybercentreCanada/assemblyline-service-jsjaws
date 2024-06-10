@@ -34,6 +34,7 @@ COPY . .
 USER root
 WORKDIR ./tools
 RUN npm install
+RUN npm install -g asar
 
 USER assemblyline
 WORKDIR /opt/al_service
