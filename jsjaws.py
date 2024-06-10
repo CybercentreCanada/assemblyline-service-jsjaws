@@ -2522,6 +2522,7 @@ class JsJaws(ServiceBase):
         """
         This method
         """
+        # Supported by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L37:L39
         # Look for elements with the on<event> attributes and add their script bodies to the aggregated js script
         for event in ["error", "pageshow", "load", "submit", "click", "finish"]:
             for onevent in element.get_attribute_list(f"on{event}"):
