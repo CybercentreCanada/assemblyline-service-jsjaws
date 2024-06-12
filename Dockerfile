@@ -34,6 +34,7 @@ COPY . .
 USER root
 WORKDIR ./tools
 RUN npm install
+RUN chown -R root:root node_modules
 
 USER assemblyline
 WORKDIR /opt/al_service
