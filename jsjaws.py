@@ -646,6 +646,8 @@ class JsJaws(ServiceBase):
         self.script_entropies: Dict[str, Any] = dict()
         # The number of web bugs/beacons found in an HTML document
         self.num_of_web_bugs = 0
+        # Used for heuristic 25, to show that a form exists and that there are a small amount of input elements
+        self.short_form = False
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -692,6 +694,7 @@ class JsJaws(ServiceBase):
         self.sus_form_actions = set()
         self.script_entropies = dict()
         self.num_of_web_bugs = 0
+        self.short_form = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1470,6 +1473,8 @@ class JsJaws(ServiceBase):
             )
             phishing_inputs_sec.add_line(phishing_inputs_heur.description)
             phishing_inputs_sec.add_lines([f"\t- {item}" for item in sorted(self.phishing_inputs)])
+            if self.short_form:
+                phishing_inputs_heur.add_signature_id("short_form")
 
         if self.num_of_web_bugs:
             web_bugs_sec = ResultTextSection("Web bugs found", parent=request.result)
@@ -4502,6 +4507,10 @@ class JsJaws(ServiceBase):
                 break
 
         if password_field_exists:
+            # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L375
+            if len(inputs) > 0 and len(inputs) < 4:
+                self.short_form = True
+
             # If we have a password field, let's look at the form details
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
             forms = soup.findAll("form")
