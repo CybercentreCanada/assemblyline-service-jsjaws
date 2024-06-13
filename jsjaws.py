@@ -24,7 +24,6 @@ from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
-from assemblyline.odm.base import DOMAIN_ONLY_REGEX, FULL_URI, URI_REGEX
 from assemblyline_service_utilities.common.dynamic_service_helper import (
     COMMON_FP_DOMAINS,
     OntologyResults,
@@ -52,6 +51,7 @@ from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwor
 from bs4 import BeautifulSoup
 from bs4.element import Comment, PageElement, ResultSet
 from dateutil.parser import parse as dtparse
+from multidecoder.decoders.network import find_urls, is_domain, is_url
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
 from signatures.abstracts import Signature
@@ -723,9 +723,7 @@ class JsJaws(ServiceBase):
             for uri in gootloader_config.urls:
                 stripped_uri = uri.strip()
                 # URI should exist, URI should actually be a URI, or URI is actually a domain
-                if not stripped_uri or (
-                    not re.match(FULL_URI, stripped_uri) and not re.match(DOMAIN_ONLY_REGEX, stripped_uri)
-                ):
+                if not stripped_uri or (not is_url(stripped_uri.encode()) and not is_domain(stripped_uri.encode())):
                     continue
 
                 self.gootloader_uris.append(stripped_uri)
@@ -1785,6 +1783,7 @@ class JsJaws(ServiceBase):
             self._hunt_for_suspicious_titles(soup)
             self._hunt_for_suspicious_input_fields(soup)
             self._hunt_for_suspicious_forms(soup)
+            self._hunt_for_suspicious_meta(soup, request)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -2393,7 +2392,7 @@ class JsJaws(ServiceBase):
         """
         source_added = False
         if script.get("src") and script["src"] not in self.initial_script_sources:
-            if re.match(FULL_URI, script["src"]):
+            if is_url(script["src"].encode()):
                 if self.gauntlet_runs < 2:
                     self.initial_script_sources.add(script["src"])
                 else:
@@ -3790,7 +3789,7 @@ class JsJaws(ServiceBase):
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
             elif kind == "shady-link":
-                if not re.match(FULL_URI, val) and not re.match(DOMAIN_ONLY_REGEX, val):
+                if not is_url(val.encode()) and not is_domain(val.encode()):
                     continue
                 else:
                     add_tag(jsxray_iocs_result_section, "network.static.uri", val, self.safelist)
@@ -3870,7 +3869,6 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
-        redirection_res_sec: Optional[ResultTextSection] = None
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -3943,7 +3941,7 @@ class JsJaws(ServiceBase):
                 # (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
                 if not path.exists(self.malware_jail_sandbox_env_dump_path):
-                    matches = re.findall(URI_REGEX, log_line)
+                    matches = list(set([url.value.decode() for url in find_urls(log_line.encode())]))
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
@@ -3984,41 +3982,7 @@ class JsJaws(ServiceBase):
                 elif isinstance(location_href, dict):
                     continue
 
-                if location_href.lower().startswith("ms-msdt:"):
-                    heur = Heuristic(5)
-                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-
-                    # Try to only recover the msdt command's powershell for the extracted file
-                    # If we can't, write the whole command
-                    try:
-                        encoded_content = self.parse_msdt_powershell(location_href).encode()
-                    except ValueError:
-                        encoded_content = location_href.encode()
-
-                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                        out.write(encoded_content)
-                    artifact = {
-                        "name": sha256(encoded_content).hexdigest(),
-                        "path": out.name,
-                        "description": "Redirection location",
-                        "to_be_extracted": True,
-                    }
-                    self.log.debug(f"Redirection location: {out.name}")
-                    self.artifact_list.append(artifact)
-                elif not redirection_res_sec:
-                    heur = Heuristic(6)
-                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-
-                if not redirection_res_sec.body or (
-                    redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body
-                ):
-                    if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
-                        redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
-
-                        if any(
-                            urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls
-                        ):
-                            redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
+                self._handle_location_redirection(location_href, request)
 
             # Check if programatically created script with src set is found
             if HTMLELEMENT_SRC_SET_TO_URI in log_line and any(
@@ -4035,6 +3999,51 @@ class JsJaws(ServiceBase):
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
+
+    def _handle_location_redirection(self, location_href: str, request: ServiceRequest):
+        """
+        If a location redirection related to MS-MSDT is seen, handle
+        If a generic location redirection is seen, handle
+        :param location_href: The URI that the page is being redirected to
+        :param request: The ServiceRequest object
+        """
+        redirection_res_sec: Optional[ResultTextSection] = next(
+            (res for res in request.result.sections if res.heuristic and res.heuristic.heur_id == 6), None
+        )
+
+        if location_href.lower().startswith("ms-msdt:"):
+            heur = Heuristic(5)
+            redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+            # Try to only recover the msdt command's powershell for the extracted file
+            # If we can't, write the whole command
+            try:
+                encoded_content = self.parse_msdt_powershell(location_href).encode()
+            except ValueError:
+                encoded_content = location_href.encode()
+
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                out.write(encoded_content)
+            artifact = {
+                "name": sha256(encoded_content).hexdigest(),
+                "path": out.name,
+                "description": "Redirection location",
+                "to_be_extracted": True,
+            }
+            self.log.debug(f"Redirection location: {out.name}")
+            self.artifact_list.append(artifact)
+        elif not redirection_res_sec:
+            heur = Heuristic(6)
+            redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+        if not redirection_res_sec.body or (
+            redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body
+        ):
+            if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
+                redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
+
+                if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
+                    redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
 
     def _handle_subsequent_scripts(self, result: Result):
         """
@@ -4496,7 +4505,7 @@ class JsJaws(ServiceBase):
                     if not value:
                         continue
                     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
-                    if key == "action" and re.match(FULL_URI, value):
+                    if key == "action" and is_url(value.encode()):
                         form_has_action = True
                         if self.single_script_with_unescape:
                             # A form with an action was created from a single script that used an unescape AND the form
@@ -4523,7 +4532,7 @@ class JsJaws(ServiceBase):
                                 if not value:
                                     continue
                                 # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
-                                if key == "formaction" and re.match(FULL_URI, value):
+                                if key == "formaction" and is_url(value.encode()):
                                     form_has_action = True
                                     if self.single_script_with_unescape:
                                         # A form with an action was created from a single script that used an
@@ -4538,3 +4547,24 @@ class JsJaws(ServiceBase):
 
                 if not form_has_action:
                     self.password_input_and_no_form_action = True
+
+    def _hunt_for_suspicious_meta(self, soup: BeautifulSoup, request: ServiceRequest) -> None:
+        """
+        This method looks for meta redirects, which are suspicious.
+        Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L264
+        :param soup: The BeautifulSoup object
+        :param request: The ServiceRequest object
+        :return: None
+        """
+        # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+        metas = soup.findAll("meta")
+
+        for meta in metas:
+            # Metadata equivalent to http headers
+            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#http-equiv
+            if meta.has_attr("http-equiv"):
+                if meta.get("http-equiv").lower() == "refresh":
+                    url_data = meta.get("content", "unknown")
+                    urls = list(set([url.value.decode() for url in find_urls(url_data.encode())]))
+                    if urls:
+                        self._handle_location_redirection(urls[0], request)
