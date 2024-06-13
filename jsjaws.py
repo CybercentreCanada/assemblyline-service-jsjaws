@@ -644,6 +644,8 @@ class JsJaws(ServiceBase):
         self.sus_form_actions: Set[str] = set()
         # Map of scripts found and their corresponding entropies
         self.script_entropies: Dict[str, Any] = dict()
+        # The number of web bugs/beacons found in an HTML document
+        self.num_of_web_bugs = 0
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -689,6 +691,7 @@ class JsJaws(ServiceBase):
         self.phishing_inputs = set()
         self.sus_form_actions = set()
         self.script_entropies = dict()
+        self.num_of_web_bugs = 0
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -1468,6 +1471,10 @@ class JsJaws(ServiceBase):
             phishing_inputs_sec.add_line(phishing_inputs_heur.description)
             phishing_inputs_sec.add_lines([f"\t- {item}" for item in sorted(self.phishing_inputs)])
 
+        if self.num_of_web_bugs:
+            web_bugs_sec = ResultTextSection("Web bugs found", parent=request.result)
+            web_bugs_sec.add_lines([f"{self.num_of_web_bugs} web bug(s)/beacon(s) found in document"])
+
         if self.password_input_and_no_form_action:
             pass_and_no_action_heur = Heuristic(26)
             pass_and_no_action_sec = ResultTextSection(
@@ -1784,6 +1791,7 @@ class JsJaws(ServiceBase):
             self._hunt_for_suspicious_input_fields(soup)
             self._hunt_for_suspicious_forms(soup)
             self._hunt_for_suspicious_meta(soup, request)
+            self._hunt_for_suspicious_images(soup)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -4568,3 +4576,44 @@ class JsJaws(ServiceBase):
                     urls = list(set([url.value.decode() for url in find_urls(url_data.encode())]))
                     if urls:
                         self._handle_location_redirection(urls[0], request)
+
+    def _hunt_for_suspicious_images(self, soup: BeautifulSoup):
+        """
+        This method looks for web bugs, which are suspicious.
+        Web bug/beacon: https://en.wikipedia.org/wiki/Web_beacon
+        Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L304
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        imgs = soup.findAll("img")
+
+        for img in imgs:
+            d = {}
+            try:
+                if img.has_attr("height"):
+                    try:
+                        d["height"] = int(img.get("height"))
+                    except Exception:
+                        try:
+                            d["height"] = img.get("height")
+                            if isinstance(d["height"], str):
+                                d["height"] = d["height"].encode("utf-8")
+                        except Exception:
+                            pass
+                if img.has_attr("width"):
+                    try:
+                        d["width"] = int(img.get("width"))
+                    except Exception:
+                        try:
+                            d["width"] = img.get("width")
+                            if isinstance(type(d["width"]), str):
+                                d["width"] = d["width"].encode("utf-8")
+                        except Exception:
+                            pass
+                if "height" in d and "width" in d:
+                    if isinstance(d["height"], int) and isinstance(d["width"], int):
+                        if d["height"] <= 1 and d["width"] <= 1:
+                            self.num_of_web_bugs += 1
+            except Exception:
+                # We don't care that much
+                pass
