@@ -1,10 +1,12 @@
 """
 These are all of the signatures related to using ActiveXObjects
 """
+
 from signatures.abstracts import Signature
 
 
 class ActiveXObject(Signature):
+    # Supported by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L35
     def __init__(self):
         super().__init__(
             heuristic_id=3,

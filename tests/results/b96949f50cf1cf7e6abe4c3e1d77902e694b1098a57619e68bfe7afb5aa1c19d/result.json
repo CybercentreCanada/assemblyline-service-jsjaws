@@ -56,7 +56,9 @@
           "heur_id": 25,
           "score": 100,
           "score_map": {},
-          "signatures": {}
+          "signatures": {
+            "short_form": 1
+          }
         },
         "promote_to": null,
         "tags": {},
@@ -856,7 +858,9 @@
       {
         "attack_ids": [],
         "heur_id": 25,
-        "signatures": []
+        "signatures": [
+          "short_form"
+        ]
       },
       {
         "attack_ids": [],
