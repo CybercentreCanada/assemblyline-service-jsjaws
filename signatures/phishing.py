@@ -136,7 +136,7 @@ class PhishingPostLocation(Signature):
                     "T3R0YXdh",
                     "b3R0YXdh",
                     # Canada + Canada b64'd + canada b64'd
-                    "Canada",
+                    # "Canada", Removed due to FPs
                     "Q2FuYWRh",
                     "Y2FuYWRh",
                     # 1A1 A1A + 1A1 A1A b64'd + 1a1 a1a b64'd
@@ -192,8 +192,8 @@ class PhishingPostCCInfo(Signature):
                 "method": ANY,
                 "indicators": [
                     "maiden",
-                    "expiry",
-                    "billing",
+                    # "expiry", Removed due to FPs
+                    # "billing", Removed due to FPs
                 ],
             },
         ]
