@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2571,
+    "score": 3071,
     "sections": [
       {
         "auto_collapse": false,
@@ -707,6 +707,44 @@
       },
       {
         "auto_collapse": false,
+        "body": "\t-\thttps://couponhagen.churchontheranch.uk/app/exlca.php",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "is_phishing_url": 500
+          },
+          "signatures": {
+            "is_phishing_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "couponhagen.churchontheranch.uk"
+              ],
+              "uri": [
+                "https://couponhagen.churchontheranch.uk/app/exlca.php"
+              ],
+              "uri_path": [
+                "/app/exlca.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Multiple rounds of tool runs were required due to nested document.write calls",
         "body_config": {},
         "body_format": "TEXT",
@@ -760,6 +798,13 @@
         "heur_id": 1,
         "signatures": [
           "single_script_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "is_phishing_url"
         ]
       },
       {
@@ -882,6 +927,13 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "couponhagen.churchontheranch.uk"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
             "single_script_url"
           ],
           "value": "kasumbo.com"
@@ -905,6 +957,13 @@
         {
           "heur_id": 1,
           "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
             "single_script_url"
           ],
           "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
@@ -915,6 +974,13 @@
           "heur_id": 1,
           "signatures": [
             "single_script_url"
+          ],
+          "value": "/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
           ],
           "value": "/app/exlca.php"
         },

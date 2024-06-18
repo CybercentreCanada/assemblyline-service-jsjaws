@@ -1475,6 +1475,7 @@ class JsJaws(ServiceBase):
             phishing_inputs_sec.add_lines([f"\t- {item}" for item in sorted(self.phishing_inputs)])
             if self.short_form:
                 phishing_inputs_heur.add_signature_id("short_form", 500)
+                self.is_phishing = True
 
         if self.num_of_web_bugs:
             web_bugs_sec = ResultTextSection("Web bugs found", parent=request.result)
