@@ -3837,17 +3837,21 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest, timed_out=object):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object):
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
         :return: None
         """
-        if not path.exists(self.cleaned_with_synchrony_path):
-            return
-
         # We do not want a loop of Synchrony extractions
         if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
+            return
+
+        if not path.exists(self.cleaned_with_synchrony_path):
+            if timed_out:
+                time_out_synchrony_res = ResultTextSection(f"{SYNCHRONY} timed out deobfuscating the file")
+                time_out_synchrony_res.set_heuristic(8)
+                request.result.add_section(time_out_synchrony_res)
             return
 
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
@@ -3864,7 +3868,8 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
         self.artifact_list.append(artifact)
 
-        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io, we should flag this combination with a signature that scores 500
+        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io,
+        # we should flag this combination with a signature that scores 500
         for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug(
