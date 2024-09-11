@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 563,
+    "score": 562,
     "sections": [
       {
         "auto_collapse": false,
@@ -272,26 +272,6 @@
         },
         "title_text": "URLs",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "\t\tObfuscated code was found that was obfuscated by: morse",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "JS-X-Ray IOCs Detected",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -304,11 +284,6 @@
       {
         "attack_ids": [],
         "heur_id": 1,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
         "signatures": []
       },
       {

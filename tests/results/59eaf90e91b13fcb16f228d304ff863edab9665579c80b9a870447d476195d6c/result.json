@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1563,
+    "score": 1562,
     "sections": [
       {
         "auto_collapse": false,
@@ -286,26 +286,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "\t\tAn unsafe statement was found: Function",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "JS-X-Ray IOCs Detected",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "View extracted file 59eaf90e91b13fcb16f228d304ff863edab9665579c80b9a870447d476195d6c.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -347,11 +327,6 @@
         "signatures": [
           "obfuscator_io_usage_url"
         ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
       },
       {
         "attack_ids": [],
