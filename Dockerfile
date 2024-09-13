@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y curl xz-utils
 
 WORKDIR /usr/local
 # Pinning to this version of Node
-ARG NODE_VERSION=19.7.0
+ARG NODE_VERSION=20.17.0
 RUN curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz --output node-v${NODE_VERSION}-linux-x64.tar.xz
 RUN tar -xJf node-v${NODE_VERSION}-linux-x64.tar.xz --strip 1
 RUN node --version
