@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 562,
+    "score": 540,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,30 +14,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\t\tNew ActiveXObject: WScript.Shell\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tNew ActiveXObject: Shell.Application",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "active_x_object": 10
-          },
-          "signatures": {
-            "active_x_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -86,30 +62,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ParseIntUsage",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "save_to_file": 10
-          },
-          "signatures": {
-            "save_to_file": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: SaveToFile",
         "zeroize_on_tag_safe": false
       },
       {
@@ -183,95 +135,6 @@
         "tags": {},
         "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "C://ProgramData//CCleaner1.zip",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "C://ProgramData//CCleaner1.zip"
-              ]
-            }
-          }
-        },
-        "title_text": "The script wrote the following files",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": [
-              "GET"
-            ],
-            "request_headers": {},
-            "url": "https://lilygovert91.top/CCleaner2.zip"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method",
-            "request_headers"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "lilygovert91.top"
-              ],
-              "uri": [
-                "https://lilygovert91.top/CCleaner2.zip"
-              ],
-              "uri_path": [
-                "/CCleaner2.zip"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -281,23 +144,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "active_x_object"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -310,13 +156,6 @@
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "save_to_file"
         ]
       },
       {
@@ -341,36 +180,7 @@
         ]
       }
     ],
-    "tags": {
-      "dynamic.process.file_name": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "C://ProgramData//CCleaner1.zip"
-        }
-      ],
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "lilygovert91.top"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://lilygovert91.top/CCleaner2.zip"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/CCleaner2.zip"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }
