@@ -232,10 +232,6 @@
   "files": {
     "extracted": [
       {
-        "name": "3fb5f6db21abb181956aeaf5bdeabfe8c711874d37ff77b20d8689318d3f9d7e",
-        "sha256": "3fb5f6db21abb181956aeaf5bdeabfe8c711874d37ff77b20d8689318d3f9d7e"
-      },
-      {
         "name": "Blob[80]",
         "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
       }

@@ -272,10 +272,6 @@
       {
         "name": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned",
         "sha256": "153b3e0785599c169f576625125bd4a21f19eb140744241ca5e4998becff3ed0"
-      },
-      {
-        "name": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc",
-        "sha256": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc"
       }
     ],
     "supplementary": []
