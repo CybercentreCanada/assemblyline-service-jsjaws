@@ -16,7 +16,6 @@ from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse
 
-import signatures
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.entropy import calculate_partition_entropy
@@ -54,11 +53,13 @@ from dateutil.parser import parse as dtparse
 from multidecoder.decoders.network import find_urls, is_domain, is_url
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
-from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
+from yaml import safe_load as yaml_safe_load
+
+import signatures
+from signatures.abstracts import Signature
 from tools import tinycss2_helper
 from tools.gootloader.run import run as gootloader_run
-from yaml import safe_load as yaml_safe_load
 from yara import Error as YARAError
 from yara import compile as yara_compile
 
@@ -1588,21 +1589,30 @@ class JsJaws(ServiceBase):
                 low_body_heur.name, low_body_heur.description, heuristic=low_body_heur, parent=request.result
             )
 
-        tool_threads: List[Thread] = []
+        tool_threads: List[tuple[str, Thread]] = []
         responses: Dict[str, List[str]] = {}
         if not request.get_param("static_analysis_only"):
-            tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             tool_threads.append(
-                Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
+                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             )
-        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+            tool_threads.append(
+                (
+                    MALWARE_JAIL,
+                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True),
+                )
+            )
+        tool_threads.append(
+            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+        )
 
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
 
         # 1. If it is enabled in the submission parameter
         if request.get_param("enable_synchrony"):
-            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+            tool_threads.append(
+                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+            )
             has_synchrony_run = True
         else:
             for yara_rule in listdir("./yara"):
@@ -1615,18 +1625,24 @@ class JsJaws(ServiceBase):
                 # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
                 if matches:
                     tool_threads.append(
-                        Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
+                        (
+                            SYNCHRONY,
+                            Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True),
+                        )
                     )
                     has_synchrony_run = True
                     break
 
-        for thr in tool_threads:
+        for _, thr in tool_threads:
             thr.start()
 
-        for thr in tool_threads:
+        synchrony_timedout = False
+        for name, thr in tool_threads:
             thr.join(timeout=tool_timeout)
             if thr.is_alive():
-                self.log.debug("A tool did not finish. Look at previous logs...")
+                if name == SYNCHRONY:
+                    synchrony_timedout = True
+                self.log.debug(f"{name} did not finish. Look at previous logs...")
                 # Give the tool a chance to clean up after to the tool timeout
                 sleep(3)
 
@@ -1697,7 +1713,7 @@ class JsJaws(ServiceBase):
         # TODO: Do something with the Synchrony output
         _ = responses.get(SYNCHRONY)
 
-        self._extract_synchrony(request)
+        self._extract_synchrony(request, synchrony_timedout)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
@@ -3821,17 +3837,21 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object):
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
         :return: None
         """
-        if not path.exists(self.cleaned_with_synchrony_path):
-            return
-
         # We do not want a loop of Synchrony extractions
         if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
+            return
+
+        if not path.exists(self.cleaned_with_synchrony_path):
+            if timed_out:
+                time_out_synchrony_res = ResultTextSection(f"{SYNCHRONY} timed out deobfuscating the file")
+                time_out_synchrony_res.set_heuristic(8)
+                request.result.add_section(time_out_synchrony_res)
             return
 
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
@@ -3848,7 +3868,8 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
         self.artifact_list.append(artifact)
 
-        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io, we should flag this combination with a signature that scores 500
+        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io,
+        # we should flag this combination with a signature that scores 500
         for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug(
