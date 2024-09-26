@@ -227,7 +227,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
               ],
@@ -324,30 +324,14 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
         }
@@ -357,11 +341,21 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/"
         }

@@ -3363,7 +3363,8 @@ class JsJaws(ServiceBase):
         urls_result_section.set_column_order(["url", "method", "request_body"])
         urls_rows: List[TableRow] = []
         items_seen: Set[str] = set()
-        posts_seen: List[str] = []
+        mj_posts_seen: List[str] = []
+        boxjs_posts_seen: List[str] = []
 
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
@@ -3372,10 +3373,10 @@ class JsJaws(ServiceBase):
                 for item in urls_json:
                     if len(item["url"]) > 500:
                         item["url"] = truncate(item["url"], 500)
-                    if not add_tag(urls_result_section, "network.dynamic.uri", item["url"], self.safelist):
+                    if not add_tag(urls_result_section, "network.static.uri", item["url"], self.safelist):
                         continue
                     if item.get("method", "").lower() == "post":
-                        posts_seen.append(item["url"])
+                        mj_posts_seen.append(item["url"])
                         params = {"method": "POST", "headers": item.get("headers", {})}
                         if isinstance(item.get("request_body"), dict):
                             params["json"] = item.get("request_body", None)
@@ -3411,7 +3412,7 @@ class JsJaws(ServiceBase):
                             and len(item["method"]) == 1
                             and any(method == "post" for method in item["method"])
                         ):
-                            posts_seen.append(value["url"])
+                            boxjs_posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
                                 params["json"] = item.get("request_body", None)
@@ -3450,13 +3451,16 @@ class JsJaws(ServiceBase):
             if self.url_used_for_suspicious_exec:
                 urls_result_section.heuristic.add_signature_id("url_used_for_suspicious_exec", 500)
 
-            if self.is_phishing and posts_seen:
+            if self.is_phishing and (mj_posts_seen or boxjs_posts_seen):
                 phishing_post_urls_result_section = ResultTextSection(
                     "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
                     parent=urls_result_section,
                 )
                 phishing_post_urls_result_section.set_heuristic(1)
-                for post_seen in posts_seen:
+                for post_seen in mj_posts_seen:
+                    phishing_post_urls_result_section.add_line(f"\t-\t{post_seen}")
+                    add_tag(phishing_post_urls_result_section, "network.static.uri", post_seen, self.safelist)
+                for post_seen in boxjs_posts_seen:
                     phishing_post_urls_result_section.add_line(f"\t-\t{post_seen}")
                     add_tag(phishing_post_urls_result_section, "network.dynamic.uri", post_seen, self.safelist)
                 phishing_post_urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)

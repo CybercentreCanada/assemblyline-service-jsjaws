@@ -120,7 +120,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "ip": [
                 "194.180.174.158"
               ],
@@ -173,30 +173,14 @@
       }
     ],
     "tags": {
-      "network.dynamic.ip": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "194.180.174.158"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "http://194.180.174.158/lv.jpg"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/lv.jpg"
-        }
-      ],
       "network.static.ip": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "194.180.174.158"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "194.180.174.158"
         }
@@ -206,11 +190,21 @@
           "heur_id": 2,
           "signatures": [],
           "value": "http://194.180.174.158/lv.jpg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://194.180.174.158/lv.jpg"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/lv.jpg"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/lv.jpg"
         }

@@ -268,7 +268,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "dce42.shrubs.emptyisland.pics"
               ],
@@ -387,37 +387,17 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "dce42.shrubs.emptyisland.pics"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "/subscribeEvent"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "dce42.shrubs.emptyisland.pics"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "dce42.shrubs.emptyisland.pics"
         }
       ],
@@ -426,12 +406,26 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/subscribeEvent"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/subscribeEvent"
         }
       ]
