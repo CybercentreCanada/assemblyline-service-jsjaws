@@ -371,7 +371,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "gkjdepok.org"
               ],
@@ -480,30 +480,14 @@
           "value": "C:/ProgramData/wJPBCKy.HoGKdJI"
         }
       ],
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "gkjdepok.org"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/crtfc/TsCw3rCG.dll"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "gkjdepok.org"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "gkjdepok.org"
         }
@@ -513,11 +497,21 @@
           "heur_id": 2,
           "signatures": [],
           "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://gkjdepok.org/crtfc/TsCw3rCG.dll"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/crtfc/TsCw3rCG.dll"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/crtfc/TsCw3rCG.dll"
         }

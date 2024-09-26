@@ -192,7 +192,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.icodeps.com"
               ],
@@ -256,30 +256,14 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "www.icodeps.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://www.icodeps.com/jsapi.php"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/jsapi.php"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "www.icodeps.com"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "www.icodeps.com"
         }
@@ -289,11 +273,21 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://www.icodeps.com/jsapi.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://www.icodeps.com/jsapi.php"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/jsapi.php"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/jsapi.php"
         }

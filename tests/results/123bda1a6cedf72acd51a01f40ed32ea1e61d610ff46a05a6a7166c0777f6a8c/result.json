@@ -159,7 +159,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "centarial.com"
               ],
@@ -234,30 +234,14 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "centarial.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "http://centarial.com/documento.php"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/documento.php"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "centarial.com"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "centarial.com"
         },
@@ -279,6 +263,11 @@
           "value": "http://centarial.com/documento.php"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://centarial.com/documento.php"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://google.com"
@@ -287,6 +276,11 @@
       "network.static.uri_path": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/documento.php"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/documento.php"
         }

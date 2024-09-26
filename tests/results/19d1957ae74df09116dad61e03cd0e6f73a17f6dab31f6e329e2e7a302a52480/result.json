@@ -521,7 +521,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "abc.xyz"
               ],
@@ -683,11 +683,6 @@
       ],
       "network.dynamic.domain": [
         {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "abc.xyz"
-        },
-        {
           "heur_id": 13,
           "signatures": [
             "suspicious_pwsh_url"
@@ -703,11 +698,6 @@
         }
       ],
       "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://abc.xyz/img/bg-cropped.jpg"
-        },
         {
           "heur_id": 13,
           "signatures": [
@@ -737,16 +727,16 @@
             "wscript_pwsh_url"
           ],
           "value": "/get/vpiHmi/invoice.pdf"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/img/bg-cropped.jpg"
         }
       ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "abc.xyz"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "abc.xyz"
         },
@@ -759,6 +749,11 @@
       "network.static.uri": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "https://abc.xyz/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "https://abc.xyz/img/bg-cropped.jpg"
         },
@@ -776,6 +771,11 @@
         },
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/img/bg-cropped.jpg"
         }

@@ -342,7 +342,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "mail1.ccistack.com"
               ],
@@ -425,47 +425,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "mail1.ccistack.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://code.jquery.com/jquery-3.4.1.min.js"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/jquery-3.4.1.min.js"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
@@ -474,6 +433,11 @@
         },
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "mail1.ccistack.com"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "mail1.ccistack.com"
         },
@@ -490,14 +454,29 @@
           "value": "https://code.jquery.com/jquery-3.4.1.min.js"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://code.jquery.com/jquery-3.4.1.min.js"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2Fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2FAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://mail1.ccistack.com/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
         },
         {
           "heur_id": 2,
@@ -517,12 +496,27 @@
           "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2Fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6MWYyZDNiMzJmP2RmNmZlMjQ+MmJjZmRhMTI1MzUwMGQyPmRhNjc0ZiFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fadobe-logo-5CC38E11AD-seeklogo.com.png&fmlBlkTk"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3A%2F%2Fseeklogo.com%2Fimages%2FA%2FAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/fmlurlsvc/?fewReq=:B:JVc9NjIyPSFxOjUpNyFuYzo3Nj03NiF0bmBpZnNydWI6YTc/YTBjPmIyNjJlMT41MT82MGM+MDExZGI/YzU/MDcwYTZmMzMyMyFzOjYxNDI2PjE0MjYhdm5jOjY+V0tEUjBENzc+Mjc+KjY+V0tEUjBDNzc+Mjc+IXVkd3M6bGtmZnRxZmlzb2hodUdkZG5qZm5rKWRoaiFkOjY+IW9jazo3&url=https%3a%2f%2fseeklogo.com%2fimages%2fA%2fAdobe_PDF-logo-D4883D5CD6-seeklogo.com.png&fmlBlkTk"
+        },
+        {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/jquery-3.4.1.min.js"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/jquery-3.4.1.min.js"
         }
