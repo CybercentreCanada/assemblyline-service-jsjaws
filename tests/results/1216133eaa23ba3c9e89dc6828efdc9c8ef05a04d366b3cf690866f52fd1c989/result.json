@@ -257,7 +257,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "badwebsiteurl.com"
               ],
@@ -295,7 +295,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "badwebsiteurl.com"
               ],
@@ -388,48 +388,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "badwebsiteurl.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "badwebsiteurl.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://badwebsiteurl.com/postrcv/bad.php"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "https://badwebsiteurl.com/postrcv/bad.php"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/postrcv/bad.php"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "/postrcv/bad.php"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 27,
@@ -439,6 +397,18 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "badwebsiteurl.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "badwebsiteurl.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
           "value": "badwebsiteurl.com"
         },
         {
@@ -459,6 +429,18 @@
           "value": "https://badwebsiteurl.com/postrcv/bad.php"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://badwebsiteurl.com/postrcv/bad.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "https://badwebsiteurl.com/postrcv/bad.php"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"
@@ -473,6 +455,18 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/postrcv/bad.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/postrcv/bad.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
           "value": "/postrcv/bad.php"
         },
         {

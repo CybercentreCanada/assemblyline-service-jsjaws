@@ -316,7 +316,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "orthodentrics.com"
               ],
@@ -422,37 +422,17 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "orthodentrics.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/8GE/fdsfdsfewwwe23"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "orthodentrics.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "orthodentrics.com"
         }
       ],
@@ -461,12 +441,26 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/8GE/fdsfdsfewwwe23"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/8GE/fdsfdsfewwwe23"
         }
       ]

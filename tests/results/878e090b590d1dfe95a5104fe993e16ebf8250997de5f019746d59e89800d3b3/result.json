@@ -293,7 +293,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "m.facebook.com",
                 "efijkyt.s3.ap-northeast-2.amazonaws.com",
@@ -381,52 +381,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "efijkyt.s3.ap-northeast-2.amazonaws.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "m.facebook.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "www.listfcbt.top"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "http://www.listfcbt.top"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/7253hgrscv"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/composer/ocelot/async_loader/?publisher=feed#_=_"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
@@ -434,12 +388,27 @@
           "value": "efijkyt.s3.ap-northeast-2.amazonaws.com"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "efijkyt.s3.ap-northeast-2.amazonaws.com"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "m.facebook.com"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "m.facebook.com"
+        },
+        {
           "heur_id": 2,
+          "signatures": [],
+          "value": "www.listfcbt.top"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "www.listfcbt.top"
         }
@@ -451,12 +420,27 @@
           "value": "http://www.listfcbt.top"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://www.listfcbt.top"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
+        },
+        {
           "heur_id": 2,
+          "signatures": [],
+          "value": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
         }
@@ -468,7 +452,17 @@
           "value": "/7253hgrscv"
         },
         {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/7253hgrscv"
+        },
+        {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/composer/ocelot/async_loader/?publisher=feed#_=_"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/composer/ocelot/async_loader/?publisher=feed#_=_"
         }

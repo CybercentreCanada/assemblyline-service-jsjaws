@@ -500,7 +500,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "kuratoro.com"
               ],
@@ -664,37 +664,17 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "kuratoro.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "https://kuratoro.com/community/experience.min.js"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "/community/experience.min.js"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "kuratoro.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "kuratoro.com"
         }
       ],
@@ -703,12 +683,26 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://kuratoro.com/community/experience.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://kuratoro.com/community/experience.min.js"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/community/experience.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
           "value": "/community/experience.min.js"
         }
       ]

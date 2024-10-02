@@ -196,7 +196,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.computerhope.com"
               ],
@@ -262,37 +262,17 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "split_reverse_join_url"
-          ],
-          "value": "www.computerhope.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "split_reverse_join_url"
-          ],
-          "value": "https://www.computerhope.com/jargon/t/tilde.htm"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "split_reverse_join_url"
-          ],
-          "value": "/jargon/t/tilde.htm"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "www.computerhope.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
           "value": "www.computerhope.com"
         }
       ],
@@ -301,12 +281,26 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://www.computerhope.com/jargon/t/tilde.htm"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
+          "value": "https://www.computerhope.com/jargon/t/tilde.htm"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/jargon/t/tilde.htm"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
           "value": "/jargon/t/tilde.htm"
         }
       ]

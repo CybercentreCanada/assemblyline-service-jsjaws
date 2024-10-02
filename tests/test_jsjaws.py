@@ -14,6 +14,7 @@ from assemblyline_service_utilities.testing.helper import check_section_equality
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection, ResultTableSection, TableRow
 from assemblyline_v4_service.common.task import Task
+
 from jsjaws import JsJaws
 from signatures.abstracts import Signature
 
@@ -563,14 +564,17 @@ class TestJsJaws:
             body_format=BODY_FORMAT.TABLE,
             body=dumps(body),
             tags={
-                "network.dynamic.domain": ["blah.ca", "definitely-a-url.ca"],
+                "network.dynamic.domain": ["definitely-a-url.ca"],
                 "network.dynamic.uri": [
-                    "http://blah.ca/blah.exe",
-                    "http://1.1.1.1/blah.exe",
                     "http://definitely-a-url.ca",
                 ],
-                "network.dynamic.ip": ["1.1.1.1"],
-                "network.dynamic.uri_path": ["/blah.exe"],
+                "network.static.domain": ["blah.ca"],
+                "network.static.uri": [
+                    "http://blah.ca/blah.exe",
+                    "http://1.1.1.1/blah.exe",
+                ],
+                "network.static.ip": ["1.1.1.1"],
+                "network.static.uri_path": ["/blah.exe"],
                 "file.string.extracted": ["blahblahblah"],
             },
         )
