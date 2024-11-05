@@ -2379,8 +2379,14 @@ class JsJaws(ServiceBase):
                  and a possible result section
         """
         # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
-        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
+        vb_scripts = any(
+            script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+            for script in scripts
+        )
+        js_scripts = any(
+            script.get("type", "").lower() in ("", "text/javascript") or script.get("language").lower() == "javascript"
+            for script in scripts
+        )
         vb_and_js_scripts = vb_scripts and js_scripts
 
         if vb_and_js_scripts:
