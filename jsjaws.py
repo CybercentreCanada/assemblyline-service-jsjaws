@@ -2379,15 +2379,17 @@ class JsJaws(ServiceBase):
                  and a possible result section
         """
         # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(
-            script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+        vb_scripts = [
+            script
             for script in scripts
-        )
+            if script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+        ]
+
         js_scripts = any(
             script.get("type", "").lower() in ("", "text/javascript") or script.get("language").lower() == "javascript"
             for script in scripts
         )
-        vb_and_js_scripts = vb_scripts and js_scripts
+        vb_and_js_scripts = bool(vb_scripts) and js_scripts
 
         if vb_and_js_scripts:
             heur = Heuristic(12)
@@ -2397,24 +2399,23 @@ class JsJaws(ServiceBase):
             vb_and_js_section.add_tag("file.behavior", heur.name)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
-            for script in scripts:
-                if script.get("language", "").lower() in ["vbscript"]:
-                    # Make sure there is actually a body to the script
-                    body = script.string if script.string is None else str(script.string).strip()
+            for script in vb_scripts:
+                # Make sure there is actually a body to the script
+                body = script.string if script.string is None else str(script.string).strip()
 
-                    if body and len(body) > 2:
-                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                            out.write(body.encode())
-                            vbscript_to_extract = out.name
-                        vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
-                        artifact = {
-                            "name": vbs_file_name,
-                            "path": vbscript_to_extract,
-                            "description": "Extracted VBScript Contents",
-                            "to_be_extracted": True,
-                        }
-                        self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
-                        self.artifact_list.append(artifact)
+                if body and len(body) > 2:
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                        out.write(body.encode())
+                        vbscript_to_extract = out.name
+                    vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
+                    artifact = {
+                        "name": vbs_file_name,
+                        "path": vbscript_to_extract,
+                        "description": "Extracted VBScript Contents",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
+                    self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
 
