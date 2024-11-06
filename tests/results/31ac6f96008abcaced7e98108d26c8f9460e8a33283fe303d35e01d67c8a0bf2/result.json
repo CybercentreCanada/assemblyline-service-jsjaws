@@ -318,8 +318,8 @@
   "files": {
     "extracted": [
       {
-        "name": "extracted_wscript.bat",
-        "sha256": "f20eab87239a3d4d39277c4240bea115f73a324b51ceb25ab433125eb7deef85"
+        "name": "extracted_wscript.ps1",
+        "sha256": "f03e6dfb5749f09337b18c8e99c494355431ee854f7b6a2f36549079e74ba007"
       }
     ],
     "supplementary": [
