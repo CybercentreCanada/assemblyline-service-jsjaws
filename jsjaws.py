@@ -48,7 +48,7 @@ from assemblyline_v4_service.common.result import (
 )
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
-from bs4.element import Comment, PageElement, ResultSet
+from bs4.element import Comment, ResultSet, Tag
 from dateutil.parser import parse as dtparse
 from multidecoder.decoders.network import find_urls, is_domain, is_url
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
@@ -556,6 +556,19 @@ ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
 # or
 # Invoice.pdf
 PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
+
+
+def is_vb_script(script: Tag) -> bool:
+    return script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+
+
+def is_js_script(script: Tag) -> bool:
+    """Checks if script is javascript or jscript"""
+    if "type" in script:
+        return script["type"].lower() in ("", "text/javascript", "text/jscript")
+    if "language" in script:
+        return script["language"].lower() in ("", "javascript", "jscript")
+    return True  # default is text/javascript if there is no type/language
 
 
 class JsJaws(ServiceBase):
@@ -1968,7 +1981,7 @@ class JsJaws(ServiceBase):
                 return True
         return False
 
-    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[Tag]) -> None:
         """
         This method checks if the file content is contains scripts that are made up of
         large "unescape" calls
@@ -1998,7 +2011,7 @@ class JsJaws(ServiceBase):
             if count > 1:
                 self.multiple_scripts_with_unescape = True
 
-    def _skip_element(self, element: PageElement) -> bool:
+    def _skip_element(self, element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an element
         :param element: The BeautifulSoup element
@@ -2033,7 +2046,7 @@ class JsJaws(ServiceBase):
 
         return False
 
-    def _remove_safelisted_element_attrs(self, element: PageElement) -> PageElement:
+    def _remove_safelisted_element_attrs(self, element: Tag) -> Tag:
         """
         If an element has an attribute that is safelisted, don't include it when we create the element
         :param element: The BeautifulSoup element
@@ -2042,13 +2055,13 @@ class JsJaws(ServiceBase):
         if element.name in SAFELISTED_ATTRS_TO_POP:
             for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
                 if is_tag_safelisted(
-                    element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist
+                    element.attrs.get(attr, ""), ["network.static.domain", "network.static.uri"], self.safelist
                 ):
                     element.attrs.pop(attr)
         return element
 
     @staticmethod
-    def _skip_embed_element(element: PageElement) -> bool:
+    def _skip_embed_element(element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an embedded element which
         could be created elsewhere
@@ -2097,7 +2110,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_id(element: PageElement, idx: int, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_id(element: Tag, idx: int, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the element id of the element, and will create one if
         the "id" field is not set
@@ -2118,7 +2131,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_varname(element: PageElement, element_id: str, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the name of the variable representing the element
         :param element: The BeautifulSoup element
@@ -2149,7 +2162,7 @@ class JsJaws(ServiceBase):
                 random_element_varname = "jsjaws_" + random_element_varname
         return random_element_varname
 
-    def _determine_element_value(self, element: PageElement) -> str:
+    def _determine_element_value(self, element: Tag) -> str:
         """
         This method determines the value of an element
         :param element: The BeautifulSoup element
@@ -2179,7 +2192,7 @@ class JsJaws(ServiceBase):
         return element_value
 
     @staticmethod
-    def _initialize_create_element_script(random_element_varname: str, element: PageElement, element_id: str) -> str:
+    def _initialize_create_element_script(random_element_varname: str, element: Tag, element_id: str) -> str:
         """
         This method sets up the initial script used for dynamically creating elements
         :param random_element_varname: The name of the variable
@@ -2199,9 +2212,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     @staticmethod
-    def _append_element_script(
-        element: PageElement, set_of_variable_names: Set[str], random_element_varname: str
-    ) -> str:
+    def _append_element_script(element: Tag, set_of_variable_names: Set[str], random_element_varname: str) -> str:
         """
         This method adds script that appends the element
         :param element: The BeautifulSoup element
@@ -2218,7 +2229,7 @@ class JsJaws(ServiceBase):
 
         return f"document.body.appendChild({random_element_varname});\n"
 
-    def _set_element_innertext_script(self, element: PageElement, random_element_varname: str) -> str:
+    def _set_element_innertext_script(self, element: Tag, random_element_varname: str) -> str:
         """
         This method sets the element value to the innerText attribute of the element
         :param element: The BeautifulSoup element
@@ -2284,7 +2295,7 @@ class JsJaws(ServiceBase):
         return f'{random_element_varname}.setAttribute("{attr_id}", "{attr_val}");\n'
 
     @staticmethod
-    def _handle_object_elements(element: PageElement, request: ServiceRequest, random_element_varname: str) -> str:
+    def _handle_object_elements(element: Tag, request: ServiceRequest, random_element_varname: str) -> str:
         """
         This method handles "object" elements and could return a script that clicks the object
         :param element: The BeautifulSoup element
@@ -2337,7 +2348,7 @@ class JsJaws(ServiceBase):
         return ""
 
     def _setup_create_element_script(
-        self, element: PageElement, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
+        self, element: Tag, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
     ) -> str:
         """
         This method sets up the script that creates elements dynamically
@@ -2369,7 +2380,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     def _is_vb_and_js_scripts(
-        self, scripts: ResultSet[PageElement], request: ServiceRequest
+        self, scripts: ResultSet[Tag], request: ServiceRequest
     ) -> Tuple[bool, Optional[ResultTextSection]]:
         """
         This method determines if there is a combination of VisualBasic and JavaScript scripts
@@ -2379,9 +2390,10 @@ class JsJaws(ServiceBase):
                  and a possible result section
         """
         # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
-        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
-        vb_and_js_scripts = vb_scripts and js_scripts
+        vb_scripts = [script for script in scripts if is_vb_script(script)]
+
+        js_scripts = any(is_js_script(script) for script in scripts)
+        vb_and_js_scripts = bool(vb_scripts) and js_scripts
 
         if vb_and_js_scripts:
             heur = Heuristic(12)
@@ -2391,30 +2403,29 @@ class JsJaws(ServiceBase):
             vb_and_js_section.add_tag("file.behavior", heur.name)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
-            for script in scripts:
-                if script.get("language", "").lower() in ["vbscript"]:
-                    # Make sure there is actually a body to the script
-                    body = script.string if script.string is None else str(script.string).strip()
+            for script in vb_scripts:
+                # Make sure there is actually a body to the script
+                body = script.string if script.string is None else str(script.string).strip()
 
-                    if body and len(body) > 2:
-                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                            out.write(body.encode())
-                            vbscript_to_extract = out.name
-                        vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
-                        artifact = {
-                            "name": vbs_file_name,
-                            "path": vbscript_to_extract,
-                            "description": "Extracted VBScript Contents",
-                            "to_be_extracted": True,
-                        }
-                        self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
-                        self.artifact_list.append(artifact)
+                if body and len(body) > 2:
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                        out.write(body.encode())
+                        vbscript_to_extract = out.name
+                    vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
+                    artifact = {
+                        "name": vbs_file_name,
+                        "path": vbscript_to_extract,
+                        "description": "Extracted VBScript Contents",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
+                    self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
 
         return vb_and_js_scripts, vb_and_js_section
 
-    def _is_script_source(self, script: PageElement) -> bool:
+    def _is_script_source(self, script: Tag) -> bool:
         """
         This method the script source, if it exists, and adds it to the set
         :param script: The Script soup element
@@ -2545,9 +2556,7 @@ class JsJaws(ServiceBase):
         return body
 
     @staticmethod
-    def _handle_onevent_attributes(
-        is_script_body: bool, element: PageElement, onevents: List[str]
-    ) -> Tuple[bool, List[str]]:
+    def _handle_onevent_attributes(is_script_body: bool, element: Tag, onevents: List[str]) -> Tuple[bool, List[str]]:
         """
         This method
         """
@@ -2612,7 +2621,7 @@ class JsJaws(ServiceBase):
 
     def _handle_malformed_javascript(
         self,
-        visible_texts: ResultSet[PageElement],
+        visible_texts: ResultSet[Tag],
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
         js_content: bytes,
     ) -> Tuple[Optional[tempfile.NamedTemporaryFile], bytes]:
@@ -2780,13 +2789,13 @@ class JsJaws(ServiceBase):
                     "entropy": script_entropy,
                 }
 
-            if script.get("language", "").lower() in ["vbscript"]:
+            if is_vb_script(script):
                 js_content, aggregated_js_script = self._handle_vbscript(
                     body, js_content, aggregated_js_script, function_varname, vb_and_js_section
                 )
                 continue
 
-            if script.get("type", "").lower() in ["", "text/javascript"]:
+            if is_js_script(script):
                 # BeautifulSoup has failed us, don't add this as it will break JavaScript compilation
                 if body.startswith("<script "):
                     continue
