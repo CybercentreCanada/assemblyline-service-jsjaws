@@ -563,13 +563,12 @@ def is_vb_script(script: Tag) -> bool:
 
 
 def is_js_script(script: Tag) -> bool:
-    type = script.get("type", "")
-    if type:
-        return type.lower() == "text/javascript"
-    language = script.get("language", "")
-    if language:
-        return language.lower() == "javascript"
-    return True  # default is javascript if there is no other type/language
+    """Checks if script is javascript or jscript"""
+    if "type" in script:
+        return script["type"].lower() in ("", "text/javascript", "text/jscript")
+    if "language" in script:
+        return script["language"].lower() in ("", "javascript", "jscript")
+    return True  # default is text/javascript if there is no type/language
 
 
 class JsJaws(ServiceBase):
