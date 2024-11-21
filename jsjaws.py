@@ -922,6 +922,15 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
+        # Handle UTF-16 Encoding with BOM
+        if file_content[:2] in (b"\xFF\xFE", b"\xFE\xFF"):
+            file_content = file_content.decode("utf-16").encode("utf-8")
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(file_content)
+                file_path = f.name
+
+        original_contents = file_content
+
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
 
@@ -984,7 +993,7 @@ class JsJaws(ServiceBase):
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
 
-        self._run_the_gauntlet(request, file_path, file_content)
+        self._run_the_gauntlet(request, file_path, file_content, original_contents)
 
         if path.exists(self.cleaned_with_synchrony_path):
             # Set this to avoid a loop of Synchrony extractions
@@ -1365,7 +1374,9 @@ class JsJaws(ServiceBase):
             pass
         return jsxray_output
 
-    def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+    def _run_the_gauntlet(
+        self, request, file_path, file_content, original_contents, subsequent_run: bool = False
+    ) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
         tools and signatures. Ideally you should only call this when you are running an "improved" or "superset"
@@ -1704,9 +1715,9 @@ class JsJaws(ServiceBase):
 
         self._extract_boxjs_iocs(request.result)
         if not self.ignore_stdout_limit:
-            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
+            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_malware_jail_iocs(malware_jail_output, request)
+            self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
 
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
@@ -1730,9 +1741,9 @@ class JsJaws(ServiceBase):
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
-            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
+            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_doc_writes(malware_jail_output, request)
+            self._extract_doc_writes(malware_jail_output, request, original_contents)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
@@ -3250,11 +3261,12 @@ class JsJaws(ServiceBase):
         if ret is not None:
             yield ret
 
-    def _extract_doc_writes(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_doc_writes(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :param request: The ServiceRequest object
+        :param original_contents: the original contents for the request file
         :return: None
         """
         doc_write = False
@@ -3313,7 +3325,7 @@ class JsJaws(ServiceBase):
             new_passwords = set()
             # If the line including "password" was written to the DOM later than when the actual password was, we
             # should look in the file contents for it
-            visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
+            visible_text.update(self._extract_visible_text_using_soup(original_contents))
             for line in visible_text:
                 if len(line) > 10000:
                     line = truncate(line, 10000)
@@ -3345,9 +3357,9 @@ class JsJaws(ServiceBase):
         # we should wrap the JavaScript with <script> tags so that it is correctly handled by the next run
         # of the gauntlet.
         if self.sample_type == "code/javascript":
-            total_dom_contents = b"<script>" + request.file_contents + b"</script>"
+            total_dom_contents = b"<script>" + original_contents + b"</script>"
         else:
-            total_dom_contents = request.file_contents
+            total_dom_contents = original_contents
         total_dom_contents += b"\n"
         total_dom_contents += content_to_write
         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
@@ -3355,7 +3367,7 @@ class JsJaws(ServiceBase):
             total_dom_path = out.name
 
         self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
-        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
+        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, original_contents, subsequent_run=True)
 
     def _extract_urls(self, request: ServiceRequest) -> None:
         """
@@ -3913,7 +3925,7 @@ class JsJaws(ServiceBase):
                 return element[17:]
         return cmd
 
-    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
@@ -3953,9 +3965,9 @@ class JsJaws(ServiceBase):
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
                 if match and len(match.regs) > 1:
                     line_to_wrap = match.group(1).decode()
-                    amended_content = request.file_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
+                    amended_content = original_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
 
-                    if request.file_contents != amended_content:
+                    if original_contents != amended_content:
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(amended_content)
                             amended_content_path = out.name
@@ -3963,7 +3975,9 @@ class JsJaws(ServiceBase):
                         self.log.debug(
                             "There was an unexpected end of input, run the gauntlet again with the amended content!"
                         )
-                        self._run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+                        self._run_the_gauntlet(
+                            request, amended_content_path, amended_content, original_contents, subsequent_run=True
+                        )
 
                 # Check if there was a reference error after multiple DOM writes
                 match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
