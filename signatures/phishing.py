@@ -70,6 +70,7 @@ class PhishingLogoDownload(Signature):
                 "companieslogo.com",
                 "upload.wikimedia.org",
                 "i.gyazo.com",
+                "i.ytimg.com",
             ],
             severity=1,
         )
