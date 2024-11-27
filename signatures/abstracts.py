@@ -15,14 +15,14 @@ class Signature:
 
     def __init__(
         self,
-        heuristic_id: int = None,
-        name: str = None,
-        description: str = None,
-        ttp: List[str] = None,
-        families: List[str] = None,
-        indicators: List[str] = None,
-        severity: int = None,
-        safelist: List[str] = None,
+        heuristic_id: int | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        ttp: List[str] | None = None,
+        families: List[str] | None = None,
+        indicators: List[str] | None = None,
+        severity: int = 0,
+        safelist: List[str] | None = None,
     ):
         """
         This method instantiates the base Signature class and performs some validtion checks
@@ -51,11 +51,11 @@ class Signature:
         if severity is None:
             self.severity: int = 0
         elif severity < 0:
-            self.severity: int = 0
+            self.severity = 0
         elif severity > 3:
-            self.severity: int = 3
+            self.severity = 3
         else:
-            self.severity: int = severity
+            self.severity = severity
 
         self.safelist: List[str] = [] if safelist is None else safelist
 
