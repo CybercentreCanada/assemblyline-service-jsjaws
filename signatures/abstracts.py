@@ -136,18 +136,19 @@ class Signature:
             string = self.remove_timestamp(string)
             lower = string.lower()
 
-            # If all_indicators
-            are_indicators_matched = True
-            for all_indicator in all_indicators:
-                if not all(indicator.lower() in lower for indicator in all_indicator["indicators"]):
-                    are_indicators_matched = False
-                    break
-
-            if are_indicators_matched:
-                for any_indicator in any_indicators:
-                    if not any(indicator.lower() in lower for indicator in any_indicator["indicators"]):
-                        are_indicators_matched = False
-                        break
-
-            if are_indicators_matched and not any(item.lower() in lower for item in self.safelist):
+            # We want all of the indicators to match
+            if (
+                all(
+                    # With all_indicators matching all of their indicators
+                    all(indicator.lower() in lower for indicator in all_indicator["indicators"])
+                    for all_indicator in all_indicators
+                )
+                and all(
+                    # And any_indicators matching any of their indicators
+                    any(indicator.lower() in lower for indicator in any_indicator["indicators"])
+                    for any_indicator in any_indicators
+                )
+                # But nothing from the safelist
+                and not any(item.lower() in lower for item in self.safelist)
+            ):
                 self.add_mark(string)
