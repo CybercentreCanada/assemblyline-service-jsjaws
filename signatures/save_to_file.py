@@ -2,7 +2,10 @@
 These are all of the signatures related to saving a file
 """
 
+import re
+
 from assemblyline.common.str_utils import safe_str
+
 from signatures.abstracts import ANY, Signature
 
 # List of commands used to save a file to disk
@@ -64,14 +67,14 @@ class WritesArchive(Signature):
                 string = split_line[1]
             else:
                 string = line
-            if self.check_regex(extension_regex, string.lower()):
+            if re.search(extension_regex, string.lower()):
                 extension_results.append(string)
 
         # Next look for the command
         escaped_save_commands = [save_command.replace("(", "\\(") for save_command in save_commands]
         commands_regex = f"({'|'.join(escaped_save_commands)})"
         for line in extension_results:
-            if self.check_regex(commands_regex, line):
+            if re.search(commands_regex, line):
                 results.append(line)
 
         results_set = sorted(set(results))
