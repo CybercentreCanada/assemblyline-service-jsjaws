@@ -73,10 +73,16 @@ class Signature:
             lower = string.lower()
             any_all = all if match_all else any
             # If we match indicators in a line and nothing from the safelist is in that line, mark it!
-            if any_all(indicator.lower() in lower for indicator in self.indicators) and not any(
-                item.lower() in lower for item in self.safelist
-            ):
+            if any_all(indicator.lower() in lower for indicator in self.indicators) and not self.safelisted(lower):
                 self.add_mark(string)
+
+    def safelisted(self, string: str) -> bool:
+        """
+        This method checks if the string contains any safelisted terms
+        :param string: The string to check
+        """
+        string = string.lower()
+        return any(item.lower() in string for item in self.safelist)
 
     @staticmethod
     def check_regex(regex: str, string: str) -> List[str]:
@@ -110,7 +116,10 @@ class Signature:
 
     @staticmethod
     def remove_timestamp(line: str) -> str:
-        """Remove the timestamp at the start of an output line."""
+        """
+        This method removes the timestamp from the start of an output line
+        :param line: The line to strip the timestamp from
+        """
         # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
         return line.split("] ", 1)[-1]
 
@@ -149,6 +158,6 @@ class Signature:
                     for any_indicator in any_indicators
                 )
                 # But nothing from the safelist
-                and not any(item.lower() in lower for item in self.safelist)
+                and not self.safelisted(lower)
             ):
                 self.add_mark(string)
