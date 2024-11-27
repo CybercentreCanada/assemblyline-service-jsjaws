@@ -69,12 +69,7 @@ class Signature:
         :param match_all: All indicators must be found in a single line for a mark to be added
         """
         for string in output:
-            # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
-            split_line = string.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
-            elif len(split_line) > 2:
-                string = "] ".join(split_line[1:])
+            string = self.remove_timestamp(string)
 
             # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
             if (
@@ -121,6 +116,12 @@ class Signature:
         else:
             return False
 
+    @staticmethod
+    def remove_timestamp(line: str) -> str:
+        """Remove the timestamp at the start of an output line."""
+        # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
+        return line.split("] ", 1)[-1]
+
     def check_multiple_indicators_in_list(self, output: List[str], indicators: List[Dict[str, List[str]]]) -> None:
         """
         This method checks for multiple indicators in a list, with varying degrees of inclusivity
@@ -140,9 +141,7 @@ class Signature:
 
         for string in output:
             # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
-            split_line = string.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
+            string = self.remove_timestamp(string)
 
             # If all_indicators
             are_indicators_matched = True

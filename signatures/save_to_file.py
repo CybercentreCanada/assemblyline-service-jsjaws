@@ -62,11 +62,7 @@ class WritesArchive(Signature):
         # First look for file extensions
         extension_regex = f"(?i)({'|'.join(self.indicators)})\\b"
         for line in output:
-            split_line = line.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
-            else:
-                string = line
+            string = self.remove_timestamp(line)
             if re.search(extension_regex, string.lower()):
                 extension_results.append(string)
 
