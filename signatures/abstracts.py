@@ -1,4 +1,4 @@
-from re import findall
+import re
 from typing import Any, Dict, List, Optional, Union
 
 from assemblyline.common.str_utils import safe_str
@@ -99,11 +99,7 @@ class Signature:
         :param regex: A regular expression to be applied to the string
         :param string: A line of output
         """
-        result = findall(regex, string)
-        if len(result) > 0:
-            return result
-        else:
-            return []
+        return re.findall(regex, string)
 
     def process_output(self, output: List[str]):
         """
