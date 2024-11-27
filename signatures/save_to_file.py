@@ -37,11 +37,13 @@ class WritesExecutable(Signature):
         )
 
     def process_output(self, output):
-        indicator_list = [
-            {"method": ANY, "indicators": save_commands},
-            {"method": ANY, "indicators": self.indicators},
-        ]
-        self.check_multiple_indicators_in_list(output, indicator_list)
+        for line in output:
+            line = self.remove_timestamp(line)
+            lower = line.lower()
+            if re.search(r"[.](exe|dll)\b", lower) and any(
+                save_command.lower() in lower for save_command in save_commands
+            ):
+                self.add_mark(line)
 
 
 class WritesArchive(Signature):
@@ -51,7 +53,7 @@ class WritesArchive(Signature):
             name="writes_archive",
             description="JavaScript writes archive file to disk",
             # File extensions based on https://github.com/CybercentreCanada/assemblyline-service-cape/blob/2412416fd8040897d25d00bdaba6356d514398f4/cape/cape_main.py#L1343
-            indicators=["\\.zip", "\\.iso", "\\.rar", "\\.vhd", "\\.udf", "\\.7z"],
+            indicators=["zip", "iso", "rar", "vhd", "udf", "7z"],
             severity=3,
         )
 
@@ -60,7 +62,7 @@ class WritesArchive(Signature):
         results = []
 
         # First look for file extensions
-        extension_regex = f"(?i)({'|'.join(self.indicators)})\\b"
+        extension_regex = f"(?i)\\w[.]({'|'.join(self.indicators)})\\b"
         for line in output:
             string = self.remove_timestamp(line)
             if re.search(extension_regex, string.lower()):
