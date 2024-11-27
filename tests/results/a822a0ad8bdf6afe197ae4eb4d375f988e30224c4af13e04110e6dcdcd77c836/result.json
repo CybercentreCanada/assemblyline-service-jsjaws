@@ -661,7 +661,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript encodes a Uniform Resource Identifier\n\t\t= encodeURIComponent(this.value)\n\t\tb.push(c+\"=\"+encodeURIComponent(d))}var b=b.join\n\t\tG.n=function(a,b,c){var d=this.k,e=this.e||\"\",d=d+\"?module=\"+encodeURIComponent(e)\n\t\td=d+\"&type=\"+encodeURIComponent(a)\n\t\t+\"&msg=\"+encodeURIComponent(b)\n\t\ta++)d=d+\"&arg=\"+encodeURIComponent(c[a])\n\t\treturn a=0<=a.indexOf(\"?\")?a+\"&\"+encodeURIComponent(b)+\"=\"+encodeURIComponent(c):a\n\t\t+\"?\"+encodeURIComponent(b)+\"=\"+encodeURIComponent(c)}",
+        "body": "JavaScript encodes a Uniform Resource Identifier\n\t\tlangChooser_params['hl'] = encodeURIComponent(this.value)\n\t\tb.push(c+\"=\"+encodeURIComponent(d))}var b=b.join\n\t\tG.n=function(a,b,c){var d=this.k,e=this.e||\"\",d=d+\"?module=\"+encodeURIComponent(e)\n\t\td=d+\"&type=\"+encodeURIComponent(a)\n\t\t+\"&msg=\"+encodeURIComponent(b)\n\t\ta++)d=d+\"&arg=\"+encodeURIComponent(c[a])\n\t\treturn a=0<=a.indexOf(\"?\")?a+\"&\"+encodeURIComponent(b)+\"=\"+encodeURIComponent(c):a\n\t\t+\"?\"+encodeURIComponent(b)+\"=\"+encodeURIComponent(c)}",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

@@ -120,6 +120,8 @@ class Signature:
         This method removes the timestamp from the start of an output line
         :param line: The line to strip the timestamp from
         """
+        if not line.startswith("["):
+            return line
         # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
         return line.split("] ", 1)[-1]
 

