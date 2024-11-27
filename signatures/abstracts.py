@@ -139,28 +139,15 @@ class Signature:
             # If all_indicators
             are_indicators_matched = True
             for all_indicator in all_indicators:
-                if are_indicators_matched and all(
-                    indicator.lower() in lower for indicator in all_indicator["indicators"]
-                ):
-                    for any_indicator in any_indicators:
-                        if are_indicators_matched and any(
-                            indicator.lower() in lower for indicator in any_indicator["indicators"]
-                        ):
-                            pass
-                        else:
-                            are_indicators_matched = False
-                else:
+                if not all(indicator.lower() in lower for indicator in all_indicator["indicators"]):
                     are_indicators_matched = False
+                    break
 
-            # If no all_indicators
-            if not all_indicators:
+            if are_indicators_matched:
                 for any_indicator in any_indicators:
-                    if are_indicators_matched and any(
-                        indicator.lower() in lower for indicator in any_indicator["indicators"]
-                    ):
-                        pass
-                    else:
+                    if not any(indicator.lower() in lower for indicator in any_indicator["indicators"]):
                         are_indicators_matched = False
+                        break
 
             if are_indicators_matched and not any(item.lower() in lower for item in self.safelist):
                 self.add_mark(string)
