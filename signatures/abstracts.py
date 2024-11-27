@@ -70,22 +70,13 @@ class Signature:
         """
         for string in output:
             string = self.remove_timestamp(string)
-
-            # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
-            if (
-                match_all
-                and all(indicator.lower() in string.lower() for indicator in self.indicators)
-                and not any(item.lower() in string.lower() for item in self.safelist)
+            lower = string.lower()
+            any_all = all if match_all else any
+            # If we match indicators in a line and nothing from the safelist is in that line, mark it!
+            if any_all(indicator.lower() in lower for indicator in self.indicators) and not any(
+                item.lower() in lower for item in self.safelist
             ):
                 self.add_mark(string)
-
-            # If we only want to match at least one indicator in a line, then mark it!
-            if not match_all:
-                for indicator in self.indicators:
-                    if indicator.lower() in string.lower() and not any(
-                        item.lower() in string.lower() for item in self.safelist
-                    ):
-                        self.add_mark(string)
 
     @staticmethod
     def check_regex(regex: str, string: str) -> List[str]:
@@ -108,13 +99,14 @@ class Signature:
         :param mark: The mark to be added
         :return: A boolean indicating if the mark was added
         """
-        if mark:
-            if safe_str(mark).strip() not in self.marks:
-                # Sometimes lines end with trailing semi-colons and sometimes they do not. These are not unique marks
-                if safe_str(mark).strip() + ";" not in self.marks:
-                    self.marks.append(safe_str(mark).strip())
-        else:
+        if not mark:
             return False
+        mark = safe_str(mark).strip()
+        if mark not in self.marks and mark + ";" not in self.marks:
+            # Sometimes lines end with trailing semi-colons and sometimes they do not. These are not unique marks
+            self.marks.append(mark)
+            return True
+        return False
 
     @staticmethod
     def remove_timestamp(line: str) -> str:
@@ -142,16 +134,17 @@ class Signature:
         for string in output:
             # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
             string = self.remove_timestamp(string)
+            lower = string.lower()
 
             # If all_indicators
             are_indicators_matched = True
             for all_indicator in all_indicators:
                 if are_indicators_matched and all(
-                    indicator.lower() in string.lower() for indicator in all_indicator["indicators"]
+                    indicator.lower() in lower for indicator in all_indicator["indicators"]
                 ):
                     for any_indicator in any_indicators:
                         if are_indicators_matched and any(
-                            indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
+                            indicator.lower() in lower for indicator in any_indicator["indicators"]
                         ):
                             pass
                         else:
@@ -163,11 +156,11 @@ class Signature:
             if not all_indicators:
                 for any_indicator in any_indicators:
                     if are_indicators_matched and any(
-                        indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
+                        indicator.lower() in lower for indicator in any_indicator["indicators"]
                     ):
                         pass
                     else:
                         are_indicators_matched = False
 
-            if are_indicators_matched and not any(item.lower() in string.lower() for item in self.safelist):
+            if are_indicators_matched and not any(item.lower() in lower for item in self.safelist):
                 self.add_mark(string)
