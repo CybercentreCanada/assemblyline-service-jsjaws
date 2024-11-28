@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2021,
+    "score": 2031,
     "sections": [
       {
         "auto_collapse": false,
@@ -136,7 +136,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\t\"function JyOYc($ywVoR){$tMWkE=\"8AD00AC970\";function hmXLCut($unTuRCX){$lagYac = [System.IO.MemorySt...\n\t\tTypeError: \"function JyOYc($ywVoR){$tMWkE=\"8AD00AC970\";function hmXLCut($unTuRCX){$lagYac = [System....\n\t\tfunction hmXLCut($unTuRCX){$lagYac = [System.IO.MemoryStream]::new()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\t\"function JyOYc($ywVoR){$tMWkE=\"8AD00AC970\";function hmXLCut($unTuRCX){$lagYac = [System.IO.MemorySt...\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...\n\t\tTypeError: \"function JyOYc($ywVoR){$tMWkE=\"8AD00AC970\";function hmXLCut($unTuRCX){$lagYac = [System....\n\t\tfunction hmXLCut($unTuRCX){$lagYac = [System.IO.MemoryStream]::new()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -160,7 +160,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -180,6 +180,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
         "zeroize_on_tag_safe": false
       },
       {
@@ -354,6 +378,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
         ]
       },
       {

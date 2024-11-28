@@ -114,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\t= jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tGdxgkbZtlbkX[i] = jUVqAOisGJal[zWCwJfTxMEaZ].charCodeAt(0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
