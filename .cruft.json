@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/CybercentreCanada/assemblyline-service-template.git",
-  "commit": "6d2fcb683f00eeda843cf2c40981e266679a97dc",
+  "commit": "99becf8ed2990a4063a5bb1f8ce878824a5a1a7b",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -8,15 +8,15 @@
       "__svc_name": "jsjaws",
       "__repository": "assemblyline-service-jsjaws",
       "__pkg_name": "jsjaws",
+      "class_name": "Jsjaws",
       "short_description": "This service provides sandboxing for JavaScript execution.",
-      "short_description_fr": "Ce service fournit un bac \u00e0 sable pour l'ex\u00e9cution de JavaScript.",
+      "short_description_fr": "Ce service fournit un bac à sable pour l'exécution de JavaScript.",
       "stage": "CORE",
       "category": "Static Analysis",
       "org_name_full": "CybercentreCanada",
       "org_name_short": "cccs",
       "license": "mit",
-      "_template": "https://github.com/CybercentreCanada/assemblyline-service-template.git",
-      "class_name": "Jsjaws"
+      "_template": "https://github.com/CybercentreCanada/assemblyline-service-template.git"
     }
   },
   "directory": null
