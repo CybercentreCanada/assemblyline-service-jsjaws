@@ -229,7 +229,7 @@ WSCRIPT_SHELL_REGEX = r"(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|She
 # Example:
 # /*!
 #  * jQuery JavaScript Library v1.5
-JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+(?:-[a-z0-9]+)?)\n"
+JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+(?:-[a-z0-9.]+)?)\n"
 
 # Example:
 # /**
