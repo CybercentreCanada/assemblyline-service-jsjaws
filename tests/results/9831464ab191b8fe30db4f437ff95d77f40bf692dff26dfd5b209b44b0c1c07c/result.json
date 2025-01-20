@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tfunction _0x2f62(b, e) {\n\t\tvar f = _0x1f7f()\n\t\treturn _0x2f62 = function (g, h) {\n\t\t= k, b = arguments, _0x2f62[D(0x184, 'h1iX')] = !![]\n\t\t=== undefined && (_0x2f62[D(0x1bc, '^Hs8')] = !![]), i = _0x2f62[D(0x1f9, 'R04l')](i, h), b[m] = i) ...\n\t\t}, _0x2f62(b, e)\n\t\tvar _0x460ecf = _0x2f62\n\t\tvar E = d, f = _0x2f62, g = b()\n\t\t}(_0x1f7f, 0x7fb6c))\n\t\tvar _0xebf086 = (function () {\n\t\t[22 Mark(s) Truncated]",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tfunction _0x2f62(b, e) {\n\t\tvar f = _0x1f7f()\n\t\treturn _0x2f62 = function (g, h) {\n\t\tif (_0x2f62['DEcwLP'] === undefined) {\n\t\t_0x2f62[D(0x1c6, 'wmH4')] = k, b = arguments, _0x2f62[D(0x184, 'h1iX')] = !![]\n\t\treturn !n ? (_0x2f62[D(0x1c0, 'XU*R')] === undefined && (_0x2f62[D(0x1bc, '^Hs8')] = !![]), i = _0x2...\n\t\t}, _0x2f62(b, e)\n\t\tvar _0x460ecf = _0x2f62\n\t\tvar E = d, f = _0x2f62, g = b()\n\t\t}(_0x1f7f, 0x7fb6c))\n\t\t[24 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

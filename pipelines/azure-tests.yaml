@@ -2,17 +2,21 @@ name: tests
 
 variables:
   - group: unittest-samples
-  # - name: self_location
-  #   value: "self_location"
-  # - name: full_self_location
-  #   value: "$(Build.SourcesDirectory)/$(self_location)"
-  # - name: samples_location
-  #   value: "samples_location"
-  # - name: full_samples_location
-  #   value: "$(Build.SourcesDirectory)/$(samples_location)"
+
+trigger: ["*"]
+pr: ["*"]
+
+pool:
+  vmImage: "ubuntu-20.04"
 
 resources:
   repositories:
+    - repository: PipelineTemplates
+      type: github
+      name: CybercentreCanada/assemblyline-pipeline-templates
+      ref: refs/heads/main
+      endpoint: github-repo-sa
+      trigger: none
     - repository: unittest-samples
       type: github
       name: $(unittest_samples_repository)
@@ -20,63 +24,9 @@ resources:
       endpoint: github-repo-sa
       trigger: none
 
-trigger: ["*"]
-pr: ["*"]
-
-jobs:
-  - job: run_test
-    pool:
-      vmImage: "ubuntu-20.04"
-    container:
-      image: cccstemp.azurecr.io/assemblyline-service-jsjaws-nightly:stable
-      endpoint: cccstemp
-
-    strategy:
-      matrix:
-        Python3_11:
-         python.version: "3.11"
-        Python3_12:
-         python.version: "3.12"
-
-    timeoutInMinutes: 20
-
-    steps:
-      - task: UsePythonVersion@0
-        displayName: Set python version
-        inputs:
-          versionSpec: "$(python.version)"
-      - checkout: self
-        fetchDepth: 1
-      - checkout: unittest-samples
-        fetchDepth: 1
-      - script: |
-          set -exv # echo on
-          cd assemblyline-service-jsjaws
-          [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
-
-          # Override the path to make sure Azure doesn't interfere
-          export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-          env "PATH=$PATH" python -m pip install -U --no-cache-dir assemblyline assemblyline_v4_service
-
-          # Install Python packages
-          [ -f $(pwd)/requirements.txt ] && env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/requirements.txt
-          [ -f $(pwd)/tests/requirements.txt ] && env "PATH=$PATH" python -m pip install -U --no-cache-dir -r $(pwd)/tests/requirements.txt
-
-          # Check Node and npm versions
-          node --version
-          npm --version
-
-          # Install Node packages
-          cd tools
-          npm install
-        displayName: Setup environment
-      - script: |
-          set -x # echo on
-          export FULL_SAMPLES_LOCATION=$PWD/assemblyline-unittest-samples
-          cd assemblyline-service-jsjaws
-          [ ! -d "$(pwd)/tests" ] && echo "No tests found" && exit
-          # Override the path to make sure Azure doesn't interfere
-          export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-          export REPO_NAME=${BUILD_REPOSITORY_NAME##*/}
-          python -m pytest -p no:cacheprovider --durations=10 -rsx -xsvvv --disable-warnings
-        displayName: Test
+extends:
+  template: stages/test-service.yaml@PipelineTemplates
+  parameters:
+    samples_repo: unittest-samples
+    test_container: "true"
+    

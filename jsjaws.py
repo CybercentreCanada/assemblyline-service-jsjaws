@@ -48,7 +48,7 @@ from assemblyline_v4_service.common.result import (
 )
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
-from bs4.element import Comment, PageElement, ResultSet
+from bs4.element import Comment, ResultSet, Tag
 from dateutil.parser import parse as dtparse
 from multidecoder.decoders.network import find_urls, is_domain, is_url
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
@@ -558,6 +558,19 @@ ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
 PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
 
 
+def is_vb_script(script: Tag) -> bool:
+    return script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+
+
+def is_js_script(script: Tag) -> bool:
+    """Checks if script is javascript or jscript"""
+    if "type" in script:
+        return script["type"].lower() in ("", "text/javascript", "text/jscript")
+    if "language" in script:
+        return script["language"].lower() in ("", "javascript", "jscript")
+    return True  # default is text/javascript if there is no type/language
+
+
 class JsJaws(ServiceBase):
     def __init__(self, config: Optional[Dict] = None) -> None:
         super(JsJaws, self).__init__(config)
@@ -909,6 +922,15 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
+        # Handle UTF-16 Encoding with BOM
+        if file_content[:2] in (b"\xFF\xFE", b"\xFE\xFF"):
+            file_content = file_content.decode("utf-16").encode("utf-8")
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(file_content)
+                file_path = f.name
+
+        original_contents = file_content
+
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
 
@@ -971,7 +993,7 @@ class JsJaws(ServiceBase):
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
 
-        self._run_the_gauntlet(request, file_path, file_content)
+        self._run_the_gauntlet(request, file_path, file_content, original_contents)
 
         if path.exists(self.cleaned_with_synchrony_path):
             # Set this to avoid a loop of Synchrony extractions
@@ -1352,7 +1374,9 @@ class JsJaws(ServiceBase):
             pass
         return jsxray_output
 
-    def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+    def _run_the_gauntlet(
+        self, request, file_path, file_content, original_contents, subsequent_run: bool = False
+    ) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
         tools and signatures. Ideally you should only call this when you are running an "improved" or "superset"
@@ -1691,9 +1715,9 @@ class JsJaws(ServiceBase):
 
         self._extract_boxjs_iocs(request.result)
         if not self.ignore_stdout_limit:
-            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
+            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_malware_jail_iocs(malware_jail_output, request)
+            self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
 
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
@@ -1717,9 +1741,9 @@ class JsJaws(ServiceBase):
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
-            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
+            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_doc_writes(malware_jail_output, request)
+            self._extract_doc_writes(malware_jail_output, request, original_contents)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
@@ -1968,7 +1992,7 @@ class JsJaws(ServiceBase):
                 return True
         return False
 
-    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[Tag]) -> None:
         """
         This method checks if the file content is contains scripts that are made up of
         large "unescape" calls
@@ -1998,7 +2022,7 @@ class JsJaws(ServiceBase):
             if count > 1:
                 self.multiple_scripts_with_unescape = True
 
-    def _skip_element(self, element: PageElement) -> bool:
+    def _skip_element(self, element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an element
         :param element: The BeautifulSoup element
@@ -2033,7 +2057,7 @@ class JsJaws(ServiceBase):
 
         return False
 
-    def _remove_safelisted_element_attrs(self, element: PageElement) -> PageElement:
+    def _remove_safelisted_element_attrs(self, element: Tag) -> Tag:
         """
         If an element has an attribute that is safelisted, don't include it when we create the element
         :param element: The BeautifulSoup element
@@ -2042,13 +2066,13 @@ class JsJaws(ServiceBase):
         if element.name in SAFELISTED_ATTRS_TO_POP:
             for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
                 if is_tag_safelisted(
-                    element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist
+                    element.attrs.get(attr, ""), ["network.static.domain", "network.static.uri"], self.safelist
                 ):
                     element.attrs.pop(attr)
         return element
 
     @staticmethod
-    def _skip_embed_element(element: PageElement) -> bool:
+    def _skip_embed_element(element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an embedded element which
         could be created elsewhere
@@ -2097,7 +2121,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_id(element: PageElement, idx: int, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_id(element: Tag, idx: int, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the element id of the element, and will create one if
         the "id" field is not set
@@ -2118,7 +2142,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_varname(element: PageElement, element_id: str, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the name of the variable representing the element
         :param element: The BeautifulSoup element
@@ -2149,7 +2173,7 @@ class JsJaws(ServiceBase):
                 random_element_varname = "jsjaws_" + random_element_varname
         return random_element_varname
 
-    def _determine_element_value(self, element: PageElement) -> str:
+    def _determine_element_value(self, element: Tag) -> str:
         """
         This method determines the value of an element
         :param element: The BeautifulSoup element
@@ -2179,7 +2203,7 @@ class JsJaws(ServiceBase):
         return element_value
 
     @staticmethod
-    def _initialize_create_element_script(random_element_varname: str, element: PageElement, element_id: str) -> str:
+    def _initialize_create_element_script(random_element_varname: str, element: Tag, element_id: str) -> str:
         """
         This method sets up the initial script used for dynamically creating elements
         :param random_element_varname: The name of the variable
@@ -2199,9 +2223,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     @staticmethod
-    def _append_element_script(
-        element: PageElement, set_of_variable_names: Set[str], random_element_varname: str
-    ) -> str:
+    def _append_element_script(element: Tag, set_of_variable_names: Set[str], random_element_varname: str) -> str:
         """
         This method adds script that appends the element
         :param element: The BeautifulSoup element
@@ -2218,7 +2240,7 @@ class JsJaws(ServiceBase):
 
         return f"document.body.appendChild({random_element_varname});\n"
 
-    def _set_element_innertext_script(self, element: PageElement, random_element_varname: str) -> str:
+    def _set_element_innertext_script(self, element: Tag, random_element_varname: str) -> str:
         """
         This method sets the element value to the innerText attribute of the element
         :param element: The BeautifulSoup element
@@ -2284,7 +2306,7 @@ class JsJaws(ServiceBase):
         return f'{random_element_varname}.setAttribute("{attr_id}", "{attr_val}");\n'
 
     @staticmethod
-    def _handle_object_elements(element: PageElement, request: ServiceRequest, random_element_varname: str) -> str:
+    def _handle_object_elements(element: Tag, request: ServiceRequest, random_element_varname: str) -> str:
         """
         This method handles "object" elements and could return a script that clicks the object
         :param element: The BeautifulSoup element
@@ -2337,7 +2359,7 @@ class JsJaws(ServiceBase):
         return ""
 
     def _setup_create_element_script(
-        self, element: PageElement, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
+        self, element: Tag, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
     ) -> str:
         """
         This method sets up the script that creates elements dynamically
@@ -2369,7 +2391,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     def _is_vb_and_js_scripts(
-        self, scripts: ResultSet[PageElement], request: ServiceRequest
+        self, scripts: ResultSet[Tag], request: ServiceRequest
     ) -> Tuple[bool, Optional[ResultTextSection]]:
         """
         This method determines if there is a combination of VisualBasic and JavaScript scripts
@@ -2379,9 +2401,10 @@ class JsJaws(ServiceBase):
                  and a possible result section
         """
         # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
-        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
-        vb_and_js_scripts = vb_scripts and js_scripts
+        vb_scripts = [script for script in scripts if is_vb_script(script)]
+
+        js_scripts = any(is_js_script(script) for script in scripts)
+        vb_and_js_scripts = bool(vb_scripts) and js_scripts
 
         if vb_and_js_scripts:
             heur = Heuristic(12)
@@ -2391,30 +2414,29 @@ class JsJaws(ServiceBase):
             vb_and_js_section.add_tag("file.behavior", heur.name)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
-            for script in scripts:
-                if script.get("language", "").lower() in ["vbscript"]:
-                    # Make sure there is actually a body to the script
-                    body = script.string if script.string is None else str(script.string).strip()
+            for script in vb_scripts:
+                # Make sure there is actually a body to the script
+                body = script.string if script.string is None else str(script.string).strip()
 
-                    if body and len(body) > 2:
-                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                            out.write(body.encode())
-                            vbscript_to_extract = out.name
-                        vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
-                        artifact = {
-                            "name": vbs_file_name,
-                            "path": vbscript_to_extract,
-                            "description": "Extracted VBScript Contents",
-                            "to_be_extracted": True,
-                        }
-                        self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
-                        self.artifact_list.append(artifact)
+                if body and len(body) > 2:
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                        out.write(body.encode())
+                        vbscript_to_extract = out.name
+                    vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
+                    artifact = {
+                        "name": vbs_file_name,
+                        "path": vbscript_to_extract,
+                        "description": "Extracted VBScript Contents",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
+                    self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
 
         return vb_and_js_scripts, vb_and_js_section
 
-    def _is_script_source(self, script: PageElement) -> bool:
+    def _is_script_source(self, script: Tag) -> bool:
         """
         This method the script source, if it exists, and adds it to the set
         :param script: The Script soup element
@@ -2545,9 +2567,7 @@ class JsJaws(ServiceBase):
         return body
 
     @staticmethod
-    def _handle_onevent_attributes(
-        is_script_body: bool, element: PageElement, onevents: List[str]
-    ) -> Tuple[bool, List[str]]:
+    def _handle_onevent_attributes(is_script_body: bool, element: Tag, onevents: List[str]) -> Tuple[bool, List[str]]:
         """
         This method
         """
@@ -2612,7 +2632,7 @@ class JsJaws(ServiceBase):
 
     def _handle_malformed_javascript(
         self,
-        visible_texts: ResultSet[PageElement],
+        visible_texts: ResultSet[Tag],
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
         js_content: bytes,
     ) -> Tuple[Optional[tempfile.NamedTemporaryFile], bytes]:
@@ -2780,13 +2800,13 @@ class JsJaws(ServiceBase):
                     "entropy": script_entropy,
                 }
 
-            if script.get("language", "").lower() in ["vbscript"]:
+            if is_vb_script(script):
                 js_content, aggregated_js_script = self._handle_vbscript(
                     body, js_content, aggregated_js_script, function_varname, vb_and_js_section
                 )
                 continue
 
-            if script.get("type", "").lower() in ["", "text/javascript"]:
+            if is_js_script(script):
                 # BeautifulSoup has failed us, don't add this as it will break JavaScript compilation
                 if body.startswith("<script "):
                     continue
@@ -3241,11 +3261,12 @@ class JsJaws(ServiceBase):
         if ret is not None:
             yield ret
 
-    def _extract_doc_writes(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_doc_writes(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :param request: The ServiceRequest object
+        :param original_contents: the original contents for the request file
         :return: None
         """
         doc_write = False
@@ -3304,7 +3325,7 @@ class JsJaws(ServiceBase):
             new_passwords = set()
             # If the line including "password" was written to the DOM later than when the actual password was, we
             # should look in the file contents for it
-            visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
+            visible_text.update(self._extract_visible_text_using_soup(original_contents))
             for line in visible_text:
                 if len(line) > 10000:
                     line = truncate(line, 10000)
@@ -3336,9 +3357,9 @@ class JsJaws(ServiceBase):
         # we should wrap the JavaScript with <script> tags so that it is correctly handled by the next run
         # of the gauntlet.
         if self.sample_type == "code/javascript":
-            total_dom_contents = b"<script>" + request.file_contents + b"</script>"
+            total_dom_contents = b"<script>" + original_contents + b"</script>"
         else:
-            total_dom_contents = request.file_contents
+            total_dom_contents = original_contents
         total_dom_contents += b"\n"
         total_dom_contents += content_to_write
         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
@@ -3346,7 +3367,7 @@ class JsJaws(ServiceBase):
             total_dom_path = out.name
 
         self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
-        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
+        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, original_contents, subsequent_run=True)
 
     def _extract_urls(self, request: ServiceRequest) -> None:
         """
@@ -3904,7 +3925,7 @@ class JsJaws(ServiceBase):
                 return element[17:]
         return cmd
 
-    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
@@ -3944,9 +3965,9 @@ class JsJaws(ServiceBase):
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
                 if match and len(match.regs) > 1:
                     line_to_wrap = match.group(1).decode()
-                    amended_content = request.file_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
+                    amended_content = original_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
 
-                    if request.file_contents != amended_content:
+                    if original_contents != amended_content:
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(amended_content)
                             amended_content_path = out.name
@@ -3954,7 +3975,9 @@ class JsJaws(ServiceBase):
                         self.log.debug(
                             "There was an unexpected end of input, run the gauntlet again with the amended content!"
                         )
-                        self._run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+                        self._run_the_gauntlet(
+                            request, amended_content_path, amended_content, original_contents, subsequent_run=True
+                        )
 
                 # Check if there was a reference error after multiple DOM writes
                 match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())

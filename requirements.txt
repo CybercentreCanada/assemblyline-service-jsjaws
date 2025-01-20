@@ -1,7 +1,9 @@
+assemblyline
+assemblyline-service-utilities
+assemblyline-v4-service
 beautifulsoup4
 html5lib
 tinycss2
 yara-python
 PyYAML
 multidecoder==1.0.0
-assemblyline-service-utilities
