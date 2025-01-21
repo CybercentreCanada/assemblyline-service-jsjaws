@@ -1,3 +1,5 @@
+"""JsJaws Service Tests"""
+
 import os
 import shutil
 from hashlib import sha256
