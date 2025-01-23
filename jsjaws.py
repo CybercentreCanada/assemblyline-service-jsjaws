@@ -147,54 +147,54 @@ MAXIMUM_GAUNTLET_RUNS = 30
 # When looking at HTML files, these are common terms found in phishing files
 PHISHING_TITLE_TERMS = [
     # Classic phishing terms for file names
-    "payment",
-    "statement",
-    "invoice",
-    "notice",
-    "download",
-    "transfer",
+    r"payment",
+    r"statement",
+    r"invoice",
+    r"notice",
+    r"download",
+    r"transfer",
     # These file-type specific terms of suspicious because this is an HTML file!
-    "\.xls",
-    "\.doc",
-    "\.ppt",
-    "\.one",
-    "\.pdf",
-    "microsoft",
-    "adobe",
-    "excel",
-    "word",
-    "powerpoint",
-    "onenote",
-    "pdf",
+    r"\.xls",
+    r"\.doc",
+    r"\.ppt",
+    r"\.one",
+    r"\.pdf",
+    r"microsoft",
+    r"adobe",
+    r"excel",
+    r"word",
+    r"powerpoint",
+    r"onenote",
+    r"pdf",
     # https://github.com/CAPESandbox/community/blob/815e21980f4b234cf84e78749447f262af2beef9/modules/signatures/secure_login_phish.py
-    "secure login",
-    "google doc",
-    "dropbox",
-    "google drive",
-    "outlook",
+    r"secure login",
+    r"google doc",
+    r"dropbox",
+    r"google drive",
+    r"outlook",
     # https://github.com/CAPESandbox/community/blob/d010d2c8a8343a37e176133edb26e901c2c8ced9/modules/signatures/suspicious_html.py
-    "please wait",
-    "redirecting",
-    "remittence",
-    "remittance",
-    "voicemail",
+    r"please wait",
+    r"redirecting",
+    r"remittence",
+    r"remittance",
+    r"voicemail",
     # Other
-    "paypal",
-    "instagram",
-    "facebook",
-    "secure",
-    "security",
-    "sign",
-    "bank",
-    "ether",
-    "coin",
-    "files",
-    "challenge",
-    "card",
-    "remember",
-    "forgot",
-    "verify",
-    "confirm",
+    r"paypal",
+    r"instagram",
+    r"facebook",
+    r"secure",
+    r"security",
+    r"sign",
+    r"bank",
+    r"ether",
+    r"coin",
+    r"files",
+    r"challenge",
+    r"card",
+    r"remember",
+    r"forgot",
+    r"verify",
+    r"confirm",
 ]
 
 # There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
@@ -335,24 +335,27 @@ CHARTVIEW_REGEX = (
 
 # /**
 #  * A component handler interface using the revealing module design pattern.
-MDL_REGEX = r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/[\s\S]*\/\*\*\s*\*\s*A component handler interface using the revealing module design pattern\."
+MDL_REGEX = (
+    r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/[\s\S]*\/\*\*\s*\*\s*"
+    r"A component handler interface using the revealing module design pattern\."
+)
 
 # Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
-MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
+MALWARE_JAIL_TIME_STAMP = r"\[([\dTZ:\-.]+)\] "
 
 # Example:
 # data:image/png;base64,iVBORw0KGgoAAAAN
-APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,([\s\S]*)")
+APPENDCHILD_BASE64_REGEX = re.compile(r"data:(?:[^;]+;)+base64,([\s\S]*)")
 
 # Example:
 # const element99_jsjaws =
-ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)\w*_jsjaws = ")
+ELEMENT_INDEX_REGEX = re.compile(rb"const element(\d+)\w*_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
 VBSCRIPT_ENV_SETTING_REGEX = (
-    b"[^;]\((?P<property_name>[\w\s()'\"+\\\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+    rb"[^;]\((?P<property_name>[\w\s()'\"+\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;.]+?[^>=;]+);"
 )
 
 # Example:
@@ -360,7 +363,7 @@ VBSCRIPT_ENV_SETTING_REGEX = (
 # badinputhere
 # SyntaxError: Unexpected end of input
 INVALID_END_OF_INPUT_REGEX = (
-    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
+    rb"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 )
 
 # Example:
@@ -368,7 +371,7 @@ INVALID_END_OF_INPUT_REGEX = (
 # missingfunction()
 # ReferenceError: missingfunction is not defined
 REFERENCE_NOT_DEFINED_REGEX = (
-    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\\n.+\\n\^\\nReferenceError: (.+) is not defined"
+    rb"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n.+\n\^\nReferenceError: (.+) is not defined"
 )
 
 # JScript conditional comments
@@ -376,27 +379,27 @@ REFERENCE_NOT_DEFINED_REGEX = (
 
 # Example:
 # /*@cc_on
-AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+AT_CC_ON_REGEX = rb"/\*@cc_on\s*"
 
 # Example:
 # @*/
-AT_REGEX = b"@\*\/"
+AT_REGEX = rb"@\*/"
 
 # Example:
 # /*@if (@_jscript_version >= 7)
-AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_IF_REGEX = rb"/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
 
 # Example:
 # @elif (@_jscript_version >= 7)
-AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELIF_REGEX = rb"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
 
 # Example:
 # @else
-AT_ELSE_REGEX = b"@else\s*"
+AT_ELSE_REGEX = rb"@else\s*"
 
 # Example:
 # /*@end
-AT_END_REGEX = b"\/\*@end\s*"
+AT_END_REGEX = rb"/\*@end\s*"
 
 JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
@@ -417,7 +420,13 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 #       blah7++;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)\s*{(?:\s*\w{2,15}\s*=\s*\w{2,15};)+\s*while\s*\(\w{2,15}\s*<\s*\(\w{2,15}\s*\*\s*\(?\w{2,15}\)?\)\)\s*{\s*(?:\w{2,15}\s*=\s*\w{2,15}\s*\+\s*\w{2,15}\s*|\w{2,15}\+\+);\s*}\s*}"
+WHILE_TIME_WASTER_REGEX = (
+    rb"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)\s*{"
+    rb"(?:\s*\w{2,15}\s*=\s*\w{2,15};)+"
+    rb"\s*while\s*\(\w{2,15}\s*<\s*\(\w{2,15}\s*\*\s*\(?\w{2,15}\)?\)\)\s*{"
+    rb"\s*(?:\w{2,15}\s*=\s*\w{2,15}\s*\+\s*\w{2,15}\s*|\w{2,15}\+\+);"
+    rb"\s*}\s*}"
+)
 
 # Examples:
 # function blah1() {
@@ -461,7 +470,20 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)
 #       }
 #   }
 # }
-WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s+\w{2,15}\((?:\w{2,15}(?:,\s*)?){0,5}\)\s*{\s*\w{2,15}\(\w{2,15}\);\s*\w{2,15}\s*=\s*\w{2,15};\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};\s*|\w{2,15}\s*=\s*\w{2,15};\s*|\w{2,15}\+\+;\s*)*try\s*{\s*(?:\w{2,15}\s*=\s*)?\(?\w{2,15}\[\w{2,15}\]\(\w{2,15}\)\)?;\s*}\s*catch\s*\(\w{2,15}\)\s*{\s*(?:\w{2,15}\[\(?\w{2,15}\)?\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+\s*}\s*(?:\w{2,15}\+\+;?)?\s*}\s*}"
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = (
+    rb"function\s+\w{2,15}\((?:\w{2,15}(?:,\s*)?){0,5}\)\s*{"
+    rb"\s*\w{2,15}\(\w{2,15}\);"
+    rb"\s*\w{2,15}\s*=\s*\w{2,15};"
+    rb"\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{"
+    rb"\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};\s*|\w{2,15}\s*=\s*\w{2,15};\s*|\w{2,15}\+\+;\s*)*"
+    rb"try\s*{"
+    rb"\s*(?:\w{2,15}\s*=\s*)?\(?\w{2,15}\[\w{2,15}\]\(\w{2,15}\)\)?;"
+    rb"\s*}\s*catch\s*\(\w{2,15}\)\s*{"
+    rb"\s*(?:\w{2,15}\[\(?\w{2,15}\)?\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+"
+    rb"\s*}"
+    rb"\s*(?:\w{2,15}\+\+;?)?"
+    rb"\s*}\s*}"
+)
 
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
@@ -469,7 +491,7 @@ TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGE
 
 # Example:
 # blah = "blahblah"
-VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'].+[\"'])"
+VBS_GRAB_VARS_REGEX = r"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'].+[\"'])"
 
 # Examples:
 # Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
@@ -477,20 +499,18 @@ VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'
 # Dim blah
 # Set blah = CreateObject("wscript.shell")
 VBS_WSCRIPT_SHELL_REGEX = (
-    "Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"']wscript\.shell[\"']\)"
+    r"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"']wscript\.shell[\"']\)"
 )
 
 # Example:
 # WshShell.RegWrite "blah\blah\blah\blah\blah", varname, "REG_SZ"
-VBS_WSCRIPT_REG_WRITE_REGEX = (
-    "%s\.RegWrite\s+(?P<key>[\w\"'\\\\]+),\s*(?P<content>[\w\"'.()]+),\s*(?P<type>[\w\"'.()]+)"
-)
+VBS_WSCRIPT_REG_WRITE_REGEX = r"%s\.RegWrite\s+(?P<key>[\w\"'\\]+),\s*(?P<content>[\w\"'.()]+),\s*(?P<type>[\w\"'.()]+)"
 
 # Examples:
 # blah "http://blah.com/evil.exe"
 # or
 # Call blah(varname)
-VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
+VBS_FUNCTION_CALL = r"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
 
 # Examples:
 # var blah = Function("blah", varname);
@@ -501,27 +521,30 @@ VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
 # {
 # 	return(new Function(thing1, thing2));
 # }
-JS_NEW_FUNCTION_REGEX = "(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"']+),\s*(?P<args>[\w.()\"'\/&,\s]+)\)\)?;(\s*})?"
+JS_NEW_FUNCTION_REGEX = (
+    r"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{"
+    r"\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"']+),\s*(?P<args>[\w.()\"'\/&,\s]+)\)\)?;(\s*})?"
+)
 
 # Example:
 # var new_blah = blah("blah", thing2);
-JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
+JS_NEW_FUNCTION_REASSIGN_REGEX = r"(?P<new_name>\w+)\s*=\s*%s"
 
 # Example:
 # document.write(unescape("blah"))
-DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
+DOM_WRITE_UNESCAPE_REGEX = r"(document\.write\(unescape\(.+\))"
 
 # Example:
 # document.write(atob(val));
-DOM_WRITE_ATOB_REGEX = "(document\.write\((window\.)?atob\(.+\))"
+DOM_WRITE_ATOB_REGEX = r"(document\.write\((window\.)?atob\(.+\))"
 
 # Example:
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
-HTMLELEMENT_SRC_REGEX = f"(?:{HTMLSCRIPTELEMENT}|{HTMLIFRAMEELEMENT})\[[0-9]+\]{HTMLELEMENT_SRC_SET_TO_URI} '(.+)'"
+HTMLELEMENT_SRC_REGEX = rf"(?:{HTMLSCRIPTELEMENT}|{HTMLIFRAMEELEMENT})\[[0-9]+\]{HTMLELEMENT_SRC_SET_TO_URI} '(.+)'"
 
 # Example:
 # <!-- HTML Encryption provided by www.blah.com -->
-FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
+FULL_HTML_COMMENT_IN_JS = rb"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
 
 # Example:
 # function a0nnnnoo() {
@@ -531,25 +554,31 @@ FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
 #     };
 #     return a0nnnnoo();
 # };
-FUNCTION_INCEPTION = b"function\s+(?P<function_name>\w+)\(\)\s*\{\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];\s*(?P=function_name)\s*=\s*function\(\)\s*\{\s*return\s+(?P=variable_name);\s*\};\s*return\s+(?P=function_name)\(\);\s*\};"
+FUNCTION_INCEPTION = (
+    rb"function\s+(?P<function_name>\w+)\(\)\s*\{"
+    rb"\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];"
+    rb"\s*(?P=function_name)\s*=\s*function\(\)\s*\{"
+    rb"\s*return\s+(?P=variable_name);\s*\};"
+    rb"\s*return\s+(?P=function_name)\(\);\s*\};"
+)
 
 # Example:
 # adc4bc7c-8f35-4a85-91e9-dc822b07f60d
-BOX_JS_PAYLOAD_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
+BOX_JS_PAYLOAD_FILE_NAME = r"[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
 
 # Example:
 # 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
-SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
+SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + r"\.js"
 
 # Examples:
 # <!DOCTYPE html>
 # or
 # <html>
-HTML_START = b"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
+HTML_START = rb"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
 
 # Example:
 # atob was seen decoding a URI: 'http://blah.com'
-ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
+ATOB_URI_REGEX = r"atob was seen decoding a URI: '(.+)'"
 
 # Example:
 # Payment.xls
