@@ -588,15 +588,23 @@ PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
 
 
 def is_vb_script(script: Tag) -> bool:
-    return script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() == "text/vbscript"
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() == "vbscript"
+    return False
 
 
 def is_js_script(script: Tag) -> bool:
     """Checks if script is javascript or jscript"""
-    if "type" in script:
-        return script["type"].lower() in ("", "text/javascript", "text/jscript")
-    if "language" in script:
-        return script["language"].lower() in ("", "javascript", "jscript")
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() in ("", "text/javascript", "text/jscript")
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() in ("", "javascript", "jscript")
     return True  # default is text/javascript if there is no type/language
 
 
