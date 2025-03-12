@@ -588,15 +588,23 @@ PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
 
 
 def is_vb_script(script: Tag) -> bool:
-    return script.get("language", "").lower() == "vbscript" or script.get("type", "").lower() == "text/vbscript"
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() == "text/vbscript"
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() == "vbscript"
+    return False
 
 
 def is_js_script(script: Tag) -> bool:
     """Checks if script is javascript or jscript"""
-    if "type" in script:
-        return script["type"].lower() in ("", "text/javascript", "text/jscript")
-    if "language" in script:
-        return script["language"].lower() in ("", "javascript", "jscript")
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() in ("", "text/javascript", "text/jscript")
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() in ("", "javascript", "jscript")
     return True  # default is text/javascript if there is no type/language
 
 
@@ -1658,33 +1666,27 @@ class JsJaws(ServiceBase):
             (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
         )
 
+        # Detect Obfuscator.io
+        obfuscator_io = False
+        for yara_rule in listdir("./yara"):
+            rules = yara_compile(filepath=path.join("./yara", yara_rule))
+            try:
+                matches = rules.match(file_path)
+            except YARAError as e:
+                self.log.debug(f"Could not open file {file_path} due to '{e}'")
+                matches = []
+            if matches:
+                obfuscator_io = True
+                break
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
-
-        # 1. If it is enabled in the submission parameter
-        if request.get_param("enable_synchrony"):
+        # 1. If the yara rule that looks for obfuscator.io obfuscation hits on the file
+        # 2. If it is enabled in the submission parameter
+        if obfuscator_io or request.get_param("enable_synchrony"):
             tool_threads.append(
                 (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
             )
             has_synchrony_run = True
-        else:
-            for yara_rule in listdir("./yara"):
-                rules = yara_compile(filepath=path.join("./yara", yara_rule))
-                try:
-                    matches = rules.match(file_path)
-                except YARAError as e:
-                    self.log.debug(f"Could not open file {file_path} due to '{e}'")
-                    matches = []
-                # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
-                if matches:
-                    tool_threads.append(
-                        (
-                            SYNCHRONY,
-                            Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True),
-                        )
-                    )
-                    has_synchrony_run = True
-                    break
 
         for _, thr in tool_threads:
             thr.start()
@@ -1738,7 +1740,7 @@ class JsJaws(ServiceBase):
 
         if self.html_document_write and self.sample_type == "code/html":
             doc_write_heur = Heuristic(23)
-            _ = ResultSection(
+            ResultSection(
                 doc_write_heur.name, doc_write_heur.description, heuristic=doc_write_heur, parent=request.result
             )
 
@@ -1758,15 +1760,16 @@ class JsJaws(ServiceBase):
 
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
+        obfuscator_io = obfuscator_io or run_synchrony
         if not has_synchrony_run and run_synchrony:
             synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
-        # TODO: Do something with the Synchrony output
+        # Synchrony output is the same every time unless there is an error.
         _ = responses.get(SYNCHRONY)
 
-        self._extract_synchrony(request, synchrony_timedout)
+        self._extract_synchrony(request, synchrony_timedout, obfuscator_io)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
@@ -3891,7 +3894,7 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest, timed_out: object):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool):
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
@@ -3908,9 +3911,14 @@ class JsJaws(ServiceBase):
                 request.result.add_section(time_out_synchrony_res)
             return
 
+        # Sometimes Synchrony does nothing
+        if get_sha256_for_file(self.cleaned_with_synchrony_path) == request.sha256:
+            return
+
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
-        deobfuscated_with_synchrony_res.set_heuristic(8)
+        if obfuscator_io:
+            deobfuscated_with_synchrony_res.set_heuristic(8)
         request.result.add_section(deobfuscated_with_synchrony_res)
 
         artifact = {
