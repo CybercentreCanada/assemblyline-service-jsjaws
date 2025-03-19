@@ -1829,7 +1829,7 @@ class JsJaws(ServiceBase):
         js_content: bytes = b"",
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None,
         insert_above_divider: bool = False,
-    ) -> Tuple[Optional[str], bytes, Optional[str]]:
+    ) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
