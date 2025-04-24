@@ -254,27 +254,27 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581",
+            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581",
+            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581",
+            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=184980817204321254173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=68216817063525744173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/xml.php?axkhpbmxwhmjuwt=83015716210956714173581",
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=8825554069874854173581",
             "ioc_type": "uri_path"
           }
         ],
@@ -306,14 +306,14 @@
                 "www.travelettes.net"
               ],
               "uri": [
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581",
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581",
-                "/xml.php?axkhpbmxwhmjuwt=68216817063525744173581",
-                "/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
+                "/xml.php?axkhpbmxwhmjuwt=184980817204321254173581",
+                "/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
+                "/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
               ]
             }
           }
@@ -326,15 +326,15 @@
         "body": [
           {
             "method": "GET",
-            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
+            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
           },
           {
             "method": "GET",
-            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
+            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581"
           },
           {
             "method": "GET",
-            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
+            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
           }
         ],
         "body_config": {
@@ -361,21 +361,21 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "www.travelettes.net",
                 "www.tokyo-hi-vision.com",
                 "www.thomadaneau.com"
               ],
               "uri": [
-                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581",
-                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581",
-                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
               ],
               "uri_path": [
-                "/xml.php?axkhpbmxwhmjuwt=68216817063525744173581",
-                "/xml.php?axkhpbmxwhmjuwt=83015716210956714173581",
-                "/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
+                "/xml.php?axkhpbmxwhmjuwt=8825554069874854173581",
+                "/xml.php?axkhpbmxwhmjuwt=36948072985515484173581",
+                "/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
               ]
             }
           }
@@ -483,81 +483,14 @@
           "value": "www.thomadaneau.com"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "www.thomadaneau.com"
-        },
-        {
           "heur_id": 4,
           "signatures": [],
-          "value": "www.tokyo-hi-vision.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
           "value": "www.tokyo-hi-vision.com"
         },
         {
           "heur_id": 4,
           "signatures": [],
           "value": "www.travelettes.net"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "www.travelettes.net"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
         }
       ],
       "network.static.domain": [
@@ -572,13 +505,34 @@
           "value": "www.thomadaneau.com"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.thomadaneau.com"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "www.tokyo-hi-vision.com"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.tokyo-hi-vision.com"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "www.travelettes.net"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
           "value": "www.travelettes.net"
         }
       ],
@@ -586,34 +540,76 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=36948072985515484173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=0599240611494411554173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=184980817204321254173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=68216817063525744173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=36948072985515484173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=36948072985515484173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/xml.php?axkhpbmxwhmjuwt=83015716210956714173581"
+          "value": "/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=8825554069874854173581"
         }
       ]
     },

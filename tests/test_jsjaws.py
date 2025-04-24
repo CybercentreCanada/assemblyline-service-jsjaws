@@ -1,3 +1,5 @@
+"""JsJaws Service Tests"""
+
 import os
 import shutil
 from hashlib import sha256
@@ -14,6 +16,7 @@ from assemblyline_service_utilities.testing.helper import check_section_equality
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection, ResultTableSection, TableRow
 from assemblyline_v4_service.common.task import Task
+
 from jsjaws import JsJaws
 from signatures.abstracts import Signature
 
@@ -378,7 +381,9 @@ class TestJsJaws:
             "[2022-10-18T20:12:52.924Z] document[15].write(content) 0 bytes",
             "[2022-10-18T20:12:53.924Z] => 'password?!'",
         ]
-        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
+        jsjaws_class_instance._extract_doc_writes(
+            output, dummy_request_class_instance, dummy_request_class_instance.file_contents
+        )
         expected_doc_write = "write me!write me too!password?!"
         assert jsjaws_class_instance.doc_write_hashes == {sha256(expected_doc_write.encode()).hexdigest()}
         assert dummy_request_class_instance.temp_submission_data.get("passwords") == [
@@ -408,7 +413,9 @@ class TestJsJaws:
             "</html>'",
             "[2022-10-18T20:12:51.924Z] - Something else",
         ]
-        jsjaws_class_instance._extract_doc_writes(output, dummy_request_class_instance)
+        jsjaws_class_instance._extract_doc_writes(
+            output, dummy_request_class_instance, dummy_request_class_instance.file_contents
+        )
         expected_doc_write = "<html>\npassword: yabadabadoo\n</html>"
         assert jsjaws_class_instance.doc_write_hashes == {sha256(expected_doc_write.encode()).hexdigest()}
         assert dummy_request_class_instance.temp_submission_data.get("passwords") == [
@@ -451,7 +458,9 @@ class TestJsJaws:
             "    document.write(b64_decoded);</script></html>'",
             "[2022-12-21T21:06:23.657Z] ==> Cleaning up sandbox.",
         ]
-        jsjaws_class_instance._extract_doc_writes(multiple_gauntlet_output, dummy_request_class_instance)
+        jsjaws_class_instance._extract_doc_writes(
+            multiple_gauntlet_output, dummy_request_class_instance, dummy_request_class_instance.file_contents
+        )
         expected_doc_write_1 = b'<html><script>var b64_encoded = "PGh0bWw+CnBhc3N3b3JkOiB5YWJhZGFiYWRvbwo8L2h0bWw+";\n    var b64_decoded = atob(b64_encoded);\n    document.write(b64_decoded);</script></html>'
         expected_doc_write_2 = b"<html>\n\npassword: yabadabadoo\n\n</html>"
         assert jsjaws_class_instance.doc_write_hashes == {
@@ -563,14 +572,17 @@ class TestJsJaws:
             body_format=BODY_FORMAT.TABLE,
             body=dumps(body),
             tags={
-                "network.dynamic.domain": ["blah.ca", "definitely-a-url.ca"],
+                "network.dynamic.domain": ["definitely-a-url.ca"],
                 "network.dynamic.uri": [
-                    "http://blah.ca/blah.exe",
-                    "http://1.1.1.1/blah.exe",
                     "http://definitely-a-url.ca",
                 ],
-                "network.dynamic.ip": ["1.1.1.1"],
-                "network.dynamic.uri_path": ["/blah.exe"],
+                "network.static.domain": ["blah.ca"],
+                "network.static.uri": [
+                    "http://blah.ca/blah.exe",
+                    "http://1.1.1.1/blah.exe",
+                ],
+                "network.static.ip": ["1.1.1.1"],
+                "network.static.uri_path": ["/blah.exe"],
                 "file.string.extracted": ["blahblahblah"],
             },
         )
@@ -742,7 +754,7 @@ class TestJsJaws:
         # Generate a fake Request object with a single attribute
         request = type("Request", (object,), {"result": Result()})
         output = ["29 Jun 08:24:36 - https://blah.com/blah.exe"]
-        jsjaws_class_instance._extract_malware_jail_iocs(output, request)
+        jsjaws_class_instance._extract_malware_jail_iocs(output, request, b"")
         assert check_section_equality(request.result.sections[0], correct_res_sec)
 
     @staticmethod

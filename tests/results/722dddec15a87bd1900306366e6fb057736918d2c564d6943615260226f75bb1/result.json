@@ -281,7 +281,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "southernplate.co"
               ],
@@ -350,30 +350,14 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "southernplate.co"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "southernplate.co"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "southernplate.co"
         },
@@ -401,6 +385,11 @@
         },
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
         },
@@ -448,6 +437,11 @@
         },
         {
           "heur_id": 2,
+          "signatures": [],
+          "value": "/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
+        },
+        {
+          "heur_id": 1,
           "signatures": [],
           "value": "/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
         },

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2171,
+    "score": 3071,
     "sections": [
       {
         "auto_collapse": false,
@@ -54,9 +54,13 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 25,
-          "score": 100,
-          "score_map": {},
-          "signatures": {}
+          "score": 500,
+          "score_map": {
+            "short_form": 500
+          },
+          "signatures": {
+            "short_form": 1
+          }
         },
         "promote_to": null,
         "tags": {},
@@ -277,7 +281,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t_0x270c40[_0x4b1197(...)] is not a function\n\t\tHTMLFormElement[18].innerText = (string) 'Payment-notice.xls  Microsoft Excel File     This document...\n\t\tconst _0x4b1197=_0x5dbe75;function _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31b...\n\t\tdocument[6].addEventListener(click, _0x186426)\n\t\tRunning function _0x186426([object Object])\n\t\tlogin_form6vstsa7g7dnohpt5hszsc4_jsjaws.innerText = \"Payment-notice.xls  Microsoft Excel File     Th...\n\t\tfunction _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31bf(_0x38f68c-'0x2e6',_0x2d8...\n\t\t}function _0x1ae974(_0x277982,_0x3f26cb){return _0x49e1(_0x3f26cb-'0x1b1',_0x277982)\n\t\t}const _0x4de4bd=[_0x501dfe('B$lB',-'0x26'),_0x501dfe('6YpM',-'0xa'),_0x53811e('0x50d','0x520'),_0x5...\n\t\t_0x303a0c=function(){function _0x7d723c(_0x74702d,_0x460db6){return _0x501dfe(_0x460db6,_0x74702d-'0...\n\t\t[102 Mark(s) Truncated]",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t_0x3f6b1e[_0xf4f74d(...)] is not a function\n\t\tHTMLFormElement[18].innerText = (string) 'Payment-notice.xls  Microsoft Excel File     This document...\n\t\tconst _0x4b1197=_0x5dbe75;function _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31b...\n\t\tdocument[6].addEventListener(click, _0x186426)\n\t\tRunning function _0x186426([object Object])\n\t\tlogin_form6vstsa7g7dnohpt5hszsc4_jsjaws.innerText = \"Payment-notice.xls  Microsoft Excel File     Th...\n\t\tfunction _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31bf(_0x38f68c-'0x2e6',_0x2d8...\n\t\t}function _0x1ae974(_0x277982,_0x3f26cb){return _0x49e1(_0x3f26cb-'0x1b1',_0x277982)\n\t\t}const _0x4de4bd=[_0x501dfe('B$lB',-'0x26'),_0x501dfe('6YpM',-'0xa'),_0x53811e('0x50d','0x520'),_0x5...\n\t\t_0x303a0c=function(){function _0x7d723c(_0x74702d,_0x460db6){return _0x501dfe(_0x460db6,_0x74702d-'0...\n\t\t[102 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -680,7 +684,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "kasumbo.com",
                 "couponhagen.churchontheranch.uk"
@@ -699,6 +703,44 @@
           }
         },
         "title_text": "URLs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t-\thttps://couponhagen.churchontheranch.uk/app/exlca.php",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "is_phishing_url": 500
+          },
+          "signatures": {
+            "is_phishing_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "couponhagen.churchontheranch.uk"
+              ],
+              "uri": [
+                "https://couponhagen.churchontheranch.uk/app/exlca.php"
+              ],
+              "uri_path": [
+                "/app/exlca.php"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
         "zeroize_on_tag_safe": false
       },
       {
@@ -756,6 +798,13 @@
         "heur_id": 1,
         "signatures": [
           "single_script_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "is_phishing_url"
         ]
       },
       {
@@ -856,7 +905,9 @@
       {
         "attack_ids": [],
         "heur_id": 25,
-        "signatures": []
+        "signatures": [
+          "short_form"
+        ]
       },
       {
         "attack_ids": [],
@@ -865,68 +916,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "couponhagen.churchontheranch.uk"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "kasumbo.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "/app/exlca.php"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "single_script_url"
-          ],
-          "value": "/smarty/xls_v1.6/tail-spin.svg"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
@@ -944,8 +933,29 @@
           "value": "couponhagen.churchontheranch.uk"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "couponhagen.churchontheranch.uk"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "couponhagen.churchontheranch.uk"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "kasumbo.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
           "value": "kasumbo.com"
         },
         {
@@ -966,6 +976,13 @@
           "value": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -976,6 +993,20 @@
           "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "https://couponhagen.churchontheranch.uk/app/exlca.php"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://kasumbo.com/smarty/xls_v1.6/msoxcel_.svg"
@@ -983,6 +1014,13 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
           "value": "https://kasumbo.com/smarty/xls_v1.6/tail-spin.svg"
         },
         {
@@ -1003,8 +1041,29 @@
           "value": "/app/exlca.php"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
+          "value": "/app/exlca.php"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "is_phishing_url"
+          ],
+          "value": "/app/exlca.php"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
           "value": "/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
         },
         {
@@ -1015,6 +1074,13 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/smarty/xls_v1.6/tail-spin.svg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "single_script_url"
+          ],
           "value": "/smarty/xls_v1.6/tail-spin.svg"
         },
         {

@@ -200,7 +200,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\t= slice.charCodeAt(i)",
+        "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tbyteNumbers[i] = slice.charCodeAt(i)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

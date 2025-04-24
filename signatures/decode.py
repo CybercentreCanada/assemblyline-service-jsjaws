@@ -7,6 +7,7 @@ from signatures.abstracts import ALL, Signature
 
 class Unescape(Signature):
     # Supported by https://github.com/CYB3RMX/Qu1cksc0pe/blob/ad3105ab9d3363df013ff95bae218f5c374a93fb/Systems/Multiple/malicious_html_codes.json#L27
+    # Supported by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L33
     # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/unescape
     def __init__(self):
         super().__init__(
@@ -101,6 +102,7 @@ class Obfuscation(Signature):
 
 
 class CryptoJSObfuscation(Signature):
+    # Supported by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L41
     def __init__(self):
         super().__init__(
             heuristic_id=3,
@@ -233,7 +235,7 @@ class WriteDecodedURIComponentFromBase64Content(Signature):
             name="write_decoded_uri_component_from_base64",
             description="JavaScript writes content to the DOM by base64-decoding a value from an element",
             indicators=["document.write(", "decodeURI", "atob("],
-            severity=0,
+            severity=3,
         )
 
     def process_output(self, output):

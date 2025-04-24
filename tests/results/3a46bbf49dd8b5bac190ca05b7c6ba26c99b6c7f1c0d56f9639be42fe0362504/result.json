@@ -582,7 +582,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "projectdare.co.uk"
               ],
@@ -746,89 +746,6 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "projectdare.co.uk"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
@@ -848,6 +765,13 @@
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "projectdare.co.uk"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "projectdare.co.uk"
         },
         {
@@ -883,8 +807,22 @@
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
         },
         {
@@ -893,13 +831,34 @@
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "http://projectdare.co.uk/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
         },
         {
@@ -945,8 +904,22 @@
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=01"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=02"
         },
         {
@@ -955,13 +928,34 @@
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=03"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=04"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/counter/?ad=1PdN3rw5BbYzjH4bs9J7gNBbDHLHiKhYCs&id=LZYF9ZMqgF5p5vYBCNUZ47q4APPUucn_m_WTT2wUeNdf5uH-w9ppNfDwmv54EB1VkJxJmO4iQA&rnd=05"
         },
         {

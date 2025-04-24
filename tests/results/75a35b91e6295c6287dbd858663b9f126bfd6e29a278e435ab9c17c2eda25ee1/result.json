@@ -333,7 +333,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "iscast.com.br",
                 "tapasyaevents.com",
@@ -482,37 +482,13 @@
           "value": "dealsontrainers.org"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "dealsontrainers.org"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
           "value": "iscast.com.br"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "iscast.com.br"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
-          "value": "tapasyaevents.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
           "value": "tapasyaevents.com"
         }
       ],
@@ -523,37 +499,13 @@
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "https://dealsontrainers.org/tete/tete.php?85434"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
           "value": "https://iscast.com.br/udit/udit.php?68977"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "https://iscast.com.br/udit/udit.php?68977"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
-          "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
           "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
         }
       ],
@@ -564,37 +516,13 @@
           "value": "/fmu/fmu.php?55724"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "/fmu/fmu.php?55724"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
           "value": "/tete/tete.php?85434"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
-          "value": "/tete/tete.php?85434"
-        },
-        {
           "heur_id": 18,
           "signatures": [],
-          "value": "/udit/udit.php?68977"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "function_inception_url",
-            "obfuscator_io_usage_url"
-          ],
           "value": "/udit/udit.php?68977"
         }
       ],
@@ -605,13 +533,37 @@
           "value": "dealsontrainers.org"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "dealsontrainers.org"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "iscast.com.br"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "iscast.com.br"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "tapasyaevents.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
           "value": "tapasyaevents.com"
         }
       ],
@@ -622,13 +574,37 @@
           "value": "https://dealsontrainers.org/tete/tete.php?85434"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://dealsontrainers.org/tete/tete.php?85434"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "https://iscast.com.br/udit/udit.php?68977"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://iscast.com.br/udit/udit.php?68977"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
           "value": "https://tapasyaevents.com/fmu/fmu.php?55724"
         }
       ],
@@ -639,13 +615,37 @@
           "value": "/fmu/fmu.php?55724"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "/fmu/fmu.php?55724"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
           "value": "/tete/tete.php?85434"
         },
         {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
+          "value": "/tete/tete.php?85434"
+        },
+        {
           "heur_id": 2,
           "signatures": [],
+          "value": "/udit/udit.php?68977"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "function_inception_url",
+            "obfuscator_io_usage_url"
+          ],
           "value": "/udit/udit.php?68977"
         }
       ]

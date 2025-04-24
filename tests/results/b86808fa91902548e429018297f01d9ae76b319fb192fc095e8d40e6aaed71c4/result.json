@@ -471,6 +471,19 @@
                 "084a8a9aa8cced9175bd07bc44998e75"
               ]
             }
+          },
+          "network": {
+            "static": {
+              "ip": [
+                "139.99.117.17"
+              ],
+              "uri": [
+                "http://139.99.117.17/68597.dat"
+              ],
+              "uri_path": [
+                "/68597.dat"
+              ]
+            }
           }
         },
         "title_text": "JS-X-Ray IOCs Detected",
@@ -639,6 +652,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "139.99.117.17"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "139.99.117.17"
         }
       ],
       "network.static.uri": [
@@ -647,6 +665,11 @@
           "signatures": [
             "suspicious_url_found"
           ],
+          "value": "http://139.99.117.17/68597.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "http://139.99.117.17/68597.dat"
         },
         {
@@ -666,6 +689,11 @@
           "signatures": [
             "suspicious_url_found"
           ],
+          "value": "/68597.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "/68597.dat"
         },
         {

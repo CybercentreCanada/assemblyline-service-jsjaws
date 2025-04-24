@@ -1,6 +1,7 @@
 """
 These are all of the signatures related to using suspicious function calls
 """
+
 from signatures.abstracts import Signature
 
 
@@ -34,6 +35,22 @@ class DocumentWrite(Signature):
             name="document_write",
             description="Object(s) are written to the DOM",
             indicators=["document", ".write(content)"],
+            severity=0,
+        )
+
+    def process_output(self, output):
+        self.check_indicators_in_list(output, match_all=True)
+
+
+class ExecCommandUsage(Signature):
+    # Inspired by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L34
+    # https://developer.mozilla.org/en-US/docs/Web/API/document/execCommand
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="execcommand_usage",
+            description="Executes command, possibly related to clipboard access, or editing forms and documents.",
+            indicators=["execCommand("],
             severity=0,
         )
 
