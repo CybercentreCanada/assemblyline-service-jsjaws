@@ -973,19 +973,22 @@ class JsJaws(ServiceBase):
 
         original_contents = file_content
 
+        root_dir = path.dirname(path.abspath(__file__))
+
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
 
 
         #Geek Week 9 Team:2.2 Exracting Asar files aswell as reuploading files to ALv4.
 
+
         elif self.sample_type in ["archive/asar"]:
             request.result=Result()
+            asar_path = path.join(root_dir, 'tools/node_modules/@electron/asar/bin/asar.js')
 
             try:
 
-                extracted = subprocess.check_call(['asar', 'extract', file_path, self.working_directory])
-
+                extracted = subprocess.check_call([asar_path, 'extract', file_path, self.working_directory])
                 text_section = ResultSection('example of a default section')
                 request.result.add_section(text_section)
 
@@ -1025,7 +1028,6 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump_path = path.join(
             self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
         )
-        root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_boxjs_boilerplate = path.join(root_dir, "tools/node_modules/box-js/boilerplate.js")

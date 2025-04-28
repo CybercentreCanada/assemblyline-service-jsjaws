@@ -37,7 +37,6 @@ COPY . .
 USER root
 WORKDIR ./tools
 RUN npm install
-RUN npm install -g asar
 RUN chown -R root:root node_modules
 
 USER assemblyline
