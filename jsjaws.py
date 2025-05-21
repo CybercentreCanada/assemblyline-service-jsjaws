@@ -994,7 +994,7 @@ class JsJaws(ServiceBase):
 
             main: str | None = None
             try:
-                with open(os.path.join(asar_dir, "package.json")) as f:
+                with open(os.path.join(asar_dir, "package.json"), "rb") as f:
                     package_json = json.load(f)
                     main = package_json.get("main")  # entrypoint name
                     if not main:
@@ -1014,6 +1014,8 @@ class JsJaws(ServiceBase):
                     error_section = ResultSection(
                         f"Error processing ASAR file {asar_name}", f"main process file {main} does not exist"
                     )
+                with open(file_path, "rb") as f:
+                    file_content = f.read()
 
             if error_section:
                 request.result.add_section(error_section)
