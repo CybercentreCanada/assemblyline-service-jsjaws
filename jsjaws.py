@@ -1,10 +1,9 @@
+import json
+import os
 import re
-import tempfile
 import subprocess
 import sys
-import os
-import json
-
+import tempfile
 from base64 import b64decode
 from binascii import Error as BinasciiError
 from glob import glob
@@ -977,37 +976,54 @@ class JsJaws(ServiceBase):
 
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
-
-
-        #Geek Week 9 Team:2.2 Exracting Asar files aswell as reuploading files to ALv4.
-
-
-        elif self.sample_type in ["archive/asar"]:
-            request.result=Result()
-            asar_path = path.join(root_dir, 'tools/node_modules/@electron/asar/bin/asar.js')
-
+        elif self.sample_type == "archive/asar":
+            # Geek Week 9 Team:2.2 Exracting Asar files aswell as reuploading files to ALv4.
+            error_section: ResultSection | None = None
+            request.result = Result()
+            asar_name = os.path.basename(file_path)
+            asar_path = os.path.join(root_dir, "tools/node_modules/@electron/asar/bin/asar.js")
+            # isolate asar files in their own directory
+            asar_dir = os.path.join(self.working_directory, "asar")
             try:
-
-                extracted = subprocess.check_call([asar_path, 'extract', file_path, self.working_directory])
-                text_section = ResultSection('example of a default section')
-                request.result.add_section(text_section)
-
+                # asar creates the output directory itself
+                subprocess.check_call([asar_path, "extract", file_path, asar_dir])
             except Exception as e:
-
-                error_section = ResultSection(f"An Error occured when extracting the asar file: {e}", file_path)
+                error_section = ResultSection(f"An Error occured when extracting the ASAR file {asar_name}", str(e))
                 request.result.add_section(error_section)
-
                 return
 
-            print(self.working_directory)
-            print(os.listdir(self.working_directory))
+            main: str | None = None
+            try:
+                with open(os.path.join(asar_dir, "package.json")) as f:
+                    package_json = json.load(f)
+                    main = package_json.get("main")  # entrypoint name
+                    if not main:
+                        error_section = ResultSection(
+                            f"Error processing ASAR file {asar_name}", "No main in package.json"
+                        )
+            except FileNotFoundError:
+                error_section = ResultSection(
+                    f"Error processing ASAR file {asar_name}", "No package.json in ASAR archive"
+                )
+            except json.JSONDecodeError as e:
+                error_section = ResultSection(f"Error reading package.json from {asar_name}", str(e))
 
-            for file in os.listdir(self.working_directory):
-                if os.path.isfile(os.path.join(self.working_directory, file)):
-                    request.add_extracted(os.path.join(self.working_directory, file),file, "extracted with asar")
+            if main:
+                file_path = os.path.join(asar_dir, main)
+                if not os.path.isfile(file_path):
+                    error_section = ResultSection(
+                        f"Error processing ASAR file {asar_name}", f"main process file {main} does not exist"
+                    )
 
-            return
-
+            if error_section:
+                request.result.add_section(error_section)
+                # Extract files we couldn't analyse
+                for file in os.listdir(asar_dir):
+                    if os.path.isfile(os.path.join(asar_dir, file)):
+                        request.add_extracted(os.path.join(asar_dir, file), file, "extracted with asar")
+                return
+            # If there is no error section then file_path is now set to the main process file of the ASAR archive.
+            # Continue processing that file
 
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(
             request, file_path, file_content
