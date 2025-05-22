@@ -999,23 +999,24 @@ class JsJaws(ServiceBase):
                     main = package_json.get("main")  # entrypoint name
                     if not main:
                         error_section = ResultSection(
-                            f"Error processing ASAR file {asar_name}", "No main in package.json"
+                            f"Error processing ASAR file {asar_name}", "No main attribute in package.json."
                         )
-            except FileNotFoundError:
+            except (FileNotFoundError, IsADirectoryError):
                 error_section = ResultSection(
-                    f"Error processing ASAR file {asar_name}", "No package.json in ASAR archive"
+                    f"Error processing ASAR file {asar_name}", "File package.json missing from ASAR archive."
                 )
             except json.JSONDecodeError as e:
                 error_section = ResultSection(f"Error reading package.json from {asar_name}", str(e))
 
             if main:
                 file_path = os.path.join(asar_dir, main)
-                if not os.path.isfile(file_path):
+                try:
+                    with open(file_path, "rb") as f:
+                        file_content = f.read()
+                except (FileNotFoundError, IsADirectoryError):
                     error_section = ResultSection(
-                        f"Error processing ASAR file {asar_name}", f"main process file {main} does not exist"
+                        f"Error processing ASAR file {asar_name}", f"main process file {main} does not exist."
                     )
-                with open(file_path, "rb") as f:
-                    file_content = f.read()
 
             if error_section:
                 request.result.add_section(error_section)
