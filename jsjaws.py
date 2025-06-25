@@ -1936,7 +1936,7 @@ class JsJaws(ServiceBase):
             "input",
             # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L197
             "object",
-            "script",
+            #"script", scripts src is added to js_content by _extract_js_using_soup. No need to extract.
             "source",
             "track",
             "v:fill",
