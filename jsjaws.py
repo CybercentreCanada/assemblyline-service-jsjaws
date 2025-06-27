@@ -1,3 +1,4 @@
+import hashlib
 import re
 import tempfile
 from base64 import b64decode
@@ -1829,7 +1830,7 @@ class JsJaws(ServiceBase):
         js_content: bytes = b"",
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None,
         insert_above_divider: bool = False,
-    ) -> Tuple[Optional[str], bytes, Optional[str]]:
+    ) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
@@ -1936,7 +1937,7 @@ class JsJaws(ServiceBase):
             "input",
             # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L197
             "object",
-            "script",
+            #"script", scripts src is added to js_content by _extract_js_using_soup. No need to extract.
             "source",
             "track",
             "v:fill",
@@ -4712,3 +4713,26 @@ class JsJaws(ServiceBase):
             except Exception:
                 # We don't care that much
                 pass
+
+    def _extract_svg(self, soup: BeautifulSoup, request: ServiceRequest) -> None:
+        """Extract SVG with embedded scripts."""
+        if self.sample_type == "image/svg":
+            return
+        script_in_svg = False
+        svg_section = ResultSection("Embedded SVG images")
+        svg_section.add_line("See extracted files:")
+        for svg in soup.find_all("svg"):
+            data = svg.encode()
+            file_name = hashlib.sha256(data).hexdigest()[:8] + ".svg"
+            file_path = path.join(self.working_directory, file_name)
+            with open(file_path, "wb") as f:
+                f.write(data)
+            request.add_extracted(file_path, file_name, "Embedded SVG image")
+            if svg.find("script"):
+                svg_section.add_line(f"\u2022 {file_name}")
+                script_in_svg = True
+            else:
+                svg_section.add_line(f"\u2022 {file_name} [Contains script]")
+        if script_in_svg:
+            svg_section.set_heuristic(28)
+        request.result.add_section(svg_section)

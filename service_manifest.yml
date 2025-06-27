@@ -288,6 +288,12 @@ heuristics:
     filetype: 'code/html'
     description: Form action is suspicious because form was created in suspicious way
 
+  - heur_id: 28
+    name: Script in SVG
+    score: 0
+    filetype: '.*'
+    description: SVG image contains a script
+
 docker_config:
   allow_internet_access: true
   image: ${REGISTRY}cccs/assemblyline-service-jsjaws:$SERVICE_TAG

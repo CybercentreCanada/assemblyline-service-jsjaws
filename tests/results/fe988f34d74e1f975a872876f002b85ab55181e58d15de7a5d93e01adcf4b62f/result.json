@@ -254,27 +254,27 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581",
+            "ioc": "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581",
+            "ioc": "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581",
+            "ioc": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581",
             "ioc_type": "uri"
           },
           {
-            "ioc": "/test.php?tfognzsagssntu=000070463760521111144173581",
+            "ioc": "/test.php?tfognzsagssntu=020496310507605924173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?tfognzsagssntu=2065242434389884173581",
+            "ioc": "/test.php?tfognzsagssntu=86739267852056794173581",
             "ioc_type": "uri_path"
           },
           {
-            "ioc": "/test.php?tfognzsagssntu=8727009293490524173581",
+            "ioc": "/test.php?tfognzsagssntu=94809959012549674173581",
             "ioc_type": "uri_path"
           }
         ],
@@ -306,14 +306,14 @@
                 "www.macromixenlinea.com"
               ],
               "uri": [
-                "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581",
-                "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581",
-                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581"
+                "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581",
+                "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581",
+                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581"
               ],
               "uri_path": [
-                "/test.php?tfognzsagssntu=000070463760521111144173581",
-                "/test.php?tfognzsagssntu=2065242434389884173581",
-                "/test.php?tfognzsagssntu=8727009293490524173581"
+                "/test.php?tfognzsagssntu=020496310507605924173581",
+                "/test.php?tfognzsagssntu=86739267852056794173581",
+                "/test.php?tfognzsagssntu=94809959012549674173581"
               ]
             }
           }
@@ -326,15 +326,15 @@
         "body": [
           {
             "method": "GET",
-            "url": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581"
+            "url": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581"
           },
           {
             "method": "GET",
-            "url": "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581"
+            "url": "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581"
           },
           {
             "method": "GET",
-            "url": "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581"
+            "url": "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581"
           }
         ],
         "body_config": {
@@ -368,14 +368,14 @@
                 "www.lukeamiller.net"
               ],
               "uri": [
-                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581",
-                "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581",
-                "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581"
+                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581",
+                "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581",
+                "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581"
               ],
               "uri_path": [
-                "/test.php?tfognzsagssntu=000070463760521111144173581",
-                "/test.php?tfognzsagssntu=8727009293490524173581",
-                "/test.php?tfognzsagssntu=2065242434389884173581"
+                "/test.php?tfognzsagssntu=020496310507605924173581",
+                "/test.php?tfognzsagssntu=94809959012549674173581",
+                "/test.php?tfognzsagssntu=86739267852056794173581"
               ]
             }
           }
@@ -540,76 +540,76 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581"
+          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=8727009293490524173581"
+          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=94809959012549674173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581"
+          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=2065242434389884173581"
+          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=86739267852056794173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581"
+          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=000070463760521111144173581"
+          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=020496310507605924173581"
         }
       ],
       "network.static.uri_path": [
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?tfognzsagssntu=000070463760521111144173581"
+          "value": "/test.php?tfognzsagssntu=020496310507605924173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?tfognzsagssntu=000070463760521111144173581"
+          "value": "/test.php?tfognzsagssntu=020496310507605924173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?tfognzsagssntu=2065242434389884173581"
+          "value": "/test.php?tfognzsagssntu=86739267852056794173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?tfognzsagssntu=2065242434389884173581"
+          "value": "/test.php?tfognzsagssntu=86739267852056794173581"
         },
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "/test.php?tfognzsagssntu=8727009293490524173581"
+          "value": "/test.php?tfognzsagssntu=94809959012549674173581"
         },
         {
           "heur_id": 1,
           "signatures": [
             "gootloader_url"
           ],
-          "value": "/test.php?tfognzsagssntu=8727009293490524173581"
+          "value": "/test.php?tfognzsagssntu=94809959012549674173581"
         }
       ]
     },
