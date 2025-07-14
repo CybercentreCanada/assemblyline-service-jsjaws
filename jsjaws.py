@@ -4281,7 +4281,7 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
-        file_contents = file_contents.decode()
+        file_string = file_contents.decode()
         common_libs = {
             # URL/FILE: REGEX
             "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
@@ -4293,10 +4293,10 @@ class JsJaws(ServiceBase):
             "tools/gootloader/clean_libs/chartview.js": CHARTVIEW_REGEX,
             "tools/gootloader/clean_libs/mdl.js": MDL_REGEX,
         }
-        file_contents = file_contents.replace("\r", "")
-        split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
+        file_string = file_string.replace("\r", "")
+        split_file_contents = [line.strip() for line in file_string.split("\n") if line.strip()]
         for lib_path, regex in common_libs.items():
-            regex_match = re.match(regex, file_contents)
+            regex_match = re.match(regex, file_string)
             if not regex_match:
                 continue
             path_contents = None
