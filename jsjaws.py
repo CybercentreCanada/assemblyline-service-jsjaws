@@ -4281,20 +4281,17 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
-        file_string = file_contents.decode()
-        file_string = file_string.replace("\r", "")
-        lib_path, path_contents = self._get_library_code(file_string)
-        if not path_contents:
+        file_string = file_contents.decode().replace("\r", "")
+        lib_path, lib_contents = self._get_library_code(file_string)
+        if not lib_contents:
             return None, None, None
-        diff = self._filter_library_code(file_string, path_contents)
+        diff = self._filter_library_code(file_string, lib_contents)
         if len(diff) > 10:
-            new_file_contents = "\n".join(diff).encode()
+            new_file_contents = "\n".join(diff).encode() + b'\n'
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 f.write(new_file_contents)
-                f.write(b'\n')  # POSIX newline
                 file_path = f.name
             return file_path, new_file_contents, lib_path
-
         return None, None, None
 
     def _get_library_code(self, file_string: str) -> Tuple[Optional[str], Optional[str]]:
@@ -4302,7 +4299,7 @@ class JsJaws(ServiceBase):
         jquery_match = re.match(JQUERY_VERSION_REGEX, file_string)
         if jquery_match:
             jquery_version = ("jquery-compat-" if jquery_match.group(1) else "jquery-") + jquery_match.group(2)
-            jquery_url = f"https://code.jquery.com/jquery-{jquery_version}.js"
+            jquery_url = f"https://code.jquery.com/{jquery_version}.js"
             if self.service_attributes.docker_config.allow_internet_access:
                 resp = get(jquery_url, timeout=15)
                 return jquery_url, resp.text
@@ -4317,17 +4314,17 @@ class JsJaws(ServiceBase):
             "tools/gootloader/clean_libs/mdl.js": MDL_REGEX,
         }
         for lib_path, regex in common_libs.items():
-            regex_match = re.match(regex, file_string)
-            if not regex_match:
+            match = re.match(regex, file_string)
+            if not match:
                 continue
-            path_contents = None
-            if len(regex_match.regs) > 1:
-                lib_path = lib_path % regex_match.group(1)
+            lib_contents = None
+            if len(match.regs) > 1:
+                lib_path = lib_path % match.group(1)
 
             if path.exists(lib_path):
-                path_contents = open(lib_path, "r").read()
-                if path_contents:
-                    return lib_path, path_contents
+                lib_contents = open(lib_path, "r").read()
+                if lib_contents:
+                    return lib_path, lib_contents
             else:
                 self.log.warning(
                     f"There was a regex hit for a clean library file '{lib_path}' but this "
@@ -4336,35 +4333,24 @@ class JsJaws(ServiceBase):
 
         return None, None
 
-    def _filter_library_code(self, file_string: str, path_contents: str) -> list[str]:
-        split_file_contents = [line.strip() for line in file_string.split("\n") if line.strip()]
-        clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
+    def _filter_library_code(self, dirty_library: str, clean_library: str) -> list[str]:
+        dirty_lines = [s for line in dirty_library.split("\n") if (s := line.strip())]
+        clean_lines = [s for line in clean_library.split("\n") if (s := line.strip())]
         diff = []
         # The dirty file contents should always have more lines than the clean file contents
-        dirty_file_line_offset = 0
-        for index, item in enumerate(clean_file_contents):
-            dirty_file_line_index = index + dirty_file_line_offset
-
-            if dirty_file_line_index >= len(split_file_contents):
-                break
-
-            dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-            if self._compare_lines(item, dirty_file_line_to_compare):
-                pass
+        dirty_line_index = 0
+        for index, clean_line in enumerate(clean_lines):
             # Python has difficulty with decoding .. and ..., so skip it!
             # (the malicious lines are not in the clean files anyways)
-            elif ".." in item:
-                continue
-            else:
-                while not self._compare_lines(item, dirty_file_line_to_compare):
-                    diff.append(dirty_file_line_to_compare)
-                    dirty_file_line_offset += 1
-                    dirty_file_line_index = index + dirty_file_line_offset
-
-                    if dirty_file_line_index >= len(split_file_contents):
+            if ".." not in clean_line:
+                for dirty_line_index in range(dirty_line_index, len(dirty_lines)):
+                    dirty_line = dirty_lines[dirty_line_index]
+                    if self._compare_lines(clean_line, dirty_line):
                         break
-
-                    dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
+                    diff.append(dirty_line)
+            dirty_line_index += 1
+            if dirty_line_index >= len(dirty_lines):
+                break
         return diff
 
     @staticmethod
