@@ -10,6 +10,7 @@ from glob import glob
 from hashlib import sha256
 from inspect import getmembers, isclass
 from io import BytesIO
+from ipaddress import IPv4Address
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
@@ -18,7 +19,7 @@ from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit
 
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
@@ -1913,6 +1914,25 @@ class JsJaws(ServiceBase):
         aggregated_js_script, js_content = self._extract_js_using_soup(
             soup, aggregated_js_script, js_content, request, insert_above_divider
         )
+
+        link_section = ResultSection('URLs in <a> Tags')
+        links = soup.find_all('a', href=True)
+        for link in links:
+            assert isinstance(link, Tag)
+            href = link["href"]
+            assert isinstance(href, str)
+            link_section.add_line(href)
+            split = urlsplit(href)
+            if split.scheme and split.netloc:
+                link_section.add_tag("network.static.uri", href)
+            if split.path:
+                link_section.add_tag("network.static.uri_path", split.path)
+            if split.hostname:
+                try:
+                    link_section.add_tag("network.static.ip", IPv4Address(split.hostname).compressed)
+                except ValueError:  # not an ip address
+                    if is_domain(split.hostname.encode()):
+                        link_section.add_tag("network.static.domain", split.hostname)
 
         if self.sample_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(
