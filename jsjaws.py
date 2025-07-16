@@ -233,7 +233,7 @@ WSCRIPT_SHELL_REGEX = r"(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|She
 # Example:
 # /*!
 #  * jQuery JavaScript Library v1.5
-JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+(?:-[a-z0-9.]+)?)\n"
+JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery( Compat)? JavaScript Library v([\d\.]+(?:-[a-z0-9.]+)?)\n"
 
 # Example:
 # /**
@@ -4281,10 +4281,30 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
-        file_contents = file_contents.decode()
+        file_string = file_contents.decode().replace("\r", "")
+        lib_path, lib_contents = self._get_library_code(file_string)
+        if not lib_contents:
+            return None, None, None
+        diff = self._filter_library_code(file_string, lib_contents)
+        if len(diff) > 10:
+            new_file_contents = "\n".join(diff).encode() + b'\n'
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(new_file_contents)
+                file_path = f.name
+            return file_path, new_file_contents, lib_path
+        return None, None, None
+
+    def _get_library_code(self, file_string: str) -> Tuple[Optional[str], Optional[str]]:
+        # JQuery / online libs
+        jquery_match = re.match(JQUERY_VERSION_REGEX, file_string)
+        if jquery_match:
+            jquery_version = ("jquery-compat-" if jquery_match.group(1) else "jquery-") + jquery_match.group(2)
+            jquery_url = f"https://code.jquery.com/{jquery_version}.js"
+            if self.service_attributes.docker_config.allow_internet_access:
+                resp = get(jquery_url, timeout=15)
+                return jquery_url, resp.text
         common_libs = {
-            # URL/FILE: REGEX
-            "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
+            # FILE: REGEX
             "tools/gootloader/clean_libs/maplace%s.js": MAPLACE_REGEX,
             "tools/gootloader/clean_libs/combo.js": COMBO_REGEX,
             "tools/gootloader/clean_libs/underscore%s.js": UNDERSCORE_REGEX,
@@ -4293,76 +4313,45 @@ class JsJaws(ServiceBase):
             "tools/gootloader/clean_libs/chartview.js": CHARTVIEW_REGEX,
             "tools/gootloader/clean_libs/mdl.js": MDL_REGEX,
         }
-        file_contents = file_contents.replace("\r", "")
-        split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
         for lib_path, regex in common_libs.items():
-            regex_match = re.match(regex, file_contents)
-            if not regex_match:
+            match = re.match(regex, file_string)
+            if not match:
                 continue
-            path_contents = None
-            if lib_path.startswith("https"):
-                if not self.service_attributes.docker_config.allow_internet_access:
-                    continue
-                if len(regex_match.regs) > 1:
-                    lib_path = lib_path % regex_match.group(1)
-                    resp = get(lib_path, timeout=15)
-                else:
-                    resp = get(lib_path, timeout=15)
+            lib_contents = None
+            if len(match.regs) > 1:
+                lib_path = lib_path % match.group(1)
 
-                path_contents = resp.text
+            if path.exists(lib_path):
+                lib_contents = open(lib_path, "r").read()
+                if lib_contents:
+                    return lib_path, lib_contents
             else:
-                if len(regex_match.regs) > 1:
-                    lib_path = lib_path % regex_match.group(1)
+                self.log.warning(
+                    f"There was a regex hit for a clean library file '{lib_path}' but this "
+                    "file does not exist..."
+                )
 
-                if path.exists(lib_path):
-                    path_contents = open(lib_path, "r").read()
-                else:
-                    self.log.warning(
-                        f"There was a regex hit for a clean library file '{lib_path}' but this "
-                        "file does not exist..."
-                    )
+        return None, None
 
-            if not path_contents:
-                continue
-
-            diff = list()
-            clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
-            # The dirty file contents should always have more lines than the clean file contents
-            dirty_file_line_offset = 0
-            for index, item in enumerate(clean_file_contents):
-                dirty_file_line_index = index + dirty_file_line_offset
-
-                if dirty_file_line_index >= len(split_file_contents):
-                    break
-
-                dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-                if self._compare_lines(item, dirty_file_line_to_compare):
-                    pass
-                # Python has difficulty with decoding .. and ..., so skip it!
-                # (the malicious lines are not in the clean files anyways)
-                elif ".." in item:
-                    continue
-                else:
-                    while not self._compare_lines(item, dirty_file_line_to_compare):
-                        diff.append(dirty_file_line_to_compare)
-                        dirty_file_line_offset += 1
-                        dirty_file_line_index = index + dirty_file_line_offset
-
-                        if dirty_file_line_index >= len(split_file_contents):
-                            break
-
-                        dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-
-            if len(diff) > 10:
-                new_file_contents = b""
-                for line in diff:
-                    new_file_contents += f"{line}\n".encode()
-                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
-                    f.write(new_file_contents)
-                    file_path = f.name
-                return file_path, new_file_contents, lib_path
-
-        return None, None, None
+    def _filter_library_code(self, dirty_library: str, clean_library: str) -> list[str]:
+        dirty_lines = [s for line in dirty_library.split("\n") if (s := line.strip())]
+        clean_lines = [s for line in clean_library.split("\n") if (s := line.strip())]
+        diff = []
+        # The dirty file contents should always have more lines than the clean file contents
+        dirty_line_index = 0
+        for index, clean_line in enumerate(clean_lines):
+            # Python has difficulty with decoding .. and ..., so skip it!
+            # (the malicious lines are not in the clean files anyways)
+            if ".." not in clean_line:
+                for dirty_line_index in range(dirty_line_index, len(dirty_lines)):
+                    dirty_line = dirty_lines[dirty_line_index]
+                    if self._compare_lines(clean_line, dirty_line):
+                        break
+                    diff.append(dirty_line)
+            dirty_line_index += 1
+            if dirty_line_index >= len(dirty_lines):
+                break
+        return diff
 
     @staticmethod
     def _compare_lines(line_1: str, line_2: str) -> bool:
