@@ -1915,6 +1915,7 @@ class JsJaws(ServiceBase):
             soup, aggregated_js_script, js_content, request, insert_above_divider
         )
 
+        self._extract_svg(soup, request)
         link_section = ResultSection('URLs in <a> Tags')
         links = soup.find_all('a', href=True)
         for link in links:
@@ -4786,6 +4787,7 @@ class JsJaws(ServiceBase):
         svg_section = ResultSection("Embedded SVG images")
         svg_section.add_line("See extracted files:")
         for svg in soup.find_all("svg"):
+            assert isinstance(svg, Tag)
             data = svg.encode()
             file_name = hashlib.sha256(data).hexdigest()[:8] + ".svg"
             file_path = path.join(self.working_directory, file_name)
