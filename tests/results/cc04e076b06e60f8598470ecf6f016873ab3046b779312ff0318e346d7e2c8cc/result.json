@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 133,
+    "score": 121,
     "sections": [
       {
         "auto_collapse": true,
@@ -99,30 +99,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[14].send()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "network_request": 10
-          },
-          "signatures": {
-            "network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript prepares a network request\n\t\tconst get_script=()=>{const request=new XMLHttpRequest()",
         "body_config": {},
         "body_format": "TEXT",
@@ -143,104 +119,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
-              ],
-              "uri": [
-                "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-              ],
-              "uri_path": [
-                "/"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "get",
-            "request_body": null,
-            "url": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method",
-            "request_body"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
-              ],
-              "uri": [
-                "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-              ],
-              "uri_path": [
-                "/"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
         "zeroize_on_tag_safe": false
       },
       {
@@ -266,12 +144,7 @@
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "32c2799ebeedcdf63dd9b0df82fd6d30e10b07ada402890f511a38d6bddfccce",
-        "sha256": "32c2799ebeedcdf63dd9b0df82fd6d30e10b07ada402890f511a38d6bddfccce"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -281,16 +154,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -307,13 +170,6 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "prepare_network_request"
         ]
       },
@@ -323,50 +179,7 @@
         "signatures": []
       }
     ],
-    "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/"
-        }
-      ],
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://hello-world-broken-dust-1f1c.brewasigfi1978.workers.dev/"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

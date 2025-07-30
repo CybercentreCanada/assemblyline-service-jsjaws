@@ -1,6 +1,7 @@
 """
 These are all of the signatures related to phishing
 """
+
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS
 from jsjaws import PHISHING_INPUTS
 from signatures.abstracts import ALL, ANY, Signature
@@ -68,6 +69,7 @@ class PhishingLogoDownload(Signature):
                 "splash247.com",
                 "companieslogo.com",
                 "upload.wikimedia.org",
+                "i.gyazo.com",
             ],
             severity=1,
         )
@@ -109,6 +111,91 @@ class PhishingPostPassword(Signature):
         indicator_list = [
             {"method": ALL, "indicators": ["XMLHttpRequest"]},
             {"method": ANY, "indicators": ["JsJ@w$==C00l!", "JsJ%40w%24%3D%3DC00l!", "SnNKQHckPT1DMDBsIQ=="]},
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostLocation(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_location",
+            description="JavaScript makes network request via POST with location data.",
+            severity=1,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    # Ottawa + Ottawa b64'd + ottawa b64'd
+                    "Ottawa",
+                    "T3R0YXdh",
+                    "b3R0YXdh",
+                    # Canada + Canada b64'd + canada b64'd
+                    # "Canada", Removed due to FPs
+                    "Q2FuYWRh",
+                    "Y2FuYWRh",
+                    # 1A1 A1A + 1A1 A1A b64'd + 1a1 a1a b64'd
+                    "1A1 A1A",
+                    "MUExIEExQQ==",
+                    "MWExIGExYQ==",
+                ],
+            },
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostHost(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_host",
+            description="JavaScript makes network request via POST with host data.",
+            severity=1,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    # USER-PC + USER-PC b64'd + user-pc b64'd
+                    "USER-PC",
+                    "VVNFUi1QQw==",
+                    "dXNlci1wYw==",
+                ],
+            },
+        ]
+
+        self.check_multiple_indicators_in_list(output, indicator_list)
+
+
+class PhishingPostCCInfo(Signature):
+    def __init__(self):
+        super().__init__(
+            heuristic_id=3,
+            name="phishing_post_cc_info",
+            description="JavaScript makes network request via POST with credit card data.",
+            severity=0,
+        )
+
+    def process_output(self, output):
+        indicator_list = [
+            {"method": ALL, "indicators": ["XMLHttpRequest"]},
+            {
+                "method": ANY,
+                "indicators": [
+                    "maiden",
+                    # "expiry", Removed due to FPs
+                    # "billing", Removed due to FPs
+                ],
+            },
         ]
 
         self.check_multiple_indicators_in_list(output, indicator_list)

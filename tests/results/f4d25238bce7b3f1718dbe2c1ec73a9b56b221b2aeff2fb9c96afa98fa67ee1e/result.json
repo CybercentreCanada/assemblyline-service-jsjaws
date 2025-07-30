@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 541,
+    "score": 1,
     "sections": [
       {
         "auto_collapse": false,
@@ -22,188 +22,15 @@
         "tags": {},
         "title_text": "Long One-Liner",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signatures",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tNew ActiveXObject: System.IO.MemoryStream\n\t\tUnknown ActiveXObject system.io.memorystream\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(System.IO.MemoryStream)\n\t\tActiveXObject(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)\n\t\tActiveXObject(System.Collections.ArrayList)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "active_x_object": 10
-          },
-          "signatures": {
-            "active_x_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: ActiveXObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,1,0,0,0,255,255,255,255,1,0,0,0,0,0,0,0,4,1,0,0,0,34,83,121,115,116,101,109,46,68,101,108...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_blob": 10
-          },
-          "signatures": {
-            "creates_blob": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesBlob",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[12]()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tNew ActiveXObject: System.IO.MemoryStream\n\t\tUnknown ActiveXObject system.io.memorystream\n\t\tActiveXObject(System.IO.MemoryStream)\n\t\tWScript.CreateObject(\"System.IO.MemoryStream\")\n\t\tnew System.IO.MemoryStream[13]()\n\t\tSystem.IO.MemoryStream[13].WriteByte()\n\t\tSystem.IO.MemoryStream[13].Position = 0\n\t\tSystem.IO.MemoryStream[13].toString()\n\t\t> System.IO.MemoryStream[13]\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[14].Deserialize_2(System.IO.MemoryStr...\n\t\tnew Delegate[16](System.IO.MemoryStream[13], undefined)(System.IO.MemoryStream[13])\n\t\tDelegate[16](System.IO.MemoryStream[13], undefined).toString()\n\t\t> Delegate[16](System.IO.MemoryStream[13], undefined)\n\t\tDelegate[16](System.IO.MemoryStream[13], undefined).0 => [0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0...\n\t\tDelegate[16](System.IO.MemoryStream[13], undefined).DynamicInvoke([0, 1, 0, 0, 0, 255, 255, 255, 255...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "memory_stream": 10
-          },
-          "signatures": {
-            "memory_stream": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: MemoryStream",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses classes found in .NET Runtime Assembly\n\t\tSystem.Runtime.Serialization.Formatters.Binary.BinaryFormatter[14].Deserialize_2(System.IO.MemoryStr...\n\t\tDelegate[16](System.IO.MemoryStream[13], undefined).DynamicInvoke([0, 1, 0, 0, 0, 255, 255, 255, 255...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "reflective_code_loading": 500
-          },
-          "signatures": {
-            "reflective_code_loading": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: ReflectiveCodeLoading",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "Blob[17]",
-        "sha256": "8dd215ea8ccd6b5402a1bcac46dfee5e9297aa38b9bce8ef0ba225a5ed47a848"
-      }
-    ],
+    "extracted": [],
     "supplementary": []
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "active_x_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_blob"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_wsh_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "memory_stream"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "reflective_code_loading"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 10,

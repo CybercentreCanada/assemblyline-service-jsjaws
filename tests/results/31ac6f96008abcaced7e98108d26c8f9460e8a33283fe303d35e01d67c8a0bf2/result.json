@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1161,
+    "score": 1140,
     "sections": [
       {
         "auto_collapse": false,
@@ -62,31 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[126]()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -110,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,7 +110,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe in a hidden window\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
+        "body": "JavaScript runs PowerShell via powershell.exe in a hidden window\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -158,7 +134,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -182,7 +158,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...\n\t\tnew WshScriptExec[130](\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Window...\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tws.exec(\"cmd.exe /c C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe -WindowStyle Hidd...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -203,125 +179,11 @@
         "tags": {},
         "title_text": "Signature: RunsNoProfilePowerShell",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[126].exec(\"cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Windo...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "runs_shell": 10
-          },
-          "signatures": {
-            "runs_shell": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: RunsShell",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "http://ddue.schemas.microsoft.com/authoring/2003/5",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "http://go.microsoft.com/fwlink/?LinkID=117437",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "http://go.microsoft.com/fwlink/?LinkID=71543",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "http://msdn.microsoft.com/mshelp",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "http://www.microsoft.com/tooltip",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/authoring/2003/5",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/fwlink/?LinkID=117437",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/fwlink/?LinkID=71543",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/mshelp",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/tooltip",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "uri": [
-                "http://ddue.schemas.microsoft.com/authoring/2003/5",
-                "http://go.microsoft.com/fwlink/?LinkID=117437",
-                "http://go.microsoft.com/fwlink/?LinkID=71543",
-                "http://msdn.microsoft.com/mshelp",
-                "http://www.microsoft.com/tooltip"
-              ],
-              "uri_path": [
-                "/authoring/2003/5",
-                "/fwlink/?LinkID=117437",
-                "/fwlink/?LinkID=71543",
-                "/mshelp",
-                "/tooltip"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "extracted_wscript.bat",
-        "sha256": "f20eab87239a3d4d39277c4240bea115f73a324b51ceb25ab433125eb7deef85"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -333,21 +195,9 @@
     "heuristics": [
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "append_and_click"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_wsh_object"
         ]
       },
       {
@@ -387,73 +237,11 @@
       },
       {
         "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "runs_shell"
-        ]
-      },
-      {
-        "attack_ids": [],
         "heur_id": 9,
         "signatures": []
       }
     ],
-    "tags": {
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://ddue.schemas.microsoft.com/authoring/2003/5"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://go.microsoft.com/fwlink/?LinkID=117437"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://go.microsoft.com/fwlink/?LinkID=71543"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://msdn.microsoft.com/mshelp"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://www.microsoft.com/tooltip"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/authoring/2003/5"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/fwlink/?LinkID=117437"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/fwlink/?LinkID=71543"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/mshelp"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/tooltip"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

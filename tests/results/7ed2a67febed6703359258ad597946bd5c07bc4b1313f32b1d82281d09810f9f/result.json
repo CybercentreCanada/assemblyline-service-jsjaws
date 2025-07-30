@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 372,
+    "score": 371,
     "sections": [
       {
         "auto_collapse": false,
@@ -106,7 +106,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: scripting.filesystemobject\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
+        "body": "JavaScript creates an ActiveXObject\n\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -130,7 +130,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: scripting.filesystemobject\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\t\tnew Scripting.FileSystemObject[14]()\n\t\tScripting.FileSystemObject[14].OpenTextFile(\"flasks/data.txt\", 1)\n\t\tat Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.js:15...\n\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tvar fso = new ActiveXObject(\"scripting.filesystemobject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -154,7 +154,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript loads a local file from disk\n\t\tScripting.FileSystemObject[14].OpenTextFile(\"flasks/data.txt\", 1)\n\t\tVFS[2].openTextFile(\"flasks/data.txt\", 1, undefined, undefined)\n\t\tat Proxy.openTextFile (tools/malwarejail/env/wscript/lib/util/VFS.js:598:19)\n\t\tat Proxy.OpenTextFile (tools/malwarejail/env/wscript/lib/COMobjects/Scripting.FileSystemObject.js:15...\n\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
+        "body": "JavaScript loads a local file from disk\n\t\tvar content = fso.OpenTextFile(filename, 1).ReadAll()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -178,7 +178,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tHTMLScriptElement[13].innerText = (string) 'Function revers(str) : ???revers = StrReverse(str) : ??E...\n\t\tvbscript_7XDD1WHrCtp1OpU0OJNRbm.setAttribute(\"innerText\", \"Function revers(str) : \t\t\trevers = StrRev...",
+        "body": "JavaScript uses a commonly-seen method for de-obfuscating a string\n\t\tvbscript_7XDD1WHrCtp1OpU0OJNRbm.setAttribute(\"innerText\", \"Function revers(str) : \t\t\trevers = StrRev...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -199,47 +199,6 @@
         "tags": {},
         "title_text": "Signature: Obfuscation",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "flasks/data.txt",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "flasks/data.txt"
-              ]
-            }
-          }
-        },
-        "title_text": "The script read the following files",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -259,11 +218,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -299,13 +253,6 @@
       }
     ],
     "tags": {
-      "dynamic.process.file_name": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "flasks/data.txt"
-        }
-      ],
       "file.behavior": [
         {
           "heur_id": 12,

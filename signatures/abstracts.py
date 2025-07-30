@@ -1,4 +1,6 @@
-from re import findall
+from __future__ import annotations
+
+import re
 from typing import Any, Dict, List, Optional, Union
 
 from assemblyline.common.str_utils import safe_str
@@ -15,14 +17,14 @@ class Signature:
 
     def __init__(
         self,
-        heuristic_id: int = None,
-        name: str = None,
-        description: str = None,
-        ttp: List[str] = None,
-        families: List[str] = None,
-        indicators: List[str] = None,
-        severity: int = None,
-        safelist: List[str] = None,
+        heuristic_id: int | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        ttp: List[str] | None = None,
+        families: List[str] | None = None,
+        indicators: List[str] | None = None,
+        severity: int = 0,
+        safelist: List[str] | None = None,
     ):
         """
         This method instantiates the base Signature class and performs some validtion checks
@@ -51,11 +53,11 @@ class Signature:
         if severity is None:
             self.severity: int = 0
         elif severity < 0:
-            self.severity: int = 0
+            self.severity = 0
         elif severity > 3:
-            self.severity: int = 3
+            self.severity = 3
         else:
-            self.severity: int = severity
+            self.severity = severity
 
         self.safelist: List[str] = [] if safelist is None else safelist
 
@@ -69,31 +71,20 @@ class Signature:
         :param match_all: All indicators must be found in a single line for a mark to be added
         """
         for string in output:
-            # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
-            split_line = string.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
-            elif len(split_line) > 2:
-                string = "] ".join(split_line[1:])
+            string = self.remove_timestamp(string)
+            lower = string.lower()
+            any_all = all if match_all else any
+            # If we match indicators in a line and nothing from the safelist is in that line, mark it!
+            if any_all(indicator.lower() in lower for indicator in self.indicators) and not self.safelisted(lower):
+                self.add_mark(string)
 
-            # If we want to match all indicators in a line and nothing from the safelist is in that line, mark it!
-            if (
-                match_all
-                and all(indicator.lower() in string.lower() for indicator in self.indicators)
-                and not any(item.lower() in string.lower() for item in self.safelist)
-            ):
-                if safe_str(string).strip() not in self.marks:
-                    self.marks.append(safe_str(string).strip())
-
-            # If we only want to match at least one indicator in a line, then mark it!
-            if not match_all:
-                for indicator in self.indicators:
-                    if indicator.lower() in string.lower() and not any(
-                        item.lower() in string.lower() for item in self.safelist
-                    ):
-                        if safe_str(string).strip() not in self.marks:
-                            self.marks.append(safe_str(string).strip())
-                        continue
+    def safelisted(self, string: str) -> bool:
+        """
+        This method checks if the string contains any safelisted terms
+        :param string: The string to check
+        """
+        string = string.lower()
+        return any(item.lower() in string for item in self.safelist)
 
     @staticmethod
     def check_regex(regex: str, string: str) -> List[str]:
@@ -102,11 +93,7 @@ class Signature:
         :param regex: A regular expression to be applied to the string
         :param string: A line of output
         """
-        result = findall(regex, string)
-        if len(result) > 0:
-            return result
-        else:
-            return []
+        return re.findall(regex, string)
 
     def process_output(self, output: List[str]):
         """
@@ -120,11 +107,25 @@ class Signature:
         :param mark: The mark to be added
         :return: A boolean indicating if the mark was added
         """
-        if mark:
-            if safe_str(mark).strip() not in self.marks:
-                self.marks.append(safe_str(mark).strip())
-        else:
+        if not mark:
             return False
+        mark = safe_str(mark).strip()
+        if mark not in self.marks and mark + ";" not in self.marks:
+            # Sometimes lines end with trailing semi-colons and sometimes they do not. These are not unique marks
+            self.marks.append(mark)
+            return True
+        return False
+
+    @staticmethod
+    def remove_timestamp(line: str) -> str:
+        """
+        This method removes the timestamp from the start of an output line
+        :param line: The line to strip the timestamp from
+        """
+        if not line.startswith("["):
+            return line
+        # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
+        return line.split("] ", 1)[-1]
 
     def check_multiple_indicators_in_list(self, output: List[str], indicators: List[Dict[str, List[str]]]) -> None:
         """
@@ -145,36 +146,22 @@ class Signature:
 
         for string in output:
             # For more lines of output, there is a datetime separated by a ]. We do not want the datetime.
-            split_line = string.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
+            string = self.remove_timestamp(string)
+            lower = string.lower()
 
-            # If all_indicators
-            are_indicators_matched = True
-            for all_indicator in all_indicators:
-                if are_indicators_matched and all(
-                    indicator.lower() in string.lower() for indicator in all_indicator["indicators"]
-                ):
-                    for any_indicator in any_indicators:
-                        if are_indicators_matched and any(
-                            indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
-                        ):
-                            pass
-                        else:
-                            are_indicators_matched = False
-                else:
-                    are_indicators_matched = False
-
-            # If no all_indicators
-            if not all_indicators:
-                for any_indicator in any_indicators:
-                    if are_indicators_matched and any(
-                        indicator.lower() in string.lower() for indicator in any_indicator["indicators"]
-                    ):
-                        pass
-                    else:
-                        are_indicators_matched = False
-
-            if are_indicators_matched and not any(item.lower() in string.lower() for item in self.safelist):
-                if safe_str(string).strip() not in self.marks:
-                    self.marks.append(safe_str(string).strip())
+            # We want all of the indicators to match
+            if (
+                all(
+                    # With all_indicators matching all of their indicators
+                    all(indicator.lower() in lower for indicator in all_indicator["indicators"])
+                    for all_indicator in all_indicators
+                )
+                and all(
+                    # And any_indicators matching any of their indicators
+                    any(indicator.lower() in lower for indicator in any_indicator["indicators"])
+                    for any_indicator in any_indicators
+                )
+                # But nothing from the safelist
+                and not self.safelisted(lower)
+            ):
+                self.add_mark(string)

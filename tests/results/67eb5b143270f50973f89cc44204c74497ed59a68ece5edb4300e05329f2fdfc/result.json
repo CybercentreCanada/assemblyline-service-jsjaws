@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2801,
+    "score": 2290,
     "sections": [
       {
         "auto_collapse": false,
@@ -92,31 +92,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\t\tnew WScript.Shell[15]()\n\t\tnew WScript.Shell[17]()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tif (WScript.CreateObject((\"W\")+(\"Scr\")+(\"ipt.\")+(\"She\")+(\"ll\")).ExpandEnvironmentStrings((\"%USE\")+(\"...",
+        "body": "JavaScript looks at the environment strings\n\t\tif (WScript.CreateObject((\"W\")+(\"Scr\")+(\"ipt.\")+(\"She\")+(\"ll\")).ExpandEnvironmentStrings((\"%USE\")+(\"...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -140,7 +116,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\tMSXML2.XMLHTTP[14].send()\n\t\tMSXML2.XMLHTTP[16].send()\n\t\tg.send()",
+        "body": "JavaScript sends a network request\n\t\tg.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -188,7 +164,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"23232\")\n\t\tif ((a.indexOf(\"@\"+p+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(12345)",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tif ((a.indexOf(\"@\"+p+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(12345)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -233,155 +209,6 @@
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "CORP.ORGANIZATION.CA",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "www.liparicasa.it",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "www.location-atelier-garage.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "www.lohevisto.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/test.php?mhsctaxsmkzg=34925214178245014173581",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/test.php?mhsctaxsmkzg=37804277527256084173581",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/test.php?mhsctaxsmkzg=62322887284989544173581",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "CORP.ORGANIZATION.CA",
-                "www.liparicasa.it",
-                "www.location-atelier-garage.com",
-                "www.lohevisto.com"
-              ],
-              "uri": [
-                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581",
-                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581",
-                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581"
-              ],
-              "uri_path": [
-                "/test.php?mhsctaxsmkzg=34925214178245014173581",
-                "/test.php?mhsctaxsmkzg=37804277527256084173581",
-                "/test.php?mhsctaxsmkzg=62322887284989544173581"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "GET",
-            "url": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581"
-          },
-          {
-            "method": "GET",
-            "url": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581"
-          },
-          {
-            "method": "GET",
-            "url": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 500,
-          "score_map": {
-            "gootloader_url": 500
-          },
-          "signatures": {
-            "gootloader_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "www.lohevisto.com",
-                "www.liparicasa.it",
-                "www.location-atelier-garage.com"
-              ],
-              "uri": [
-                "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581",
-                "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581",
-                "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581"
-              ],
-              "uri_path": [
-                "/test.php?mhsctaxsmkzg=34925214178245014173581",
-                "/test.php?mhsctaxsmkzg=62322887284989544173581",
-                "/test.php?mhsctaxsmkzg=37804277527256084173581"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -396,25 +223,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": [
-          "gootloader_url"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_wsh_object"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -483,137 +291,14 @@
           "value": "www.liparicasa.it"
         },
         {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "www.liparicasa.it"
-        },
-        {
           "heur_id": 4,
           "signatures": [],
-          "value": "www.location-atelier-garage.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
           "value": "www.location-atelier-garage.com"
         },
         {
           "heur_id": 4,
           "signatures": [],
           "value": "www.lohevisto.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "www.lohevisto.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/test.php?mhsctaxsmkzg=34925214178245014173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/test.php?mhsctaxsmkzg=37804277527256084173581"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "gootloader_url"
-          ],
-          "value": "/test.php?mhsctaxsmkzg=62322887284989544173581"
-        }
-      ],
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "CORP.ORGANIZATION.CA"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "www.liparicasa.it"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "www.location-atelier-garage.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "www.lohevisto.com"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.liparicasa.it/test.php?mhsctaxsmkzg=62322887284989544173581"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.location-atelier-garage.com/test.php?mhsctaxsmkzg=37804277527256084173581"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://www.lohevisto.com/test.php?mhsctaxsmkzg=34925214178245014173581"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=34925214178245014173581"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=37804277527256084173581"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/test.php?mhsctaxsmkzg=62322887284989544173581"
         }
       ]
     },

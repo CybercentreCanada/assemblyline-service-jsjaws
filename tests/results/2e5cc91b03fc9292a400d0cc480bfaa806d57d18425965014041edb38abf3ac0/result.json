@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2041,
+    "score": 2020,
     "sections": [
       {
         "auto_collapse": false,
@@ -136,30 +136,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: sHelL.applICatioN",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "active_x_object": 10
-          },
-          "signatures": {
-            "active_x_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: ActiveXObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction fzkGGsd($mHRaBDE){$DNpF = [System.IO.MemoryStream]::new()",
         "body_config": {},
         "body_format": "TEXT",
@@ -205,81 +181,11 @@
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"14847\")",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "sleep": 10
-          },
-          "signatures": {
-            "sleep": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: Sleep",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\"",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "command_line": [
-                "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\""
-              ]
-            }
-          }
-        },
-        "title_text": "The script ran the following commands",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "boxjs_cmds.bat",
-        "sha256": "de0cabd9595cf2419dc88b738f121534c43e82463c7b2a91575cd0caca5dd1a0"
-      }
-    ],
+    "extracted": [],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -289,18 +195,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "active_x_object"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -313,13 +207,6 @@
         "heur_id": 3,
         "signatures": [
           "runs_ps1"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "sleep"
         ]
       },
       {
@@ -346,13 +233,6 @@
           "heur_id": 4,
           "signatures": [],
           "value": "GOOTLOADER"
-        }
-      ],
-      "dynamic.process.command_line": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "\"C:Users\\Sysop12\\AppData\\Roaming\\Microsoft\\Templates\\\"cscript.exe \"2e5cc91b03fc9292a400d0cc480bfaa806d57d18425965014041edb38abf3ac0\""
         }
       ],
       "file.name.extracted": [

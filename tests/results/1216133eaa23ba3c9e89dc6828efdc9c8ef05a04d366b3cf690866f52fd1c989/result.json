@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 911,
+    "score": 400,
     "sections": [
       {
         "auto_collapse": false,
@@ -92,31 +92,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "A form is created and the action submits to a URI.\n\t\tHTMLFormElement[31].action was set to a URI: 'https://badwebsiteurl.com/postrcv/bad.php'",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "form_action_uri": 10
-          },
-          "signatures": {
-            "form_action_uri": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: FormActionURI",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript reaches out to common URL that is used for hosting logos for organizations.\n\t\tHTMLLinkElement[14].href = (string) 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Micro...\n\t\telement51m9lu5amexht11cpyozl00_jsjaws.setAttribute(\"href\", \"https://upload.wikimedia.org/wikipedia/c...",
+        "body": "JavaScript reaches out to common URL that is used for hosting logos for organizations.\n\t\telement51m9lu5amexht11cpyozl00_jsjaws.setAttribute(\"href\", \"https://upload.wikimedia.org/wikipedia/c...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -161,130 +137,11 @@
         "tags": {},
         "title_text": "Signature: PhishingTerms",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "badwebsiteurl.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "upload.wikimedia.org",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://badwebsiteurl.com/postrcv/bad.php",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/postrcv/bad.php",
-            "ioc_type": "uri_path"
-          },
-          {
-            "ioc": "/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "badwebsiteurl.com",
-                "upload.wikimedia.org"
-              ],
-              "uri": [
-                "https://badwebsiteurl.com/postrcv/bad.php",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"
-              ],
-              "uri_path": [
-                "/postrcv/bad.php",
-                "/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "post",
-            "url": "https://badwebsiteurl.com/postrcv/bad.php"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 500,
-          "score_map": {
-            "is_phishing_url": 500
-          },
-          "signatures": {
-            "is_phishing_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "badwebsiteurl.com"
-              ],
-              "uri": [
-                "https://badwebsiteurl.com/postrcv/bad.php"
-              ],
-              "uri_path": [
-                "/postrcv/bad.php"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
     "extracted": [
-      {
-        "name": "https://badwebsiteurl.com/postrcv/bad.php",
-        "sha256": "2faa40443d90f91334af794875a79c6547252897fa4da2717b8ebdce5d00dbeb"
-      },
       {
         "name": "6d627d586b06f93a056e4d4646f71831dd47fdbac9fca2522ee5a8af7ab1ff83",
         "sha256": "6d627d586b06f93a056e4d4646f71831dd47fdbac9fca2522ee5a8af7ab1ff83"
@@ -299,25 +156,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": [
-          "is_phishing_url"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "form_action_uri"
-        ]
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -349,48 +187,11 @@
       }
     ],
     "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "badwebsiteurl.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "https://badwebsiteurl.com/postrcv/bad.php"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "is_phishing_url"
-          ],
-          "value": "/postrcv/bad.php"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 27,
           "signatures": [],
           "value": "badwebsiteurl.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "badwebsiteurl.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "upload.wikimedia.org"
         }
       ],
       "network.static.uri": [
@@ -398,16 +199,6 @@
           "heur_id": 27,
           "signatures": [],
           "value": "https://badwebsiteurl.com/postrcv/bad.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://badwebsiteurl.com/postrcv/bad.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"
         }
       ],
       "network.static.uri_path": [
@@ -415,25 +206,9 @@
           "heur_id": 27,
           "signatures": [],
           "value": "/postrcv/bad.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/postrcv/bad.php"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/2203px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"
         }
       ]
     },
-    "temp_submission_data": {
-      "uri_metadata_f97a868dfe9f25eaaf9c658a0e3a930a": {
-        "data": null,
-        "headers": {},
-        "method": "POST"
-      }
-    }
+    "temp_submission_data": {}
   }
 }

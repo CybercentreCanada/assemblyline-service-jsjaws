@@ -1,4 +1,8 @@
+import hashlib
+import json
+import os
 import re
+import subprocess
 import tempfile
 from base64 import b64decode
 from binascii import Error as BinasciiError
@@ -6,6 +10,7 @@ from glob import glob
 from hashlib import sha256
 from inspect import getmembers, isclass
 from io import BytesIO
+from ipaddress import IPv4Address
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
@@ -14,9 +19,8 @@ from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import Any, Dict, List, Optional, Set, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit
 
-import signatures
 from assemblyline.common import forge
 from assemblyline.common.digests import get_sha256_for_file
 from assemblyline.common.entropy import calculate_partition_entropy
@@ -24,7 +28,6 @@ from assemblyline.common.hexdump import load as hexload
 from assemblyline.common.identify import CUSTOM_BATCH_ID, CUSTOM_PS1_ID
 from assemblyline.common.str_utils import safe_str, truncate
 from assemblyline.common.uid import get_id_from_data
-from assemblyline.odm.base import DOMAIN_ONLY_REGEX, FULL_URI, URI_REGEX
 from assemblyline_service_utilities.common.dynamic_service_helper import (
     COMMON_FP_DOMAINS,
     OntologyResults,
@@ -50,15 +53,18 @@ from assemblyline_v4_service.common.result import (
 )
 from assemblyline_v4_service.common.utils import PASSWORD_WORDS, extract_passwords
 from bs4 import BeautifulSoup
-from bs4.element import Comment, PageElement, ResultSet
+from bs4.element import Comment, ResultSet, Tag
 from dateutil.parser import parse as dtparse
+from multidecoder.decoders.network import find_urls, is_domain, is_url
 from multidecoder.decoders.shell import find_powershell_strings, get_powershell_command
 from requests import get
-from signatures.abstracts import Signature
 from tinycss2 import parse_stylesheet
+from yaml import safe_load as yaml_safe_load
+
+import signatures
+from signatures.abstracts import Signature
 from tools import tinycss2_helper
 from tools.gootloader.run import run as gootloader_run
-from yaml import safe_load as yaml_safe_load
 from yara import Error as YARAError
 from yara import compile as yara_compile
 
@@ -146,48 +152,54 @@ MAXIMUM_GAUNTLET_RUNS = 30
 # When looking at HTML files, these are common terms found in phishing files
 PHISHING_TITLE_TERMS = [
     # Classic phishing terms for file names
-    "payment",
-    "statement",
-    "invoice",
-    "notice",
-    "download",
-    "transfer",
+    r"payment",
+    r"statement",
+    r"invoice",
+    r"notice",
+    r"download",
+    r"transfer",
     # These file-type specific terms of suspicious because this is an HTML file!
-    "\.xls",
-    "\.doc",
-    "\.ppt",
-    "\.one",
-    "\.pdf",
-    "microsoft",
-    "adobe",
-    "excel",
-    "word",
-    "powerpoint",
-    "onenote",
-    "pdf",
+    r"\.xls",
+    r"\.doc",
+    r"\.ppt",
+    r"\.one",
+    r"\.pdf",
+    r"microsoft",
+    r"adobe",
+    r"excel",
+    r"word",
+    r"powerpoint",
+    r"onenote",
+    r"pdf",
     # https://github.com/CAPESandbox/community/blob/815e21980f4b234cf84e78749447f262af2beef9/modules/signatures/secure_login_phish.py
-    "secure login",
-    "google doc",
-    "dropbox",
-    "google drive",
-    "outlook",
+    r"secure login",
+    r"google doc",
+    r"dropbox",
+    r"google drive",
+    r"outlook",
+    # https://github.com/CAPESandbox/community/blob/d010d2c8a8343a37e176133edb26e901c2c8ced9/modules/signatures/suspicious_html.py
+    r"please wait",
+    r"redirecting",
+    r"remittence",
+    r"remittance",
+    r"voicemail",
     # Other
-    "paypal",
-    "instagram",
-    "facebook",
-    "secure",
-    "security",
-    "sign",
-    "bank",
-    "ether",
-    "coin",
-    "files",
-    "challenge",
-    "card",
-    "remember",
-    "forgot",
-    "verify",
-    "confirm",
+    r"paypal",
+    r"instagram",
+    r"facebook",
+    r"secure",
+    r"security",
+    r"sign",
+    r"bank",
+    r"ether",
+    r"coin",
+    r"files",
+    r"challenge",
+    r"card",
+    r"remember",
+    r"forgot",
+    r"verify",
+    r"confirm",
 ]
 
 # There is a signature called "phishing_terms" which is used for detecting terms commonly associated with phishing
@@ -222,7 +234,7 @@ WSCRIPT_SHELL_REGEX = r"(?:WScript\.Shell|Shell\.Application)\[\d+\]\.(?:Run|She
 # Example:
 # /*!
 #  * jQuery JavaScript Library v1.5
-JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery JavaScript Library v([\d\.]+)\n"
+JQUERY_VERSION_REGEX = r"\/\*\!\n \* jQuery( Compat)? JavaScript Library v([\d\.]+(?:-[a-z0-9.]+)?)\n"
 
 # Example:
 # /**
@@ -328,24 +340,27 @@ CHARTVIEW_REGEX = (
 
 # /**
 #  * A component handler interface using the revealing module design pattern.
-MDL_REGEX = r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/[\s\S]*\/\*\*\s*\*\s*A component handler interface using the revealing module design pattern\."
+MDL_REGEX = (
+    r";\(function\(\)\s*\{\s*\"use\sstrict\";\s*\/\*\*[\s\S]+?\*\/[\s\S]*\/\*\*\s*\*\s*"
+    r"A component handler interface using the revealing module design pattern\."
+)
 
 # Example:
 # [2023-02-07T14:08:19.018Z] mailware-jail, a malware sandbox ver. 0.20\n
-MALWARE_JAIL_TIME_STAMP = "\[([\dTZ:\-.]+)\] "
+MALWARE_JAIL_TIME_STAMP = r"\[([\dTZ:\-.]+)\] "
 
 # Example:
 # data:image/png;base64,iVBORw0KGgoAAAAN
-APPENDCHILD_BASE64_REGEX = re.compile("data:(?:[^;]+;)+base64,([\s\S]*)")
+APPENDCHILD_BASE64_REGEX = re.compile(r"data:(?:[^;]+;)+base64,([\s\S]*)")
 
 # Example:
 # const element99_jsjaws =
-ELEMENT_INDEX_REGEX = re.compile(b"const element(\d+)\w*_jsjaws = ")
+ELEMENT_INDEX_REGEX = re.compile(rb"const element(\d+)\w*_jsjaws = ")
 
 # Example:
 # wscript_shell_object_env("test") = "Hello World!";
 VBSCRIPT_ENV_SETTING_REGEX = (
-    b"[^;]\((?P<property_name>[\w\s()'\"+\\\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;\.]+?[^>=;]+);"
+    rb"[^;]\((?P<property_name>[\w\s()'\"+\\]{2,1000})\)\s*=\s*(?P<property_value>[^>=;.]+?[^>=;]+);"
 )
 
 # Example:
@@ -353,7 +368,7 @@ VBSCRIPT_ENV_SETTING_REGEX = (
 # badinputhere
 # SyntaxError: Unexpected end of input
 INVALID_END_OF_INPUT_REGEX = (
-    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
+    rb"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n(.+)\nSyntaxError: Unexpected end of input"
 )
 
 # Example:
@@ -361,7 +376,7 @@ INVALID_END_OF_INPUT_REGEX = (
 # missingfunction()
 # ReferenceError: missingfunction is not defined
 REFERENCE_NOT_DEFINED_REGEX = (
-    b"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\\n.+\\n\^\\nReferenceError: (.+) is not defined"
+    rb"Exception occurred in [a-zA-Z0-9]{64}: object .+:\d+\n.+\n\^\nReferenceError: (.+) is not defined"
 )
 
 # JScript conditional comments
@@ -369,27 +384,27 @@ REFERENCE_NOT_DEFINED_REGEX = (
 
 # Example:
 # /*@cc_on
-AT_CC_ON_REGEX = b"\/\*@cc_on\s*"
+AT_CC_ON_REGEX = rb"/\*@cc_on\s*"
 
 # Example:
 # @*/
-AT_REGEX = b"@\*\/"
+AT_REGEX = rb"@\*/"
 
 # Example:
 # /*@if (@_jscript_version >= 7)
-AT_IF_REGEX = b"\/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_IF_REGEX = rb"/\*@if\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
 
 # Example:
 # @elif (@_jscript_version >= 7)
-AT_ELIF_REGEX = b"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
+AT_ELIF_REGEX = rb"@elif\s*\(@_jscript_version\s[>=<]=\s\d\)\s*"
 
 # Example:
 # @else
-AT_ELSE_REGEX = b"@else\s*"
+AT_ELSE_REGEX = rb"@else\s*"
 
 # Example:
 # /*@end
-AT_END_REGEX = b"\/\*@end\s*"
+AT_END_REGEX = rb"/\*@end\s*"
 
 JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE_REGEX, AT_END_REGEX]
 
@@ -410,7 +425,13 @@ JSCRIPT_REGEXES = [AT_CC_ON_REGEX, AT_REGEX, AT_IF_REGEX, AT_ELIF_REGEX, AT_ELSE
 #       blah7++;
 #   }
 # }
-WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)\s*{(?:\s*\w{2,15}\s*=\s*\w{2,15};)+\s*while\s*\(\w{2,15}\s*<\s*\(\w{2,15}\s*\*\s*\(?\w{2,15}\)?\)\)\s*{\s*(?:\w{2,15}\s*=\s*\w{2,15}\s*\+\s*\w{2,15}\s*|\w{2,15}\+\+);\s*}\s*}"
+WHILE_TIME_WASTER_REGEX = (
+    rb"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)\s*{"
+    rb"(?:\s*\w{2,15}\s*=\s*\w{2,15};)+"
+    rb"\s*while\s*\(\w{2,15}\s*<\s*\(\w{2,15}\s*\*\s*\(?\w{2,15}\)?\)\)\s*{"
+    rb"\s*(?:\w{2,15}\s*=\s*\w{2,15}\s*\+\s*\w{2,15}\s*|\w{2,15}\+\+);"
+    rb"\s*}\s*}"
+)
 
 # Examples:
 # function blah1() {
@@ -454,7 +475,20 @@ WHILE_TIME_WASTER_REGEX = b"function\s*\w{2,15}\s*\((?:\w{2,15}(?:,\s*)?){1,5}\)
 #       }
 #   }
 # }
-WHILE_TRY_CATCH_TIME_WASTER_REGEX = b"function\s+\w{2,15}\((?:\w{2,15}(?:,\s*)?){0,5}\)\s*{\s*\w{2,15}\(\w{2,15}\);\s*\w{2,15}\s*=\s*\w{2,15};\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};\s*|\w{2,15}\s*=\s*\w{2,15};\s*|\w{2,15}\+\+;\s*)*try\s*{\s*(?:\w{2,15}\s*=\s*)?\(?\w{2,15}\[\w{2,15}\]\(\w{2,15}\)\)?;\s*}\s*catch\s*\(\w{2,15}\)\s*{\s*(?:\w{2,15}\[\(?\w{2,15}\)?\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+\s*}\s*(?:\w{2,15}\+\+;?)?\s*}\s*}"
+WHILE_TRY_CATCH_TIME_WASTER_REGEX = (
+    rb"function\s+\w{2,15}\((?:\w{2,15}(?:,\s*)?){0,5}\)\s*{"
+    rb"\s*\w{2,15}\(\w{2,15}\);"
+    rb"\s*\w{2,15}\s*=\s*\w{2,15};"
+    rb"\s*while\s*\(\w{2,15}\s*(?:=\s*\w{2,15})?\)\s*{"
+    rb"\s*(?:\w{2,15}\[\w{2,15}\]\s*=\s*\w{2,15};\s*|\w{2,15}\s*=\s*\w{2,15};\s*|\w{2,15}\+\+;\s*)*"
+    rb"try\s*{"
+    rb"\s*(?:\w{2,15}\s*=\s*)?\(?\w{2,15}\[\w{2,15}\]\(\w{2,15}\)\)?;"
+    rb"\s*}\s*catch\s*\(\w{2,15}\)\s*{"
+    rb"\s*(?:\w{2,15}\[\(?\w{2,15}\)?\]\s*=\s*\w{2,15};|\w{2,15}\s*=\s*\w{2,15};\s*)+"
+    rb"\s*}"
+    rb"\s*(?:\w{2,15}\+\+;?)?"
+    rb"\s*}\s*}"
+)
 
 TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGEX]
 
@@ -462,7 +496,7 @@ TIME_WASTER_REGEXES = [WHILE_TIME_WASTER_REGEX, WHILE_TRY_CATCH_TIME_WASTER_REGE
 
 # Example:
 # blah = "blahblah"
-VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'].+[\"'])"
+VBS_GRAB_VARS_REGEX = r"(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'].+[\"'])"
 
 # Examples:
 # Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
@@ -470,20 +504,18 @@ VBS_GRAB_VARS_REGEX = "(?P<variable_name>\w{2,10})\s*=\s*(?P<variable_value>[\"'
 # Dim blah
 # Set blah = CreateObject("wscript.shell")
 VBS_WSCRIPT_SHELL_REGEX = (
-    "Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"']wscript\.shell[\"']\)"
+    r"Dim\s+(?P<varname>\w+)\s+:?\s*Set\s+(?P=varname)\s*=\s*CreateObject\([\"']wscript\.shell[\"']\)"
 )
 
 # Example:
 # WshShell.RegWrite "blah\blah\blah\blah\blah", varname, "REG_SZ"
-VBS_WSCRIPT_REG_WRITE_REGEX = (
-    "%s\.RegWrite\s+(?P<key>[\w\"'\\\\]+),\s*(?P<content>[\w\"'.()]+),\s*(?P<type>[\w\"'.()]+)"
-)
+VBS_WSCRIPT_REG_WRITE_REGEX = r"%s\.RegWrite\s+(?P<key>[\w\"'\\]+),\s*(?P<content>[\w\"'.()]+),\s*(?P<type>[\w\"'.()]+)"
 
 # Examples:
 # blah "http://blah.com/evil.exe"
 # or
 # Call blah(varname)
-VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
+VBS_FUNCTION_CALL = r"(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
 
 # Examples:
 # var blah = Function("blah", varname);
@@ -494,27 +526,30 @@ VBS_FUNCTION_CALL = "(?:Call\s*)?%s\(?\s*(?P<func_args>[\w'\":\/.-]+)\s*\)?"
 # {
 # 	return(new Function(thing1, thing2));
 # }
-JS_NEW_FUNCTION_REGEX = "(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"']+),\s*(?P<args>[\w.()\"'\/&,\s]+)\)\)?;(\s*})?"
+JS_NEW_FUNCTION_REGEX = (
+    r"(?:(var|function))\s+(?P<function_varname>\w+)(?:(\s*=\s*|\((?:\w{2,10}(?:,\s*)?)+\)\s*{"
+    r"\s*return\s*\())(?:new)?\s+Function\((?P<function_name>[\w\"']+),\s*(?P<args>[\w.()\"'\/&,\s]+)\)\)?;(\s*})?"
+)
 
 # Example:
 # var new_blah = blah("blah", thing2);
-JS_NEW_FUNCTION_REASSIGN_REGEX = "(?P<new_name>\w+)\s*=\s*%s"
+JS_NEW_FUNCTION_REASSIGN_REGEX = r"(?P<new_name>\w+)\s*=\s*%s"
 
 # Example:
 # document.write(unescape("blah"))
-DOM_WRITE_UNESCAPE_REGEX = "(document\.write\(unescape\(.+\))"
+DOM_WRITE_UNESCAPE_REGEX = r"(document\.write\(unescape\(.+\))"
 
 # Example:
 # document.write(atob(val));
-DOM_WRITE_ATOB_REGEX = "(document\.write\(atob\(.+\))"
+DOM_WRITE_ATOB_REGEX = r"(document\.write\((window\.)?atob\(.+\))"
 
 # Example:
 # HTMLScriptElement[9].src was set to a URI 'http://blah.com'
-HTMLELEMENT_SRC_REGEX = f"(?:{HTMLSCRIPTELEMENT}|{HTMLIFRAMEELEMENT})\[[0-9]+\]{HTMLELEMENT_SRC_SET_TO_URI} '(.+)'"
+HTMLELEMENT_SRC_REGEX = rf"(?:{HTMLSCRIPTELEMENT}|{HTMLIFRAMEELEMENT})\[[0-9]+\]{HTMLELEMENT_SRC_SET_TO_URI} '(.+)'"
 
 # Example:
 # <!-- HTML Encryption provided by www.blah.com -->
-FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
+FULL_HTML_COMMENT_IN_JS = rb"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
 
 # Example:
 # function a0nnnnoo() {
@@ -524,31 +559,58 @@ FULL_HTML_COMMENT_IN_JS = b"(^|\n)\s*(\<\!\-\-[\s\S]+?\-\-\>)\s*;?\n"
 #     };
 #     return a0nnnnoo();
 # };
-FUNCTION_INCEPTION = b"function\s+(?P<function_name>\w+)\(\)\s*\{\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];\s*(?P=function_name)\s*=\s*function\(\)\s*\{\s*return\s+(?P=variable_name);\s*\};\s*return\s+(?P=function_name)\(\);\s*\};"
+FUNCTION_INCEPTION = (
+    rb"function\s+(?P<function_name>\w+)\(\)\s*\{"
+    rb"\s*var\s+(?P<variable_name>\w+)\s*=\s*\[[\s\S]+?\];"
+    rb"\s*(?P=function_name)\s*=\s*function\(\)\s*\{"
+    rb"\s*return\s+(?P=variable_name);\s*\};"
+    rb"\s*return\s+(?P=function_name)\(\);\s*\};"
+)
 
 # Example:
 # adc4bc7c-8f35-4a85-91e9-dc822b07f60d
-BOX_JS_PAYLOAD_FILE_NAME = "[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
+BOX_JS_PAYLOAD_FILE_NAME = r"[a-z0-9]{8}\-(?:[a-z0-9]{4}\-){3}[a-z0-9]{12}"
 
 # Example:
 # 'adc4bc7c-8f35-4a85-91e9-dc822b07f60d.js'
-SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + "\.js"
+SNIPPET_FILE_NAME = BOX_JS_PAYLOAD_FILE_NAME + r"\.js"
 
 # Examples:
 # <!DOCTYPE html>
 # or
 # <html>
-HTML_START = b"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
+HTML_START = rb"(^|\n|\>)[ \t]*(?P<html_start><!doctype html>|<html)"
 
 # Example:
 # atob was seen decoding a URI: 'http://blah.com'
-ATOB_URI_REGEX = "atob was seen decoding a URI: '(.+)'"
+ATOB_URI_REGEX = r"atob was seen decoding a URI: '(.+)'"
 
 # Example:
 # Payment.xls
 # or
 # Invoice.pdf
 PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
+
+
+def is_vb_script(script: Tag) -> bool:
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() == "text/vbscript"
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() == "vbscript"
+    return False
+
+
+def is_js_script(script: Tag) -> bool:
+    """Checks if script is javascript or jscript"""
+    type = script.get("type")
+    if isinstance(type, str):
+        return type.lower() in ("", "text/javascript", "text/jscript")
+    language = script.get("language")
+    if isinstance(language, str):
+        return language.lower() in ("", "javascript", "jscript")
+    return True  # default is text/javascript if there is no type/language
 
 
 class JsJaws(ServiceBase):
@@ -638,6 +700,10 @@ class JsJaws(ServiceBase):
         self.sus_form_actions: Set[str] = set()
         # Map of scripts found and their corresponding entropies
         self.script_entropies: Dict[str, Any] = dict()
+        # The number of web bugs/beacons found in an HTML document
+        self.num_of_web_bugs = 0
+        # Used for heuristic 25, to show that a form exists and that there are a small amount of input elements
+        self.short_form = False
         self.log.debug("JsJaws service initialized")
 
     def start(self) -> None:
@@ -683,6 +749,8 @@ class JsJaws(ServiceBase):
         self.phishing_inputs = set()
         self.sus_form_actions = set()
         self.script_entropies = dict()
+        self.num_of_web_bugs = 0
+        self.short_form = False
 
     def _reset_gauntlet_variables(self, request: ServiceRequest) -> None:
         """
@@ -717,9 +785,7 @@ class JsJaws(ServiceBase):
             for uri in gootloader_config.urls:
                 stripped_uri = uri.strip()
                 # URI should exist, URI should actually be a URI, or URI is actually a domain
-                if not stripped_uri or (
-                    not re.match(FULL_URI, stripped_uri) and not re.match(DOMAIN_ONLY_REGEX, stripped_uri)
-                ):
+                if not stripped_uri or (not is_url(stripped_uri.encode()) and not is_domain(stripped_uri.encode())):
                     continue
 
                 self.gootloader_uris.append(stripped_uri)
@@ -875,6 +941,8 @@ class JsJaws(ServiceBase):
                 decoded_match_string = match.string.decode()
             except UnicodeDecodeError:
                 return
+            if leading_char_index > len(decoded_match_string):
+                return
             leading_char = decoded_match_string[leading_char_index]
             return f"{leading_char}[{property_name}] = {property_value};".encode()
 
@@ -896,8 +964,70 @@ class JsJaws(ServiceBase):
         self._reset_execution_variables()
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
+        # Handle UTF-16 Encoding with BOM
+        if file_content[:2] in (b"\xFF\xFE", b"\xFE\xFF"):
+            file_content = file_content.decode("utf-16").encode("utf-8")
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(file_content)
+                file_path = f.name
+
+        original_contents = file_content
+
+        root_dir = path.dirname(path.abspath(__file__))
+
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
+        elif self.sample_type == "archive/asar":
+            # Geek Week 9 Team:2.2 Exracting Asar files aswell as reuploading files to ALv4.
+            error_section: ResultSection | None = None
+            request.result = Result()
+            asar_name = os.path.basename(file_path)
+            asar_path = os.path.join(root_dir, "tools/node_modules/@electron/asar/bin/asar.js")
+            # isolate asar files in their own directory
+            asar_dir = os.path.join(self.working_directory, "asar")
+            try:
+                # asar creates the output directory itself
+                subprocess.check_call([asar_path, "extract", file_path, asar_dir])
+            except Exception as e:
+                error_section = ResultSection(f"An Error occured when extracting the ASAR file {asar_name}", str(e))
+                request.result.add_section(error_section)
+                return
+
+            main: str | None = None
+            try:
+                with open(os.path.join(asar_dir, "package.json"), "rb") as f:
+                    package_json = json.load(f)
+                    main = package_json.get("main")  # entrypoint name
+                    if not main:
+                        error_section = ResultSection(
+                            f"Error processing ASAR file {asar_name}", "No main attribute in package.json."
+                        )
+            except (FileNotFoundError, IsADirectoryError):
+                error_section = ResultSection(
+                    f"Error processing ASAR file {asar_name}", "File package.json missing from ASAR archive."
+                )
+            except json.JSONDecodeError as e:
+                error_section = ResultSection(f"Error reading package.json from {asar_name}", str(e))
+
+            if main:
+                file_path = os.path.join(asar_dir, main)
+                try:
+                    with open(file_path, "rb") as f:
+                        file_content = f.read()
+                except (FileNotFoundError, IsADirectoryError):
+                    error_section = ResultSection(
+                        f"Error processing ASAR file {asar_name}", f"main process file {main} does not exist."
+                    )
+
+            if error_section:
+                request.result.add_section(error_section)
+                # Extract files we couldn't analyse
+                for file in os.listdir(asar_dir):
+                    if os.path.isfile(os.path.join(asar_dir, file)):
+                        request.add_extracted(os.path.join(asar_dir, file), file, "extracted with asar")
+                return
+            # If there is no error section then file_path is now set to the main process file of the ASAR archive.
+            # Continue processing that file
 
         file_path, file_content_with_no_leading_garbage = self._remove_leading_garbage_from_html(
             request, file_path, file_content
@@ -918,7 +1048,6 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump_path = path.join(
             self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
         )
-        root_dir = path.dirname(path.abspath(__file__))
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
         self.path_to_boxjs_boilerplate = path.join(root_dir, "tools/node_modules/box-js/boilerplate.js")
@@ -958,7 +1087,7 @@ class JsJaws(ServiceBase):
         if not path.exists(self.malware_jail_sandbox_env_dir):
             mkdir(self.malware_jail_sandbox_env_dir)
 
-        self._run_the_gauntlet(request, file_path, file_content)
+        self._run_the_gauntlet(request, file_path, file_content, original_contents)
 
         if path.exists(self.cleaned_with_synchrony_path):
             # Set this to avoid a loop of Synchrony extractions
@@ -1345,7 +1474,9 @@ class JsJaws(ServiceBase):
             pass
         return jsxray_output
 
-    def _run_the_gauntlet(self, request, file_path, file_content, subsequent_run: bool = False) -> None:
+    def _run_the_gauntlet(
+        self, request, file_path, file_content, original_contents, subsequent_run: bool = False
+    ) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
         tools and signatures. Ideally you should only call this when you are running an "improved" or "superset"
@@ -1404,7 +1535,15 @@ class JsJaws(ServiceBase):
         # If we are attempting to determine if there is any JavaScript that was not generated by JsJaws, and if so,
         # then we want to run that. If not, then get outta here!
         if f"{DIVIDING_COMMENT}\n".encode() in file_content:
-            _, script_we_did_not_generate = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            split_content = file_content.split(f"{DIVIDING_COMMENT}\n".encode())
+            if len(split_content) == 2:
+                _, script_we_did_not_generate = split_content
+            # Looks like a file generated by JsJaws and attached as supplementary was resubmitted for analysis.
+            # Therefore we have to massage the file contents
+            elif len(split_content) > 2:
+                _, script_we_did_not_generate = split_content[-2:]
+            else:
+                script_we_did_not_generate = file_content
             if script_we_did_not_generate == b"" and not self.sus_form_actions:
                 self.log.debug("No JavaScript file to analyze...")
                 return
@@ -1459,6 +1598,13 @@ class JsJaws(ServiceBase):
             )
             phishing_inputs_sec.add_line(phishing_inputs_heur.description)
             phishing_inputs_sec.add_lines([f"\t- {item}" for item in sorted(self.phishing_inputs)])
+            if self.short_form:
+                phishing_inputs_heur.add_signature_id("short_form", 500)
+                self.is_phishing = True
+
+        if self.num_of_web_bugs:
+            web_bugs_sec = ResultTextSection("Web bugs found", parent=request.result)
+            web_bugs_sec.add_lines([f"{self.num_of_web_bugs} web bug(s)/beacon(s) found in document"])
 
         if self.password_input_and_no_form_action:
             pass_and_no_action_heur = Heuristic(26)
@@ -1567,45 +1713,54 @@ class JsJaws(ServiceBase):
                 low_body_heur.name, low_body_heur.description, heuristic=low_body_heur, parent=request.result
             )
 
-        tool_threads: List[Thread] = []
+        tool_threads: List[tuple[str, Thread]] = []
         responses: Dict[str, List[str]] = {}
         if not request.get_param("static_analysis_only"):
-            tool_threads.append(Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             tool_threads.append(
-                Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True)
+                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
             )
-        tool_threads.append(Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+            tool_threads.append(
+                (
+                    MALWARE_JAIL,
+                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True),
+                )
+            )
+        tool_threads.append(
+            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+        )
 
+        # Detect Obfuscator.io
+        obfuscator_io = False
+        for yara_rule in listdir("./yara"):
+            rules = yara_compile(filepath=path.join("./yara", yara_rule))
+            try:
+                matches = rules.match(file_path)
+            except YARAError as e:
+                self.log.debug(f"Could not open file {file_path} due to '{e}'")
+                matches = []
+            if matches:
+                obfuscator_io = True
+                break
         # There are three ways that Synchrony will run.
         has_synchrony_run = False
-
-        # 1. If it is enabled in the submission parameter
-        if request.get_param("enable_synchrony"):
-            tool_threads.append(Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+        # 1. If the yara rule that looks for obfuscator.io obfuscation hits on the file
+        # 2. If it is enabled in the submission parameter
+        if obfuscator_io or request.get_param("enable_synchrony"):
+            tool_threads.append(
+                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+            )
             has_synchrony_run = True
-        else:
-            for yara_rule in listdir("./yara"):
-                rules = yara_compile(filepath=path.join("./yara", yara_rule))
-                try:
-                    matches = rules.match(file_path)
-                except YARAError as e:
-                    self.log.debug(f"Could not open file {file_path} due to '{e}'")
-                    matches = []
-                # 2. If the yara rule that looks for obfuscator.io obfuscation hits on the file
-                if matches:
-                    tool_threads.append(
-                        Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
-                    )
-                    has_synchrony_run = True
-                    break
 
-        for thr in tool_threads:
+        for _, thr in tool_threads:
             thr.start()
 
-        for thr in tool_threads:
+        synchrony_timedout = False
+        for name, thr in tool_threads:
             thr.join(timeout=tool_timeout)
             if thr.is_alive():
-                self.log.debug("A tool did not finish. Look at previous logs...")
+                if name == SYNCHRONY:
+                    synchrony_timedout = True
+                self.log.debug(f"{name} did not finish. Look at previous logs...")
                 # Give the tool a chance to clean up after to the tool timeout
                 sleep(3)
 
@@ -1648,15 +1803,15 @@ class JsJaws(ServiceBase):
 
         if self.html_document_write and self.sample_type == "code/html":
             doc_write_heur = Heuristic(23)
-            _ = ResultSection(
+            ResultSection(
                 doc_write_heur.name, doc_write_heur.description, heuristic=doc_write_heur, parent=request.result
             )
 
         self._extract_boxjs_iocs(request.result)
         if not self.ignore_stdout_limit:
-            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request)
+            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_malware_jail_iocs(malware_jail_output, request)
+            self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
 
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
@@ -1668,21 +1823,22 @@ class JsJaws(ServiceBase):
 
         # 3. If JS-X-Ray has detected that the sample was obfuscated with obfuscator.io, then run Synchrony
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
+        obfuscator_io = obfuscator_io or run_synchrony
         if not has_synchrony_run and run_synchrony:
             synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
-        # TODO: Do something with the Synchrony output
+        # Synchrony output is the same every time unless there is an error.
         _ = responses.get(SYNCHRONY)
 
-        self._extract_synchrony(request)
+        self._extract_synchrony(request, synchrony_timedout, obfuscator_io)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
         if not self.ignore_stdout_limit:
-            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request)
+            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request, original_contents)
         else:
-            self._extract_doc_writes(malware_jail_output, request)
+            self._extract_doc_writes(malware_jail_output, request, original_contents)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
@@ -1736,7 +1892,7 @@ class JsJaws(ServiceBase):
         js_content: bytes = b"",
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None,
         insert_above_divider: bool = False,
-    ) -> Tuple[Optional[str], bytes, Optional[str]]:
+    ) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
@@ -1765,6 +1921,25 @@ class JsJaws(ServiceBase):
             soup, aggregated_js_script, js_content, request, insert_above_divider
         )
 
+        link_section = ResultSection('URLs in <a> Tags')
+        links = soup.find_all('a', href=True)
+        for link in links:
+            assert isinstance(link, Tag)
+            href = link["href"]
+            assert isinstance(href, str)
+            link_section.add_line(href)
+            split = urlsplit(href)
+            if split.scheme and split.netloc:
+                link_section.add_tag("network.static.uri", href)
+            if split.path:
+                link_section.add_tag("network.static.uri_path", split.path)
+            if split.hostname:
+                try:
+                    link_section.add_tag("network.static.ip", IPv4Address(split.hostname).compressed)
+                except ValueError:  # not an ip address
+                    if is_domain(split.hostname.encode()):
+                        link_section.add_tag("network.static.domain", split.hostname)
+
         if self.sample_type in ["code/html", "code/hta"]:
             aggregated_js_script, js_content = self._extract_embeds_using_soup(
                 soup, request, aggregated_js_script, js_content
@@ -1775,6 +1950,8 @@ class JsJaws(ServiceBase):
             self._hunt_for_suspicious_titles(soup)
             self._hunt_for_suspicious_input_fields(soup)
             self._hunt_for_suspicious_forms(soup)
+            self._hunt_for_suspicious_meta(soup, request)
+            self._hunt_for_suspicious_images(soup)
 
         if aggregated_js_script:
             aggregated_js_script.close()
@@ -1831,7 +2008,26 @@ class JsJaws(ServiceBase):
         embed_srcs: Set[str] = set()
 
         # https://www.w3schools.com/tags/att_src.asp
-        elements_with_src_attr = ["audio", "embed", "iframe", "img", "input", "script", "source", "track", "video"]
+        # Supported and inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L60
+        elements_with_src_attr = [
+            "audio",
+            "embed",
+            "frame",
+            "iframe",
+            "img",
+            "input",
+            # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L197
+            "object",
+            #"script", scripts src is added to js_content by _extract_js_using_soup. No need to extract.
+            "source",
+            "track",
+            "v:fill",
+            "v:image",
+            "v:oval",
+            "v:rect",
+            "v:roundrect",
+            "video",
+        ]
 
         # https://www.w3schools.com/tags/att_href.asp
         elements_with_href_attr = ["a", "area", "base", "link"]
@@ -1910,7 +2106,7 @@ class JsJaws(ServiceBase):
                 return True
         return False
 
-    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[PageElement]) -> None:
+    def _contains_scripts_with_unescape(self, soup: BeautifulSoup, scripts: ResultSet[Tag]) -> None:
         """
         This method checks if the file content is contains scripts that are made up of
         large "unescape" calls
@@ -1940,7 +2136,7 @@ class JsJaws(ServiceBase):
             if count > 1:
                 self.multiple_scripts_with_unescape = True
 
-    def _skip_element(self, element: PageElement) -> bool:
+    def _skip_element(self, element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an element
         :param element: The BeautifulSoup element
@@ -1975,7 +2171,7 @@ class JsJaws(ServiceBase):
 
         return False
 
-    def _remove_safelisted_element_attrs(self, element: PageElement) -> PageElement:
+    def _remove_safelisted_element_attrs(self, element: Tag) -> Tag:
         """
         If an element has an attribute that is safelisted, don't include it when we create the element
         :param element: The BeautifulSoup element
@@ -1984,13 +2180,13 @@ class JsJaws(ServiceBase):
         if element.name in SAFELISTED_ATTRS_TO_POP:
             for attr in SAFELISTED_ATTRS_TO_POP[element.name]:
                 if is_tag_safelisted(
-                    element.attrs.get(attr), ["network.static.domain", "network.static.uri"], self.safelist
+                    element.attrs.get(attr, ""), ["network.static.domain", "network.static.uri"], self.safelist
                 ):
                     element.attrs.pop(attr)
         return element
 
     @staticmethod
-    def _skip_embed_element(element: PageElement) -> bool:
+    def _skip_embed_element(element: Tag) -> bool:
         """
         This method is used for determining if we should dynamically create an embedded element which
         could be created elsewhere
@@ -2039,7 +2235,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_id(element: PageElement, idx: int, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_id(element: Tag, idx: int, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the element id of the element, and will create one if
         the "id" field is not set
@@ -2060,7 +2256,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_varname(element: PageElement, element_id: str, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: Set[str]) -> str:
         """
         This method determines the name of the variable representing the element
         :param element: The BeautifulSoup element
@@ -2091,7 +2287,7 @@ class JsJaws(ServiceBase):
                 random_element_varname = "jsjaws_" + random_element_varname
         return random_element_varname
 
-    def _determine_element_value(self, element: PageElement) -> str:
+    def _determine_element_value(self, element: Tag) -> str:
         """
         This method determines the value of an element
         :param element: The BeautifulSoup element
@@ -2121,7 +2317,7 @@ class JsJaws(ServiceBase):
         return element_value
 
     @staticmethod
-    def _initialize_create_element_script(random_element_varname: str, element: PageElement, element_id: str) -> str:
+    def _initialize_create_element_script(random_element_varname: str, element: Tag, element_id: str) -> str:
         """
         This method sets up the initial script used for dynamically creating elements
         :param random_element_varname: The name of the variable
@@ -2141,9 +2337,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     @staticmethod
-    def _append_element_script(
-        element: PageElement, set_of_variable_names: Set[str], random_element_varname: str
-    ) -> str:
+    def _append_element_script(element: Tag, set_of_variable_names: Set[str], random_element_varname: str) -> str:
         """
         This method adds script that appends the element
         :param element: The BeautifulSoup element
@@ -2160,7 +2354,7 @@ class JsJaws(ServiceBase):
 
         return f"document.body.appendChild({random_element_varname});\n"
 
-    def _set_element_innertext_script(self, element: PageElement, random_element_varname: str) -> str:
+    def _set_element_innertext_script(self, element: Tag, random_element_varname: str) -> str:
         """
         This method sets the element value to the innerText attribute of the element
         :param element: The BeautifulSoup element
@@ -2220,13 +2414,13 @@ class JsJaws(ServiceBase):
         if '"' in attr_val:
             attr_val = attr_val.replace('"', '\\"')
 
-        if "\\" in attr_val:
+        if "\\" in attr_val and "url(" not in attr_val:
             attr_val = attr_val.replace("\\", "\\\\")
 
         return f'{random_element_varname}.setAttribute("{attr_id}", "{attr_val}");\n'
 
     @staticmethod
-    def _handle_object_elements(element: PageElement, request: ServiceRequest, random_element_varname: str) -> str:
+    def _handle_object_elements(element: Tag, request: ServiceRequest, random_element_varname: str) -> str:
         """
         This method handles "object" elements and could return a script that clicks the object
         :param element: The BeautifulSoup element
@@ -2279,7 +2473,7 @@ class JsJaws(ServiceBase):
         return ""
 
     def _setup_create_element_script(
-        self, element: PageElement, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
+        self, element: Tag, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
     ) -> str:
         """
         This method sets up the script that creates elements dynamically
@@ -2311,7 +2505,7 @@ class JsJaws(ServiceBase):
         return create_element_script
 
     def _is_vb_and_js_scripts(
-        self, scripts: ResultSet[PageElement], request: ServiceRequest
+        self, scripts: ResultSet[Tag], request: ServiceRequest
     ) -> Tuple[bool, Optional[ResultTextSection]]:
         """
         This method determines if there is a combination of VisualBasic and JavaScript scripts
@@ -2321,9 +2515,10 @@ class JsJaws(ServiceBase):
                  and a possible result section
         """
         # The combination of both VB and JS existing in an HTML file could be sketchy, stay tuned...
-        vb_scripts = any(script.get("language", "").lower() in ["vbscript"] for script in scripts)
-        js_scripts = any(script.get("type", "").lower() in ["", "text/javascript"] for script in scripts)
-        vb_and_js_scripts = vb_scripts and js_scripts
+        vb_scripts = [script for script in scripts if is_vb_script(script)]
+
+        js_scripts = any(is_js_script(script) for script in scripts)
+        vb_and_js_scripts = bool(vb_scripts) and js_scripts
 
         if vb_and_js_scripts:
             heur = Heuristic(12)
@@ -2333,30 +2528,29 @@ class JsJaws(ServiceBase):
             vb_and_js_section.add_tag("file.behavior", heur.name)
 
             # We want to extract all VBScripts IFF there are both JavaScript and VBScript scripts in the file
-            for script in scripts:
-                if script.get("language", "").lower() in ["vbscript"]:
-                    # Make sure there is actually a body to the script
-                    body = script.string if script.string is None else str(script.string).strip()
+            for script in vb_scripts:
+                # Make sure there is actually a body to the script
+                body = script.string if script.string is None else str(script.string).strip()
 
-                    if body and len(body) > 2:
-                        with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                            out.write(body.encode())
-                            vbscript_to_extract = out.name
-                        vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
-                        artifact = {
-                            "name": vbs_file_name,
-                            "path": vbscript_to_extract,
-                            "description": "Extracted VBScript Contents",
-                            "to_be_extracted": True,
-                        }
-                        self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
-                        self.artifact_list.append(artifact)
+                if body and len(body) > 2:
+                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                        out.write(body.encode())
+                        vbscript_to_extract = out.name
+                    vbs_file_name = f"{get_id_from_data(body.encode())}.vbs"
+                    artifact = {
+                        "name": vbs_file_name,
+                        "path": vbscript_to_extract,
+                        "description": "Extracted VBScript Contents",
+                        "to_be_extracted": True,
+                    }
+                    self.log.debug(f"Adding extracted VBScript: {vbs_file_name}")
+                    self.artifact_list.append(artifact)
         else:
             vb_and_js_section = None
 
         return vb_and_js_scripts, vb_and_js_section
 
-    def _is_script_source(self, script: PageElement) -> bool:
+    def _is_script_source(self, script: Tag) -> bool:
         """
         This method the script source, if it exists, and adds it to the set
         :param script: The Script soup element
@@ -2364,7 +2558,7 @@ class JsJaws(ServiceBase):
         """
         source_added = False
         if script.get("src") and script["src"] not in self.initial_script_sources:
-            if re.match(FULL_URI, script["src"]):
+            if is_url(script["src"].encode()):
                 if self.gauntlet_runs < 2:
                     self.initial_script_sources.add(script["src"])
                 else:
@@ -2487,12 +2681,11 @@ class JsJaws(ServiceBase):
         return body
 
     @staticmethod
-    def _handle_onevent_attributes(
-        is_script_body: bool, element: PageElement, onevents: List[str]
-    ) -> Tuple[bool, List[str]]:
+    def _handle_onevent_attributes(is_script_body: bool, element: Tag, onevents: List[str]) -> Tuple[bool, List[str]]:
         """
         This method
         """
+        # Supported by https://github.com/target/strelka/blob/3439953e6aa2dafb68ea73c3977da11f87aeacdf/src/python/strelka/scanners/scan_javascript.py#L37:L39
         # Look for elements with the on<event> attributes and add their script bodies to the aggregated js script
         for event in ["error", "pageshow", "load", "submit", "click", "finish"]:
             for onevent in element.get_attribute_list(f"on{event}"):
@@ -2553,7 +2746,7 @@ class JsJaws(ServiceBase):
 
     def _handle_malformed_javascript(
         self,
-        visible_texts: ResultSet[PageElement],
+        visible_texts: ResultSet[Tag],
         aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
         js_content: bytes,
     ) -> Tuple[Optional[tempfile.NamedTemporaryFile], bytes]:
@@ -2721,13 +2914,13 @@ class JsJaws(ServiceBase):
                     "entropy": script_entropy,
                 }
 
-            if script.get("language", "").lower() in ["vbscript"]:
+            if is_vb_script(script):
                 js_content, aggregated_js_script = self._handle_vbscript(
                     body, js_content, aggregated_js_script, function_varname, vb_and_js_section
                 )
                 continue
 
-            if script.get("type", "").lower() in ["", "text/javascript"]:
+            if is_js_script(script):
                 # BeautifulSoup has failed us, don't add this as it will break JavaScript compilation
                 if body.startswith("<script "):
                     continue
@@ -3159,6 +3352,8 @@ class JsJaws(ServiceBase):
         # ret represents the value to be yielded
         ret = None
         for line in output:
+            if not isinstance(line, str):
+                continue
             if line.startswith("[") and "] " in line:
                 try:
                     timestamp = re.match(MALWARE_JAIL_TIME_STAMP, line)
@@ -3182,11 +3377,12 @@ class JsJaws(ServiceBase):
         if ret is not None:
             yield ret
 
-    def _extract_doc_writes(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_doc_writes(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :param request: The ServiceRequest object
+        :param original_contents: the original contents for the request file
         :return: None
         """
         doc_write = False
@@ -3245,7 +3441,7 @@ class JsJaws(ServiceBase):
             new_passwords = set()
             # If the line including "password" was written to the DOM later than when the actual password was, we
             # should look in the file contents for it
-            visible_text.update(self._extract_visible_text_using_soup(request.file_contents))
+            visible_text.update(self._extract_visible_text_using_soup(original_contents))
             for line in visible_text:
                 if len(line) > 10000:
                     line = truncate(line, 10000)
@@ -3257,6 +3453,13 @@ class JsJaws(ServiceBase):
 
             if new_passwords:
                 self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
+                passwords_extracted_file = "passwords_extracted_from_html.json"
+                password_extracted_path = path.join(self.working_directory, passwords_extracted_file)
+                with open(password_extracted_path, "w") as f:
+                    f.write(dumps(sorted(list(new_passwords))))
+                request.add_supplementary(
+                    password_extracted_path, passwords_extracted_file, "Passwords extracted from HTML file"
+                )
                 # It is technically not required to sort them, but it makes the output of the module predictable
                 if "passwords" in request.temp_submission_data:
                     new_passwords.update(set(request.temp_submission_data["passwords"]))
@@ -3270,9 +3473,9 @@ class JsJaws(ServiceBase):
         # we should wrap the JavaScript with <script> tags so that it is correctly handled by the next run
         # of the gauntlet.
         if self.sample_type == "code/javascript":
-            total_dom_contents = b"<script>" + request.file_contents + b"</script>"
+            total_dom_contents = b"<script>" + original_contents + b"</script>"
         else:
-            total_dom_contents = request.file_contents
+            total_dom_contents = original_contents
         total_dom_contents += b"\n"
         total_dom_contents += content_to_write
         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
@@ -3280,7 +3483,7 @@ class JsJaws(ServiceBase):
             total_dom_path = out.name
 
         self.log.debug("There were elements written to the DOM. Time to run the gauntlet again!")
-        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, subsequent_run=True)
+        self._run_the_gauntlet(request, total_dom_path, total_dom_contents, original_contents, subsequent_run=True)
 
     def _extract_urls(self, request: ServiceRequest) -> None:
         """
@@ -3297,7 +3500,8 @@ class JsJaws(ServiceBase):
         urls_result_section.set_column_order(["url", "method", "request_body"])
         urls_rows: List[TableRow] = []
         items_seen: Set[str] = set()
-        post_seen = False
+        mj_posts_seen: List[str] = []
+        boxjs_posts_seen: List[str] = []
 
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
@@ -3306,10 +3510,10 @@ class JsJaws(ServiceBase):
                 for item in urls_json:
                     if len(item["url"]) > 500:
                         item["url"] = truncate(item["url"], 500)
-                    if not add_tag(urls_result_section, "network.dynamic.uri", item["url"], self.safelist):
+                    if not add_tag(urls_result_section, "network.static.uri", item["url"], self.safelist):
                         continue
                     if item.get("method", "").lower() == "post":
-                        post_seen = True
+                        mj_posts_seen.append(item["url"])
                         params = {"method": "POST", "headers": item.get("headers", {})}
                         if isinstance(item.get("request_body"), dict):
                             params["json"] = item.get("request_body", None)
@@ -3326,7 +3530,11 @@ class JsJaws(ServiceBase):
             boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
             with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
-                ioc_json = loads(file_contents)
+                ioc_json: List[Dict[str, Any]] = []
+                try:
+                    ioc_json = loads(file_contents)
+                except JSONDecodeError as e:
+                    self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
                 for ioc in ioc_json:
                     value = ioc.get("value", "")
                     if ioc["type"] in ["UrlFetch", "XMLHttpRequest"]:
@@ -3335,8 +3543,13 @@ class JsJaws(ServiceBase):
                         elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
                         item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
-                        if item.get("method", "").lower() == "post":
-                            post_seen = True
+                        # For some reason BoxJS allows method to be a string and also a list of strings
+                        if (isinstance(item.get("method"), str) and item["method"].lower() == "post") or (
+                            isinstance(item.get("method"), list)
+                            and len(item["method"]) == 1
+                            and any(method == "post" for method in item["method"])
+                        ):
+                            boxjs_posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
                                 params["json"] = item.get("request_body", None)
@@ -3366,9 +3579,6 @@ class JsJaws(ServiceBase):
             if self.split_reverse_join:
                 urls_result_section.heuristic.add_signature_id("split_reverse_join_url", 500)
 
-            if self.is_phishing and post_seen:
-                urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
-
             if self.weird_base64_value_set:
                 urls_result_section.heuristic.add_signature_id("weird_base64_value_set_url", 500)
 
@@ -3378,6 +3588,25 @@ class JsJaws(ServiceBase):
             if self.url_used_for_suspicious_exec:
                 urls_result_section.heuristic.add_signature_id("url_used_for_suspicious_exec", 500)
 
+            if self.is_phishing and (mj_posts_seen or boxjs_posts_seen):
+                phishing_post_urls_result_section = ResultTextSection(
+                    "URLs used for POSTs, found in a file containing suspicious phishing characteristics",
+                    parent=urls_result_section,
+                )
+                phishing_post_urls_result_section.set_heuristic(1)
+                for post_seen in mj_posts_seen:
+                    phishing_post_urls_result_section.add_line(f"\t-\t{post_seen}")
+                    add_tag(phishing_post_urls_result_section, "network.static.uri", post_seen, self.safelist)
+                for post_seen in boxjs_posts_seen:
+                    phishing_post_urls_result_section.add_line(f"\t-\t{post_seen}")
+                    add_tag(phishing_post_urls_result_section, "network.dynamic.uri", post_seen, self.safelist)
+                phishing_post_urls_result_section.heuristic.add_signature_id("is_phishing_url", 500)
+
+            # Special case where we are going to flag the GETs because this file is most likely phishing.
+            elif self.is_phishing and (
+                self.html_document_write and self.sample_type == "code/html" or self.gauntlet_runs > 1
+            ):
+                urls_result_section.heuristic.add_signature_id("possible_phishing_urls", 400)
             request.result.add_section(urls_result_section)
 
     def _extract_supplementary(self, output: List[str]) -> None:
@@ -3510,10 +3739,24 @@ class JsJaws(ServiceBase):
                 if http_res.body and http_res.tags.get("network.dynamic.uri"):
                     http_res.set_heuristic(13)
                     http_res.heuristic.add_signature_id("suspicious_pwsh_url", 500)
+            # These are common phishing techniques used together for obfuscation
+            # Step 1: Base64 decoding
+            # Step 2: DOM Write
+            elif "base64_decoding" in sig_hit_names and (
+                self.html_document_write and self.sample_type == "code/html" or self.gauntlet_runs > 1
+            ):
+                self.is_phishing = True
 
             result.add_section(sigs_res_sec)
 
-        if phishing_terms and (phishing_logos or phishing_form):
+        # A regular form asking for credentials is not phishing, so we need more than just
+        # phishing terms + one of phishing logos and phishing form
+        if (
+            not self.is_phishing
+            and phishing_terms
+            and (phishing_logos or phishing_form)
+            and len(signatures_that_hit) > 2
+        ):
             self.is_phishing = True
 
     @staticmethod
@@ -3832,6 +4075,11 @@ class JsJaws(ServiceBase):
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
+            elif kind == "shady-link":
+                if not is_url(val.encode()) and not is_domain(val.encode()):
+                    continue
+                else:
+                    add_tag(jsxray_iocs_result_section, "network.static.uri", val, self.safelist)
             elif kind in ["suspicious-literal", "short-identifiers", "suspicious-file", "unsafe-regex"]:
                 # We don't care about these warnings
                 continue
@@ -3846,22 +4094,31 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool):
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
         :return: None
         """
-        if not path.exists(self.cleaned_with_synchrony_path):
-            return
-
         # We do not want a loop of Synchrony extractions
         if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
             return
 
+        if not path.exists(self.cleaned_with_synchrony_path):
+            if timed_out:
+                time_out_synchrony_res = ResultTextSection(f"{SYNCHRONY} timed out deobfuscating the file")
+                time_out_synchrony_res.set_heuristic(8)
+                request.result.add_section(time_out_synchrony_res)
+            return
+
+        # Sometimes Synchrony does nothing
+        if get_sha256_for_file(self.cleaned_with_synchrony_path) == request.sha256:
+            return
+
         deobfuscated_with_synchrony_res = ResultTextSection(f"The file was deobfuscated/cleaned by {SYNCHRONY}")
         deobfuscated_with_synchrony_res.add_line(f"View extracted file {self.cleaned_with_synchrony} for details.")
-        deobfuscated_with_synchrony_res.set_heuristic(8)
+        if obfuscator_io:
+            deobfuscated_with_synchrony_res.set_heuristic(8)
         request.result.add_section(deobfuscated_with_synchrony_res)
 
         artifact = {
@@ -3873,7 +4130,8 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Adding extracted file: {self.cleaned_with_synchrony}")
         self.artifact_list.append(artifact)
 
-        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io, we should flag this combination with a signature that scores 500
+        # If there is a URL used in a suspicious way and the file is obfuscated with Obfuscator.io,
+        # we should flag this combination with a signature that scores 500
         for result_section in request.result.sections:
             if result_section.heuristic and result_section.heuristic.heur_id == 6:
                 self.log.debug(
@@ -3904,11 +4162,10 @@ class JsJaws(ServiceBase):
                 return element[17:]
         return cmd
 
-    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest) -> None:
+    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
-        redirection_res_sec: Optional[ResultTextSection] = None
         for line in self._parse_malwarejail_output(output):
             split_line = line.split("] ", 1)
             if len(split_line) == 2:
@@ -3945,9 +4202,9 @@ class JsJaws(ServiceBase):
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
                 if match and len(match.regs) > 1:
                     line_to_wrap = match.group(1).decode()
-                    amended_content = request.file_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
+                    amended_content = original_contents.replace(line_to_wrap.encode(), f'"{line_to_wrap}"'.encode())
 
-                    if request.file_contents != amended_content:
+                    if original_contents != amended_content:
                         with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                             out.write(amended_content)
                             amended_content_path = out.name
@@ -3955,7 +4212,9 @@ class JsJaws(ServiceBase):
                         self.log.debug(
                             "There was an unexpected end of input, run the gauntlet again with the amended content!"
                         )
-                        self._run_the_gauntlet(request, amended_content_path, amended_content, subsequent_run=True)
+                        self._run_the_gauntlet(
+                            request, amended_content_path, amended_content, original_contents, subsequent_run=True
+                        )
 
                 # Check if there was a reference error after multiple DOM writes
                 match = re.match(REFERENCE_NOT_DEFINED_REGEX, exception_blurb.encode())
@@ -3981,7 +4240,7 @@ class JsJaws(ServiceBase):
                 # (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
                 if not path.exists(self.malware_jail_sandbox_env_dump_path):
-                    matches = re.findall(URI_REGEX, log_line)
+                    matches = list(set([url.value.decode() for url in find_urls(log_line.encode())]))
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
@@ -4022,41 +4281,7 @@ class JsJaws(ServiceBase):
                 elif isinstance(location_href, dict):
                     continue
 
-                if location_href.lower().startswith("ms-msdt:"):
-                    heur = Heuristic(5)
-                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-
-                    # Try to only recover the msdt command's powershell for the extracted file
-                    # If we can't, write the whole command
-                    try:
-                        encoded_content = self.parse_msdt_powershell(location_href).encode()
-                    except ValueError:
-                        encoded_content = location_href.encode()
-
-                    with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
-                        out.write(encoded_content)
-                    artifact = {
-                        "name": sha256(encoded_content).hexdigest(),
-                        "path": out.name,
-                        "description": "Redirection location",
-                        "to_be_extracted": True,
-                    }
-                    self.log.debug(f"Redirection location: {out.name}")
-                    self.artifact_list.append(artifact)
-                elif not redirection_res_sec:
-                    heur = Heuristic(6)
-                    redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
-
-                if not redirection_res_sec.body or (
-                    redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body
-                ):
-                    if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
-                        redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
-
-                        if any(
-                            urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls
-                        ):
-                            redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
+                self._handle_location_redirection(location_href, request)
 
             # Check if programatically created script with src set is found
             if HTMLELEMENT_SRC_SET_TO_URI in log_line and any(
@@ -4073,6 +4298,51 @@ class JsJaws(ServiceBase):
         if malware_jail_res_sec.body:
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
+
+    def _handle_location_redirection(self, location_href: str, request: ServiceRequest):
+        """
+        If a location redirection related to MS-MSDT is seen, handle
+        If a generic location redirection is seen, handle
+        :param location_href: The URI that the page is being redirected to
+        :param request: The ServiceRequest object
+        """
+        redirection_res_sec: Optional[ResultTextSection] = next(
+            (res for res in request.result.sections if res.heuristic and res.heuristic.heur_id == 6), None
+        )
+
+        if location_href.lower().startswith("ms-msdt:"):
+            heur = Heuristic(5)
+            redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+            # Try to only recover the msdt command's powershell for the extracted file
+            # If we can't, write the whole command
+            try:
+                encoded_content = self.parse_msdt_powershell(location_href).encode()
+            except ValueError:
+                encoded_content = location_href.encode()
+
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
+                out.write(encoded_content)
+            artifact = {
+                "name": sha256(encoded_content).hexdigest(),
+                "path": out.name,
+                "description": "Redirection location",
+                "to_be_extracted": True,
+            }
+            self.log.debug(f"Redirection location: {out.name}")
+            self.artifact_list.append(artifact)
+        elif not redirection_res_sec:
+            heur = Heuristic(6)
+            redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
+
+        if not redirection_res_sec.body or (
+            redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body
+        ):
+            if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
+                redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
+
+                if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
+                    redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
 
     def _handle_subsequent_scripts(self, result: Result):
         """
@@ -4155,10 +4425,30 @@ class JsJaws(ServiceBase):
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
-        file_contents = file_contents.decode()
+        file_string = file_contents.decode().replace("\r", "")
+        lib_path, lib_contents = self._get_library_code(file_string)
+        if not lib_contents:
+            return None, None, None
+        diff = self._filter_library_code(file_string, lib_contents)
+        if len(diff) > 10:
+            new_file_contents = "\n".join(diff).encode() + b'\n'
+            with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
+                f.write(new_file_contents)
+                file_path = f.name
+            return file_path, new_file_contents, lib_path
+        return None, None, None
+
+    def _get_library_code(self, file_string: str) -> Tuple[Optional[str], Optional[str]]:
+        # JQuery / online libs
+        jquery_match = re.match(JQUERY_VERSION_REGEX, file_string)
+        if jquery_match:
+            jquery_version = ("jquery-compat-" if jquery_match.group(1) else "jquery-") + jquery_match.group(2)
+            jquery_url = f"https://code.jquery.com/{jquery_version}.js"
+            if self.service_attributes.docker_config.allow_internet_access:
+                resp = get(jquery_url, timeout=15)
+                return jquery_url, resp.text
         common_libs = {
-            # URL/FILE: REGEX
-            "https://code.jquery.com/jquery-%s.js": JQUERY_VERSION_REGEX,
+            # FILE: REGEX
             "tools/gootloader/clean_libs/maplace%s.js": MAPLACE_REGEX,
             "tools/gootloader/clean_libs/combo.js": COMBO_REGEX,
             "tools/gootloader/clean_libs/underscore%s.js": UNDERSCORE_REGEX,
@@ -4167,76 +4457,45 @@ class JsJaws(ServiceBase):
             "tools/gootloader/clean_libs/chartview.js": CHARTVIEW_REGEX,
             "tools/gootloader/clean_libs/mdl.js": MDL_REGEX,
         }
-        file_contents = file_contents.replace("\r", "")
-        split_file_contents = [line.strip() for line in file_contents.split("\n") if line.strip()]
         for lib_path, regex in common_libs.items():
-            regex_match = re.match(regex, file_contents)
-            if not regex_match:
+            match = re.match(regex, file_string)
+            if not match:
                 continue
-            path_contents = None
-            if lib_path.startswith("https"):
-                if not self.service_attributes.docker_config.allow_internet_access:
-                    continue
-                if len(regex_match.regs) > 1:
-                    lib_path = lib_path % regex_match.group(1)
-                    resp = get(lib_path, timeout=15)
-                else:
-                    resp = get(lib_path, timeout=15)
+            lib_contents = None
+            if len(match.regs) > 1:
+                lib_path = lib_path % match.group(1)
 
-                path_contents = resp.text
+            if path.exists(lib_path):
+                lib_contents = open(lib_path, "r").read()
+                if lib_contents:
+                    return lib_path, lib_contents
             else:
-                if len(regex_match.regs) > 1:
-                    lib_path = lib_path % regex_match.group(1)
+                self.log.warning(
+                    f"There was a regex hit for a clean library file '{lib_path}' but this "
+                    "file does not exist..."
+                )
 
-                if path.exists(lib_path):
-                    path_contents = open(lib_path, "r").read()
-                else:
-                    self.log.warning(
-                        f"There was a regex hit for a clean library file '{lib_path}' but this "
-                        "file does not exist..."
-                    )
+        return None, None
 
-            if not path_contents:
-                continue
-
-            diff = list()
-            clean_file_contents = [line.strip() for line in path_contents.split("\n") if line.strip()]
-            # The dirty file contents should always have more lines than the clean file contents
-            dirty_file_line_offset = 0
-            for index, item in enumerate(clean_file_contents):
-                dirty_file_line_index = index + dirty_file_line_offset
-
-                if dirty_file_line_index >= len(split_file_contents):
-                    break
-
-                dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-                if self._compare_lines(item, dirty_file_line_to_compare):
-                    pass
-                # Python has difficulty with decoding .. and ..., so skip it!
-                # (the malicious lines are not in the clean files anyways)
-                elif ".." in item:
-                    continue
-                else:
-                    while not self._compare_lines(item, dirty_file_line_to_compare):
-                        diff.append(dirty_file_line_to_compare)
-                        dirty_file_line_offset += 1
-                        dirty_file_line_index = index + dirty_file_line_offset
-
-                        if dirty_file_line_index >= len(split_file_contents):
-                            break
-
-                        dirty_file_line_to_compare = split_file_contents[dirty_file_line_index]
-
-            if len(diff) > 10:
-                new_file_contents = b""
-                for line in diff:
-                    new_file_contents += f"{line}\n".encode()
-                with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
-                    f.write(new_file_contents)
-                    file_path = f.name
-                return file_path, new_file_contents, lib_path
-
-        return None, None, None
+    def _filter_library_code(self, dirty_library: str, clean_library: str) -> list[str]:
+        dirty_lines = [s for line in dirty_library.split("\n") if (s := line.strip())]
+        clean_lines = [s for line in clean_library.split("\n") if (s := line.strip())]
+        diff = []
+        # The dirty file contents should always have more lines than the clean file contents
+        dirty_line_index = 0
+        for index, clean_line in enumerate(clean_lines):
+            # Python has difficulty with decoding .. and ..., so skip it!
+            # (the malicious lines are not in the clean files anyways)
+            if ".." not in clean_line:
+                for dirty_line_index in range(dirty_line_index, len(dirty_lines)):
+                    dirty_line = dirty_lines[dirty_line_index]
+                    if self._compare_lines(clean_line, dirty_line):
+                        break
+                    diff.append(dirty_line)
+            dirty_line_index += 1
+            if dirty_line_index >= len(dirty_lines):
+                break
+        return diff
 
     @staticmethod
     def _compare_lines(line_1: str, line_2: str) -> bool:
@@ -4523,6 +4782,10 @@ class JsJaws(ServiceBase):
                 break
 
         if password_field_exists:
+            # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L375
+            if len(inputs) > 0 and len(inputs) < 4:
+                self.short_form = True
+
             # If we have a password field, let's look at the form details
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
             forms = soup.findAll("form")
@@ -4534,7 +4797,7 @@ class JsJaws(ServiceBase):
                     if not value:
                         continue
                     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
-                    if key == "action":
+                    if key == "action" and is_url(value.encode()):
                         form_has_action = True
                         if self.single_script_with_unescape:
                             # A form with an action was created from a single script that used an unescape AND the form
@@ -4561,7 +4824,7 @@ class JsJaws(ServiceBase):
                                 if not value:
                                     continue
                                 # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
-                                if key == "formaction":
+                                if key == "formaction" and is_url(value.encode()):
                                     form_has_action = True
                                     if self.single_script_with_unescape:
                                         # A form with an action was created from a single script that used an
@@ -4576,3 +4839,88 @@ class JsJaws(ServiceBase):
 
                 if not form_has_action:
                     self.password_input_and_no_form_action = True
+
+    def _hunt_for_suspicious_meta(self, soup: BeautifulSoup, request: ServiceRequest) -> None:
+        """
+        This method looks for meta redirects, which are suspicious.
+        Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L264
+        :param soup: The BeautifulSoup object
+        :param request: The ServiceRequest object
+        :return: None
+        """
+        # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+        metas = soup.findAll("meta")
+
+        for meta in metas:
+            # Metadata equivalent to http headers
+            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#http-equiv
+            if meta.has_attr("http-equiv"):
+                if meta.get("http-equiv").lower() == "refresh":
+                    url_data = meta.get("content", "unknown")
+                    urls = list(set([url.value.decode() for url in find_urls(url_data.encode())]))
+                    if urls:
+                        self._handle_location_redirection(urls[0], request)
+
+    def _hunt_for_suspicious_images(self, soup: BeautifulSoup):
+        """
+        This method looks for web bugs, which are suspicious.
+        Web bug/beacon: https://en.wikipedia.org/wiki/Web_beacon
+        Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L304
+        :param soup: The BeautifulSoup object
+        :return: None
+        """
+        imgs = soup.findAll("img")
+
+        for img in imgs:
+            d = {}
+            try:
+                if img.has_attr("height"):
+                    try:
+                        d["height"] = int(img.get("height"))
+                    except Exception:
+                        try:
+                            d["height"] = img.get("height")
+                            if isinstance(d["height"], str):
+                                d["height"] = d["height"].encode("utf-8")
+                        except Exception:
+                            pass
+                if img.has_attr("width"):
+                    try:
+                        d["width"] = int(img.get("width"))
+                    except Exception:
+                        try:
+                            d["width"] = img.get("width")
+                            if isinstance(type(d["width"]), str):
+                                d["width"] = d["width"].encode("utf-8")
+                        except Exception:
+                            pass
+                if "height" in d and "width" in d:
+                    if isinstance(d["height"], int) and isinstance(d["width"], int):
+                        if d["height"] <= 1 and d["width"] <= 1:
+                            self.num_of_web_bugs += 1
+            except Exception:
+                # We don't care that much
+                pass
+
+    def _extract_svg(self, soup: BeautifulSoup, request: ServiceRequest) -> None:
+        """Extract SVG with embedded scripts."""
+        if self.sample_type == "image/svg":
+            return
+        script_in_svg = False
+        svg_section = ResultSection("Embedded SVG images")
+        svg_section.add_line("See extracted files:")
+        for svg in soup.find_all("svg"):
+            data = svg.encode()
+            file_name = hashlib.sha256(data).hexdigest()[:8] + ".svg"
+            file_path = path.join(self.working_directory, file_name)
+            with open(file_path, "wb") as f:
+                f.write(data)
+            request.add_extracted(file_path, file_name, "Embedded SVG image")
+            if svg.find("script"):
+                svg_section.add_line(f"\u2022 {file_name}")
+                script_in_svg = True
+            else:
+                svg_section.add_line(f"\u2022 {file_name} [Contains script]")
+        if script_in_svg:
+            svg_section.set_heuristic(28)
+        request.result.add_section(svg_section)

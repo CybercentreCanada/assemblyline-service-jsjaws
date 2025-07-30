@@ -1,7 +1,11 @@
 """
 These are all of the signatures related to saving a file
 """
+
+import re
+
 from assemblyline.common.str_utils import safe_str
+
 from signatures.abstracts import ANY, Signature
 
 # List of commands used to save a file to disk
@@ -33,11 +37,13 @@ class WritesExecutable(Signature):
         )
 
     def process_output(self, output):
-        indicator_list = [
-            {"method": ANY, "indicators": save_commands},
-            {"method": ANY, "indicators": self.indicators},
-        ]
-        self.check_multiple_indicators_in_list(output, indicator_list)
+        for line in output:
+            line = self.remove_timestamp(line)
+            lower = line.lower()
+            if re.search(r"[.](exe|dll)\b", lower) and any(
+                save_command.lower() in lower for save_command in save_commands
+            ):
+                self.add_mark(line)
 
 
 class WritesArchive(Signature):
@@ -46,7 +52,8 @@ class WritesArchive(Signature):
             heuristic_id=3,
             name="writes_archive",
             description="JavaScript writes archive file to disk",
-            indicators=["\\.zip", "\\.iso"],
+            # File extensions based on https://github.com/CybercentreCanada/assemblyline-service-cape/blob/2412416fd8040897d25d00bdaba6356d514398f4/cape/cape_main.py#L1343
+            indicators=["zip", "iso", "rar", "vhd", "udf", "7z"],
             severity=3,
         )
 
@@ -55,19 +62,17 @@ class WritesArchive(Signature):
         results = []
 
         # First look for file extensions
-        extension_regex = f"(?i)({'|'.join(self.indicators)})\\b"
+        extension_regex = f"(?i)\\w[.]({'|'.join(self.indicators)})\\b"
         for line in output:
-            split_line = line.split("] ")
-            if len(split_line) == 2:
-                string = split_line[1]
-            if self.check_regex(extension_regex, string.lower()):
+            string = self.remove_timestamp(line)
+            if re.search(extension_regex, string.lower()):
                 extension_results.append(string)
 
         # Next look for the command
         escaped_save_commands = [save_command.replace("(", "\\(") for save_command in save_commands]
         commands_regex = f"({'|'.join(escaped_save_commands)})"
         for line in extension_results:
-            if self.check_regex(commands_regex, line):
+            if re.search(commands_regex, line):
                 results.append(line)
 
         results_set = sorted(set(results))

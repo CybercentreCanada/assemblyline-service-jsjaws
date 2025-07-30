@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 861,
+    "score": 110,
     "sections": [
       {
         "auto_collapse": false,
@@ -59,120 +59,6 @@
         "tags": {},
         "title_text": "Signature: Base64Decoding",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript uses atob to decode a base64-encoded URL\n\t\tatob was seen decoding a URI: 'https://darmstadt.heimatschatz.de/images/imgs/'",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 250,
-          "score_map": {
-            "base64_encoded_url": 250
-          },
-          "signatures": {
-            "base64_encoded_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: Base64EncodedURL",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "Redirection to:\nhttps://darmstadt.heimatschatz.de/images/imgs/",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 6,
-          "score": 500,
-          "score_map": {
-            "redirection_to_base64_decoded_url": 500
-          },
-          "signatures": {
-            "redirection_to_base64_decoded_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "darmstadt.heimatschatz.de"
-              ],
-              "uri": [
-                "https://darmstadt.heimatschatz.de/images/imgs/"
-              ],
-              "uri_path": [
-                "/images/imgs/"
-              ]
-            }
-          }
-        },
-        "title_text": "Automatic location redirection",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "darmstadt.heimatschatz.de",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://darmstadt.heimatschatz.de/images/imgs/",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/images/imgs/",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "darmstadt.heimatschatz.de"
-              ],
-              "uri": [
-                "https://darmstadt.heimatschatz.de/images/imgs/"
-              ],
-              "uri_path": [
-                "/images/imgs/"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -189,28 +75,9 @@
     "heuristics": [
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "base64_decoding"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "base64_encoded_url"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 6,
-        "signatures": [
-          "redirection_to_base64_decoded_url"
         ]
       },
       {
@@ -219,50 +86,7 @@
         "signatures": []
       }
     ],
-    "tags": {
-      "network.static.domain": [
-        {
-          "heur_id": 6,
-          "signatures": [
-            "redirection_to_base64_decoded_url"
-          ],
-          "value": "darmstadt.heimatschatz.de"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "darmstadt.heimatschatz.de"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 6,
-          "signatures": [
-            "redirection_to_base64_decoded_url"
-          ],
-          "value": "https://darmstadt.heimatschatz.de/images/imgs/"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://darmstadt.heimatschatz.de/images/imgs/"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 6,
-          "signatures": [
-            "redirection_to_base64_decoded_url"
-          ],
-          "value": "/images/imgs/"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/images/imgs/"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }

