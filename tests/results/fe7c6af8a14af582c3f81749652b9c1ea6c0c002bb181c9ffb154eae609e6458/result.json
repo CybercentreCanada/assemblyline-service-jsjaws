@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 83,
+    "score": 82,
     "sections": [
       {
         "auto_collapse": true,
@@ -60,7 +60,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: MSXML2.XMLHTTP\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange = function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";va...\n\t\tActiveXObject(ADODB.Stream)\n\t\tMSXML2.XMLHTTP[13].onreadystatechange => function() {if(rdpe5oF1.readyState===4) {var oRBmhY=\"ADO\";v...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -204,7 +204,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tScript called ADODBStream.savetofile\n\t\tADODB.Stream[15].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\t\tADODB.Stream[20].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)",
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[15].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)\n\t\tADODB.Stream[20].saveToFile(\"C:/ProgramData/wJPBCKy.HoGKdJI\", 2)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -248,47 +248,6 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": null,
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 0,
-        "heuristic": {
-          "attack_ids": [],
-          "frequency": 1,
-          "heur_id": 2,
-          "score": 1,
-          "score_map": {},
-          "signatures": {}
-        },
-        "promote_to": null,
-        "tags": {},
-        "title_text": "IOCs extracted by Box.js",
-        "zeroize_on_tag_safe": false
-      },
-      {
-        "auto_collapse": false,
-        "body": "C:/ProgramData/wJPBCKy.HoGKdJI",
-        "body_config": {},
-        "body_format": "TEXT",
-        "classification": "TLP:C",
-        "depth": 1,
-        "heuristic": null,
-        "promote_to": null,
-        "tags": {
-          "dynamic": {
-            "process": {
-              "file_name": [
-                "C:/ProgramData/wJPBCKy.HoGKdJI"
-              ]
-            }
-          }
-        },
-        "title_text": "The script wrote the following files",
         "zeroize_on_tag_safe": false
       },
       {
@@ -412,11 +371,6 @@
       },
       {
         "attack_ids": [],
-        "heur_id": 2,
-        "signatures": []
-      },
-      {
-        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -473,13 +427,6 @@
       }
     ],
     "tags": {
-      "dynamic.process.file_name": [
-        {
-          "heur_id": null,
-          "signatures": [],
-          "value": "C:/ProgramData/wJPBCKy.HoGKdJI"
-        }
-      ],
       "network.static.domain": [
         {
           "heur_id": 2,

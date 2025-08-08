@@ -1174,21 +1174,26 @@ class JsJaws(ServiceBase):
         :param tool_timeout: The time that the tool with run for
         :return: A list of arguments used for running Box.js
         """
-        # --no-kill              Do not kill the application when runtime errors occur
-        # --no-rewrite           Do not rewrite the source code at all, other than for `@cc_on` support
-        # --loglevel             Logging level (debug, verbose, info, warning, error - default "info")
-        # --output-dir           The location on disk to write the results files and folders to (defaults to the
-        #                        current directory)
-        # --timeout              The script will timeout after this many seconds (default 10)
-        # --prepended-code       Prepend the JavaScript in the given file to the sample prior to sandboxing
         boxjs_args = [
             self.path_to_boxjs,
+            # Do not kill the application when runtime errors occur
             "--no-kill",
+            # Do not rewrite the source code at all, other than for `@cc_on` support
             "--no-rewrite",
+            # Logging level (debug, verbose, info, warning, error - default "info")
             "--loglevel=debug",
+            # The location on disk to write the results files and folders to (defaults to the current directory)
             f"--output-dir={self.working_directory}",
+            # The script will timeout after this many seconds (default 10)
             f"--timeout={tool_timeout}",
+            # Prepend the JavaScript in the given file to the sample prior to sandboxing
             f"--prepended-code={self.path_to_boxjs_boilerplate}",
+            # Fake file name to use for the sample being analyzed. Can be a full path or just
+            # the file name to use. If you have '\' in the path escape them as '\\' in this
+            # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
+            # f"--fake-sample-name={path.basename(request.task.file_name)}",
+            # Fake that HTTP requests work and have them return a fake payload
+            "--fake-download",
         ]
 
         no_shell_error = request.get_param("no_shell_error")
@@ -3529,7 +3534,7 @@ class JsJaws(ServiceBase):
                     self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
                 for ioc in ioc_json:
                     value = ioc.get("value", "")
-                    if ioc["type"] == "UrlFetch":
+                    if ioc["type"] in ["UrlFetch", "XMLHttpRequest"]:
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
                         elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
@@ -3640,7 +3645,7 @@ class JsJaws(ServiceBase):
                 "description": f"{BOX_JS} Output",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {boxjs_analysis_log}")
+            self.log.debug(f"Adding supplementary file: {boxjs_analysis_log['path']}")
             self.artifact_list.append(boxjs_analysis_log)
 
     def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
@@ -3797,19 +3802,31 @@ class JsJaws(ServiceBase):
         commands_to_display = list()
         file_writes = set()
         file_reads = set()
+        file_folder_exists = set()
+        remote_scripts = set()
+        windows_installers = set()
+        regkey_reads = set()
+        regkey_writes = set()
+        new_resources_associated_with_url = set()
+        other = list()
         cmd_count = 0
         for ioc in ioc_json:
-            type = ioc["type"]
+            ioc_type = ioc["type"]
             value = ioc.get("value", "")
-            if type == "Run" and "command" in value:
-                if value["command"] not in commands:
-                    commands.add(value["command"].strip())
+            if ioc_type in ["Run", "WMI.GetObject.Create"]:
+                command = None
+                if ioc_type == "Run":
+                    command = value["command"]
+                    commands.add(command.strip())
+                else:
+                    command = value
+                    commands.add(command.strip())
 
                 # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
                 try:
-                    matches = find_powershell_strings(value["command"].encode())
+                    matches = find_powershell_strings(command.encode())
                 except BinasciiError as e:
-                    self.log.debug(f"Could not base64-decode encoded command value '{value['command']}' due to '{e}'")
+                    self.log.debug(f"Could not base64-decode encoded command value '{command}' due to '{e}'")
                     matches = []
 
                 if matches:
@@ -3821,15 +3838,44 @@ class JsJaws(ServiceBase):
                         ps1_cmd_spotted = True
                 else:
                     # Write non-ps1 to file
-                    commands_to_display.append(value["command"].strip())
-                    boxjs_batch_extraction.write(value["command"].strip() + "\n")
+                    commands_to_display.append(command.strip())
+                    boxjs_batch_extraction.write(command.strip() + "\n")
                     batch_cmd_spotted = True
 
                 cmd_count += 1
-            elif type == "FileWrite" and "file" in value:
+            elif ioc_type == "FileWrite" and value.get("file"):
                 file_writes.add(value["file"])
-            elif type == "FileRead" and "file" in value:
+            elif ioc_type == "FileRead" and value.get("file"):
                 file_reads.add(value["file"])
+            elif ioc_type == "Remote Script" and value.get("url"):
+                remote_scripts.add(value["url"])
+            elif ioc_type in ["FileExists", "FolderExists"]:
+                file_folder_exists.add(value)
+            elif ioc_type == "WindowsInstaller" and value.get("url"):
+                windows_installers.add(value["url"])
+            elif ioc_type == "RegRead" and value.get("key"):
+                regkey_reads.add(value["key"])
+            elif ioc_type == "RegWrite" and value.get("key"):
+                regkey_writes.add(value["key"])
+            elif ioc_type == "NewResource":
+                if not value.get("latestUrl"):
+                    continue
+                new_resources_associated_with_url.add(dumps({"path": value["path"], "url": value["latestUrl"]}))
+
+            # Sample Name, DOM Writes, PayloadExec, Environ, ADODBStream are not interesting
+            # UrlFetch, XMLHttpRequest are handled somewhere else in the code
+            elif ioc_type in [
+                "Sample Name",
+                "UrlFetch",
+                "DOM Write",
+                "PayloadExec",
+                "Environ",
+                "XMLHttpRequest",
+                "ADODBStream",
+            ]:
+                continue
+            else:
+                other.append(ioc)
 
         boxjs_ps1_extraction.close()
         boxjs_batch_extraction.close()
@@ -3868,21 +3914,96 @@ class JsJaws(ServiceBase):
             file_writes_result_section = ResultTextSection(
                 "The script wrote the following files", parent=ioc_result_section
             )
-            file_writes_result_section.add_lines(list(file_writes))
+            sorted_file_writes = sorted(file_writes)
+            file_writes_result_section.add_lines(sorted_file_writes)
             [
                 file_writes_result_section.add_tag("dynamic.process.file_name", file_write)
-                for file_write in list(file_writes)
+                for file_write in sorted_file_writes
             ]
 
         if file_reads:
             file_reads_result_section = ResultTextSection(
                 "The script read the following files", parent=ioc_result_section
             )
-            file_reads_result_section.add_lines(list(file_reads))
+            sorted_file_reads = sorted(file_reads)
+            file_reads_result_section.add_lines(sorted_file_reads)
             [
                 file_reads_result_section.add_tag("dynamic.process.file_name", file_read)
-                for file_read in list(file_reads)
+                for file_read in sorted_file_reads
             ]
+
+        if file_folder_exists:
+            file_folder_exists_result_section = ResultTextSection(
+                "The script checked if the following files/folders existed", parent=ioc_result_section
+            )
+            sorted_file_folder_exists = sorted(file_folder_exists)
+            file_folder_exists_result_section.add_lines(sorted_file_folder_exists)
+            [
+                file_folder_exists_result_section.add_tag("dynamic.process.file_name", file_folder_exist)
+                for file_folder_exist in sorted_file_folder_exists
+            ]
+
+        if remote_scripts:
+            remote_scripts_result_section = ResultTextSection(
+                "The script contains the following remote scripts", parent=ioc_result_section
+            )
+            sorted_remote_scripts = sorted(remote_scripts)
+            remote_scripts_result_section.add_lines(sorted_remote_scripts)
+            [
+                add_tag(remote_scripts_result_section, "network.dynamic.uri", remote_script)
+                for remote_script in sorted_remote_scripts
+            ]
+
+        if windows_installers:
+            windows_installers_result_section = ResultTextSection(
+                "The script contains the following Windows Installers", parent=ioc_result_section
+            )
+            sorted_windows_installers = sorted(windows_installers)
+            windows_installers_result_section.add_lines(sorted_windows_installers)
+            [
+                add_tag(windows_installers_result_section, "network.dynamic.uri", windows_installer)
+                for windows_installer in sorted_windows_installers
+            ]
+
+        if regkey_reads:
+            regkey_reads_result_section = ResultTextSection(
+                "The script read the following registry keys", parent=ioc_result_section
+            )
+            sorted_regkey_reads = sorted(regkey_reads)
+            regkey_reads_result_section.add_lines(sorted_regkey_reads)
+            [
+                regkey_reads_result_section.add_tag("dynamic.registry_key", regkey_read)
+                for regkey_read in sorted_regkey_reads
+            ]
+
+        if regkey_writes:
+            regkey_writes_result_section = ResultTextSection(
+                "The script wrote the following registry keys", parent=ioc_result_section
+            )
+            sorted_regkey_writes = sorted(regkey_writes)
+            regkey_writes_result_section.add_lines(sorted_regkey_writes)
+            [
+                regkey_writes_result_section.add_tag("dynamic.registry_key", regkey_write)
+                for regkey_write in sorted_regkey_writes
+            ]
+
+        if new_resources_associated_with_url:
+            new_resources_associated_with_url_result_section = ResultMultiSection(
+                "The script created the following resources associated with a URL", parent=ioc_result_section
+            )
+
+            for new_resource in sorted(new_resources_associated_with_url):
+                nr = loads(new_resource)
+                new_resources_associated_with_url_result_section.add_tag("dynamic.process.file_name", nr["path"])
+                add_tag(new_resources_associated_with_url_result_section, "network.dynamic.uri", nr["url"])
+                new_resources_associated_with_url_result_section.add_section_part(KVSectionBody(**nr))
+
+        if other:
+            other_result_section = ResultMultiSection(
+                "The script did the following other interesting things", parent=ioc_result_section
+            )
+            for other_item in other:
+                other_result_section.add_section_part(KVSectionBody(**other_item))
 
         if ioc_result_section.subsections:
             ioc_result_section.set_heuristic(2)
