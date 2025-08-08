@@ -1439,7 +1439,6 @@ class JsJaws(ServiceBase):
                     if line.startswith("[verb] Code saved to"):
                         continue
                     else:
-                        print(line)
                         boxjs_output.append(line)
 
         return boxjs_output
@@ -3282,8 +3281,6 @@ class JsJaws(ServiceBase):
 
             box_js_payloads = []
             for file in sorted(listdir(boxjs_output_dir)):
-                print(path.join(boxjs_output_dir, file))
-                print(path.getsize(path.join(boxjs_output_dir, file)))
                 if file not in snippet_keys:
                     box_js_payloads.append((file, path.join(boxjs_output_dir, file)))
 
