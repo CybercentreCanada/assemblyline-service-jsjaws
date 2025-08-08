@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1653,
+    "score": 1664,
     "sections": [
       {
         "auto_collapse": true,
@@ -124,6 +124,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tNew ActiveXObject: Msxml2.XMLHTTP\n\t\tNew ActiveXObject: ADODB.Stream\n\t\tNew ActiveXObject: Scripting.FileSystemObject",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()",
         "body_config": {},
         "body_format": "TEXT",
@@ -196,7 +220,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[17]()\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\t\tScripting.FileSystemObject[17].Drives => Drives",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[17]()\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.exe\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\php4ts.dll\")\n\t\tScripting.FileSystemObject[17].FileExists(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\")\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.txt\", true)\n\t\tScripting.FileSystemObject[17].CreateTextFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\a.php\", true)\n\t\tScripting.FileSystemObject[17].Drives => Drives",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -336,6 +360,47 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: WritesExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt"
+              ]
+            }
+          }
+        },
+        "title_text": "The script checked if the following files/folders existed",
         "zeroize_on_tag_safe": false
       },
       {
@@ -647,6 +712,18 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "creates_wsh_object"
@@ -715,6 +792,13 @@
       }
     ],
     "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:\\Users\\SYSOP1~1\\AppData\\Local\\Temp\\a.txt"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,

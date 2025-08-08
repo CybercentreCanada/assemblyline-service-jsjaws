@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1552,
+    "score": 1553,
     "sections": [
       {
         "auto_collapse": false,
@@ -182,6 +182,47 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "URL_Blob_file_0",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "URL_Blob_file_0"
+              ]
+            }
+          }
+        },
+        "title_text": "The script wrote the following files",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_config": {},
         "body_format": "TEXT",
@@ -244,6 +285,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "_0x_prefix"
@@ -295,7 +341,15 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "URL_Blob_file_0"
+        }
+      ]
+    },
     "temp_submission_data": {
       "cleaned_by_synchrony": true
     }

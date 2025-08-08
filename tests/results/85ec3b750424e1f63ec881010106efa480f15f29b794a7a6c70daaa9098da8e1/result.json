@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 24,
+    "score": 25,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(windowsinstaller.installer)\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: windowsinstaller.installer\n\t\tActiveXObject(windowsinstaller.installer)\n\t\tvar kRate = new ActiveXObject(oly + heskkr + sOlyo)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -62,6 +62,53 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "https://acehphonnajaya.com/css/ke.msi",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "domain": [
+                "acehphonnajaya.com"
+              ],
+              "uri": [
+                "https://acehphonnajaya.com/css/ke.msi"
+              ],
+              "uri_path": [
+                "/css/ke.msi"
+              ]
+            }
+          }
+        },
+        "title_text": "The script contains the following Windows Installers",
         "zeroize_on_tag_safe": false
       },
       {
@@ -272,6 +319,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -291,6 +343,27 @@
           "heur_id": 2,
           "signatures": [],
           "value": "https://bsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsfjrbsf"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "acehphonnajaya.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "https://acehphonnajaya.com/css/ke.msi"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "/css/ke.msi"
         }
       ],
       "network.static.domain": [

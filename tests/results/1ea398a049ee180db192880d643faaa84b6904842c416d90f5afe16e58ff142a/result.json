@@ -136,7 +136,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tR= 'ShELLEXEcUtESTdinlastIndexOfcscriptWsCriPT.ShElLsLeepsCrIptFulLNAmeshell.APPLiCaTioNCrEAtEObJeCT...\n\t\tTypeError: \"function LtGEs($XGqbLJV){$xamrMR=\"A8AFCE8D37\";function szxwJG($PQNgWB){$JUxiC = [System....\n\t\tfunction szxwJG($PQNgWB){$JUxiC = [System.IO.MemoryStream]::new()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\t\"function LtGEs($XGqbLJV){$xamrMR=\"A8AFCE8D37\";function szxwJG($PQNgWB){$JUxiC = [System.IO.MemorySt...\n\t\tR= 'ShELLEXEcUtESTdinlastIndexOfcscriptWsCriPT.ShElLsLeepsCrIptFulLNAmeshell.APPLiCaTioNCrEAtEObJeCT...\n\t\tTypeError: \"function LtGEs($XGqbLJV){$xamrMR=\"A8AFCE8D37\";function szxwJG($PQNgWB){$JUxiC = [System....\n\t\tfunction szxwJG($PQNgWB){$JUxiC = [System.IO.MemoryStream]::new()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",

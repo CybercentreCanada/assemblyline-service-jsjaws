@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 652,
+    "score": 653,
     "sections": [
       {
         "auto_collapse": true,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WScript.Shell)\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\\\"WScript.Shell\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\"WScript.Shell\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WScript.Shell)\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\\\"WScript.Shell\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\"WScript.Shell\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -152,7 +152,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[14]()\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\t\tnew Scripting.FileSystemObject[16]()\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[14]()\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\t\tnew Scripting.FileSystemObject[16]()\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -268,6 +268,47 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "C:\\Users\\Public\\po",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "file_name": [
+                "C:\\Users\\Public\\po"
+              ]
+            }
+          }
+        },
+        "title_text": "The script checked if the following files/folders existed",
         "zeroize_on_tag_safe": false
       },
       {
@@ -537,6 +578,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
@@ -651,6 +697,13 @@
           "heur_id": 13,
           "signatures": [],
           "value": "colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe"
+        }
+      ],
+      "dynamic.process.file_name": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "C:\\Users\\Public\\po"
         }
       ],
       "network.dynamic.domain": [
