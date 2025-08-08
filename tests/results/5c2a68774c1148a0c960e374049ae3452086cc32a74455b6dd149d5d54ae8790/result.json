@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2020,
+    "score": 2031,
     "sections": [
       {
         "auto_collapse": false,
@@ -137,7 +137,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction kdTGa($raPRe){$qKbDpJ = [sYsTeM.Io.memOrYSTReAM]::NeW()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\th=(WScript);d = ?fullNamEexEcwrITelINESLEepquit\\\\lastIndexOfcscRIPT.exesliceSheLL.APPLICaTIonSheLleX...\n\t\tfunction kdTGa($raPRe){$qKbDpJ = [sYsTeM.Io.memOrYSTReAM]::NeW()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -161,7 +161,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\td = ?fullNamEexEcwrITelINESLEepquit\\\\lastIndexOfcscRIPT.exesliceSheLL.APPLICaTIonSheLleXEcUtEsCrIpTf...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\th=(WScript);d = ?fullNamEexEcwrITelINESLEepquit\\\\lastIndexOfcscRIPT.exesliceSheLL.APPLICaTIonSheLleX...\n\t\td = ?fullNamEexEcwrITelINESLEepquit\\\\lastIndexOfcscRIPT.exesliceSheLL.APPLICaTIonSheLleXEcUtEsCrIpTf...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -182,6 +182,177 @@
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\th=(WScript);d = ?fullNamEexEcwrITelINESLEepquit\\\\lastIndexOfcscRIPT.exesliceSheLL.APPLICaTIonSheLleX...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "alivedesktop.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "dasanderetheater.at",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "inalto.cl",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "itrust-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "michaelcasado.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "picklebums.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "prijuutti.fi",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "shega.co",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "templatesjungle.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "whatifshow.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://alivedesktop.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://dasanderetheater.at/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://inalto.cl/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://itrust-digital.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://michaelcasado.com/tempdump/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://picklebums.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://prijuutti.fi/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://shega.co/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://templatesjungle.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://whatifshow.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/tempdump/xmlrpc.php",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/xmlrpc.php",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "alivedesktop.com",
+                "dasanderetheater.at",
+                "inalto.cl",
+                "itrust-digital.com",
+                "michaelcasado.com",
+                "picklebums.com",
+                "prijuutti.fi",
+                "shega.co",
+                "templatesjungle.com",
+                "whatifshow.com"
+              ],
+              "uri": [
+                "https://alivedesktop.com/xmlrpc.php",
+                "https://dasanderetheater.at/xmlrpc.php",
+                "https://inalto.cl/xmlrpc.php",
+                "https://itrust-digital.com/xmlrpc.php",
+                "https://michaelcasado.com/tempdump/xmlrpc.php",
+                "https://picklebums.com/xmlrpc.php",
+                "https://prijuutti.fi/xmlrpc.php",
+                "https://shega.co/xmlrpc.php",
+                "https://templatesjungle.com/xmlrpc.php",
+                "https://whatifshow.com/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/tempdump/xmlrpc.php",
+                "/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -198,6 +369,11 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "memory_stream"
@@ -208,6 +384,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
         ]
       },
       {
@@ -360,6 +543,122 @@
         },
         {
           "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "alivedesktop.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "dasanderetheater.at"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "inalto.cl"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "itrust-digital.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "michaelcasado.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "picklebums.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "prijuutti.fi"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "shega.co"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "templatesjungle.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "whatifshow.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://alivedesktop.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://dasanderetheater.at/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://inalto.cl/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://itrust-digital.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://michaelcasado.com/tempdump/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://picklebums.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://prijuutti.fi/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://shega.co/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://templatesjungle.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://whatifshow.com/xmlrpc.php"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/tempdump/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
           "signatures": [],
           "value": "/xmlrpc.php"
         }

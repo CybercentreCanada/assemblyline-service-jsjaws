@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1020,
+    "score": 1120,
     "sections": [
       {
         "auto_collapse": false,
@@ -66,6 +66,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"wscript\", \"\"5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file 5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -89,6 +113,10 @@
   "files": {
     "extracted": [
       {
+        "name": "extracted_wscript.bat",
+        "sha256": "94a8f8f591fb0d26eef0ef07e5c4e5338f4837925273fa3a78848243687a4de3"
+      },
+      {
         "name": "5fbf446e062e0bf1e7cf57fb2b9c1a6257e9c288744e2d35deda0fb18ce2cf6f.cleaned",
         "sha256": "d7fb1e5e3119ea5abf85698cbe7667a87cf3bc69b5cf23afc3c3333b00b5bf5a"
       }
@@ -109,6 +137,13 @@
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
         ]
       },
       {

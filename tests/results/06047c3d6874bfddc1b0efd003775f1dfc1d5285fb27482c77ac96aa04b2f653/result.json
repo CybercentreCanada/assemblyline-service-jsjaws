@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1020,
+    "score": 1130,
     "sections": [
       {
         "auto_collapse": false,
@@ -66,6 +66,54 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file 06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -91,6 +139,10 @@
       {
         "name": "06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned",
         "sha256": "59c3899696a97cc35edf3dc682ebc7a54add525ced9977a62e49ac44e171cb1a"
+      },
+      {
+        "name": "extracted_wscript.ps1",
+        "sha256": "971cc0af22ed0c974f6b9298aed9d9b0499c25ee5390b211f3d288c61b8993a7"
       }
     ],
     "supplementary": []
@@ -109,6 +161,20 @@
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
         ]
       },
       {

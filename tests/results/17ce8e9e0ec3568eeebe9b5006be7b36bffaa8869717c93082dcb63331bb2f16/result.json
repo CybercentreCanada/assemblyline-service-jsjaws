@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 20,
+    "score": 60,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,6 +14,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"time\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"less powershel\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"conhost --headless powers...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object": 10
+          },
+          "signatures": {
+            "auto_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: AutomationObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an AutomationObject that uses winmgmts\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"time\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"less powershel\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"conhost --headless powers...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "auto_object_winmgmts": 10
+          },
+          "signatures": {
+            "auto_object_winmgmts": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: WinMgmtsAutoObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -42,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tvar oqibupxvwhmyfgkr = GetObject(qmxhdoerwyaizupg[0])",
+        "body": "JavaScript returns a reference to an object provided by an ActiveX component\n\t\tGetObject(winmgmts:root\\cimv2:Win32_Process, undefined)\n\t\tvar oqibupxvwhmyfgkr = GetObject(qmxhdoerwyaizupg[0])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -63,6 +111,54 @@
         "tags": {},
         "title_text": "Signature: GetObject",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"conhost --headless powers...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses a suspicious process\n\t\tGetObject(winmgmts:root\\cimv2:Win32_Process, undefined)\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"time\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"less powershel\")\n\t\tAutomationObject[12](winmgmts:root\\cimv2:Win32_Process, undefined).Create(\"conhost --headless powers...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "suspicious_process": 10
+          },
+          "signatures": {
+            "suspicious_process": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SuspiciousProcess",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -76,6 +172,20 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "auto_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "auto_object_winmgmts"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "decode_uri"
         ]
       },
@@ -84,6 +194,20 @@
         "heur_id": 3,
         "signatures": [
           "get_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "suspicious_process"
         ]
       }
     ],

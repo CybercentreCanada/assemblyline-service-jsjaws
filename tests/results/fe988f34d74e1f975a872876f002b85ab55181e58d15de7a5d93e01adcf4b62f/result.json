@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2290,
+    "score": 2801,
     "sections": [
       {
         "auto_collapse": false,
@@ -92,7 +92,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\t\tnew WScript.Shell[15]()\n\t\tnew WScript.Shell[17]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -116,7 +140,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tz.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\tMSXML2.XMLHTTP[14].send()\n\t\tMSXML2.XMLHTTP[16].send()\n\t\tz.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -164,7 +188,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tif ((K.indexOf(\"@\"+X+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"23232\")\n\t\tif ((K.indexOf(\"@\"+X+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -209,6 +233,155 @@
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "CORP.ORGANIZATION.CA",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.lovlr.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.lukeamiller.net",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.macromixenlinea.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/test.php?tfognzsagssntu=140494595451531984173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/test.php?tfognzsagssntu=39101016113115744173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/test.php?tfognzsagssntu=69075223387501634173581",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "CORP.ORGANIZATION.CA",
+                "www.lovlr.com",
+                "www.lukeamiller.net",
+                "www.macromixenlinea.com"
+              ],
+              "uri": [
+                "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581",
+                "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581",
+                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581"
+              ],
+              "uri_path": [
+                "/test.php?tfognzsagssntu=140494595451531984173581",
+                "/test.php?tfognzsagssntu=39101016113115744173581",
+                "/test.php?tfognzsagssntu=69075223387501634173581"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "gootloader_url": 500
+          },
+          "signatures": {
+            "gootloader_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.macromixenlinea.com",
+                "www.lovlr.com",
+                "www.lukeamiller.net"
+              ],
+              "uri": [
+                "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581",
+                "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581",
+                "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581"
+              ],
+              "uri_path": [
+                "/test.php?tfognzsagssntu=69075223387501634173581",
+                "/test.php?tfognzsagssntu=140494595451531984173581",
+                "/test.php?tfognzsagssntu=39101016113115744173581"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -223,6 +396,25 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "gootloader_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -299,6 +491,125 @@
           "heur_id": 4,
           "signatures": [],
           "value": "www.macromixenlinea.com"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "CORP.ORGANIZATION.CA"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.lovlr.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.lovlr.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.lukeamiller.net"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.lukeamiller.net"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.macromixenlinea.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.macromixenlinea.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.lovlr.com/test.php?tfognzsagssntu=140494595451531984173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.lukeamiller.net/test.php?tfognzsagssntu=39101016113115744173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.macromixenlinea.com/test.php?tfognzsagssntu=69075223387501634173581"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/test.php?tfognzsagssntu=140494595451531984173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/test.php?tfognzsagssntu=140494595451531984173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/test.php?tfognzsagssntu=39101016113115744173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/test.php?tfognzsagssntu=39101016113115744173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/test.php?tfognzsagssntu=69075223387501634173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/test.php?tfognzsagssntu=69075223387501634173581"
         }
       ]
     },

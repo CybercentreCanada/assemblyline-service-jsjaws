@@ -67,7 +67,12 @@
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "HTMLEmbedElement[12]",
+        "sha256": "f4f43bfabf8e410683a9ffaa7acd359fda0045b35d1eef7bd872ae2c4064382f"
+      }
+    ],
     "supplementary": []
   },
   "results": {

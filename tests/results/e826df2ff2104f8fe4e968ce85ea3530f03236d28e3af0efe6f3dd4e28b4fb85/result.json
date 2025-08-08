@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2290,
+    "score": 2801,
     "sections": [
       {
         "auto_collapse": false,
@@ -92,7 +92,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript looks at the environment strings\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[13]()\n\t\tnew WScript.Shell[15]()\n\t\tnew WScript.Shell[17]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript looks at the environment strings\n\t\tWScript.Shell[13].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[15].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tWScript.Shell[17].ExpandEnvironmentStrings(\"%USERDNSDOMAIN%\")\n\t\tif (WScript.CreateObject((\"W\")+(\"Sc\")+(\"rip\")+(\"t.Sh\")+(\"el\")+(\"l\")).ExpandEnvironmentStrings((\"%U\")...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -116,7 +140,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\tz.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\tMSXML2.XMLHTTP[14].send()\n\t\tMSXML2.XMLHTTP[16].send()\n\t\tz.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -164,7 +188,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tif ((X.indexOf(\"@\"+C+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\tWScript.Sleep(\"23232\")\n\t\tif ((X.indexOf(\"@\"+C+\"@\", 0))==-1) { WScript.sleep(23232)\n\t\t} } else { WScript.sleep(11111)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -209,6 +233,155 @@
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "CORP.ORGANIZATION.CA",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.thomadaneau.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.tokyo-hi-vision.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.travelettes.net",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=088382312367286894173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=104611960546443064173581",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/xml.php?axkhpbmxwhmjuwt=62090172916632924173581",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "CORP.ORGANIZATION.CA",
+                "www.thomadaneau.com",
+                "www.tokyo-hi-vision.com",
+                "www.travelettes.net"
+              ],
+              "uri": [
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581",
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+              ],
+              "uri_path": [
+                "/xml.php?axkhpbmxwhmjuwt=088382312367286894173581",
+                "/xml.php?axkhpbmxwhmjuwt=104611960546443064173581",
+                "/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
+          },
+          {
+            "method": "GET",
+            "url": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "gootloader_url": 500
+          },
+          "signatures": {
+            "gootloader_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.travelettes.net",
+                "www.tokyo-hi-vision.com",
+                "www.thomadaneau.com"
+              ],
+              "uri": [
+                "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581",
+                "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581",
+                "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+              ],
+              "uri_path": [
+                "/xml.php?axkhpbmxwhmjuwt=104611960546443064173581",
+                "/xml.php?axkhpbmxwhmjuwt=62090172916632924173581",
+                "/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -223,6 +396,25 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "gootloader_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -299,6 +491,125 @@
           "heur_id": 4,
           "signatures": [],
           "value": "www.travelettes.net"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "CORP.ORGANIZATION.CA"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.thomadaneau.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.thomadaneau.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.tokyo-hi-vision.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.tokyo-hi-vision.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.travelettes.net"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "www.travelettes.net"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.thomadaneau.com/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.tokyo-hi-vision.com/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "https://www.travelettes.net/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=088382312367286894173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=104611960546443064173581"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "gootloader_url"
+          ],
+          "value": "/xml.php?axkhpbmxwhmjuwt=62090172916632924173581"
         }
       ]
     },

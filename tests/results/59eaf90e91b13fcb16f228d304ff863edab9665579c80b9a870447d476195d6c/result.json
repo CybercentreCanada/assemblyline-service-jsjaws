@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1051,
+    "score": 1562,
     "sections": [
       {
         "auto_collapse": false,
@@ -62,7 +62,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(MSXML2.XMLHTTP)\n\t\tvar a0_0x56e24b=new ActiveXObject(a0_0x32782b('Vm^C',0x443)+a0_0x32782b('dPAd',0x43c))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,6 +134,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript prepares a network request\n\t\tMSXML2.XMLHTTP[12].setRequestHeader(\"Upgrade-Insecure-Requests\", \"1\")",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "prepare_network_request": 10
+          },
+          "signatures": {
+            "prepare_network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PrepareNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript uses unescape() to decode an encoded string\n\t\treturn e},random:Un,now:Wn,escape:$n,unescape:Cn,templateSettings:Kn,template:function(n,r,t){!r&&t&...",
         "body_config": {},
         "body_format": "TEXT",
@@ -154,6 +178,110 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: Unescape",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "dce42.shrubs.emptyisland.pics",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://dce42.shrubs.emptyisland.pics/subscribeEvent",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/subscribeEvent",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "dce42.shrubs.emptyisland.pics"
+              ],
+              "uri": [
+                "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+              ],
+              "uri_path": [
+                "/subscribeEvent"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "POST",
+            "request_body": "GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==",
+            "request_headers": "1",
+            "url": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method",
+            "request_headers",
+            "request_body"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "obfuscator_io_usage_url": 500
+          },
+          "signatures": {
+            "obfuscator_io_usage_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "dce42.shrubs.emptyisland.pics"
+              ],
+              "uri": [
+                "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+              ],
+              "uri_path": [
+                "/subscribeEvent"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
         "zeroize_on_tag_safe": false
       },
       {
@@ -181,6 +309,10 @@
   "files": {
     "extracted": [
       {
+        "name": "https://dce42.shrubs.emptyisland.pics/subscribeEvent",
+        "sha256": "047afbd5396bf549caf620ad9de260d53e84cdb61827db784213078a478c7f12"
+      },
+      {
         "name": "59eaf90e91b13fcb16f228d304ff863edab9665579c80b9a870447d476195d6c.cleaned",
         "sha256": "bc20f8b0b42a8f1ac71a131ad759480eb63181a72365dc24c7c4e529829cdc11"
       }
@@ -189,6 +321,18 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "obfuscator_io_usage_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -221,6 +365,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "prepare_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "unescape"
         ]
       },
@@ -235,9 +386,57 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "dce42.shrubs.emptyisland.pics"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "dce42.shrubs.emptyisland.pics"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/subscribeEvent"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "obfuscator_io_usage_url"
+          ],
+          "value": "/subscribeEvent"
+        }
+      ]
+    },
     "temp_submission_data": {
-      "cleaned_by_synchrony": true
+      "cleaned_by_synchrony": true,
+      "uri_metadata_4bb72720a72237ee95537a43adbcbc32": {
+        "data": "GTF8Cht4qIj0zVkehbMzFtYQtgf1ySNAltTgXW4UaQ==",
+        "headers": {},
+        "method": "POST"
+      }
     }
   }
 }

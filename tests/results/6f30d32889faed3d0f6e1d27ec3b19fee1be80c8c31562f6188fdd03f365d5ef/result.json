@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2020,
+    "score": 2031,
     "sections": [
       {
         "auto_collapse": false,
@@ -136,7 +136,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memOrySTReaM]::nEW()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...\n\t\tfunction pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memOrySTReaM]::nEW()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -160,7 +160,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tN=?sLeEpScriptfullNamEFuLLnaMEPowERsHeLL.EXelastIndexOfcscriptWSCRIPT.SHElLsearchCREATEOBjECT\\\\CsCrI...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...\n\t\tN=?sLeEpScriptfullNamEFuLLnaMEPowERsHeLL.EXelastIndexOfcscriptWSCRIPT.SHElLsearchCREATEOBjECT\\\\CsCrI...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -181,6 +181,172 @@
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tn = ?function pxny($TlOIlxX){$HmsGlo=\"56139C9225\";function pVsfJUP($zViavV){$iKxAK = [SyStEm.iO.memO...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "autoconvo.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "edelson.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "enscape3d.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "handicapformidlingen.dk",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "hopejoyinchrist.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "javgiga.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "mmckmusic.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "redshirtsalwaysdie.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "sinarlampung.co",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "villasunflower.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://mmckmusic.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://autoconvo.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://edelson.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://enscape3d.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://handicapformidlingen.dk/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://hopejoyinchrist.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://javgiga.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://redshirtsalwaysdie.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://sinarlampung.co/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://villasunflower.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/xmlrpc.php",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "autoconvo.com",
+                "edelson.com",
+                "enscape3d.com",
+                "handicapformidlingen.dk",
+                "hopejoyinchrist.com",
+                "javgiga.com",
+                "mmckmusic.com",
+                "redshirtsalwaysdie.com",
+                "sinarlampung.co",
+                "villasunflower.com"
+              ],
+              "uri": [
+                "http://mmckmusic.com/xmlrpc.php",
+                "https://autoconvo.com/xmlrpc.php",
+                "https://edelson.com/xmlrpc.php",
+                "https://enscape3d.com/xmlrpc.php",
+                "https://handicapformidlingen.dk/xmlrpc.php",
+                "https://hopejoyinchrist.com/xmlrpc.php",
+                "https://javgiga.com/xmlrpc.php",
+                "https://redshirtsalwaysdie.com/xmlrpc.php",
+                "https://sinarlampung.co/xmlrpc.php",
+                "https://villasunflower.com/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -197,6 +363,11 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "memory_stream"
@@ -207,6 +378,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
         ]
       },
       {
@@ -354,6 +532,117 @@
       "network.dynamic.uri_path": [
         {
           "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "autoconvo.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "edelson.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "enscape3d.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "handicapformidlingen.dk"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hopejoyinchrist.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "javgiga.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "mmckmusic.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "redshirtsalwaysdie.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "sinarlampung.co"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "villasunflower.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://mmckmusic.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://autoconvo.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://edelson.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://enscape3d.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://handicapformidlingen.dk/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://hopejoyinchrist.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://javgiga.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://redshirtsalwaysdie.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://sinarlampung.co/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://villasunflower.com/xmlrpc.php"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
           "signatures": [],
           "value": "/xmlrpc.php"
         }

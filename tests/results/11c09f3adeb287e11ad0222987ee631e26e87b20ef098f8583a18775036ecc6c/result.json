@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 130,
+    "score": 150,
     "sections": [
       {
         "auto_collapse": false,
@@ -100,7 +100,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -124,7 +148,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
+        "body": "JavaScript runs Scheduled Task utility via cmd.exe\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...\n\t\tnew WshScriptExec[20](\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% /...\n\t\tws.exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \\\"%coMSPec% /c s^t^a^rt /^...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -145,11 +169,40 @@
         "tags": {},
         "title_text": "Signature: RunsScheduledTask",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[16].exec(\"cmd.exe schtasks  /create /sc minute /mo 16 /tn PrintSpooler /tr \"%coMSPec% ...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "9c5c55b28f2b8268fcc20c7a952286f4d1920454e69fdc76e6a9b8588bea089b"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -170,6 +223,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "runs_cmd_prompt"
         ]
       },
@@ -178,6 +238,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_schtasks_via_cmd_prompt"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
         ]
       },
       {

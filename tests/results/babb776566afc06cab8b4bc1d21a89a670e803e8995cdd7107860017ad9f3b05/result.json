@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 30,
+    "score": 531,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript sends a network request\n\t\to.send()",
+        "body": "JavaScript sends a network request\n\t\tMSXML2.XMLHTTP[12].send()\n\t\to.send()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -87,6 +87,106 @@
         "tags": {},
         "title_text": "Signature: SplitReverseJoin",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "www.computerhope.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://www.computerhope.com/jargon/t/tilde.htm",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/jargon/t/tilde.htm",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.computerhope.com"
+              ],
+              "uri": [
+                "https://www.computerhope.com/jargon/t/tilde.htm"
+              ],
+              "uri_path": [
+                "/jargon/t/tilde.htm"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "GET",
+            "url": "https://www.computerhope.com/jargon/t/tilde.htm"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 500,
+          "score_map": {
+            "split_reverse_join_url": 500
+          },
+          "signatures": {
+            "split_reverse_join_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "www.computerhope.com"
+              ],
+              "uri": [
+                "https://www.computerhope.com/jargon/t/tilde.htm"
+              ],
+              "uri_path": [
+                "/jargon/t/tilde.htm"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -96,6 +196,18 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": [
+          "split_reverse_join_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -118,7 +230,50 @@
         ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.computerhope.com"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
+          "value": "www.computerhope.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://www.computerhope.com/jargon/t/tilde.htm"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
+          "value": "https://www.computerhope.com/jargon/t/tilde.htm"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/jargon/t/tilde.htm"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [
+            "split_reverse_join_url"
+          ],
+          "value": "/jargon/t/tilde.htm"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

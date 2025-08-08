@@ -1,8 +1,34 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 100,
+    "score": 211,
     "sections": [
+      {
+        "auto_collapse": false,
+        "body": "Sample uses a combination of both Visual Basic and JavaScript",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 12,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "file": {
+            "behavior": [
+              "Visual Basic and JavaScript"
+            ]
+          }
+        },
+        "title_text": "Visual Basic and JavaScript",
+        "zeroize_on_tag_safe": false
+      },
       {
         "auto_collapse": true,
         "body": null,
@@ -91,6 +117,79 @@
       },
       {
         "auto_collapse": false,
+        "body": {
+          "data": {
+            "domain": [
+              0,
+              8
+            ],
+            "values": [
+              4.15517,
+              4.13213,
+              4.12383,
+              4.1327,
+              4.14226,
+              4.12669,
+              4.12285,
+              4.14302,
+              4.1451,
+              4.13516,
+              4.13707,
+              4.13113,
+              4.13422,
+              4.12051,
+              4.15228,
+              4.14383,
+              4.1334,
+              4.13678,
+              4.14528,
+              4.13368,
+              4.13,
+              4.1382,
+              4.14426,
+              4.1298,
+              4.1386,
+              4.14307,
+              4.13276,
+              4.13267,
+              4.14071,
+              4.13846,
+              4.12304,
+              4.14136,
+              4.15177,
+              4.14062,
+              4.14423,
+              4.13756,
+              4.14564,
+              4.13188,
+              4.12378,
+              4.12586,
+              4.13597,
+              4.1241,
+              4.13722,
+              4.13871,
+              4.12377,
+              4.12803,
+              4.1366,
+              4.13126,
+              4.13652,
+              4.18373
+            ]
+          },
+          "type": "colormap"
+        },
+        "body_config": {},
+        "body_format": "GRAPH_DATA",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Script: Execute chr(389-(&H13F))&chr(594-(&H1DD))&chr(417-...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "Low number of body elements.",
         "body_config": {},
         "body_format": "TEXT",
@@ -108,15 +207,101 @@
         "tags": {},
         "title_text": "Detected JavaScript Redirector / Loader",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Object(s) are written to the DOM\n\t\tdocument[6].write(content) 103813 bytes",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "document_write": 10
+          },
+          "signatures": {
+            "document_write": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: DocumentWrite",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Suspicious JavaScript code found in HTML file",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 23,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "document.write usage found in HTML",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Multiple rounds of tool runs were required due to nested document.write calls",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 15,
+          "score": 0,
+          "score_map": {
+            "dom_writes_equal_2": 0
+          },
+          "signatures": {
+            "dom_writes_equal_2": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Nested document.write calls",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "32zWdULLX7GeSwrHEV4mD8.vbs",
+        "sha256": "ac2830eca0d79ad5156be6dff4c48cbb5e1d72c7b923a334ee34cd8fff611f88"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "0afb3ed5d000303d9d34e4e8955285fb3cc0116470d45b72ab192b33c69d1723"
+        "sha256": "c2e543e9effa14d852ef703a3d7bce0803d1af608711dcbbf059028eef73253d"
       }
     ]
   },
@@ -124,11 +309,43 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "document_write"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 12,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 15,
+        "signatures": [
+          "dom_writes_equal_2"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 22,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 23,
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "file.behavior": [
+        {
+          "heur_id": 12,
+          "signatures": [],
+          "value": "Visual Basic and JavaScript"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

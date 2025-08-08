@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 540,
+    "score": 560,
     "sections": [
       {
         "auto_collapse": true,
@@ -128,7 +128,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\tvar blob = new Blob(byteArrays, {type: \"application/zip\"})\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,20,0,1,0,8,0,234,145,70,85,152,108,183,42,144,114,3,0,0,248,6,0,16,0,0,0,79,118,1...\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\t\tnew Blob([object Blob], [object Object])\n\t\tvar blob = new Blob(byteArrays, {type: \"application/zip\"})\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -152,7 +152,31 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes data to disk\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "creates_object_url": 10
+          },
+          "signatures": {
+            "creates_object_url": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: CreatesObjectURL",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tnew File([object Blob], attachment.zip, [object Object])\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -200,7 +224,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript writes archive file to disk\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})",
+        "body": "JavaScript writes archive file to disk\n\t\tlet file = new File([blob], \"attachment.zip\", {type: \"application/zip\"})\n\t\tnew File([object Blob], attachment.zip, [object Object])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -221,11 +245,50 @@
         "tags": {},
         "title_text": "Signature: WritesArchive",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Redirection to:\nhttp://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 6,
+          "score": 10,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "example.com"
+              ],
+              "uri": [
+                "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
+              ],
+              "uri_path": [
+                "/?search#YmxhaC5ibGFoQGJsYWguY29t"
+              ]
+            }
+          }
+        },
+        "title_text": "Automatic location redirection",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "attachment.zip",
+        "sha256": "6e997245b12dc1a3cdaf9620f129810908990458da866f8b70a6bdb8a279fd43"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -253,6 +316,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "creates_object_url"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "save_to_file"
         ]
       },
@@ -269,9 +339,36 @@
         "signatures": [
           "writes_archive"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 6,
+        "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "example.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 6,
+          "signatures": [],
+          "value": "/?search#YmxhaC5ibGFoQGJsYWguY29t"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

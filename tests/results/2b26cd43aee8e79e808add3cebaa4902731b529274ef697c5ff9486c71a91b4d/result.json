@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 50,
+    "score": 51,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript appends a child object to the document and clicks it\n\t\thWgcnjlRWVbB.click()",
+        "body": "JavaScript appends a child object to the document and clicks it\n\t\tHTMLAnchorElement[79].click(undefined)\n\t\thWgcnjlRWVbB.click()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\treturn new Blob(xrXkOsltcOME, { type: ali + 'ct################et-s############tre###############am'...",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0...\n\t\treturn new Blob(xrXkOsltcOME, { type: ali + 'ct################et-s############tre###############am'...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an object URL with a blob\n\t\thWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
+        "body": "JavaScript creates an object URL with a blob\n\t\tURL.createObjectURL([object Blob])\n\t\thWgcnjlRWVbB.href = URL.createObjectURL(bhypRSCJZwKJ(QhdBjpVXRbaZ()))",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -135,11 +135,66 @@
         "tags": {},
         "title_text": "Signature: SuspiciousUseOfCharCodes",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "Booking.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "www.protware.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://www.protware.com",
+            "ioc_type": "uri"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "Booking.com",
+                "www.protware.com"
+              ],
+              "uri": [
+                "http://www.protware.com"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "Blob[80]",
+        "sha256": "d303c8ff0303b9f86867615e9e3d77323f9ba65c26d2856086bd3df4587fbf55"
+      }
+    ],
     "supplementary": [
       {
         "name": "temp_javascript.js",
@@ -149,6 +204,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -185,7 +245,27 @@
         ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "Booking.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "www.protware.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.protware.com"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

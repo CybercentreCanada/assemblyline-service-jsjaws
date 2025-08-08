@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1042,
+    "score": 1552,
     "sections": [
       {
         "auto_collapse": false,
@@ -86,7 +86,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates a Blob object\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
+        "body": "JavaScript creates a Blob object\n\t\tnew Blob(80,75,3,4,10,0,0,0,0,0,163,136,40,85,0,0,0,0,0,0,0,0,0,0,0,0,4,0,28,0,100,111,99,47,85,84,9...\n\t\t}var _0x3a5870=new Blob(_0x492071,{'type':_0x3262af})",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -134,6 +134,54 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript writes data to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "save_to_file": 10
+          },
+          "signatures": {
+            "save_to_file": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: SaveToFile",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes archive file to disk\n\t\tmsSaveOrOpenBlob([object Blob], Document5934.zip)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 500,
+          "score_map": {
+            "writes_archive": 500
+          },
+          "signatures": {
+            "writes_archive": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: WritesArchive",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "\t\tObfuscated code was found that was obfuscated by: obfuscator.io",
         "body_config": {},
         "body_format": "TEXT",
@@ -177,6 +225,10 @@
   "files": {
     "extracted": [
       {
+        "name": "Document5934.zip",
+        "sha256": "05b8f8346baf3d7f50bc4315cd3d66e716916e716cc5ef3d3942dd7c2b71e933"
+      },
+      {
         "name": "fdb599ee616fa643820cfaeb9afe561fe5915447ccc80f7d63d85573f0440237.cleaned",
         "sha256": "153b3e0785599c169f576625125bd4a21f19eb140744241ca5e4998becff3ed0"
       }
@@ -216,6 +268,20 @@
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "save_to_file"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "writes_archive"
         ]
       },
       {

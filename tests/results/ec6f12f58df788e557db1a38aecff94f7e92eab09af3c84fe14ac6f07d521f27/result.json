@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2020,
+    "score": 2031,
     "sections": [
       {
         "auto_collapse": false,
@@ -136,7 +136,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tfunction hmXLCut($unTuRCX){$lagYac = [System.IO.MemoryStream]::new()",
+        "body": "JavaScript uses a MemoryStream object to manipulate memory\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...\n\t\tTypeError: \"function JyOYc($ywVoR){$tMWkE=\"8AD00AC970\";function hmXLCut($unTuRCX){$lagYac = [System....\n\t\tfunction hmXLCut($unTuRCX){$lagYac = [System.IO.MemoryStream]::new()",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -160,7 +160,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -181,6 +181,172 @@
         "tags": {},
         "title_text": "Signature: RunsPowerShell",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs PowerShell to call out to a URI\n\t\tp ='WriTeLiNeSLeeplastIndexOfshEllExECUtEsHeLL.APpLIcATIonexEcCREaTEobjectslicePOwErShELlwScrIpt.sHe...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1_to_download": 10
+          },
+          "signatures": {
+            "runs_ps1_to_download": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: PowerShellDownloader",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "ariessys.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "blog.maikvanderhorst.nl",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "corporate2017.sinclairpharma.hosting-kunde.de",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "cpyskidrow.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "eastardisplay.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "hentai-sharing.net",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "hetnlpcollege.nl",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "madsandreasolesen.dk",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "roilandtv.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "rooziato.com",
+            "ioc_type": "domain"
+          },
+          {
+            "ioc": "http://roilandtv.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://ariessys.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://blog.maikvanderhorst.nl/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://corporate2017.sinclairpharma.hosting-kunde.de/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://cpyskidrow.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://eastardisplay.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://hentai-sharing.net/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://hetnlpcollege.nl/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://madsandreasolesen.dk/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "https://rooziato.com/xmlrpc.php",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/xmlrpc.php",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "ariessys.com",
+                "blog.maikvanderhorst.nl",
+                "corporate2017.sinclairpharma.hosting-kunde.de",
+                "cpyskidrow.com",
+                "eastardisplay.com",
+                "hentai-sharing.net",
+                "hetnlpcollege.nl",
+                "madsandreasolesen.dk",
+                "roilandtv.com",
+                "rooziato.com"
+              ],
+              "uri": [
+                "http://roilandtv.com/xmlrpc.php",
+                "https://ariessys.com/xmlrpc.php",
+                "https://blog.maikvanderhorst.nl/xmlrpc.php",
+                "https://corporate2017.sinclairpharma.hosting-kunde.de/xmlrpc.php",
+                "https://cpyskidrow.com/xmlrpc.php",
+                "https://eastardisplay.com/xmlrpc.php",
+                "https://hentai-sharing.net/xmlrpc.php",
+                "https://hetnlpcollege.nl/xmlrpc.php",
+                "https://madsandreasolesen.dk/xmlrpc.php",
+                "https://rooziato.com/xmlrpc.php"
+              ],
+              "uri_path": [
+                "/xmlrpc.php"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -197,6 +363,11 @@
     "heuristics": [
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "memory_stream"
@@ -207,6 +378,13 @@
         "heur_id": 3,
         "signatures": [
           "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1_to_download"
         ]
       },
       {
@@ -354,6 +532,117 @@
       "network.dynamic.uri_path": [
         {
           "heur_id": 4,
+          "signatures": [],
+          "value": "/xmlrpc.php"
+        }
+      ],
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "ariessys.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "blog.maikvanderhorst.nl"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "corporate2017.sinclairpharma.hosting-kunde.de"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "cpyskidrow.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "eastardisplay.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hentai-sharing.net"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "hetnlpcollege.nl"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "madsandreasolesen.dk"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "roilandtv.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "rooziato.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://roilandtv.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://ariessys.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://blog.maikvanderhorst.nl/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://corporate2017.sinclairpharma.hosting-kunde.de/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://cpyskidrow.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://eastardisplay.com/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://hentai-sharing.net/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://hetnlpcollege.nl/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://madsandreasolesen.dk/xmlrpc.php"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "https://rooziato.com/xmlrpc.php"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
           "signatures": [],
           "value": "/xmlrpc.php"
         }

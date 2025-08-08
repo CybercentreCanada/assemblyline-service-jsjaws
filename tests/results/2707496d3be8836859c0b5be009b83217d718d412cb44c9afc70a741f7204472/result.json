@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1020,
+    "score": 1140,
     "sections": [
       {
         "auto_collapse": false,
@@ -124,6 +124,30 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(shell.application)",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "JavaScript decodes a Uniform Resource Identifier\n\t\treturn decodeURIComponent(costuming)\n\t\treturn decodeURIComponent(nocenceunperiphrased)",
         "body_config": {},
         "body_format": "TEXT",
@@ -172,6 +196,54 @@
       },
       {
         "auto_collapse": false,
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tShell.Application[14].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "runs_ps1": 10
+          },
+          "signatures": {
+            "runs_ps1": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsPowerShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript runs code via shell application\n\t\tShell.Application[14].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 100,
+          "score_map": {
+            "runs_shell_application": 100
+          },
+          "signatures": {
+            "runs_shell_application": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: RunsShellApplication",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file 2707496d3be8836859c0b5be009b83217d718d412cb44c9afc70a741f7204472.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -195,6 +267,10 @@
   "files": {
     "extracted": [
       {
+        "name": "extracted_wscript.ps1",
+        "sha256": "a33c35a1433caaaa3db453daec3f2e667dae45012cd9dbd740e4d88c6b29a8c4"
+      },
+      {
         "name": "2707496d3be8836859c0b5be009b83217d718d412cb44c9afc70a741f7204472.cleaned",
         "sha256": "d01a0916809ee0a8fd38b1573f8b93d050d0c63f954a0023233a648d54a8feb0"
       }
@@ -212,6 +288,13 @@
         "attack_ids": [],
         "heur_id": 3,
         "signatures": [
+          "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
           "decode_uri"
         ]
       },
@@ -220,6 +303,20 @@
         "heur_id": 3,
         "signatures": [
           "parseint_usage"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_ps1"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "runs_shell_application"
         ]
       },
       {

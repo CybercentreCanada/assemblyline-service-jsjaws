@@ -1,16 +1,93 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 0,
-    "sections": []
+    "score": 1,
+    "sections": [
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/?search#YmxhaC5ibGFoQGJsYWguY29t",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "domain": [
+                "example.com"
+              ],
+              "uri": [
+                "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
+              ],
+              "uri_path": [
+                "/?search#YmxhaC5ibGFoQGJsYWguY29t"
+              ]
+            }
+          }
+        },
+        "title_text": "MalwareJail extracted the following IOCs",
+        "zeroize_on_tag_safe": false
+      }
+    ]
   },
   "files": {
     "extracted": [],
     "supplementary": []
   },
   "results": {
-    "heuristics": [],
-    "tags": {},
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      }
+    ],
+    "tags": {
+      "network.static.domain": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "example.com"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://example.com/?search#YmxhaC5ibGFoQGJsYWguY29t"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/?search#YmxhaC5ibGFoQGJsYWguY29t"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }
