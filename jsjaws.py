@@ -1920,8 +1920,8 @@ class JsJaws(ServiceBase):
             soup, aggregated_js_script, js_content, request, insert_above_divider
         )
 
-        link_section = ResultSection('URLs in <a> Tags')
-        links = soup.find_all('a', href=True)
+        link_section = ResultSection("URLs in <a> Tags")
+        links = soup.find_all("a", href=True)
         for link in links:
             assert isinstance(link, Tag)
             href = link["href"]
@@ -2017,7 +2017,7 @@ class JsJaws(ServiceBase):
             "input",
             # Inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L197
             "object",
-            #"script", scripts src is added to js_content by _extract_js_using_soup. No need to extract.
+            # "script", scripts src is added to js_content by _extract_js_using_soup. No need to extract.
             "source",
             "track",
             "v:fill",
@@ -3539,7 +3539,11 @@ class JsJaws(ServiceBase):
                             continue
                         elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
-                        item = {"url": value["url"], "method": value["method"], "request_headers": value["headers"]}
+                        item = {
+                            "url": value["url"],
+                            "method": value["method"],
+                            "request_headers": value.get("headers", {}),
+                        }
                         # For some reason BoxJS allows method to be a string and also a list of strings
                         if (isinstance(item.get("method"), str) and item["method"].lower() == "post") or (
                             isinstance(item.get("method"), list)
@@ -4428,7 +4432,7 @@ class JsJaws(ServiceBase):
             return None, None, None
         diff = self._filter_library_code(file_string, lib_contents)
         if len(diff) > 10:
-            new_file_contents = "\n".join(diff).encode() + b'\n'
+            new_file_contents = "\n".join(diff).encode() + b"\n"
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 f.write(new_file_contents)
                 file_path = f.name
@@ -4468,8 +4472,7 @@ class JsJaws(ServiceBase):
                     return lib_path, lib_contents
             else:
                 self.log.warning(
-                    f"There was a regex hit for a clean library file '{lib_path}' but this "
-                    "file does not exist..."
+                    f"There was a regex hit for a clean library file '{lib_path}' but this file does not exist..."
                 )
 
         return None, None
