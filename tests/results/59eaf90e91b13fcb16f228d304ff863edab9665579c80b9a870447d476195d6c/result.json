@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1562,
+    "score": 1573,
     "sections": [
       {
         "auto_collapse": false,
@@ -82,6 +82,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: ActiveXObject",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript writes data to the console\n\t\tReturning HTTP 200 (Success) with fake response payload 'console.log(\"EXECUTED DOWNLOADED PAYLOAD\");...",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "console_output": 10
+          },
+          "signatures": {
+            "console_output": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ConsoleOutput",
         "zeroize_on_tag_safe": false
       },
       {
@@ -178,6 +202,51 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: Unescape",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script opened URL https://dce42.shrubs.emptyisland.pics/subscribeEvent with XMLHTTP",
+              "type": "XMLHTTP",
+              "value": {
+                "url": "https://dce42.shrubs.emptyisland.pics/subscribeEvent"
+              }
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "The script did the following other interesting things",
         "zeroize_on_tag_safe": false
       },
       {
@@ -335,6 +404,11 @@
       },
       {
         "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
         "heur_id": 3,
         "signatures": [
           "_0x_prefix"
@@ -345,6 +419,13 @@
         "heur_id": 3,
         "signatures": [
           "active_x_object"
+        ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "console_output"
         ]
       },
       {
