@@ -181,17 +181,17 @@ def getGootVersion(topFileData, log: Logger = print):
     gloader21sample = False
 
     if re.search(r"jQuery JavaScript Library v\d{1,}\.\d{1,}\.\d{1,}$", topFileData):
-        log("\nGootLoader Obfuscation Variant 2.0 detected")
+        log("GootLoader Obfuscation Variant 2.0 detected")
         gloader21sample = False
     elif goot3linesPattern.match(topFileData):
         log(
-            '\nGootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the file first.'
+            'GootLoader Obfuscation Variant 3.0 detected\n\nIf this fails try using CyberChef "JavaScript Beautify" against the file first.'
         )
         gloader3sample = True
         # 3 and 2 have some overlap so enabling both flags for simplicity
         gloader21sample = True
     else:
-        log("\nGootLoader Obfuscation Variant 2.1 or higher detected")
+        log("Attempting default option for GootLoader Obfuscation Variant 2.1 or higher")
         gloader21sample = True
 
     return gloader21sample, gloader3sample
@@ -319,9 +319,11 @@ def findCodeMatchInRound1Result(inputStr):
     # Find code text in the result of the first decode round
     findCodeinQuotePattern = re.compile(r"(?<!\\)(?:\\\\)*'([^'\\]*(?:\\.[^'\\]*)*)'")
 
-    outputStr = findCodeinQuotePattern.findall(inputStr)[0]
-
-    return outputStr
+    results = findCodeinQuotePattern.findall(inputStr)
+    if len(results) > 0:
+        return results[0]
+    else:
+        return ""
 
 
 def getVariableAndConcatPatterns(isGloader21Sample):
@@ -379,6 +381,7 @@ def parseRound2Data(
 ):
     output_domains = list()
     persistence = None
+    maliciousDomains = list()
 
     if round2InputStr.startswith("function"):
         log("GootLoader Obfuscation Variant 3.0 sample detected.")
@@ -400,8 +403,8 @@ def parseRound2Data(
         else:
             outputFileName = payload_path
 
-        log("\nScript output Saved to: %s\n" % outputFileName)
-        log("\nThe script will new attempt to deobfuscate the %s file." % outputFileName)
+        log("Script output Saved to: %s\n" % outputFileName)
+        log("The script will new attempt to deobfuscate the %s file." % outputFileName)
     else:
         if isGootloader3sample:
             outputCode = round2InputStr.replace("'+'", "").replace("')+('", "").replace("+()+", "").replace("?+?", "")
@@ -418,15 +421,16 @@ def parseRound2Data(
             outputCode = round2InputStr
 
             v2DomainRegex = re.compile(r"(.*)(\[\".*?\"\])(.*)")
-            domainsMatch = v2DomainRegex.search(round2InputStr)[2]
-            maliciousDomains = (
-                domainsMatch.replace("[", "")
-                .replace("]", "")
-                .replace('"', "")
-                .replace("+(", "")
-                .replace(")+", "")
-                .split(",")
-            )
+            if round2InputStr:
+                domainsMatch = v2DomainRegex.search(round2InputStr)[2]
+                maliciousDomains = (
+                    domainsMatch.replace("[", "")
+                    .replace("]", "")
+                    .replace('"', "")
+                    .replace("+(", "")
+                    .replace(")+", "")
+                    .split(",")
+                )
 
         # Store the malicious domains and return the list.s
         for domain in maliciousDomains:
@@ -437,11 +441,12 @@ def parseRound2Data(
 
         outputFileName = "DecodedJsPayload.js_"
         # Print to screen
-        log("\nScript output Saved to: %s\n" % outputFileName)
+        log("Script output Saved to: %s\n" % outputFileName)
         outputDomains = ""
         for dom in maliciousDomains:
             outputDomains += defang(dom) + "\n"
-        log("\nMalicious Domains: \n\n%s" % outputDomains)
+        if outputDomains:
+            log("\nMalicious Domains: \n\n%s" % outputDomains)
     return outputCode, outputFileName, output_domains, persistence
 
 

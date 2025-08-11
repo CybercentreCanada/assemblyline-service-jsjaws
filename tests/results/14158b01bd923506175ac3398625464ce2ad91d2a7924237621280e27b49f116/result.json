@@ -42,7 +42,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tNew ActiveXObject: WinHttp.WinHttpRequest.5.1\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WinHttp.WinHttpRequest.5.1)\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(ADODB.Stream)\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _g = new ActiveXObject(_0x4b[9])",
+        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tActiveXObject(WinHttp.WinHttpRequest.5.1)\n\t\tActiveXObject(WScript.Shell)\n\t\tActiveXObject(ADODB.Stream)\n\t\tvar _a = new ActiveXObject(_0x4b[1])\n\t\tvar _b = new ActiveXObject(_0x4b[2])\n\t\tvar _c = new ActiveXObject(_0x4b[3])\n\t\tvar _g = new ActiveXObject(_0x4b[9])",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -90,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tNew ActiveXObject: Scripting.FileSystemObject\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[12]()\n\t\tScripting.FileSystemObject[12].FolderExists(\"C:\\ProgramData\\Trdce\")\n\t\tScripting.FileSystemObject[12].CreateFolder(\"C:\\ProgramData\\Trdce\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
+        "body": "JavaScript creates an ActiveXObject to gain access to the computer's file system\n\t\tActiveXObject(Scripting.FileSystemObject)\n\t\tWScript.CreateObject(\"Scripting.FileSystemObject\")\n\t\tnew Scripting.FileSystemObject[12]()\n\t\tScripting.FileSystemObject[12].FolderExists(\"C:\\ProgramData\\Trdce\")\n\t\tScripting.FileSystemObject[12].CreateFolder(\"C:\\ProgramData\\Trdce\")\n\t\tvar _0x4b = [\"\\\\ProgramData\\\\\", \"Scripting.FileSystemObject\", \"WinHttp.WinHttpRequest.5.1\", \"WScript...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
