@@ -26,6 +26,7 @@ extends:
   template: stages/deploy-service.yaml@PipelineTemplates
   parameters:
     is_public: 'true'
+    timeout: '20'
     samples_repo: unittest-samples
     labels:
       classification: UNCLASSIFIED
