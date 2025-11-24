@@ -14,7 +14,12 @@
         "node": ">=6.0.0"
     },
     "dependencies": {
-        "@nodesecure/js-x-ray": ">=6.1.1",
+        "@nodesecure/js-x-ray": "10.0.0",
+        "@nodesecure/sec-literal": "1.2.0",
+        "is-svg": "4.4.0",
+        "string-width": "5.1.2",
+        "digraph-js": "2.2.3",
+        "ts-pattern": "5.8.0",
         "box-js": ">=1.9.25",
         "crypto-js": ">=4.2.0",
         "deobfuscator": ">=2.4.4",
