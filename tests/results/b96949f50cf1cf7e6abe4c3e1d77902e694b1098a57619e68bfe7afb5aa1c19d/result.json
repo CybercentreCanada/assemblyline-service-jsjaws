@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 3071,
+    "score": 3072,
     "sections": [
       {
         "auto_collapse": false,
@@ -517,6 +517,62 @@
       },
       {
         "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script added an event listener for the 'click' event.",
+              "type": "Element.addEventListener()",
+              "value": {
+                "event": "click"
+              }
+            },
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script added an event listener for the 'click' event.",
+              "type": "Element.addEventListener()",
+              "value": {
+                "event": "click"
+              }
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "The script did the following other interesting things",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
         "body": [
           {
             "ioc": "40securview.com",
@@ -774,6 +830,10 @@
       {
         "name": "https://couponhagen.churchontheranch.uk/app/exlca.php",
         "sha256": "1783c54b019e1132b4419a03271f413709dfd1c20f57dc5ebd517a48c9cbad92"
+      },
+      {
+        "name": "https://couponhagen.churchontheranch.uk/app/exlca.php",
+        "sha256": "ee2841022a7162b3e7a36f5f8bb8204b8d230f72b87126bb9ed8f620be6b3c2f"
       }
     ],
     "supplementary": [
@@ -806,6 +866,11 @@
         "signatures": [
           "is_phishing_url"
         ]
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
       },
       {
         "attack_ids": [],
