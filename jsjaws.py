@@ -3533,8 +3533,8 @@ class JsJaws(ServiceBase):
                 except JSONDecodeError as e:
                     self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
                 for ioc in ioc_json:
-                    value = ioc.get("value", "")
-                    if ioc["type"] in ["UrlFetch", "XMLHttpRequest"]:
+                    value = ioc.get("value", {})
+                    if ioc["type"] in ["UrlFetch", "XMLHttpRequest"] and "url" in value:
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
                         elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
