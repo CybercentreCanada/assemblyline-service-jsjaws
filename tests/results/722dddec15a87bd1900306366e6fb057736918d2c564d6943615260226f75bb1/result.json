@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 52,
+    "score": 53,
     "sections": [
       {
         "auto_collapse": false,
@@ -110,6 +110,84 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Signature: Sleep",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script changed location.href.",
+              "type": "HREF Location",
+              "value": {
+                "url": "http://southernplate.co/mtm/direct/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/3/"
+              }
+            },
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script added an event listener for the 'load' event.",
+              "type": "Window.addEventListener()",
+              "value": {
+                "event": "load"
+              }
+            },
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script changed location.href.",
+              "type": "HREF Location",
+              "value": {
+                "url": "http://southernplate.co/mtm/direct/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/4/"
+              }
+            },
+            {}
+          ],
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script changed location.href.",
+              "type": "HREF Location",
+              "value": {
+                "url": "http://southernplate.co/mtm/direct/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/5/0"
+              }
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "The script did the following other interesting things",
         "zeroize_on_tag_safe": false
       },
       {
@@ -259,12 +337,18 @@
           {
             "method": "get",
             "url": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/1/0"
+          },
+          {
+            "method": "GET",
+            "request_headers": {},
+            "url": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/2/0"
           }
         ],
         "body_config": {
           "column_order": [
             "url",
-            "method"
+            "method",
+            "request_headers"
           ]
         },
         "body_format": "TABLE",
@@ -281,6 +365,17 @@
         "promote_to": null,
         "tags": {
           "network": {
+            "dynamic": {
+              "domain": [
+                "southernplate.co"
+              ],
+              "uri": [
+                "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/2/0"
+              ],
+              "uri_path": [
+                "/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/2/0"
+              ]
+            },
             "static": {
               "domain": [
                 "southernplate.co"
@@ -308,6 +403,11 @@
       {
         "attack_ids": [],
         "heur_id": 1,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 2,
         "signatures": []
       },
       {
@@ -350,6 +450,27 @@
       }
     ],
     "tags": {
+      "network.dynamic.domain": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "southernplate.co"
+        }
+      ],
+      "network.dynamic.uri": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "http://southernplate.co/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/2/0"
+        }
+      ],
+      "network.dynamic.uri_path": [
+        {
+          "heur_id": 1,
+          "signatures": [],
+          "value": "/mtm/async/.eJxdjMsOwiAQRf-FZcXSxI3a9FvMFKdAwkuYVhLjv0utLnR37rkz98HmZNiZCcYZJJUrVko4YcK0BR0yXTw4rDGHmTQmHy0QtjKsX1JipNoRFhKanOUQozUSyAQvymp25d8629-Grj1x40ChgMVMH7zjGL82esUb0bxPjz8D2SiP1z0WqcEr7JdhPGyL7PkCpi1IZQ:1oHlLv:kPEoZ4FtsSEkAxqu9ReZYsk5Mvw/2/0"
+        }
+      ],
       "network.static.domain": [
         {
           "heur_id": 2,
