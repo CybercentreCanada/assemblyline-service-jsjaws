@@ -569,12 +569,12 @@
   "files": {
     "extracted": [
       {
-        "name": "2H3UCl1xXaxvDHEVUheUkx.vbs",
-        "sha256": "d8fd4b98fcdaf3257c180b648ddcb0f18ad9afdef7b63e9b05eb39b0e362fb85"
+        "name": "extracted_wscript.bat",
+        "sha256": "1c293bc5c9ae73ce967fa1a670473a4c6cb1fa2047d090b8925382f233573830"
       },
       {
-        "name": "extracted_wscript.ps1",
-        "sha256": "ddaf74fa67838c7a45c22c6fd43a4f268413e2cbd6c9f7e70a05681d7e05a86e"
+        "name": "2H3UCl1xXaxvDHEVUheUkx.vbs",
+        "sha256": "d8fd4b98fcdaf3257c180b648ddcb0f18ad9afdef7b63e9b05eb39b0e362fb85"
       }
     ],
     "supplementary": [
