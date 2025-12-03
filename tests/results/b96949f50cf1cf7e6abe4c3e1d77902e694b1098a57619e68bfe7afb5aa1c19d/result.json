@@ -575,10 +575,6 @@
         "auto_collapse": false,
         "body": [
           {
-            "ioc": "40securview.com",
-            "ioc_type": "domain"
-          },
-          {
             "ioc": "cdnjs.cloudflare.com",
             "ioc_type": "domain"
           },
@@ -669,7 +665,6 @@
           "network": {
             "static": {
               "domain": [
-                "40securview.com",
                 "cdnjs.cloudflare.com",
                 "couponhagen.churchontheranch.uk",
                 "kasumbo.com",
@@ -982,11 +977,6 @@
     ],
     "tags": {
       "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "40securview.com"
-        },
         {
           "heur_id": 2,
           "signatures": [],
