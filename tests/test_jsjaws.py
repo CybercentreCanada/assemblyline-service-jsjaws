@@ -167,11 +167,8 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
         assert jsjaws_class_instance.malware_jail_sandbox_env_dir is None
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path is None
-        assert jsjaws_class_instance.path_to_jailme_js is None
-        assert jsjaws_class_instance.path_to_boxjs is None
         assert jsjaws_class_instance.boxjs_urls_json_path is None
         assert jsjaws_class_instance.malware_jail_urls_json_path is None
-        assert jsjaws_class_instance.wscript_only_config is None
         assert jsjaws_class_instance.extracted_wscript_batch_path is None
         assert jsjaws_class_instance.extracted_wscript_ps1_path is None
         assert jsjaws_class_instance.boxjs_batch_path is None
@@ -258,13 +255,8 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path == path.join(
             jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.js")
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
-        )
-        assert jsjaws_class_instance.wscript_only_config == path.join(
-            root_dir, "tools/malwarejail/config/config_wscript_only.json"
         )
         assert jsjaws_class_instance.extracted_wscript_batch_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws.EXTRACTED_WSCRIPT_BATCH
@@ -340,10 +332,6 @@ class TestJsJaws:
         jsjaws_class_instance.stdout_limit = 10000
         jsjaws_class_instance.boxjs_analysis_log = "blah"
         jsjaws_class_instance.gauntlet_runs = 0
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-
-        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
-        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
         jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
@@ -418,10 +406,7 @@ class TestJsJaws:
         jsjaws_class_instance.gauntlet_runs = 0
 
         jsjaws_class_instance.boxjs_analysis_log = "blah"
-        root_dir = os.path.dirname(os.path.abspath(__file__))
 
-        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
-        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
         jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )

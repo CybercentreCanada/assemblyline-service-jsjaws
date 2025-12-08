@@ -152,6 +152,15 @@ EXTRACTED_WSCRIPT_PS1 = "extracted_wscript.ps1"
 MALWARE_JAIL_OUTPUT = "output.txt"
 MALWARE_JAIL_SANDBOX_ENV_DUMP = "sandbox_dump.json"
 
+ROOT_DIR = path.dirname(path.abspath(__file__))
+ASAR_PATH = os.path.join(ROOT_DIR, "tools/node_modules/@electron/asar/bin/asar.js")
+PATH_TO_JAILME_JS = path.join(ROOT_DIR, "tools/malwarejail/jailme.js")
+PATH_TO_BOXJS = path.join(ROOT_DIR, "tools/node_modules/box-js/run.js")
+PATH_TO_BOXJS_BOILERPLATE = path.join(ROOT_DIR, "tools/node_modules/box-js/boilerplate.js")
+PATH_TO_JSXRAY = path.join(ROOT_DIR, "tools/js-x-ray-run.js")
+PATH_TO_SYNCHRONY = path.join(ROOT_DIR, "tools/node_modules/.bin/synchrony")
+WSCRIPT_ONLY_CONFIG = path.join(ROOT_DIR, "tools/malwarejail/config/config_wscript_only.json")
+
 # Default value for the maximum number of times the gauntlet should be run
 # This usually gets exceeded when a script writes randomly generated content to the DOM
 MAXIMUM_GAUNTLET_RUNS = 30
@@ -628,14 +637,8 @@ class JsJaws(ServiceBase):
         self.malware_jail_payload_extraction_dir: str | None = None
         self.malware_jail_sandbox_env_dir: str | None = None
         self.malware_jail_sandbox_env_dump_path: str | None = None
-        self.path_to_jailme_js: str | None = None
-        self.path_to_boxjs: str | None = None
-        self.path_to_boxjs_boilerplate: str | None = None
-        self.path_to_jsxray: str | None = None
-        self.path_to_synchrony: str | None = None
         self.boxjs_urls_json_path: str | None = None
         self.malware_jail_urls_json_path: str | None = None
-        self.wscript_only_config: str | None = None
         self.extracted_wscript_batch_path: str | None = None
         self.extracted_wscript_ps1_path: str | None = None
         self.boxjs_batch_path: str | None = None
@@ -975,8 +978,6 @@ class JsJaws(ServiceBase):
 
         original_contents = file_content
 
-        root_dir = path.dirname(path.abspath(__file__))
-
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
         elif self.sample_type == "archive/asar":
@@ -984,12 +985,11 @@ class JsJaws(ServiceBase):
             error_section: ResultSection | None = None
             request.result = Result()
             asar_name = os.path.basename(file_path)
-            asar_path = os.path.join(root_dir, "tools/node_modules/@electron/asar/bin/asar.js")
             # isolate asar files in their own directory
             asar_dir = os.path.join(self.working_directory, "asar")
             try:
                 # asar creates the output directory itself
-                subprocess.check_call([asar_path, "extract", file_path, asar_dir])
+                subprocess.check_call([ASAR_PATH, "extract", file_path, asar_dir])
             except Exception as e:
                 error_section = ResultSection(f"An Error occured when extracting the ASAR file {asar_name}", str(e))
                 request.result.add_section(error_section)
@@ -1049,13 +1049,7 @@ class JsJaws(ServiceBase):
         self.malware_jail_sandbox_env_dump_path = path.join(
             self.malware_jail_sandbox_env_dir, MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
-        self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
-        self.path_to_boxjs_boilerplate = path.join(root_dir, "tools/node_modules/box-js/boilerplate.js")
-        self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
-        self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
-        self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
         self.extracted_wscript_batch_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_BATCH)
         self.extracted_wscript_ps1_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_PS1)
         self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_BATCH)
@@ -1169,7 +1163,7 @@ class JsJaws(ServiceBase):
         :return: A list of arguments used for running Box.js
         """
         boxjs_args = [
-            self.path_to_boxjs,
+            PATH_TO_BOXJS,
             # Do not kill the application when runtime errors occur
             "--no-kill",
             # Do not rewrite the source code at all, other than for `@cc_on` support
@@ -1181,7 +1175,7 @@ class JsJaws(ServiceBase):
             # The script will timeout after this many seconds (default 10)
             f"--timeout={tool_timeout}",
             # Prepend the JavaScript in the given file to the sample prior to sandboxing
-            f"--prepended-code={self.path_to_boxjs_boilerplate}",
+            f"--prepended-code={PATH_TO_BOXJS_BOILERPLATE}",
             # Fake file name to use for the sample being analyzed. Can be a full path or just
             # the file name to use. If you have '\' in the path escape them as '\\' in this
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
@@ -1223,7 +1217,7 @@ class JsJaws(ServiceBase):
         # -f filename ... the value of the script full name property to be set
         malware_jail_args = [
             "node",
-            self.path_to_jailme_js,
+            PATH_TO_JAILME_JS,
             "-s",
             self.malware_jail_payload_extraction_dir,
             "-o",
@@ -1259,7 +1253,7 @@ class JsJaws(ServiceBase):
         # By default, detonation takes place within a sandboxed browser. This option allows
         # for the sample to be run in WScript only
         if wscript_only:
-            malware_jail_args.extend(["-c", self.wscript_only_config])
+            malware_jail_args.extend(["-c", WSCRIPT_ONLY_CONFIG])
 
         # By default, we don't want to replace exception catching in a script with a log of the exception,
         # but it is useful for debugging
@@ -1295,9 +1289,9 @@ class JsJaws(ServiceBase):
 
         malware_jail_args = self._setup_malware_jail_args(request, tool_timeout, css_path)
 
-        jsxray_args = ["node", self.path_to_jsxray, f"{DIVIDING_COMMENT}\n"]
+        jsxray_args = ["node", PATH_TO_JSXRAY, f"{DIVIDING_COMMENT}\n"]
 
-        synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
+        synchrony_args = [PATH_TO_SYNCHRONY, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
         # then allow_download_from_internet service variable needs to be set to true
