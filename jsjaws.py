@@ -18,7 +18,7 @@ from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import sleep, time
-from typing import Any
+from typing import IO, Any
 from urllib.parse import urlparse, urlsplit
 
 from assemblyline.common import forge
@@ -144,6 +144,13 @@ SYNCHRONY = "Synchrony"
 EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
 GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
+
+BOXJS_BATCH = "boxjs_cmds.bat"
+BOXJS_PS1 = "boxjs_cmds.ps1"
+EXTRACTED_WSCRIPT_BATCH = "extracted_wscript.bat"
+EXTRACTED_WSCRIPT_PS1 = "extracted_wscript.ps1"
+MALWARE_JAIL_OUTPUT = "output.txt"
+MALWARE_JAIL_SANDBOX_ENV_DUMP = "sandbox_dump.json"
 
 # Default value for the maximum number of times the gauntlet should be run
 # This usually gets exceeded when a script writes randomly generated content to the DOM
@@ -614,11 +621,11 @@ def is_js_script(script: Tag) -> bool:
 
 
 class JsJaws(ServiceBase):
+
     def __init__(self, config: dict | None = None) -> None:
         super(JsJaws, self).__init__(config)
         self.artifact_list: list[dict[str, str]] | None = None
         self.malware_jail_payload_extraction_dir: str | None = None
-        self.malware_jail_sandbox_env_dump: str | None = None
         self.malware_jail_sandbox_env_dir: str | None = None
         self.malware_jail_sandbox_env_dump_path: str | None = None
         self.path_to_jailme_js: str | None = None
@@ -629,15 +636,10 @@ class JsJaws(ServiceBase):
         self.boxjs_urls_json_path: str | None = None
         self.malware_jail_urls_json_path: str | None = None
         self.wscript_only_config: str | None = None
-        self.extracted_wscript_batch: str | None = None
-        self.extracted_wscript_ps1: str | None = None
         self.extracted_wscript_batch_path: str | None = None
         self.extracted_wscript_ps1_path: str | None = None
-        self.boxjs_batch: str | None = None
         self.boxjs_batch_path: str | None = None
-        self.boxjs_ps1: str | None = None
         self.boxjs_ps1_path: str | None = None
-        self.malware_jail_output: str | None = None
         self.malware_jail_output_path: str | None = None
         self.boxjs_output_dir: str | None = None
         self.boxjs_iocs: str | None = None
@@ -1043,10 +1045,9 @@ class JsJaws(ServiceBase):
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
-        self.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
         self.malware_jail_sandbox_env_dump_path = path.join(
-            self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
+            self.malware_jail_sandbox_env_dir, MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
         self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
         self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
@@ -1055,20 +1056,11 @@ class JsJaws(ServiceBase):
         self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
         self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
-        self.extracted_wscript_batch = "extracted_wscript.bat"
-        self.extracted_wscript_batch_path = path.join(
-            self.malware_jail_payload_extraction_dir, self.extracted_wscript_batch
-        )
-        self.extracted_wscript_ps1 = "extracted_wscript.ps1"
-        self.extracted_wscript_ps1_path = path.join(
-            self.malware_jail_payload_extraction_dir, self.extracted_wscript_ps1
-        )
-        self.boxjs_batch = "boxjs_cmds.bat"
-        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_batch)
-        self.boxjs_ps1 = "boxjs_cmds.ps1"
-        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_ps1)
-        self.malware_jail_output = "output.txt"
-        self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
+        self.extracted_wscript_batch_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_BATCH)
+        self.extracted_wscript_ps1_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_PS1)
+        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_BATCH)
+        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_PS1)
+        self.malware_jail_output_path = path.join(self.working_directory, MALWARE_JAIL_OUTPUT)
         # Box.js creates an output directory in the working level directory with the name <file_name>.results
         # We must use globs to find the specific file paths
         self.boxjs_output_dir = path.join(self.working_directory, "*.results")
@@ -1843,8 +1835,8 @@ class JsJaws(ServiceBase):
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
 
     def append_content(
-        self, content: str, js_content: bytes, aggregated_js_script: tempfile.NamedTemporaryFile | None
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, content: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method appends contents to a NamedTemporaryFile
         :param content: content to be appended
@@ -1860,8 +1852,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def insert_content(
-        self, content: str, js_content: bytes, aggregated_js_script: tempfile.NamedTemporaryFile | None
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, content: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method inserts contents above the dividing comment line in a NamedTemporaryFile
         :param content: content to be inserted
@@ -1889,7 +1881,7 @@ class JsJaws(ServiceBase):
         request: ServiceRequest,
         file_content: bytes,
         js_content: bytes = b"",
-        aggregated_js_script: tempfile.NamedTemporaryFile | None = None,
+        aggregated_js_script: IO[bytes] | None = None,
         insert_above_divider: bool = False,
     ) -> tuple[str | None, bytes | None, str | None]:
         """
@@ -1992,9 +1984,9 @@ class JsJaws(ServiceBase):
         self,
         soup: BeautifulSoup,
         request: ServiceRequest,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes = b"",
-    ) -> tuple[tempfile.NamedTemporaryFile | None, bytes | None]:
+    ) -> tuple[IO[bytes] | None, bytes | None]:
         """
         This method extracts files from embed tag sources via BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -2580,10 +2572,10 @@ class JsJaws(ServiceBase):
         self,
         body: str,
         js_content: bytes,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
+        aggregated_js_script: IO[bytes] | None,
         function_varname: str | None,
         vb_and_js_section: ResultTextSection | None,
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile | None]:
+    ) -> tuple[bytes, IO[bytes] | None]:
         """
         This method handles VisualBasic scripts
         :param body: The VisualBasic script body to be looked through
@@ -2623,8 +2615,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def _create_vbscript_element(
-        self, body: str, js_content: bytes, aggregated_js_script: tempfile.NamedTemporaryFile | None
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile | None]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes] | None]:
         """
         This method takes the body of a VBScript and creates an element in the DOM, basically as a placeholder
         since we cannot run this script in Node.js
@@ -2700,10 +2692,10 @@ class JsJaws(ServiceBase):
     def _handle_misparsed_soup(
         self,
         body: str,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes,
         request: ServiceRequest,
-    ) -> tuple[str, tempfile.NamedTemporaryFile | None, bytes]:
+    ) -> tuple[str, IO[bytes] | None, bytes]:
         """
         If there is a malformed JavaScript script and another "script body" starts with an already seen script,
         this is most likely a parsing issue and we are going to slice the already seen script out
@@ -2744,9 +2736,9 @@ class JsJaws(ServiceBase):
     def _handle_malformed_javascript(
         self,
         visible_texts: ResultSet[Tag],
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes,
-    ) -> tuple[tempfile.NamedTemporaryFile | None, bytes]:
+    ) -> tuple[IO[bytes] | None, bytes]:
         """
         This is a workaround for broken scripts that we still want to run. Odds are this won't create
         valid JavaScript, but odds are the initial JavaScript wasn't valid in the first place, so we're just going to
@@ -2794,11 +2786,11 @@ class JsJaws(ServiceBase):
     def _extract_js_using_soup(
         self,
         soup: BeautifulSoup,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None = None,
+        aggregated_js_script: IO[bytes] | None = None,
         js_content: bytes = b"",
         request: ServiceRequest | None = None,
         insert_above_divider: bool = False,
-    ) -> tuple[tempfile.NamedTemporaryFile | None, bytes | None]:
+    ) -> tuple[IO[bytes] | None, bytes | None]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -2955,9 +2947,9 @@ class JsJaws(ServiceBase):
         self,
         soup: BeautifulSoup,
         request: ServiceRequest,
-        aggregated_js_script: tempfile.NamedTemporaryFile,
+        aggregated_js_script: IO[bytes],
         js_content: bytes,
-    ) -> tuple[tempfile.NamedTemporaryFile | None, tempfile.NamedTemporaryFile | None, bytes | None]:
+    ) -> tuple[IO[bytes] | None, IO[bytes] | None, bytes | None]:
         """
         This method extracts CSS and possibly JS from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -3224,22 +3216,22 @@ class JsJaws(ServiceBase):
 
         if batch_cmd_spotted:
             artifact = {
-                "name": self.extracted_wscript_batch,
+                "name": EXTRACTED_WSCRIPT_BATCH,
                 "path": self.extracted_wscript_batch_path,
                 "description": "Extracted WScript batch file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.extracted_wscript_batch}")
+            self.log.debug(f"Adding extracted file: {EXTRACTED_WSCRIPT_BATCH}")
             self.artifact_list.append(artifact)
 
         if ps1_cmd_spotted:
             artifact = {
-                "name": self.extracted_wscript_ps1,
+                "name": EXTRACTED_WSCRIPT_PS1,
                 "path": self.extracted_wscript_ps1_path,
                 "description": "Extracted WScript ps1 file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.extracted_wscript_ps1}")
+            self.log.debug(f"Adding extracted file: {EXTRACTED_WSCRIPT_PS1}")
             self.artifact_list.append(artifact)
 
         if (batch_cmd_spotted or ps1_cmd_spotted) and wscript_res_sec.body:
@@ -3618,12 +3610,12 @@ class JsJaws(ServiceBase):
         if path.exists(self.malware_jail_sandbox_env_dump_path):
             # Get the sandbox env json that is dumped. This should always exist.
             malware_jail_sandbox_env_dump = {
-                "name": self.malware_jail_sandbox_env_dump,
+                "name": MALWARE_JAIL_SANDBOX_ENV_DUMP,
                 "path": self.malware_jail_sandbox_env_dump_path,
                 "description": "Sandbox Environment Details",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {self.malware_jail_sandbox_env_dump}")
+            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_SANDBOX_ENV_DUMP}")
             self.artifact_list.append(malware_jail_sandbox_env_dump)
 
         if output:
@@ -3631,12 +3623,12 @@ class JsJaws(ServiceBase):
                 for line in output:
                     f.write(line + "\n")
             mlwr_jail_out = {
-                "name": self.malware_jail_output,
+                "name": MALWARE_JAIL_OUTPUT,
                 "path": self.malware_jail_output_path,
                 "description": "Malware Jail Output",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
+            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_OUTPUT}")
             self.artifact_list.append(mlwr_jail_out)
 
         if len(glob(self.boxjs_analysis_log)) > 0:
@@ -3884,22 +3876,22 @@ class JsJaws(ServiceBase):
 
         if batch_cmd_spotted:
             artifact = {
-                "name": self.boxjs_batch,
+                "name": BOXJS_BATCH,
                 "path": self.boxjs_batch_path,
                 "description": "Boxjs batch file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.boxjs_batch}")
+            self.log.debug(f"Adding extracted file: {BOXJS_BATCH}")
             self.artifact_list.append(artifact)
 
         if ps1_cmd_spotted:
             artifact = {
-                "name": self.boxjs_ps1,
+                "name": BOXJS_PS1,
                 "path": self.boxjs_ps1_path,
                 "description": "Boxjs ps1 file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.boxjs_ps1}")
+            self.log.debug(f"Adding extracted file: {BOXJS_PS1}")
             self.artifact_list.append(artifact)
 
         if batch_cmd_spotted or ps1_cmd_spotted:
@@ -4515,8 +4507,8 @@ class JsJaws(ServiceBase):
         return line_1 == line_2
 
     def _convert_vb_static_variables(
-        self, body: str, js_content: bytes, aggregated_js_script: tempfile.NamedTemporaryFile | None
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for variable declaration, and converts them to JavaScript
         :param body: The VisualBasic script body to be looked through
@@ -4541,8 +4533,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def _convert_vb_wscript_shell_declaration(
-        self, body: str, js_content: bytes, aggregated_js_script: tempfile.NamedTemporaryFile | None
-    ) -> tuple[str | None, bytes, tempfile.NamedTemporaryFile]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[str | None, bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for a WScript.Shell declaration, and converts it to JavaScript
         :param body: The VisualBasic script body to be looked through
@@ -4572,8 +4564,8 @@ class JsJaws(ServiceBase):
         wscript_varname: str,
         body: str,
         js_content: bytes,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile]:
+        aggregated_js_script: IO[bytes] | None,
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for RegWrite usage with the previously created WScript.Shell variable,
         and converts it to JavaScript
@@ -4659,8 +4651,8 @@ class JsJaws(ServiceBase):
         body: str,
         vb_and_js_section: ResultTextSection,
         js_content: bytes,
-        aggregated_js_script: tempfile.NamedTemporaryFile | None,
-    ) -> tuple[bytes, tempfile.NamedTemporaryFile]:
+        aggregated_js_script: IO[bytes] | None,
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for Function calls where the Function was
         declared in a previous JavaScript script (see _find_js_function_declaration)
