@@ -725,7 +725,7 @@ class JsJaws(ServiceBase):
         # Reset per sample
         self.doc_write_hashes = set()
         self.embedded_code_in_lib = None
-        self.gootloader_uris = list()
+        self.gootloader_uris = []
         self.gootloader_persistence = {}
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
@@ -2808,7 +2808,7 @@ class JsJaws(ServiceBase):
         """
 
         # A list of methods to run when a form is submitted, after the DOM is loaded
-        onevents: list[str] = list()
+        onevents: list[str] = []
 
         self.log.debug("Extracting JavaScript from soup...")
         scripts = soup.findAll("script")
@@ -3799,7 +3799,7 @@ class JsJaws(ServiceBase):
         boxjs_ps1_extraction.write(CUSTOM_PS1_ID.decode())
 
         commands = set()
-        commands_to_display = list()
+        commands_to_display = []
         file_writes = set()
         file_reads = set()
         file_folder_exists = set()
@@ -3808,7 +3808,7 @@ class JsJaws(ServiceBase):
         regkey_reads = set()
         regkey_writes = set()
         new_resources_associated_with_url = set()
-        other = list()
+        other = []
         cmd_count = 0
         for ioc in ioc_json:
             ioc_type = ioc["type"]
