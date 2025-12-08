@@ -649,57 +649,57 @@ class JsJaws(ServiceBase):
         self.stdout_limit: int | None = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: dict[str, dict[str, list[str]]] = {}
-        self.doc_write_hashes: set[str] | None = None
-        self.gauntlet_runs: int | None = None
+        self.doc_write_hashes: set[str] = set()
+        self.gauntlet_runs = 0
         # Used for maintaining the sample type as manipulations occur in the service per execution
         self.sample_type: str | None = None
         # Script sources that are NOT programatically created
         # (or at least, written to the DOM via code)
-        self.initial_script_sources: set[str] | None = None
+        self.initial_script_sources: set[str] = set()
         # Script sources that ARE programatically created
         # (or at least, written to the DOM via code)
-        self.subsequent_script_sources: set[str] | None = None
-        self.script_with_source_and_no_body: bool | None = None
+        self.subsequent_script_sources: set[str] = set()
+        self.script_with_source_and_no_body = False
         self.scripts: set[str] = set()
-        self.malformed_javascript: bool | None = None
-        self.function_inception: bool | None = None
+        self.malformed_javascript = False
+        self.function_inception = False
         self.ignore_stdout_limit: bool | None = None
         # Flag that the sample was embedded within a third party library
         self.embedded_code_in_lib: str | None = None
         # List of malicious domains detected from a gootloader sample
-        self.gootloader_uris: list[str] | None = None
+        self.gootloader_uris: list[str] = []
         # Persistence data from a gootloader sample
-        self.gootloader_persistence: dict[str, str] | None = None
+        self.gootloader_persistence: dict[str, str] = {}
         # Flag that the sample contains a single script that writes unescaped values to the DOM
-        self.single_script_with_unescape: bool | None = None
+        self.single_script_with_unescape = False
         # Flag that the sample contains multiple scripts that write unescaped values to the DOM
-        self.multiple_scripts_with_unescape: bool | None = None
+        self.multiple_scripts_with_unescape = False
         # Flag that the sample contains leading garbage
-        self.leading_garbage: bool | None = None
+        self.leading_garbage = False
         # Flag that the split_reverse_join signature was raised
-        self.split_reverse_join: bool | None = None
+        self.split_reverse_join = False
         # Flag that the file is phishing
-        self.is_phishing: bool | None = None
+        self.is_phishing = False
         # Flag that the file sets long base64-encoded strings to weird attributes, like innerText or input:value
-        self.weird_base64_value_set: bool | None = None
+        self.weird_base64_value_set = False
         # List of marks to indicate if a base64-encoded URL was base64-decoded
         self.base64_encoded_urls: list[str] = []
         # URL is seen in the same execution as a "SaveToFile", "WritesExecutable" and "RunsShell"
-        self.url_used_for_suspicious_exec: bool | None = None
+        self.url_used_for_suspicious_exec = False
         # Used for heuristic 22
-        self.low_body_elements: bool | None = None
+        self.low_body_elements = False
         # Used for heuristic 23
-        self.html_document_write: bool | None = None
+        self.html_document_write = False
         # Used for heuristic 24
         self.html_phishing_title: set[str] = set()
         # Used for heuristic 25
         self.phishing_inputs: set[str] = set()
         # Used for heuristic 26
-        self.password_input_and_no_form_action: bool | None = None
+        self.password_input_and_no_form_action = False
         # List of URLs found in suspicious forms, used for heuristic 27
         self.sus_form_actions: set[str] = set()
         # Map of scripts found and their corresponding entropies
-        self.script_entropies: dict[str, Any] = dict()
+        self.script_entropies: dict[str, Any] = {}
         # The number of web bugs/beacons found in an HTML document
         self.num_of_web_bugs = 0
         # Used for heuristic 25, to show that a form exists and that there are a small amount of input elements
@@ -726,7 +726,7 @@ class JsJaws(ServiceBase):
         self.doc_write_hashes = set()
         self.embedded_code_in_lib = None
         self.gootloader_uris = list()
-        self.gootloader_persistence = dict()
+        self.gootloader_persistence = {}
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
@@ -748,7 +748,7 @@ class JsJaws(ServiceBase):
         self.html_phishing_title = set()
         self.phishing_inputs = set()
         self.sus_form_actions = set()
-        self.script_entropies = dict()
+        self.script_entropies = {}
         self.num_of_web_bugs = 0
         self.short_form = False
 
@@ -2971,7 +2971,7 @@ class JsJaws(ServiceBase):
         # analysis envs
         try:
             styles = soup.findAll("style")
-            style_json = dict()
+            style_json = {}
             css_content = b""
             aggregated_css_script = None
             for style in styles:
