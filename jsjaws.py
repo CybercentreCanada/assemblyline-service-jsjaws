@@ -917,7 +917,7 @@ class JsJaws(ServiceBase):
             :return: The value to replace the match
             """
             if len(match.regs) != 3:
-                return
+                return b""
             property_name = match.group("property_name").decode()
 
             # We only want the last property assigned \(.+\), despite the regex capturing consecutive \(.+\)+
@@ -932,7 +932,7 @@ class JsJaws(ServiceBase):
             try:
                 property_value = match.group("property_value").decode()
             except UnicodeDecodeError:
-                return
+                return b""
 
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
             # Since we are looking for the character prior to this assignment, we need to add it again
@@ -940,9 +940,9 @@ class JsJaws(ServiceBase):
             try:
                 decoded_match_string = match.string.decode()
             except UnicodeDecodeError:
-                return
+                return b""
             if leading_char_index > len(decoded_match_string):
-                return
+                return b""
             leading_char = decoded_match_string[leading_char_index]
             return f"{leading_char}[{property_name}] = {property_value};".encode()
 
@@ -1110,9 +1110,11 @@ class JsJaws(ServiceBase):
             embedded_code_in_lib_res_sec.add_section_part(title_body)
             kv_body = KVSectionBody(**self.gootloader_persistence)
             embedded_code_in_lib_res_sec.add_section_part(kv_body)
-            embedded_code_in_lib_res_sec.add_tag("file.name.extracted", self.gootloader_persistence.get("js_file_name"))
             embedded_code_in_lib_res_sec.add_tag(
-                "file.name.extracted", self.gootloader_persistence.get("original_file_name")
+                "file.name.extracted", self.gootloader_persistence.get("js_file_name", "")
+            )
+            embedded_code_in_lib_res_sec.add_tag(
+                "file.name.extracted", self.gootloader_persistence.get("original_file_name", "")
             )
         embedded_code_in_lib_res_sec.add_tag("attribution.implant", "GOOTLOADER")
         embedded_code_in_lib_res_sec.add_tag("attribution.family", "GOOTLOADER")
