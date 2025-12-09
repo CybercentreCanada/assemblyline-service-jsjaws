@@ -18,7 +18,7 @@ from subprocess import PIPE, Popen, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import sleep, time
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import IO, Any
 from urllib.parse import urlparse, urlsplit
 
 from assemblyline.common import forge
@@ -144,6 +144,22 @@ SYNCHRONY = "Synchrony"
 EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
 GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
+
+BOXJS_BATCH = "boxjs_cmds.bat"
+BOXJS_PS1 = "boxjs_cmds.ps1"
+EXTRACTED_WSCRIPT_BATCH = "extracted_wscript.bat"
+EXTRACTED_WSCRIPT_PS1 = "extracted_wscript.ps1"
+MALWARE_JAIL_OUTPUT = "output.txt"
+MALWARE_JAIL_SANDBOX_ENV_DUMP = "sandbox_dump.json"
+
+ROOT_DIR = path.dirname(path.abspath(__file__))
+ASAR_PATH = os.path.join(ROOT_DIR, "tools/node_modules/@electron/asar/bin/asar.js")
+PATH_TO_JAILME_JS = path.join(ROOT_DIR, "tools/malwarejail/jailme.js")
+PATH_TO_BOXJS = path.join(ROOT_DIR, "tools/node_modules/box-js/run.js")
+PATH_TO_BOXJS_BOILERPLATE = path.join(ROOT_DIR, "tools/node_modules/box-js/boilerplate.js")
+PATH_TO_JSXRAY = path.join(ROOT_DIR, "tools/js-x-ray-run.js")
+PATH_TO_SYNCHRONY = path.join(ROOT_DIR, "tools/node_modules/.bin/synchrony")
+WSCRIPT_ONLY_CONFIG = path.join(ROOT_DIR, "tools/malwarejail/config/config_wscript_only.json")
 
 # Default value for the maximum number of times the gauntlet should be run
 # This usually gets exceeded when a script writes randomly generated content to the DOM
@@ -593,9 +609,9 @@ PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
 
 
 def is_vb_script(script: Tag) -> bool:
-    type = script.get("type")
-    if isinstance(type, str):
-        return type.lower() == "text/vbscript"
+    type_ = script.get("type")
+    if isinstance(type_, str):
+        return type_.lower() == "text/vbscript"
     language = script.get("language")
     if isinstance(language, str):
         return language.lower() == "vbscript"
@@ -604,9 +620,9 @@ def is_vb_script(script: Tag) -> bool:
 
 def is_js_script(script: Tag) -> bool:
     """Checks if script is javascript or jscript"""
-    type = script.get("type")
-    if isinstance(type, str):
-        return type.lower() in ("", "text/javascript", "text/jscript")
+    type_ = script.get("type")
+    if isinstance(type_, str):
+        return type_.lower() in ("", "text/javascript", "text/jscript")
     language = script.get("language")
     if isinstance(language, str):
         return language.lower() in ("", "javascript", "jscript")
@@ -614,92 +630,81 @@ def is_js_script(script: Tag) -> bool:
 
 
 class JsJaws(ServiceBase):
-    def __init__(self, config: Optional[Dict] = None) -> None:
+
+    def __init__(self, config: dict | None = None) -> None:
         super(JsJaws, self).__init__(config)
-        self.artifact_list: Optional[List[Dict[str, str]]] = None
-        self.malware_jail_payload_extraction_dir: Optional[str] = None
-        self.malware_jail_sandbox_env_dump: Optional[str] = None
-        self.malware_jail_sandbox_env_dir: Optional[str] = None
-        self.malware_jail_sandbox_env_dump_path: Optional[str] = None
-        self.path_to_jailme_js: Optional[str] = None
-        self.path_to_boxjs: Optional[str] = None
-        self.path_to_boxjs_boilerplate: Optional[str] = None
-        self.path_to_jsxray: Optional[str] = None
-        self.path_to_synchrony: Optional[str] = None
-        self.boxjs_urls_json_path: Optional[str] = None
-        self.malware_jail_urls_json_path: Optional[str] = None
-        self.wscript_only_config: Optional[str] = None
-        self.extracted_wscript_batch: Optional[str] = None
-        self.extracted_wscript_ps1: Optional[str] = None
-        self.extracted_wscript_batch_path: Optional[str] = None
-        self.extracted_wscript_ps1_path: Optional[str] = None
-        self.boxjs_batch: Optional[str] = None
-        self.boxjs_batch_path: Optional[str] = None
-        self.boxjs_ps1: Optional[str] = None
-        self.boxjs_ps1_path: Optional[str] = None
-        self.malware_jail_output: Optional[str] = None
-        self.malware_jail_output_path: Optional[str] = None
-        self.boxjs_output_dir: Optional[str] = None
-        self.boxjs_iocs: Optional[str] = None
-        self.boxjs_resources: Optional[str] = None
-        self.boxjs_analysis_log: Optional[str] = None
-        self.boxjs_snippets: Optional[str] = None
-        self.cleaned_with_synchrony: Optional[str] = None
-        self.cleaned_with_synchrony_path: Optional[str] = None
-        self.stdout_limit: Optional[int] = None
+        self.artifact_list: list[dict[str, str]] | None = None
+        self.malware_jail_payload_extraction_dir: str | None = None
+        self.malware_jail_sandbox_env_dir: str | None = None
+        self.malware_jail_sandbox_env_dump_path: str | None = None
+        self.boxjs_urls_json_path: str | None = None
+        self.malware_jail_urls_json_path: str | None = None
+        self.extracted_wscript_batch_path: str | None = None
+        self.extracted_wscript_ps1_path: str | None = None
+        self.boxjs_batch_path: str | None = None
+        self.boxjs_ps1_path: str | None = None
+        self.malware_jail_output_path: str | None = None
+        self.boxjs_output_dir: str | None = None
+        self.boxjs_iocs: str | None = None
+        self.boxjs_resources: str | None = None
+        self.boxjs_analysis_log: str | None = None
+        self.boxjs_snippets: str | None = None
+        self.cleaned_with_synchrony: str | None = None
+        self.cleaned_with_synchrony_path: str | None = None
+        self.stdout_limit: int | None = None
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
-        self.safelist: Dict[str, Dict[str, List[str]]] = {}
-        self.doc_write_hashes: Optional[Set[str]] = None
-        self.gauntlet_runs: Optional[int] = None
+        self.safelist: dict[str, dict[str, list[str]]] = {}
+        self.doc_write_hashes: set[str] = set()
+        self.gauntlet_runs = 0
         # Used for maintaining the sample type as manipulations occur in the service per execution
-        self.sample_type: Optional[str] = None
+        self.sample_type: str | None = None
         # Script sources that are NOT programatically created
         # (or at least, written to the DOM via code)
-        self.initial_script_sources: Optional[Set[str]] = None
+        self.initial_script_sources: set[str] = set()
         # Script sources that ARE programatically created
         # (or at least, written to the DOM via code)
-        self.subsequent_script_sources: Optional[Set[str]] = None
-        self.script_with_source_and_no_body: Optional[bool] = None
-        self.scripts: Set[str] = set()
-        self.malformed_javascript: Optional[bool] = None
-        self.function_inception: Optional[bool] = None
-        self.ignore_stdout_limit: Optional[bool] = None
+        self.subsequent_script_sources: set[str] = set()
+        self.script_with_source_and_no_body = False
+        self.scripts: set[str] = set()
+        self.malformed_javascript = False
+        self.function_inception = False
+        self.ignore_stdout_limit: bool | None = None
         # Flag that the sample was embedded within a third party library
-        self.embedded_code_in_lib: Optional[str] = None
+        self.embedded_code_in_lib: str | None = None
         # List of malicious domains detected from a gootloader sample
-        self.gootloader_uris: Optional[List[str]] = None
+        self.gootloader_uris: list[str] = []
         # Persistence data from a gootloader sample
-        self.gootloader_persistence: Optional[Dict[str, str]] = None
+        self.gootloader_persistence: dict[str, str] = {}
         # Flag that the sample contains a single script that writes unescaped values to the DOM
-        self.single_script_with_unescape: Optional[bool] = None
+        self.single_script_with_unescape = False
         # Flag that the sample contains multiple scripts that write unescaped values to the DOM
-        self.multiple_scripts_with_unescape: Optional[bool] = None
+        self.multiple_scripts_with_unescape = False
         # Flag that the sample contains leading garbage
-        self.leading_garbage: Optional[bool] = None
+        self.leading_garbage = False
         # Flag that the split_reverse_join signature was raised
-        self.split_reverse_join: Optional[bool] = None
+        self.split_reverse_join = False
         # Flag that the file is phishing
-        self.is_phishing: Optional[bool] = None
+        self.is_phishing = False
         # Flag that the file sets long base64-encoded strings to weird attributes, like innerText or input:value
-        self.weird_base64_value_set: Optional[bool] = None
+        self.weird_base64_value_set = False
         # List of marks to indicate if a base64-encoded URL was base64-decoded
-        self.base64_encoded_urls: List[str] = []
+        self.base64_encoded_urls: list[str] = []
         # URL is seen in the same execution as a "SaveToFile", "WritesExecutable" and "RunsShell"
-        self.url_used_for_suspicious_exec: Optional[bool] = None
+        self.url_used_for_suspicious_exec = False
         # Used for heuristic 22
-        self.low_body_elements: Optional[bool] = None
+        self.low_body_elements = False
         # Used for heuristic 23
-        self.html_document_write: Optional[bool] = None
+        self.html_document_write = False
         # Used for heuristic 24
-        self.html_phishing_title: Set[str] = set()
+        self.html_phishing_title: set[str] = set()
         # Used for heuristic 25
-        self.phishing_inputs: Set[str] = set()
+        self.phishing_inputs: set[str] = set()
         # Used for heuristic 26
-        self.password_input_and_no_form_action: Optional[bool] = None
+        self.password_input_and_no_form_action = False
         # List of URLs found in suspicious forms, used for heuristic 27
-        self.sus_form_actions: Set[str] = set()
+        self.sus_form_actions: set[str] = set()
         # Map of scripts found and their corresponding entropies
-        self.script_entropies: Dict[str, Any] = dict()
+        self.script_entropies: dict[str, Any] = {}
         # The number of web bugs/beacons found in an HTML document
         self.num_of_web_bugs = 0
         # Used for heuristic 25, to show that a form exists and that there are a small amount of input elements
@@ -725,8 +730,8 @@ class JsJaws(ServiceBase):
         # Reset per sample
         self.doc_write_hashes = set()
         self.embedded_code_in_lib = None
-        self.gootloader_uris = list()
-        self.gootloader_persistence = dict()
+        self.gootloader_uris = []
+        self.gootloader_persistence = {}
         self.single_script_with_unescape = False
         self.multiple_scripts_with_unescape = False
         self.gauntlet_runs = 0
@@ -748,7 +753,7 @@ class JsJaws(ServiceBase):
         self.html_phishing_title = set()
         self.phishing_inputs = set()
         self.sus_form_actions = set()
-        self.script_entropies = dict()
+        self.script_entropies = {}
         self.num_of_web_bugs = 0
         self.short_form = False
 
@@ -763,7 +768,7 @@ class JsJaws(ServiceBase):
         request.result = Result()
         self.script_with_source_and_no_body = False
 
-    def _handle_filtered_code(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+    def _handle_filtered_code(self, file_path: str, file_content: bytes) -> tuple[str, bytes]:
         """
         This method handles filtering code from third-party libraries, or not!
         :param file_path: The path of the file
@@ -814,7 +819,7 @@ class JsJaws(ServiceBase):
 
     def _remove_leading_garbage_from_html(
         self, request: ServiceRequest, file_path: str, file_content: bytes
-    ) -> Tuple[str, bytes]:
+    ) -> tuple[str, bytes]:
         """
         This method removes garbage text from HTML files that have been mis-identified
         :param request: The ServiceRequest object
@@ -876,18 +881,17 @@ class JsJaws(ServiceBase):
                     self.log.debug("Removed garbage from the file...")
                     self.sample_type = script_we_want_info["type"]
                     return script_we_want_path, script_we_want
-                else:
-                    # If there is more than one HTML comment, recursively remove
-                    html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
-                    if html_comment:
-                        try:
-                            return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
-                        except RecursionError as e:
-                            self.log.debug(f"Exiting _remove_leading_garbage_from_html due to '{e}'")
+                # If there is more than one HTML comment, recursively remove
+                html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
+                if html_comment:
+                    try:
+                        return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
+                    except RecursionError as e:
+                        self.log.debug(f"Exiting _remove_leading_garbage_from_html due to '{e}'")
 
         return file_path, file_content
 
-    def _handle_vbscript_env_variables(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+    def _handle_vbscript_env_variables(self, file_path: str, file_content: bytes) -> tuple[str, bytes]:
         """
         This is a VBScript method of setting an environment variable:
 
@@ -909,7 +913,7 @@ class JsJaws(ServiceBase):
         :return: A tuple of the file path and the file content
         """
 
-        def log_and_replace(match) -> bytes:
+        def log_and_replace(match: re.Match) -> bytes:
             """
             This nested method looks for matches of the VBSCRIPT_ENV_SETTING_REGEX regular
             expression, logs the match for debugging purposes, then replaces it
@@ -917,7 +921,7 @@ class JsJaws(ServiceBase):
             :return: The value to replace the match
             """
             if len(match.regs) != 3:
-                return
+                return b""
             property_name = match.group("property_name").decode()
 
             # We only want the last property assigned \(.+\), despite the regex capturing consecutive \(.+\)+
@@ -932,7 +936,7 @@ class JsJaws(ServiceBase):
             try:
                 property_value = match.group("property_value").decode()
             except UnicodeDecodeError:
-                return
+                return b""
 
             self.log.debug(f"Replaced VBScript Env variable: ({truncate(property_name)}) = {truncate(property_value)};")
             # Since we are looking for the character prior to this assignment, we need to add it again
@@ -940,9 +944,9 @@ class JsJaws(ServiceBase):
             try:
                 decoded_match_string = match.string.decode()
             except UnicodeDecodeError:
-                return
+                return b""
             if leading_char_index > len(decoded_match_string):
-                return
+                return b""
             leading_char = decoded_match_string[leading_char_index]
             return f"{leading_char}[{property_name}] = {property_value};".encode()
 
@@ -973,8 +977,6 @@ class JsJaws(ServiceBase):
 
         original_contents = file_content
 
-        root_dir = path.dirname(path.abspath(__file__))
-
         if self.sample_type in ["code/javascript", "code/jscript"]:
             file_path, file_content = self._handle_filtered_code(file_path, file_content)
         elif self.sample_type == "archive/asar":
@@ -982,12 +984,11 @@ class JsJaws(ServiceBase):
             error_section: ResultSection | None = None
             request.result = Result()
             asar_name = os.path.basename(file_path)
-            asar_path = os.path.join(root_dir, "tools/node_modules/@electron/asar/bin/asar.js")
             # isolate asar files in their own directory
             asar_dir = os.path.join(self.working_directory, "asar")
             try:
                 # asar creates the output directory itself
-                subprocess.check_call([asar_path, "extract", file_path, asar_dir])
+                subprocess.check_call([ASAR_PATH, "extract", file_path, asar_dir])
             except Exception as e:
                 error_section = ResultSection(f"An Error occured when extracting the ASAR file {asar_name}", str(e))
                 request.result.add_section(error_section)
@@ -1043,32 +1044,16 @@ class JsJaws(ServiceBase):
 
         # File constants
         self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
-        self.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
         self.malware_jail_sandbox_env_dump_path = path.join(
-            self.malware_jail_sandbox_env_dir, self.malware_jail_sandbox_env_dump
+            self.malware_jail_sandbox_env_dir, MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        self.path_to_jailme_js = path.join(root_dir, "tools/malwarejail/jailme.js")
-        self.path_to_boxjs = path.join(root_dir, "tools/node_modules/box-js/run.js")
-        self.path_to_boxjs_boilerplate = path.join(root_dir, "tools/node_modules/box-js/boilerplate.js")
-        self.path_to_jsxray = path.join(root_dir, "tools/js-x-ray-run.js")
-        self.path_to_synchrony = path.join(root_dir, "tools/node_modules/.bin/synchrony")
         self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
-        self.wscript_only_config = path.join(root_dir, "tools/malwarejail/config/config_wscript_only.json")
-        self.extracted_wscript_batch = "extracted_wscript.bat"
-        self.extracted_wscript_batch_path = path.join(
-            self.malware_jail_payload_extraction_dir, self.extracted_wscript_batch
-        )
-        self.extracted_wscript_ps1 = "extracted_wscript.ps1"
-        self.extracted_wscript_ps1_path = path.join(
-            self.malware_jail_payload_extraction_dir, self.extracted_wscript_ps1
-        )
-        self.boxjs_batch = "boxjs_cmds.bat"
-        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_batch)
-        self.boxjs_ps1 = "boxjs_cmds.ps1"
-        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, self.boxjs_ps1)
-        self.malware_jail_output = "output.txt"
-        self.malware_jail_output_path = path.join(self.working_directory, self.malware_jail_output)
+        self.extracted_wscript_batch_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_BATCH)
+        self.extracted_wscript_ps1_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_PS1)
+        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_BATCH)
+        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_PS1)
+        self.malware_jail_output_path = path.join(self.working_directory, MALWARE_JAIL_OUTPUT)
         # Box.js creates an output directory in the working level directory with the name <file_name>.results
         # We must use globs to find the specific file paths
         self.boxjs_output_dir = path.join(self.working_directory, "*.results")
@@ -1110,9 +1095,11 @@ class JsJaws(ServiceBase):
             embedded_code_in_lib_res_sec.add_section_part(title_body)
             kv_body = KVSectionBody(**self.gootloader_persistence)
             embedded_code_in_lib_res_sec.add_section_part(kv_body)
-            embedded_code_in_lib_res_sec.add_tag("file.name.extracted", self.gootloader_persistence.get("js_file_name"))
             embedded_code_in_lib_res_sec.add_tag(
-                "file.name.extracted", self.gootloader_persistence.get("original_file_name")
+                "file.name.extracted", self.gootloader_persistence.get("js_file_name", "")
+            )
+            embedded_code_in_lib_res_sec.add_tag(
+                "file.name.extracted", self.gootloader_persistence.get("original_file_name", "")
             )
         embedded_code_in_lib_res_sec.add_tag("attribution.implant", "GOOTLOADER")
         embedded_code_in_lib_res_sec.add_tag("attribution.family", "GOOTLOADER")
@@ -1126,7 +1113,7 @@ class JsJaws(ServiceBase):
                 ioc_body.add_line(f"\t-\t{safe_str(uri)}")
             embedded_code_in_lib_res_sec.add_section_part(ioc_body)
 
-    def _strip_null_bytes(self, file_path: str, file_content: bytes) -> Tuple[str, bytes]:
+    def _strip_null_bytes(self, file_path: str, file_content: bytes) -> tuple[str, bytes]:
         """
         If the file starts or ends with null bytes, let's strip them out
         :param file_path: The path of the file
@@ -1167,7 +1154,7 @@ class JsJaws(ServiceBase):
 
         return is_time_waster
 
-    def _setup_boxjs_args(self, request: ServiceRequest, tool_timeout: int) -> List[str]:
+    def _setup_boxjs_args(self, request: ServiceRequest, tool_timeout: int) -> list[str]:
         """
         This method sets up the Box.js arguments which will be used to run the tool
         :param request: The ServiceRequest object
@@ -1175,7 +1162,7 @@ class JsJaws(ServiceBase):
         :return: A list of arguments used for running Box.js
         """
         boxjs_args = [
-            self.path_to_boxjs,
+            PATH_TO_BOXJS,
             # Do not kill the application when runtime errors occur
             "--no-kill",
             # Do not rewrite the source code at all, other than for `@cc_on` support
@@ -1187,7 +1174,7 @@ class JsJaws(ServiceBase):
             # The script will timeout after this many seconds (default 10)
             f"--timeout={tool_timeout}",
             # Prepend the JavaScript in the given file to the sample prior to sandboxing
-            f"--prepended-code={self.path_to_boxjs_boilerplate}",
+            f"--prepended-code={PATH_TO_BOXJS_BOILERPLATE}",
             # Fake file name to use for the sample being analyzed. Can be a full path or just
             # the file name to use. If you have '\' in the path escape them as '\\' in this
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
@@ -1205,9 +1192,7 @@ class JsJaws(ServiceBase):
 
         return boxjs_args
 
-    def _setup_malware_jail_args(
-        self, request: ServiceRequest, tool_timeout: int, css_path: Optional[str]
-    ) -> List[str]:
+    def _setup_malware_jail_args(self, request: ServiceRequest, tool_timeout: int, css_path: str | None) -> list[str]:
         """
         This method sets up the Malware Jail arguments which will be used to run the tool
         :param request: The ServiceRequest object
@@ -1231,7 +1216,7 @@ class JsJaws(ServiceBase):
         # -f filename ... the value of the script full name property to be set
         malware_jail_args = [
             "node",
-            self.path_to_jailme_js,
+            PATH_TO_JAILME_JS,
             "-s",
             self.malware_jail_payload_extraction_dir,
             "-o",
@@ -1267,7 +1252,7 @@ class JsJaws(ServiceBase):
         # By default, detonation takes place within a sandboxed browser. This option allows
         # for the sample to be run in WScript only
         if wscript_only:
-            malware_jail_args.extend(["-c", self.wscript_only_config])
+            malware_jail_args.extend(["-c", WSCRIPT_ONLY_CONFIG])
 
         # By default, we don't want to replace exception catching in a script with a log of the exception,
         # but it is useful for debugging
@@ -1285,8 +1270,8 @@ class JsJaws(ServiceBase):
         return malware_jail_args
 
     def _setup_tool_args(
-        self, request: ServiceRequest, tool_timeout: int, css_path: Optional[str]
-    ) -> Tuple[List[str], List[str], List[str], List[str]]:
+        self, request: ServiceRequest, tool_timeout: int, css_path: str | None
+    ) -> tuple[list[str], list[str], list[str], list[str]]:
         """
         This method sets up the tool arguments which will be used to run tools
         :param request: The ServiceRequest object
@@ -1303,9 +1288,9 @@ class JsJaws(ServiceBase):
 
         malware_jail_args = self._setup_malware_jail_args(request, tool_timeout, css_path)
 
-        jsxray_args = ["node", self.path_to_jsxray, f"{DIVIDING_COMMENT}\n"]
+        jsxray_args = ["node", PATH_TO_JSXRAY, f"{DIVIDING_COMMENT}\n"]
 
-        synchrony_args = [self.path_to_synchrony, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
+        synchrony_args = [PATH_TO_SYNCHRONY, "deobfuscate", "--output", self.cleaned_with_synchrony_path]
 
         # If the Assemblyline environment is allowing service containers to reach the Internet,
         # then allow_download_from_internet service variable needs to be set to true
@@ -1352,7 +1337,7 @@ class JsJaws(ServiceBase):
         return one_liner_hit
 
     @staticmethod
-    def _trim_malware_jail_output(malware_jail_output: List[str]) -> List[str]:
+    def _trim_malware_jail_output(malware_jail_output: list[str]) -> list[str]:
         """
         Find the log line when the sample was executed in MalwareJail, and the lines after that are the
         output that we want.
@@ -1365,7 +1350,7 @@ class JsJaws(ServiceBase):
             if "==> Executing malware file(s). =========================================" in line:
                 start_idx = idx
                 break
-            elif idx > 1000:
+            if idx > 1000:
                 # There's no way MalwareJail would output 1000 lines before executing the malware, right?!
                 break
 
@@ -1374,7 +1359,7 @@ class JsJaws(ServiceBase):
                 # We want to include the line above
                 end_idx = idx + 1
                 break
-            elif idx > 1000:
+            if idx > 1000:
                 # There's no way MalwareJail would output 1000 lines after cleaning up the sandbox, right?!
                 break
 
@@ -1386,8 +1371,8 @@ class JsJaws(ServiceBase):
         return malware_jail_output
 
     def _handle_tool_stdout_limit(
-        self, tool: str, tool_output: List[str], tool_args: List[str], responses: Dict[str, List[str]]
-    ) -> List[str]:
+        self, tool: str, tool_output: list[str], tool_args: list[str], responses: dict[str, list[str]]
+    ) -> list[str]:
         """
         This method handles if the tool exits early due to the stdout limit being surpassed
         :param tool: The enumerator used for the tool name
@@ -1419,7 +1404,7 @@ class JsJaws(ServiceBase):
 
         return tool_output
 
-    def _handle_boxjs_output(self, responses: Dict[str, List[str]], boxjs_args: List[str]) -> List[str]:
+    def _handle_boxjs_output(self, responses: dict[str, list[str]], boxjs_args: list[str]) -> list[str]:
         """
         This method handles retrieving the Box.js output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1430,20 +1415,18 @@ class JsJaws(ServiceBase):
         if not self.ignore_stdout_limit:
             temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
 
-        boxjs_output: List[str] = []
+        boxjs_output: list[str] = []
         if len(glob(self.boxjs_analysis_log)) > 0:
             boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
             with open(boxjs_analysis_log, "r") as f:
                 for line in f:
                     # This creates clutter!
-                    if line.startswith("[verb] Code saved to"):
-                        continue
-                    else:
+                    if not line.startswith("[verb] Code saved to"):
                         boxjs_output.append(line)
 
         return boxjs_output
 
-    def _handle_malware_jail_output(self, responses: Dict[str, List[str]], malware_jail_args: List[str]) -> List[str]:
+    def _handle_malware_jail_output(self, responses: dict[str, list[str]], malware_jail_args: list[str]) -> list[str]:
         """
         This method handles the Malware Jail output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1455,17 +1438,16 @@ class JsJaws(ServiceBase):
             malware_jail_output = self._handle_tool_stdout_limit(
                 MALWARE_JAIL, malware_jail_output, malware_jail_args, responses
             )
-        malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
-        return malware_jail_output
+        return self._trim_malware_jail_output(malware_jail_output)
 
     @staticmethod
-    def _handle_jsxray_output(responses) -> Dict[str, Any]:
+    def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
         """
         This method handles JS-X-Ray output
         :param responses: A dictionary used to contain the stdout from a tool
         :return: A dictionary that make up the output from JS-X-Ray
         """
-        jsxray_output: Dict[str, Any] = {}
+        jsxray_output: dict[str, Any] = {}
         try:
             if len(responses.get(JS_X_RAY, [])) > 0:
                 jsxray_output = loads(responses[JS_X_RAY][0])
@@ -1474,7 +1456,12 @@ class JsJaws(ServiceBase):
         return jsxray_output
 
     def _run_the_gauntlet(
-        self, request, file_path, file_content, original_contents, subsequent_run: bool = False
+        self,
+        request: ServiceRequest,
+        file_path: str,
+        file_content: bytes,
+        original_contents: bytes,
+        subsequent_run: bool = False,
     ) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
@@ -1509,7 +1496,7 @@ class JsJaws(ServiceBase):
         # Determine the file type to be used for this gauntlet run
         if not subsequent_run:
             file_type = self.sample_type
-            file_type_details = dict(mime=None)
+            file_type_details = {"mime": None}
         else:
             file_type_details = self.identify.fileinfo(file_path, generate_hashes=False)
             file_type = file_type_details["type"]
@@ -1667,9 +1654,7 @@ class JsJaws(ServiceBase):
                 file_for_malware_jail = None
                 for section in sections_of_script:
                     section_hash = sha256(section).hexdigest()
-                    if section_hash in section_hashes:
-                        continue
-                    else:
+                    if section_hash not in section_hashes:
                         section_hashes.add(section_hash)
                         script_for_malware_jail, file_for_malware_jail = self.append_content(
                             section.decode(), script_for_malware_jail, file_for_malware_jail
@@ -1712,8 +1697,8 @@ class JsJaws(ServiceBase):
                 low_body_heur.name, low_body_heur.description, heuristic=low_body_heur, parent=request.result
             )
 
-        tool_threads: List[tuple[str, Thread]] = []
-        responses: Dict[str, List[str]] = {}
+        tool_threads: list[tuple[str, Thread]] = []
+        responses: dict[str, list[str]] = {}
         if not request.get_param("static_analysis_only"):
             tool_threads.append(
                 (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
@@ -1843,8 +1828,8 @@ class JsJaws(ServiceBase):
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
 
     def append_content(
-        self, content: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
-    ) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, content: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method appends contents to a NamedTemporaryFile
         :param content: content to be appended
@@ -1860,8 +1845,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def insert_content(
-        self, content: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
-    ) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, content: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method inserts contents above the dividing comment line in a NamedTemporaryFile
         :param content: content to be inserted
@@ -1889,9 +1874,9 @@ class JsJaws(ServiceBase):
         request: ServiceRequest,
         file_content: bytes,
         js_content: bytes = b"",
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None,
+        aggregated_js_script: IO[bytes] | None = None,
         insert_above_divider: bool = False,
-    ) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
+    ) -> tuple[str | None, bytes | None, str | None]:
         """
         This method extracts elements from an HTML file using the BeautifulSoup library
         :param request: The ServiceRequest object
@@ -1968,14 +1953,14 @@ class JsJaws(ServiceBase):
             return js_script_name, js_content, css_script_name
         return js_script_name, file_content, css_script_name
 
-    def extract_js_from_jscript(self, file_content: bytes) -> Tuple[str, bytes]:
+    def extract_js_from_jscript(self, file_content: bytes) -> tuple[str, bytes]:
         """
         This method extracts JavaScript from JScript
         :param file_content: The contents of the JScript file to be read
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
         """
 
-        def log_and_replace_jscript(match):
+        def log_and_replace_jscript(match: re.Match) -> bytes:
             group_0 = match.group(0).decode()
             self.log.debug(f"Removed JScript conditional comment: {group_0}")
             return b""
@@ -1992,9 +1977,9 @@ class JsJaws(ServiceBase):
         self,
         soup: BeautifulSoup,
         request: ServiceRequest,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes = b"",
-    ) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    ) -> tuple[IO[bytes] | None, bytes | None]:
         """
         This method extracts files from embed tag sources via BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -2004,7 +1989,7 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file that was written and the contents of the file that was written
         """
         self.log.debug("Extracting embedded files from soup...")
-        embed_srcs: Set[str] = set()
+        embed_srcs: set[str] = set()
 
         # https://www.w3schools.com/tags/att_src.asp
         # Supported and inspired by https://github.com/sandialabs/laikaboss/blob/8dd2ca17c18d4d0d363d566798720acb7b4d3662/laikaboss/modules/scan_html.py#L60
@@ -2032,7 +2017,7 @@ class JsJaws(ServiceBase):
         elements_with_href_attr = ["a", "area", "base", "link"]
 
         elements_with_attr_of_interest = elements_with_src_attr + elements_with_href_attr
-        embeds = soup.findAll(elements_with_attr_of_interest)
+        embeds = soup.find_all(elements_with_attr_of_interest)
 
         for embed in embeds:
             element_name = embed.name
@@ -2085,7 +2070,7 @@ class JsJaws(ServiceBase):
 
         return aggregated_js_script, js_content
 
-    def _search_script_contents_for_unescapes(self, script_contents_list: List[str]) -> bool:
+    def _search_script_contents_for_unescapes(self, script_contents_list: list[str]) -> bool:
         """
         This method searches a list of script contents (usually with length of 1) using regular expressions,
         hunting for simple obfuscation
@@ -2141,34 +2126,24 @@ class JsJaws(ServiceBase):
         :param element: The BeautifulSoup element
         :return: A flag indicating if we should skip creating the element
         """
-        # We don't want these elements dynamically created
-        if element.name in ["head", "style", "body", "param"]:
-            return True
-
-        # If the file is code/wsf, skip the job and package elements
-        elif element.name in ["job", "package"] and self.sample_type == "code/wsf":
-            return True
-
-        # If the file is code/wsc, skip the component element
-        elif element.name in ["component"] and self.sample_type == "code/wsc":
-            return True
-
-        # If there is a script element that just points at a src, we want it!
-        elif element.name in ["script"] and element.string is not None and element.string.strip():
-            return True
-
-        elif self._skip_embed_element(element):
-            return True
-
-        # If we have a meta element that does not have http-equiv set to refresh and content attributes, skip it
-        elif element.name in ["meta"] and not (
-            element.attrs.get("http-equiv")
-            and element.attrs.get("http-equiv").lower() == "refresh"
-            and element.attrs.get("content")
-        ):
-            return True
-
-        return False
+        return bool(
+            # We don't want these elements dynamically created
+            element.name in ["head", "style", "body", "param"]
+            # If the file is code/wsf, skip the job and package elements
+            or (element.name in ["job", "package"] and self.sample_type == "code/wsf")
+            # If the file is code/wsc, skip the component element
+            or (element.name in ["component"] and self.sample_type == "code/wsc")
+            # If there is a script element that just points at a src, we want it!
+            or (element.name in ["script"] and element.string is not None and element.string.strip())
+            or self._skip_embed_element(element)
+            # If we have a meta element that does not have http-equiv set to refresh and content attributes, skip it
+            or element.name in ["meta"]
+            and not (
+                element.attrs.get("http-equiv")
+                and element.attrs.get("http-equiv", "").lower() == "refresh"
+                and element.attrs.get("content")
+            )
+        )
 
     def _remove_safelisted_element_attrs(self, element: Tag) -> Tag:
         """
@@ -2220,7 +2195,7 @@ class JsJaws(ServiceBase):
         return idx
 
     @staticmethod
-    def create_unique_element_id(element_id: str, set_of_variable_names: Set[str]) -> str:
+    def create_unique_element_id(element_id: str, set_of_variable_names: set[str]) -> str:
         """
         If the proposed element ID already exists, then mock one
         :param element_id: The element id
@@ -2234,7 +2209,7 @@ class JsJaws(ServiceBase):
         return element_id
 
     @staticmethod
-    def _determine_element_id(element: Tag, idx: int, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_id(element: Tag, idx: int, set_of_variable_names: set[str]) -> str:
         """
         This method determines the element id of the element, and will create one if
         the "id" field is not set
@@ -2250,12 +2225,10 @@ class JsJaws(ServiceBase):
         if element_id == "":
             element_id = f"element{idx}"
 
-        element_id = JsJaws.create_unique_element_id(element_id, set_of_variable_names)
-
-        return element_id
+        return JsJaws.create_unique_element_id(element_id, set_of_variable_names)
 
     @staticmethod
-    def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: Set[str]) -> str:
+    def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: set[str]) -> str:
         """
         This method determines the name of the variable representing the element
         :param element: The BeautifulSoup element
@@ -2329,14 +2302,13 @@ class JsJaws(ServiceBase):
         if '"' in element_name:
             element_name = element_name.replace('"', "'")
         # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
-        create_element_script = (
+        return (
             f'const {random_element_varname} = document.createElement("{element_name}");\n'
             f'{random_element_varname}.setAttribute("id", "{element_id}");\n'
         )
-        return create_element_script
 
     @staticmethod
-    def _append_element_script(element: Tag, set_of_variable_names: Set[str], random_element_varname: str) -> str:
+    def _append_element_script(element: Tag, set_of_variable_names: set[str], random_element_varname: str) -> str:
         """
         This method adds script that appends the element
         :param element: The BeautifulSoup element
@@ -2436,22 +2408,25 @@ class JsJaws(ServiceBase):
             command = None
             # We need to handle <param> tags accordingly
             for descendant in element.descendants:
-                if descendant and descendant.name == "param":
-                    if all(item in descendant.attrs for item in ["name", "value"]):
-                        name = descendant.attrs["name"].lower()
-                        value = descendant.attrs["value"]
-                        if name == "command" and value.lower() == "shortcut":
-                            is_shortcut = True
-                        elif name == "item1":
-                            command_args = value.split(",")
-                            if (
-                                len(command_args) >= 2
-                                and not command_args[0].strip()
-                                and command_args[1].strip() != "cmd.exe"
-                            ):
-                                # This is the default when loaded on Windows
-                                command_args[0] = "cmd.exe"
-                            command = " ".join([command_arg for command_arg in command_args if command_arg])
+                if (
+                    descendant
+                    and descendant.name == "param"
+                    and all(item in descendant.attrs for item in ["name", "value"])
+                ):
+                    name = descendant.attrs["name"].lower()
+                    value = descendant.attrs["value"]
+                    if name == "command" and value.lower() == "shortcut":
+                        is_shortcut = True
+                    elif name == "item1":
+                        command_args = value.split(",")
+                        if (
+                            len(command_args) >= 2
+                            and not command_args[0].strip()
+                            and command_args[1].strip() != "cmd.exe"
+                        ):
+                            # This is the default when loaded on Windows
+                            command_args[0] = "cmd.exe"
+                        command = " ".join([command_arg for command_arg in command_args if command_arg])
             if is_shortcut and command:
                 # JavaScript does not like when there are newlines when setting attributes
                 if isinstance(command, str) and "\n" in command:
@@ -2472,7 +2447,7 @@ class JsJaws(ServiceBase):
         return ""
 
     def _setup_create_element_script(
-        self, element: Tag, element_id: str, set_of_variable_names: Set[str], request: ServiceRequest
+        self, element: Tag, element_id: str, set_of_variable_names: set[str], request: ServiceRequest
     ) -> str:
         """
         This method sets up the script that creates elements dynamically
@@ -2503,9 +2478,7 @@ class JsJaws(ServiceBase):
 
         return create_element_script
 
-    def _is_vb_and_js_scripts(
-        self, scripts: ResultSet[Tag], request: ServiceRequest
-    ) -> Tuple[bool, Optional[ResultTextSection]]:
+    def _is_vb_and_js_scripts(self, scripts: ResultSet[Tag], request: ServiceRequest) -> tuple[bool, ResultTextSection]:
         """
         This method determines if there is a combination of VisualBasic and JavaScript scripts
         :param scripts: A list of Script soup elements
@@ -2582,10 +2555,10 @@ class JsJaws(ServiceBase):
         self,
         body: str,
         js_content: bytes,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
-        function_varname: Optional[str],
-        vb_and_js_section: Optional[ResultTextSection],
-    ) -> Tuple[bytes, Optional[tempfile.NamedTemporaryFile]]:
+        aggregated_js_script: IO[bytes] | None,
+        function_varname: str | None,
+        vb_and_js_section: ResultTextSection | None,
+    ) -> tuple[bytes, IO[bytes] | None]:
         """
         This method handles VisualBasic scripts
         :param body: The VisualBasic script body to be looked through
@@ -2625,8 +2598,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def _create_vbscript_element(
-        self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
-    ) -> Tuple[bytes, Optional[tempfile.NamedTemporaryFile]]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes] | None]:
         """
         This method takes the body of a VBScript and creates an element in the DOM, basically as a placeholder
         since we cannot run this script in Node.js
@@ -2680,7 +2653,7 @@ class JsJaws(ServiceBase):
         return body
 
     @staticmethod
-    def _handle_onevent_attributes(is_script_body: bool, element: Tag, onevents: List[str]) -> Tuple[bool, List[str]]:
+    def _handle_onevent_attributes(is_script_body: bool, element: Tag, onevents: list[str]) -> tuple[bool, list[str]]:
         """
         This method
         """
@@ -2702,10 +2675,10 @@ class JsJaws(ServiceBase):
     def _handle_misparsed_soup(
         self,
         body: str,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes,
         request: ServiceRequest,
-    ) -> Tuple[str, Optional[tempfile.NamedTemporaryFile], bytes]:
+    ) -> tuple[str, IO[bytes] | None, bytes]:
         """
         If there is a malformed JavaScript script and another "script body" starts with an already seen script,
         this is most likely a parsing issue and we are going to slice the already seen script out
@@ -2746,9 +2719,9 @@ class JsJaws(ServiceBase):
     def _handle_malformed_javascript(
         self,
         visible_texts: ResultSet[Tag],
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
+        aggregated_js_script: IO[bytes] | None,
         js_content: bytes,
-    ) -> Tuple[Optional[tempfile.NamedTemporaryFile], bytes]:
+    ) -> tuple[IO[bytes] | None, bytes]:
         """
         This is a workaround for broken scripts that we still want to run. Odds are this won't create
         valid JavaScript, but odds are the initial JavaScript wasn't valid in the first place, so we're just going to
@@ -2796,11 +2769,11 @@ class JsJaws(ServiceBase):
     def _extract_js_using_soup(
         self,
         soup: BeautifulSoup,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile] = None,
+        aggregated_js_script: IO[bytes] | None = None,
         js_content: bytes = b"",
-        request: Optional[ServiceRequest] = None,
+        request: ServiceRequest | None = None,
         insert_above_divider: bool = False,
-    ) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    ) -> tuple[IO[bytes] | None, bytes | None]:
         """
         This method extracts JavaScript from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -2812,10 +2785,10 @@ class JsJaws(ServiceBase):
         """
 
         # A list of methods to run when a form is submitted, after the DOM is loaded
-        onevents: List[str] = list()
+        onevents: list[str] = []
 
         self.log.debug("Extracting JavaScript from soup...")
-        scripts = soup.findAll("script")
+        scripts = soup.find_all("script")
         visible_texts = self._extract_visible_text_from_soup(soup)
 
         self._contains_scripts_with_unescape(soup, scripts)
@@ -2825,9 +2798,9 @@ class JsJaws(ServiceBase):
         is_script_body = False
 
         # Create most HTML elements with JavaScript
-        elements = soup.findAll()
-        bodies = soup.findAll("body")
-        body_children: List[str] = []
+        elements = soup.find_all()
+        bodies = soup.find_all("body")
+        body_children: list[str] = []
         for body in bodies:
             body_children.extend(
                 [child.name for child in body.children if child.name]
@@ -2837,7 +2810,7 @@ class JsJaws(ServiceBase):
             self.low_body_elements = True
 
         # This will hold all variable names, to ensure we avoid variable name collision
-        set_of_variable_names: Set[str] = set()
+        set_of_variable_names: set[str] = set()
         for index, element in enumerate(elements):
             # Don't add an element to the script if it matches certain criteria
             if self._skip_element(element):
@@ -2957,9 +2930,9 @@ class JsJaws(ServiceBase):
         self,
         soup: BeautifulSoup,
         request: ServiceRequest,
-        aggregated_js_script: tempfile.NamedTemporaryFile,
+        aggregated_js_script: IO[bytes],
         js_content: bytes,
-    ) -> Tuple[Optional[tempfile.NamedTemporaryFile], Optional[tempfile.NamedTemporaryFile], Optional[bytes]]:
+    ) -> tuple[IO[bytes] | None, IO[bytes] | None, bytes | None]:
         """
         This method extracts CSS and possibly JS from BeautifulSoup enumeration
         :param soup: The BeautifulSoup object
@@ -2974,8 +2947,8 @@ class JsJaws(ServiceBase):
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript
         # analysis envs
         try:
-            styles = soup.findAll("style")
-            style_json = dict()
+            styles = soup.find_all("style")
+            style_json = {}
             css_content = b""
             aggregated_css_script = None
             for style in styles:
@@ -3035,38 +3008,37 @@ class JsJaws(ServiceBase):
                 css_script_name = aggregated_css_script.name
 
                 # Look for suspicious CSS usage
-                for _, rules in style_json.items():
+                for rules in style_json.values():
                     for rule in rules:
                         declaration_blocks = rule.values()
                         for declaration_block in declaration_blocks:
                             for item in declaration_block.get("values", []):
-                                if isinstance(item, dict):
-                                    if item.get("url"):
-                                        # SUS
-                                        url_path = None
-                                        # If the content is base64 encoded, decode it before we extract it
-                                        matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
-                                        if matches and len(matches.regs) == 2:
-                                            item["url"] = b64decode(matches.group(1).encode())
-                                        else:
-                                            item["url"] = item["url"].encode()
-                                        with tempfile.NamedTemporaryFile(
-                                            dir=self.working_directory, delete=False, mode="wb"
-                                        ) as t:
-                                            t.write(item["url"])
-                                            url_path = t.name
-                                        artifact = {
-                                            "name": get_sha256_for_file(url_path),
-                                            "path": url_path,
-                                            "description": "URL value from CSS",
-                                            "to_be_extracted": True,
-                                        }
-                                        self.log.debug(f"Extracting URL value from CSS: {url_path}")
-                                        self.artifact_list.append(artifact)
-                                        heur = Heuristic(7)
-                                        _ = ResultTextSection(
-                                            heur.name, heuristic=heur, parent=request.result, body=heur.description
-                                        )
+                                if isinstance(item, dict) and item.get("url"):
+                                    # SUS
+                                    url_path = None
+                                    # If the content is base64 encoded, decode it before we extract it
+                                    matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
+                                    if matches and len(matches.regs) == 2:
+                                        item["url"] = b64decode(matches.group(1).encode())
+                                    else:
+                                        item["url"] = item["url"].encode()
+                                    with tempfile.NamedTemporaryFile(
+                                        dir=self.working_directory, delete=False, mode="wb"
+                                    ) as t:
+                                        t.write(item["url"])
+                                        url_path = t.name
+                                    artifact = {
+                                        "name": get_sha256_for_file(url_path),
+                                        "path": url_path,
+                                        "description": "URL value from CSS",
+                                        "to_be_extracted": True,
+                                    }
+                                    self.log.debug(f"Extracting URL value from CSS: {url_path}")
+                                    self.artifact_list.append(artifact)
+                                    heur = Heuristic(7)
+                                    _ = ResultTextSection(
+                                        heur.name, heuristic=heur, parent=request.result, body=heur.description
+                                    )
             else:
                 css_script_name = None
         except Exception as e:
@@ -3076,7 +3048,7 @@ class JsJaws(ServiceBase):
 
         return css_script_name, aggregated_js_script, js_content
 
-    def _extract_visible_text_from_soup(self, soup: BeautifulSoup) -> List[str]:
+    def _extract_visible_text_from_soup(self, soup: BeautifulSoup) -> list[str]:
         """
         This method extracts visible text from the HTML page, given soup object
         :param dom_content: The content of written to the DOM
@@ -3088,14 +3060,11 @@ class JsJaws(ServiceBase):
         def tag_visible(element):
             if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
                 return False
-            if isinstance(element, Comment):
-                return False
-            return True
+            return not isinstance(element, Comment)
 
-        visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
-        return visible_texts
+        return list(filter(tag_visible, soup.find_all(string=True)))
 
-    def _extract_visible_text_using_soup(self, dom_content) -> List[str]:
+    def _extract_visible_text_using_soup(self, dom_content) -> list[str]:
         """
         This method extracts visible text from the HTML page, given DOM content
         :param dom_content: The content of written to the DOM
@@ -3109,7 +3078,7 @@ class JsJaws(ServiceBase):
 
         return self._extract_visible_text_from_soup(soup)
 
-    def _extract_wscript(self, output: List[str], result: Result) -> None:
+    def _extract_wscript(self, output: list[str], result: Result) -> None:
         """
         This method does a couple of things:
         1. It looks for lines from the output that contain shell scripts, and writes these to a file for extraction
@@ -3226,22 +3195,22 @@ class JsJaws(ServiceBase):
 
         if batch_cmd_spotted:
             artifact = {
-                "name": self.extracted_wscript_batch,
+                "name": EXTRACTED_WSCRIPT_BATCH,
                 "path": self.extracted_wscript_batch_path,
                 "description": "Extracted WScript batch file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.extracted_wscript_batch}")
+            self.log.debug(f"Adding extracted file: {EXTRACTED_WSCRIPT_BATCH}")
             self.artifact_list.append(artifact)
 
         if ps1_cmd_spotted:
             artifact = {
-                "name": self.extracted_wscript_ps1,
+                "name": EXTRACTED_WSCRIPT_PS1,
                 "path": self.extracted_wscript_ps1_path,
                 "description": "Extracted WScript ps1 file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.extracted_wscript_ps1}")
+            self.log.debug(f"Adding extracted file: {EXTRACTED_WSCRIPT_PS1}")
             self.artifact_list.append(artifact)
 
         if (batch_cmd_spotted or ps1_cmd_spotted) and wscript_res_sec.body:
@@ -3265,7 +3234,7 @@ class JsJaws(ServiceBase):
         ]
 
         # These are dumped files from Box.js of js that was run successfully
-        snippet_keys: List[str] = []
+        snippet_keys: list[str] = []
         if len(glob(self.boxjs_snippets)) > 0:
             boxjs_snippets = max(glob(self.boxjs_snippets), key=path.getctime)
             with open(boxjs_snippets, "r") as f:
@@ -3292,33 +3261,34 @@ class JsJaws(ServiceBase):
                 continue
             # These are not payloads
             # Direct paths
-            if extracted in [
-                self.malware_jail_urls_json_path,
-                self.extracted_wscript_batch_path,
-                self.extracted_wscript_ps1_path,
-                self.boxjs_batch_path,
-                self.boxjs_ps1_path,
-            ]:
-                continue
-            # Glob paths
-            elif any(
-                extracted in glob(glob_path)
-                for glob_path in [
-                    self.boxjs_iocs,
-                    self.boxjs_resources,
-                    self.boxjs_snippets,
-                    self.boxjs_analysis_log,
-                    self.boxjs_urls_json_path,
+            if (
+                extracted
+                in [
+                    self.malware_jail_urls_json_path,
+                    self.extracted_wscript_batch_path,
+                    self.extracted_wscript_ps1_path,
+                    self.boxjs_batch_path,
+                    self.boxjs_ps1_path,
                 ]
-            ):
-                continue
-            # If the snippets.json is not finished being written to, there is a race condition here,
-            # so let's confirm that the file to be extracted is a snippet but hasn't been written to
-            # the snippets.json yet
-            elif (
-                len(glob(self.boxjs_output_dir)) > 0
-                and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime))
-                and re.match(SNIPPET_FILE_NAME, file)
+                # Glob paths
+                or any(
+                    extracted in glob(glob_path)
+                    for glob_path in [
+                        self.boxjs_iocs,
+                        self.boxjs_resources,
+                        self.boxjs_snippets,
+                        self.boxjs_analysis_log,
+                        self.boxjs_urls_json_path,
+                    ]
+                )
+                # If the snippets.json is not finished being written to, there is a race condition here,
+                # so let's confirm that the file to be extracted is a snippet but hasn't been written to
+                # the snippets.json yet
+                or (
+                    len(glob(self.boxjs_output_dir)) > 0
+                    and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime))
+                    and re.match(SNIPPET_FILE_NAME, file)
+                )
             ):
                 continue
             extracted_sha = get_sha256_for_file(extracted)
@@ -3340,7 +3310,7 @@ class JsJaws(ServiceBase):
                 self.log.debug(f"Adding extracted file: {safe_str(file)}")
                 self.artifact_list.append(artifact)
 
-    def _parse_malwarejail_output(self, output: List[str]) -> str:
+    def _parse_malwarejail_output(self, output: list[str]) -> str:
         """
         This method is a generator that validates whether a new line of malwarejail output exists
         :param output: All malwarejail output
@@ -3374,7 +3344,7 @@ class JsJaws(ServiceBase):
         if ret is not None:
             yield ret
 
-    def _extract_doc_writes(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
+    def _extract_doc_writes(self, output: list[str], request: ServiceRequest, original_contents: bytes) -> None:
         """
         This method writes all document writes to a file and adds that in an extracted file
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
@@ -3431,7 +3401,7 @@ class JsJaws(ServiceBase):
 
         self.doc_write_hashes.add(doc_write_hash)
 
-        visible_text: Set[str] = set()
+        visible_text: set[str] = set()
         for line in content_to_write_list:
             visible_text.update(self._extract_visible_text_using_soup(line))
         if any(any(WORD in line.lower() for WORD in PASSWORD_WORDS) for line in visible_text):
@@ -3453,14 +3423,14 @@ class JsJaws(ServiceBase):
                 passwords_extracted_file = "passwords_extracted_from_html.json"
                 password_extracted_path = path.join(self.working_directory, passwords_extracted_file)
                 with open(password_extracted_path, "w") as f:
-                    f.write(dumps(sorted(list(new_passwords))))
+                    f.write(dumps(sorted(new_passwords)))
                 request.add_supplementary(
                     password_extracted_path, passwords_extracted_file, "Passwords extracted from HTML file"
                 )
                 # It is technically not required to sort them, but it makes the output of the module predictable
                 if "passwords" in request.temp_submission_data:
                     new_passwords.update(set(request.temp_submission_data["passwords"]))
-                request.temp_submission_data["passwords"] = sorted(list(new_passwords))
+                request.temp_submission_data["passwords"] = sorted(new_passwords)
 
         # The entire point of writing elements into the document is to manipulate the DOM. If certain elements
         # contain script elements that depend on previously declared variables, then we should build an HTML
@@ -3495,10 +3465,10 @@ class JsJaws(ServiceBase):
 
         urls_result_section = ResultTableSection("URLs")
         urls_result_section.set_column_order(["url", "method", "request_body"])
-        urls_rows: List[TableRow] = []
-        items_seen: Set[str] = set()
-        mj_posts_seen: List[str] = []
-        boxjs_posts_seen: List[str] = []
+        urls_rows: list[TableRow] = []
+        items_seen: set[str] = set()
+        mj_posts_seen: list[str] = []
+        boxjs_posts_seen: list[str] = []
 
         if path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
@@ -3527,7 +3497,7 @@ class JsJaws(ServiceBase):
             boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
             with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
-                ioc_json: List[Dict[str, Any]] = []
+                ioc_json: list[dict[str, Any]] = []
                 try:
                     ioc_json = loads(file_contents)
                 except JSONDecodeError as e:
@@ -3537,7 +3507,7 @@ class JsJaws(ServiceBase):
                     if ioc["type"] in ["UrlFetch", "XMLHttpRequest"] and "url" in value:
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
-                        elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
+                        if not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
                         item = {
                             "url": value["url"],
@@ -3553,9 +3523,9 @@ class JsJaws(ServiceBase):
                             boxjs_posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
-                                params["json"] = item.get("request_body", None)
+                                params["json"] = item.get("request_body")
                             else:
-                                params["data"] = item.get("request_body", None)
+                                params["data"] = item.get("request_body")
                             if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
                                 self.log.debug(f"Extracting URI file for '{item['url']}'")
                                 request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
@@ -3610,7 +3580,7 @@ class JsJaws(ServiceBase):
                 urls_result_section.heuristic.add_signature_id("possible_phishing_urls", 400)
             request.result.add_section(urls_result_section)
 
-    def _extract_supplementary(self, output: List[str]) -> None:
+    def _extract_supplementary(self, output: list[str]) -> None:
         """
         This method adds the sandbox environment dump and the MalwareJail stdout as supplementary files, as well as
         the dumps from Box.js
@@ -3620,12 +3590,12 @@ class JsJaws(ServiceBase):
         if path.exists(self.malware_jail_sandbox_env_dump_path):
             # Get the sandbox env json that is dumped. This should always exist.
             malware_jail_sandbox_env_dump = {
-                "name": self.malware_jail_sandbox_env_dump,
+                "name": MALWARE_JAIL_SANDBOX_ENV_DUMP,
                 "path": self.malware_jail_sandbox_env_dump_path,
                 "description": "Sandbox Environment Details",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {self.malware_jail_sandbox_env_dump}")
+            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_SANDBOX_ENV_DUMP}")
             self.artifact_list.append(malware_jail_sandbox_env_dump)
 
         if output:
@@ -3633,12 +3603,12 @@ class JsJaws(ServiceBase):
                 for line in output:
                     f.write(line + "\n")
             mlwr_jail_out = {
-                "name": self.malware_jail_output,
+                "name": MALWARE_JAIL_OUTPUT,
                 "path": self.malware_jail_output_path,
                 "description": "Malware Jail Output",
                 "to_be_extracted": False,
             }
-            self.log.debug(f"Adding supplementary file: {self.malware_jail_output}")
+            self.log.debug(f"Adding supplementary file: {MALWARE_JAIL_OUTPUT}")
             self.artifact_list.append(mlwr_jail_out)
 
         if len(glob(self.boxjs_analysis_log)) > 0:
@@ -3652,7 +3622,7 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Adding supplementary file: {boxjs_analysis_log['path']}")
             self.artifact_list.append(boxjs_analysis_log)
 
-    def _run_signatures(self, output: List[str], result: Result, display_iocs: bool = False) -> None:
+    def _run_signatures(self, output: list[str], result: Result, display_iocs: bool = False) -> None:
         """
         This method sets up the parallelized signature engine and runs each signature against the
         stdout from MalwareJail
@@ -3761,7 +3731,7 @@ class JsJaws(ServiceBase):
             self.is_phishing = True
 
     @staticmethod
-    def _process_signature(signature: Signature, output: List[str], signatures_that_hit: List[Signature]) -> None:
+    def _process_signature(signature: Signature, output: list[str], signatures_that_hit: list[Signature]) -> None:
         """
         This method is used for the purpose of multi-threading and sharing the signatures_that_hit list
         :param signature: A Signature object that represents a signature
@@ -3788,7 +3758,7 @@ class JsJaws(ServiceBase):
         with open(boxjs_iocs, "r") as f:
             file_contents = f.read()
 
-        ioc_json: List[Dict[str, Any]] = []
+        ioc_json: list[dict[str, Any]] = []
         try:
             ioc_json = loads(file_contents)
         except JSONDecodeError as e:
@@ -3803,7 +3773,7 @@ class JsJaws(ServiceBase):
         boxjs_ps1_extraction.write(CUSTOM_PS1_ID.decode())
 
         commands = set()
-        commands_to_display = list()
+        commands_to_display = []
         file_writes = set()
         file_reads = set()
         file_folder_exists = set()
@@ -3812,7 +3782,7 @@ class JsJaws(ServiceBase):
         regkey_reads = set()
         regkey_writes = set()
         new_resources_associated_with_url = set()
-        other = list()
+        other = []
         cmd_count = 0
         for ioc in ioc_json:
             ioc_type = ioc["type"]
@@ -3886,22 +3856,22 @@ class JsJaws(ServiceBase):
 
         if batch_cmd_spotted:
             artifact = {
-                "name": self.boxjs_batch,
+                "name": BOXJS_BATCH,
                 "path": self.boxjs_batch_path,
                 "description": "Boxjs batch file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.boxjs_batch}")
+            self.log.debug(f"Adding extracted file: {BOXJS_BATCH}")
             self.artifact_list.append(artifact)
 
         if ps1_cmd_spotted:
             artifact = {
-                "name": self.boxjs_ps1,
+                "name": BOXJS_PS1,
                 "path": self.boxjs_ps1_path,
                 "description": "Boxjs ps1 file",
                 "to_be_extracted": True,
             }
-            self.log.debug(f"Adding extracted file: {self.boxjs_ps1}")
+            self.log.debug(f"Adding extracted file: {BOXJS_PS1}")
             self.artifact_list.append(artifact)
 
         if batch_cmd_spotted or ps1_cmd_spotted:
@@ -4013,7 +3983,7 @@ class JsJaws(ServiceBase):
             ioc_result_section.set_heuristic(2)
             result.add_section(ioc_result_section)
 
-    def _flag_jsxray_iocs(self, output: Dict[str, Any], request: ServiceRequest) -> bool:
+    def _flag_jsxray_iocs(self, output: dict[str, Any], request: ServiceRequest) -> bool:
         """
         This method flags anything noteworthy from the Js-X-Ray output
         :param output: The output from JS-X-Ray
@@ -4021,7 +3991,7 @@ class JsJaws(ServiceBase):
         :return: A boolean flag representing that we should run Synchrony
         """
         jsxray_iocs_result_section = ResultTextSection(f"{JS_X_RAY} IOCs Detected")
-        warnings: List[Dict[str, Any]] = output.get("warnings", [])
+        warnings: list[dict[str, Any]] = output.get("warnings", [])
         signature = None
         run_synchrony = False
         for warning in warnings:
@@ -4071,15 +4041,13 @@ class JsJaws(ServiceBase):
                     jsxray_iocs_result_section.add_tag("file.string.extracted", truncate(safe_str(val)))
             elif kind == "obfuscated-code":
                 jsxray_iocs_result_section.add_line(
-                    f"\t\tObfuscated code was found that was obfuscated by: " f"{safe_str(val)}"
+                    f"\t\tObfuscated code was found that was obfuscated by: {safe_str(val)}"
                 )
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
             elif kind == "shady-link":
-                if not is_url(val.encode()) and not is_domain(val.encode()):
-                    continue
-                else:
+                if is_url(val.encode()) or is_domain(val.encode()):
                     add_tag(jsxray_iocs_result_section, "network.static.uri", val, self.safelist)
             elif kind in ["suspicious-literal", "short-identifiers", "suspicious-file", "unsafe-regex"]:
                 # We don't care about these warnings
@@ -4095,7 +4063,7 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool) -> None:
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
@@ -4163,16 +4131,12 @@ class JsJaws(ServiceBase):
                 return element[17:]
         return cmd
 
-    def _extract_malware_jail_iocs(self, output: List[str], request: ServiceRequest, original_contents: bytes) -> None:
+    def _extract_malware_jail_iocs(self, output: list[str], request: ServiceRequest, original_contents: bytes) -> None:
         self.log.debug(f"Extracting IOCs from the {MALWARE_JAIL} output...")
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
         for line in self._parse_malwarejail_output(output):
-            split_line = line.split("] ", 1)
-            if len(split_line) == 2:
-                log_line = split_line[1]
-            else:
-                log_line = line
+            log_line = line.split("] ", 1)[-1]
             if len(log_line) > 5000 and not request.deep_scan:
                 log_line = truncate(log_line, 5000)
 
@@ -4196,8 +4160,7 @@ class JsJaws(ServiceBase):
                 exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
                     raise Exception(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
-                else:
-                    self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
+                self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
 
                 # Check if there is an unexpected end of input that we could remedy
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
@@ -4231,7 +4194,7 @@ class JsJaws(ServiceBase):
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
                         for script_src in self.initial_script_sources | self.subsequent_script_sources:
                             if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
-                                url_sec.add_row(TableRow(**{"url": script_src}))
+                                url_sec.add_row(TableRow(url=script_src))
 
                         if url_sec.body:
                             script_source_res.add_subsection(url_sec)
@@ -4241,7 +4204,7 @@ class JsJaws(ServiceBase):
                 # (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
                 if not path.exists(self.malware_jail_sandbox_env_dump_path):
-                    matches = list(set([url.value.decode() for url in find_urls(log_line.encode())]))
+                    matches = list({url.value.decode() for url in find_urls(log_line.encode())})
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
@@ -4253,8 +4216,7 @@ class JsJaws(ServiceBase):
                             location_pointer = location_pointer["$ref"]
                             # Let's clean this up so that we can access the correct reference
                             # Could look like this "$[\"ret\"][\"contentDocument\"][\"_parentNode\"][\"_location\"]"
-                            if location_pointer.startswith("$"):
-                                location_pointer = location_pointer[1:]
+                            location_pointer = location_pointer.removeprefix("$")
 
                             if location_pointer.startswith('["') and location_pointer.endswith('"]'):
                                 location_pointer = location_pointer[2:-2]
@@ -4279,7 +4241,7 @@ class JsJaws(ServiceBase):
                 if not location_href:
                     continue
                 # It is possible that window.location=window.location, so this href could be reference to itself.
-                elif isinstance(location_href, dict):
+                if isinstance(location_href, dict):
                     continue
 
                 self._handle_location_redirection(location_href, request)
@@ -4300,14 +4262,14 @@ class JsJaws(ServiceBase):
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
 
-    def _handle_location_redirection(self, location_href: str, request: ServiceRequest):
+    def _handle_location_redirection(self, location_href: str, request: ServiceRequest) -> None:
         """
         If a location redirection related to MS-MSDT is seen, handle
         If a generic location redirection is seen, handle
         :param location_href: The URI that the page is being redirected to
         :param request: The ServiceRequest object
         """
-        redirection_res_sec: Optional[ResultTextSection] = next(
+        redirection_res_sec: ResultTextSection | None = next(
             (res for res in request.result.sections if res.heuristic and res.heuristic.heur_id == 6), None
         )
 
@@ -4345,7 +4307,7 @@ class JsJaws(ServiceBase):
                 if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
                     redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
 
-    def _handle_subsequent_scripts(self, result: Result):
+    def _handle_subsequent_scripts(self, result: Result) -> None:
         """
         This method handles subsequent script sources, by creating a result section and applying applicable signatures
         :param result: A Result object containing the service results
@@ -4357,14 +4319,14 @@ class JsJaws(ServiceBase):
         heur = Heuristic(18)
         dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
         # Check if domain or IP matches that of a URI that is programmatically loaded
-        for script_src in sorted(list(self.subsequent_script_sources)):
+        for script_src in sorted(self.subsequent_script_sources):
             if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
                 if any(urlparse(decoded_url).netloc in script_src for decoded_url in self.base64_encoded_urls):
                     # This is suspicious, flag it!
                     dynamic_script_source_res.heuristic.add_signature_id(
                         "programmatically_created_base64_decoded_url", 500
                     )
-                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+                dynamic_script_source_res.add_row(TableRow(url=script_src))
 
         if self.gauntlet_runs >= 5:
             # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
@@ -4377,8 +4339,8 @@ class JsJaws(ServiceBase):
     def _run_tool(
         self,
         tool_name: str,
-        args: List[str],
-        resp: Dict[str, Any],
+        args: list[str],
+        resp: dict[str, Any],
     ) -> None:
         """
         This method runs a tool and appends the stdout from that tool to the dictionary
@@ -4425,7 +4387,7 @@ class JsJaws(ServiceBase):
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
         self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
-    def _extract_filtered_code(self, file_contents: bytes) -> Tuple[Optional[str], Optional[bytes], Optional[str]]:
+    def _extract_filtered_code(self, file_contents: bytes) -> tuple[str | None, bytes | None, str | None]:
         file_string = file_contents.decode().replace("\r", "")
         lib_path, lib_contents = self._get_library_code(file_string)
         if not lib_contents:
@@ -4439,7 +4401,7 @@ class JsJaws(ServiceBase):
             return file_path, new_file_contents, lib_path
         return None, None, None
 
-    def _get_library_code(self, file_string: str) -> Tuple[Optional[str], Optional[str]]:
+    def _get_library_code(self, file_string: str) -> tuple[str | None, str | None]:
         # JQuery / online libs
         jquery_match = re.match(JQUERY_VERSION_REGEX, file_string)
         if jquery_match:
@@ -4483,7 +4445,7 @@ class JsJaws(ServiceBase):
         diff = []
         # The dirty file contents should always have more lines than the clean file contents
         dirty_line_index = 0
-        for index, clean_line in enumerate(clean_lines):
+        for clean_line in clean_lines:
             # Python has difficulty with decoding .. and ..., so skip it!
             # (the malicious lines are not in the clean files anyways)
             if ".." not in clean_line:
@@ -4505,11 +4467,8 @@ class JsJaws(ServiceBase):
         :param line_2: The second line to compare
         :return: A boolean representing that the lines are equivalent
         """
-        if line_1.startswith("//"):
-            line_1 = line_1[2:]
-
-        if line_2.startswith("//"):
-            line_2 = line_2[2:]
+        line_1 = line_1.removeprefix("//")
+        line_2 = line_2.removeprefix("//")
 
         line_1 = line_1.strip()
         line_2 = line_2.strip()
@@ -4517,8 +4476,8 @@ class JsJaws(ServiceBase):
         return line_1 == line_2
 
     def _convert_vb_static_variables(
-        self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
-    ) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for variable declaration, and converts them to JavaScript
         :param body: The VisualBasic script body to be looked through
@@ -4543,8 +4502,8 @@ class JsJaws(ServiceBase):
         return js_content, aggregated_js_script
 
     def _convert_vb_wscript_shell_declaration(
-        self, body: str, js_content: bytes, aggregated_js_script: Optional[tempfile.NamedTemporaryFile]
-    ) -> Tuple[Optional[str], bytes, tempfile.NamedTemporaryFile]:
+        self, body: str, js_content: bytes, aggregated_js_script: IO[bytes] | None
+    ) -> tuple[str | None, bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for a WScript.Shell declaration, and converts it to JavaScript
         :param body: The VisualBasic script body to be looked through
@@ -4574,8 +4533,8 @@ class JsJaws(ServiceBase):
         wscript_varname: str,
         body: str,
         js_content: bytes,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
-    ) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        aggregated_js_script: IO[bytes] | None,
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for RegWrite usage with the previously created WScript.Shell variable,
         and converts it to JavaScript
@@ -4603,7 +4562,7 @@ class JsJaws(ServiceBase):
 
         return js_content, aggregated_js_script
 
-    def _find_js_function_declaration(self, body: str) -> Optional[str]:
+    def _find_js_function_declaration(self, body: str) -> str | None:
         """
         This method looks in JavaScript scripts for a new Function being declared,
         and possibly reassigned to another variable
@@ -4622,8 +4581,8 @@ class JsJaws(ServiceBase):
         return function_varname
 
     def _look_for_iocs_between_vb_and_js(
-        self, body: str, vb_and_js_section: ResultTextSection, url_sec: Optional[ResultTableSection] = None
-    ) -> Optional[ResultTableSection]:
+        self, body: str, vb_and_js_section: ResultTextSection, url_sec: ResultTableSection | None = None
+    ) -> ResultTableSection | None:
         """
         This method looks for network IOCs (specifically URIs) being used in script bodies
         :param body: The script body to be looked through
@@ -4632,7 +4591,7 @@ class JsJaws(ServiceBase):
         :return: The URL section that may have been added to the vb_and_js_section
         """
         if not vb_and_js_section:
-            return
+            return None
 
         previous_url_sec = url_sec is not None
 
@@ -4652,8 +4611,7 @@ class JsJaws(ServiceBase):
                 url_sec.heuristic.add_signature_id("suspicious_url_found", 500)
             # Once we have url_sec that has tags, we always return it
             return url_sec
-        else:
-            return None
+        return None
 
     def _convert_vb_function_call(
         self,
@@ -4661,8 +4619,8 @@ class JsJaws(ServiceBase):
         body: str,
         vb_and_js_section: ResultTextSection,
         js_content: bytes,
-        aggregated_js_script: Optional[tempfile.NamedTemporaryFile],
-    ) -> Tuple[bytes, tempfile.NamedTemporaryFile]:
+        aggregated_js_script: IO[bytes] | None,
+    ) -> tuple[bytes, IO[bytes]]:
         """
         This method looks in VisualBasic scripts for Function calls where the Function was
         declared in a previous JavaScript script (see _find_js_function_declaration)
@@ -4697,7 +4655,7 @@ class JsJaws(ServiceBase):
         # First let's look for the actual titles
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title
         # https://beautiful-soup.readthedocs.io/en/latest/#string
-        titles = [title.string.strip() for title in soup.findAll("title") if title.string and title.string.strip()]
+        titles = [title.string.strip() for title in soup.find_all("title") if title.string and title.string.strip()]
 
         # Now we'll look for visible text
         # https://beautiful-soup.readthedocs.io/en/latest/#get-text
@@ -4706,14 +4664,14 @@ class JsJaws(ServiceBase):
             titles.extend(potential_titles)
 
         for title in titles:
-            # Phishing titles are not long
-            if len(title) > 100:
-                continue
-            # Do not start with tags
-            elif title.startswith("<") and title.endswith(">"):
-                continue
-            # Are not CSS
-            elif title.startswith("/*") and title.endswith("*/") or title.startswith("."):
+            if (
+                # Phishing titles are not long
+                len(title) > 100
+                # Do not start with tags
+                or (title.startswith("<") and title.endswith(">"))
+                # Are not CSS
+                or (title.startswith("/*") and title.endswith("*/") or title.startswith("."))
+            ):
                 continue
 
             # Let's start the threshold with two or more phishing terms in the title
@@ -4729,13 +4687,7 @@ class JsJaws(ServiceBase):
         :param soup: The BeautifulSoup object
         :return: None
         """
-        # First get all of the inputs
-        inputs = [inp for inp in soup.findAll("input")]
-
-        if not inputs:
-            return
-
-        for inp in inputs:
+        for inp in soup.find_all("input"):
             inp_hits = []
             # Now look through the attributes to find any pertaining to sensitive user data
             for key, value in inp.attrs.items():
@@ -4759,7 +4711,7 @@ class JsJaws(ServiceBase):
         """
         # First get all of the inputs
         # Note that it is not as simple as just looking for all inputs with the type="password"
-        inputs = [inp for inp in soup.findAll("input")]
+        inputs = list(soup.find_all("input"))
 
         if not inputs:
             return
@@ -4788,7 +4740,7 @@ class JsJaws(ServiceBase):
 
             # If we have a password field, let's look at the form details
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
-            forms = soup.findAll("form")
+            forms = soup.find_all("form")
             if not forms:
                 return
             for form in forms:
@@ -4812,30 +4764,29 @@ class JsJaws(ServiceBase):
                     break
 
                 # The form action can be overridden, so we need to look at a few more items
-                else:
-                    for form_child in form.children:
-                        if (
-                            form_child.name == "button"
-                            or form_child.name == "input"
-                            and form_child.attrs.get("type") in ["submit", "image"]
-                        ):
-                            # Potential
-                            for key, value in form.attrs.items():
-                                if not value:
-                                    continue
-                                # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
-                                if key == "formaction" and is_url(value.encode()):
-                                    form_has_action = True
-                                    if self.single_script_with_unescape:
-                                        # A form with an action was created from a single script that used an
-                                        # unescape AND the form contains a password input field
-                                        self.sus_form_actions.add(value)
-                                    elif self.html_phishing_title and self.phishing_inputs:
-                                        self.sus_form_actions.add(value)
-                                    break
-
-                            if form_has_action:
+                for form_child in form.children:
+                    if (
+                        form_child.name == "button"
+                        or form_child.name == "input"
+                        and form_child.attrs.get("type") in ["submit", "image"]
+                    ):
+                        # Potential
+                        for key, value in form.attrs.items():
+                            if not value:
+                                continue
+                            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
+                            if key == "formaction" and is_url(value.encode()):
+                                form_has_action = True
+                                if self.single_script_with_unescape:
+                                    # A form with an action was created from a single script that used an
+                                    # unescape AND the form contains a password input field
+                                    self.sus_form_actions.add(value)
+                                elif self.html_phishing_title and self.phishing_inputs:
+                                    self.sus_form_actions.add(value)
                                 break
+
+                        if form_has_action:
+                            break
 
                 if not form_has_action:
                     self.password_input_and_no_form_action = True
@@ -4849,19 +4800,18 @@ class JsJaws(ServiceBase):
         :return: None
         """
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
-        metas = soup.findAll("meta")
+        metas = soup.find_all("meta")
 
         for meta in metas:
             # Metadata equivalent to http headers
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#http-equiv
-            if meta.has_attr("http-equiv"):
-                if meta.get("http-equiv").lower() == "refresh":
-                    url_data = meta.get("content", "unknown")
-                    urls = list(set([url.value.decode() for url in find_urls(url_data.encode())]))
-                    if urls:
-                        self._handle_location_redirection(urls[0], request)
+            if meta.has_attr("http-equiv") and meta.get("http-equiv").lower() == "refresh":
+                url_data = meta.get("content", "unknown")
+                urls = list({url.value.decode() for url in find_urls(url_data.encode())})
+                if urls:
+                    self._handle_location_redirection(urls[0], request)
 
-    def _hunt_for_suspicious_images(self, soup: BeautifulSoup):
+    def _hunt_for_suspicious_images(self, soup: BeautifulSoup) -> None:
         """
         This method looks for web bugs, which are suspicious.
         Web bug/beacon: https://en.wikipedia.org/wiki/Web_beacon
@@ -4869,7 +4819,7 @@ class JsJaws(ServiceBase):
         :param soup: The BeautifulSoup object
         :return: None
         """
-        imgs = soup.findAll("img")
+        imgs = soup.find_all("img")
 
         for img in imgs:
             d = {}
@@ -4894,10 +4844,15 @@ class JsJaws(ServiceBase):
                                 d["width"] = d["width"].encode("utf-8")
                         except Exception:
                             pass
-                if "height" in d and "width" in d:
-                    if isinstance(d["height"], int) and isinstance(d["width"], int):
-                        if d["height"] <= 1 and d["width"] <= 1:
-                            self.num_of_web_bugs += 1
+                if (
+                    "height" in d
+                    and "width" in d
+                    and isinstance(d["height"], int)
+                    and isinstance(d["width"], int)
+                    and d["height"] <= 1
+                    and d["width"] <= 1
+                ):
+                    self.num_of_web_bugs += 1
             except Exception:
                 # We don't care that much
                 pass

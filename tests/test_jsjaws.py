@@ -17,7 +17,7 @@ from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import BODY_FORMAT, Result, ResultSection, ResultTableSection, TableRow
 from assemblyline_v4_service.common.task import Task
 
-from jsjaws import JsJaws
+import jsjaws
 from signatures.abstracts import Signature
 
 # Getting absolute paths, names and regexes
@@ -121,7 +121,7 @@ def dummy_request_class_instance(dummy_task_class):
 def jsjaws_class_instance():
     create_tmp_manifest()
     try:
-        yield JsJaws()
+        yield jsjaws.JsJaws()
     finally:
         remove_tmp_manifest()
 
@@ -165,23 +165,14 @@ class TestJsJaws:
     def test_init(jsjaws_class_instance):
         assert jsjaws_class_instance.artifact_list is None
         assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dump is None
         assert jsjaws_class_instance.malware_jail_sandbox_env_dir is None
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path is None
-        assert jsjaws_class_instance.path_to_jailme_js is None
-        assert jsjaws_class_instance.path_to_boxjs is None
         assert jsjaws_class_instance.boxjs_urls_json_path is None
         assert jsjaws_class_instance.malware_jail_urls_json_path is None
-        assert jsjaws_class_instance.wscript_only_config is None
-        assert jsjaws_class_instance.extracted_wscript_batch is None
-        assert jsjaws_class_instance.extracted_wscript_ps1 is None
         assert jsjaws_class_instance.extracted_wscript_batch_path is None
         assert jsjaws_class_instance.extracted_wscript_ps1_path is None
-        assert jsjaws_class_instance.boxjs_batch is None
         assert jsjaws_class_instance.boxjs_batch_path is None
-        assert jsjaws_class_instance.boxjs_ps1 is None
         assert jsjaws_class_instance.boxjs_ps1_path is None
-        assert jsjaws_class_instance.malware_jail_output is None
         assert jsjaws_class_instance.malware_jail_output_path is None
         assert jsjaws_class_instance.boxjs_output_dir is None
         assert jsjaws_class_instance.boxjs_iocs is None
@@ -193,7 +184,7 @@ class TestJsJaws:
         assert jsjaws_class_instance.stdout_limit is None
         assert isinstance(jsjaws_class_instance.identify, Identify)
         assert jsjaws_class_instance.safelist == {}
-        assert jsjaws_class_instance.doc_write_hashes is None
+        assert jsjaws_class_instance.doc_write_hashes == set()
 
     @staticmethod
     def test_start(jsjaws_class_instance):
@@ -258,28 +249,20 @@ class TestJsJaws:
         assert jsjaws_class_instance.malware_jail_payload_extraction_dir == path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dump == "sandbox_dump.json"
         assert jsjaws_class_instance.malware_jail_sandbox_env_dir == path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
         assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path == path.join(
-            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        root_dir = path.dirname(path.dirname(path.abspath(__file__)))
-        assert jsjaws_class_instance.path_to_jailme_js == path.join(root_dir, "tools/malwarejail/jailme.js")
         assert jsjaws_class_instance.malware_jail_urls_json_path == path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
-        assert jsjaws_class_instance.wscript_only_config == path.join(
-            root_dir, "tools/malwarejail/config/config_wscript_only.json"
-        )
-        assert jsjaws_class_instance.extracted_wscript_batch == "extracted_wscript.bat"
         assert jsjaws_class_instance.extracted_wscript_batch_path == path.join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws.EXTRACTED_WSCRIPT_BATCH
         )
-        assert jsjaws_class_instance.malware_jail_output == "output.txt"
         assert jsjaws_class_instance.malware_jail_output_path == path.join(
-            jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output
+            jsjaws_class_instance.working_directory, jsjaws.MALWARE_JAIL_OUTPUT
         )
 
         assert path.exists(jsjaws_class_instance.malware_jail_payload_extraction_dir)
@@ -319,13 +302,11 @@ class TestJsJaws:
     @staticmethod
     def test_extract_wscript(jsjaws_class_instance, mocker):
         jsjaws_class_instance.payload_extraction_dir = join(jsjaws_class_instance.working_directory, "payload/")
-        jsjaws_class_instance.extracted_wscript_batch = "extracted_wscript.bat"
-        jsjaws_class_instance.extracted_wscript_ps1 = "extracted_wscript.ps1"
         jsjaws_class_instance.extracted_wscript_batch_path = join(
-            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
+            jsjaws_class_instance.payload_extraction_dir, jsjaws.EXTRACTED_WSCRIPT_BATCH
         )
         jsjaws_class_instance.extracted_wscript_ps1_path = join(
-            jsjaws_class_instance.payload_extraction_dir, jsjaws_class_instance.extracted_wscript_ps1
+            jsjaws_class_instance.payload_extraction_dir, jsjaws.EXTRACTED_WSCRIPT_PS1
         )
         mkdir(jsjaws_class_instance.payload_extraction_dir)
         mocker.patch("jsjaws.extract_iocs_from_text_blob")
@@ -335,7 +316,7 @@ class TestJsJaws:
         jsjaws_class_instance._extract_wscript(output, res)
         assert exists(jsjaws_class_instance.extracted_wscript_batch_path)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.extracted_wscript_batch,
+            "name": jsjaws.EXTRACTED_WSCRIPT_BATCH,
             "path": jsjaws_class_instance.extracted_wscript_batch_path,
             "description": "Extracted WScript batch file",
             "to_be_extracted": True,
@@ -351,19 +332,14 @@ class TestJsJaws:
         jsjaws_class_instance.stdout_limit = 10000
         jsjaws_class_instance.boxjs_analysis_log = "blah"
         jsjaws_class_instance.gauntlet_runs = 0
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-
-        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
-        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
         jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
-        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         jsjaws_class_instance.malware_jail_sandbox_env_dir = os.path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
         jsjaws_class_instance.malware_jail_sandbox_env_dump_path = os.path.join(
-            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
 
         mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
@@ -430,19 +406,15 @@ class TestJsJaws:
         jsjaws_class_instance.gauntlet_runs = 0
 
         jsjaws_class_instance.boxjs_analysis_log = "blah"
-        root_dir = os.path.dirname(os.path.abspath(__file__))
 
-        jsjaws_class_instance.path_to_jailme_js = os.path.join(root_dir, "../", "tools/malwarejail/jailme.js")
-        jsjaws_class_instance.path_to_jsxray = os.path.join(root_dir, "../", "tools/js-x-ray-run.js")
         jsjaws_class_instance.malware_jail_payload_extraction_dir = os.path.join(
             jsjaws_class_instance.working_directory, "payload/"
         )
-        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         jsjaws_class_instance.malware_jail_sandbox_env_dir = os.path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
         jsjaws_class_instance.malware_jail_sandbox_env_dump_path = os.path.join(
-            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
 
         mocker.patch.object(jsjaws_class_instance, "_extract_boxjs_iocs")
@@ -482,9 +454,8 @@ class TestJsJaws:
         jsjaws_class_instance.malware_jail_urls_json_path = path.join(
             jsjaws_class_instance.malware_jail_payload_extraction_dir, "urls.json"
         )
-        jsjaws_class_instance.extracted_wscript_batch = "extracted_wscript.bat"
         jsjaws_class_instance.extracted_wscript_batch_path = path.join(
-            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws_class_instance.extracted_wscript_batch
+            jsjaws_class_instance.malware_jail_payload_extraction_dir, jsjaws.EXTRACTED_WSCRIPT_BATCH
         )
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
         jsjaws_class_instance.boxjs_snippets = path.join(jsjaws_class_instance.boxjs_output_dir, "snippets.json")
@@ -599,16 +570,14 @@ class TestJsJaws:
         jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
-        jsjaws_class_instance.malware_jail_sandbox_env_dump = "sandbox_dump.json"
         jsjaws_class_instance.malware_jail_sandbox_env_dir = path.join(
             jsjaws_class_instance.working_directory, "sandbox_env"
         )
         jsjaws_class_instance.malware_jail_sandbox_env_dump_path = path.join(
-            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws_class_instance.malware_jail_sandbox_env_dump
+            jsjaws_class_instance.malware_jail_sandbox_env_dir, jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        jsjaws_class_instance.malware_jail_output = "output.txt"
         jsjaws_class_instance.malware_jail_output_path = path.join(
-            jsjaws_class_instance.working_directory, jsjaws_class_instance.malware_jail_output
+            jsjaws_class_instance.working_directory, jsjaws.MALWARE_JAIL_OUTPUT
         )
         jsjaws_class_instance.boxjs_output_dir = path.join(jsjaws_class_instance.working_directory, "blah.results")
         jsjaws_class_instance.boxjs_analysis_log = path.join(jsjaws_class_instance.boxjs_output_dir, "analysis.log")
@@ -623,13 +592,13 @@ class TestJsJaws:
             f.write("blah")
         jsjaws_class_instance._extract_supplementary(output)
         assert jsjaws_class_instance.artifact_list[0] == {
-            "name": jsjaws_class_instance.malware_jail_sandbox_env_dump,
+            "name": jsjaws.MALWARE_JAIL_SANDBOX_ENV_DUMP,
             "path": jsjaws_class_instance.malware_jail_sandbox_env_dump_path,
             "description": "Sandbox Environment Details",
             "to_be_extracted": False,
         }
         assert jsjaws_class_instance.artifact_list[1] == {
-            "name": jsjaws_class_instance.malware_jail_output,
+            "name": jsjaws.MALWARE_JAIL_OUTPUT,
             "path": jsjaws_class_instance.malware_jail_output_path,
             "description": "Malware Jail Output",
             "to_be_extracted": False,
