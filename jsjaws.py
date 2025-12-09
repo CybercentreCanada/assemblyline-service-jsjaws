@@ -2018,7 +2018,7 @@ class JsJaws(ServiceBase):
         elements_with_href_attr = ["a", "area", "base", "link"]
 
         elements_with_attr_of_interest = elements_with_src_attr + elements_with_href_attr
-        embeds = soup.findAll(elements_with_attr_of_interest)
+        embeds = soup.find_all(elements_with_attr_of_interest)
 
         for embed in embeds:
             element_name = embed.name
@@ -2799,7 +2799,7 @@ class JsJaws(ServiceBase):
         onevents: list[str] = []
 
         self.log.debug("Extracting JavaScript from soup...")
-        scripts = soup.findAll("script")
+        scripts = soup.find_all("script")
         visible_texts = self._extract_visible_text_from_soup(soup)
 
         self._contains_scripts_with_unescape(soup, scripts)
@@ -2809,8 +2809,8 @@ class JsJaws(ServiceBase):
         is_script_body = False
 
         # Create most HTML elements with JavaScript
-        elements = soup.findAll()
-        bodies = soup.findAll("body")
+        elements = soup.find_all()
+        bodies = soup.find_all("body")
         body_children: list[str] = []
         for body in bodies:
             body_children.extend(
@@ -2958,7 +2958,7 @@ class JsJaws(ServiceBase):
         # Payloads can be hidden in the CSS, so we should try to extract these values and pass them to our JavaScript
         # analysis envs
         try:
-            styles = soup.findAll("style")
+            styles = soup.find_all("style")
             style_json = {}
             css_content = b""
             aggregated_css_script = None
@@ -3076,7 +3076,7 @@ class JsJaws(ServiceBase):
                 return False
             return True
 
-        visible_texts = list(filter(tag_visible, soup.findAll(text=True)))
+        visible_texts = list(filter(tag_visible, soup.find_all(string=True)))
         return visible_texts
 
     def _extract_visible_text_using_soup(self, dom_content) -> list[str]:
@@ -4681,7 +4681,7 @@ class JsJaws(ServiceBase):
         # First let's look for the actual titles
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title
         # https://beautiful-soup.readthedocs.io/en/latest/#string
-        titles = [title.string.strip() for title in soup.findAll("title") if title.string and title.string.strip()]
+        titles = [title.string.strip() for title in soup.find_all("title") if title.string and title.string.strip()]
 
         # Now we'll look for visible text
         # https://beautiful-soup.readthedocs.io/en/latest/#get-text
@@ -4737,7 +4737,7 @@ class JsJaws(ServiceBase):
         """
         # First get all of the inputs
         # Note that it is not as simple as just looking for all inputs with the type="password"
-        inputs = list(soup.findAll("input"))
+        inputs = list(soup.find_all("input"))
 
         if not inputs:
             return
@@ -4766,7 +4766,7 @@ class JsJaws(ServiceBase):
 
             # If we have a password field, let's look at the form details
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
-            forms = soup.findAll("form")
+            forms = soup.find_all("form")
             if not forms:
                 return
             for form in forms:
@@ -4827,7 +4827,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
-        metas = soup.findAll("meta")
+        metas = soup.find_all("meta")
 
         for meta in metas:
             # Metadata equivalent to http headers
@@ -4847,7 +4847,7 @@ class JsJaws(ServiceBase):
         :param soup: The BeautifulSoup object
         :return: None
         """
-        imgs = soup.findAll("img")
+        imgs = soup.find_all("img")
 
         for img in imgs:
             d = {}
