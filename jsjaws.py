@@ -914,7 +914,7 @@ class JsJaws(ServiceBase):
         :return: A tuple of the file path and the file content
         """
 
-        def log_and_replace(match) -> bytes:
+        def log_and_replace(match: re.Match) -> bytes:
             """
             This nested method looks for matches of the VBSCRIPT_ENV_SETTING_REGEX regular
             expression, logs the match for debugging purposes, then replaces it
@@ -1445,7 +1445,7 @@ class JsJaws(ServiceBase):
         return malware_jail_output
 
     @staticmethod
-    def _handle_jsxray_output(responses) -> dict[str, Any]:
+    def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
         """
         This method handles JS-X-Ray output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1460,7 +1460,12 @@ class JsJaws(ServiceBase):
         return jsxray_output
 
     def _run_the_gauntlet(
-        self, request, file_path, file_content, original_contents, subsequent_run: bool = False
+        self,
+        request: ServiceRequest,
+        file_path: str,
+        file_content: bytes,
+        original_contents: bytes,
+        subsequent_run: bool = False,
     ) -> None:
         """
         Welcome to the gauntlet. This is the method that you call when you want a file to run through all of the JsJaws
@@ -1961,7 +1966,7 @@ class JsJaws(ServiceBase):
         :return: A tuple of the JavaScript file name that was written, the contents of the file that was written
         """
 
-        def log_and_replace_jscript(match):
+        def log_and_replace_jscript(match: re.Match) -> bytes:
             group_0 = match.group(0).decode()
             self.log.debug(f"Removed JScript conditional comment: {group_0}")
             return b""
@@ -4079,7 +4084,7 @@ class JsJaws(ServiceBase):
 
         return run_synchrony
 
-    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool):
+    def _extract_synchrony(self, request: ServiceRequest, timed_out: object, obfuscator_io: bool) -> None:
         """
         This method extracts the created Synchrony artifact, if applicable
         :param request: The ServiceRequest object
@@ -4284,7 +4289,7 @@ class JsJaws(ServiceBase):
             malware_jail_res_sec.set_heuristic(2)
             request.result.add_section(malware_jail_res_sec)
 
-    def _handle_location_redirection(self, location_href: str, request: ServiceRequest):
+    def _handle_location_redirection(self, location_href: str, request: ServiceRequest) -> None:
         """
         If a location redirection related to MS-MSDT is seen, handle
         If a generic location redirection is seen, handle
@@ -4329,7 +4334,7 @@ class JsJaws(ServiceBase):
                 if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
                     redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
 
-    def _handle_subsequent_scripts(self, result: Result):
+    def _handle_subsequent_scripts(self, result: Result) -> None:
         """
         This method handles subsequent script sources, by creating a result section and applying applicable signatures
         :param result: A Result object containing the service results
@@ -4839,7 +4844,7 @@ class JsJaws(ServiceBase):
                     if urls:
                         self._handle_location_redirection(urls[0], request)
 
-    def _hunt_for_suspicious_images(self, soup: BeautifulSoup):
+    def _hunt_for_suspicious_images(self, soup: BeautifulSoup) -> None:
         """
         This method looks for web bugs, which are suspicious.
         Web bug/beacon: https://en.wikipedia.org/wiki/Web_beacon
