@@ -1495,7 +1495,7 @@ class JsJaws(ServiceBase):
         # Determine the file type to be used for this gauntlet run
         if not subsequent_run:
             file_type = self.sample_type
-            file_type_details = dict(mime=None)
+            file_type_details = {"mime": None}
         else:
             file_type_details = self.identify.fileinfo(file_path, generate_hashes=False)
             file_type = file_type_details["type"]
@@ -3076,7 +3076,7 @@ class JsJaws(ServiceBase):
                 return False
             return True
 
-        visible_texts = [x for x in filter(tag_visible, soup.findAll(text=True))]
+        visible_texts = list(filter(tag_visible, soup.findAll(text=True)))
         return visible_texts
 
     def _extract_visible_text_using_soup(self, dom_content) -> list[str]:
@@ -3437,14 +3437,14 @@ class JsJaws(ServiceBase):
                 passwords_extracted_file = "passwords_extracted_from_html.json"
                 password_extracted_path = path.join(self.working_directory, passwords_extracted_file)
                 with open(password_extracted_path, "w") as f:
-                    f.write(dumps(sorted(list(new_passwords))))
+                    f.write(dumps(sorted(new_passwords)))
                 request.add_supplementary(
                     password_extracted_path, passwords_extracted_file, "Passwords extracted from HTML file"
                 )
                 # It is technically not required to sort them, but it makes the output of the module predictable
                 if "passwords" in request.temp_submission_data:
                     new_passwords.update(set(request.temp_submission_data["passwords"]))
-                request.temp_submission_data["passwords"] = sorted(list(new_passwords))
+                request.temp_submission_data["passwords"] = sorted(new_passwords)
 
         # The entire point of writing elements into the document is to manipulate the DOM. If certain elements
         # contain script elements that depend on previously declared variables, then we should build an HTML
@@ -4225,7 +4225,7 @@ class JsJaws(ServiceBase):
                 # (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
                 if not path.exists(self.malware_jail_sandbox_env_dump_path):
-                    matches = list(set([url.value.decode() for url in find_urls(log_line.encode())]))
+                    matches = list({url.value.decode() for url in find_urls(log_line.encode())})
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
@@ -4341,7 +4341,7 @@ class JsJaws(ServiceBase):
         heur = Heuristic(18)
         dynamic_script_source_res = ResultTableSection(heur.name, heuristic=heur)
         # Check if domain or IP matches that of a URI that is programmatically loaded
-        for script_src in sorted(list(self.subsequent_script_sources)):
+        for script_src in sorted(self.subsequent_script_sources):
             if add_tag(dynamic_script_source_res, "network.dynamic.uri", script_src, self.safelist):
                 if any(urlparse(decoded_url).netloc in script_src for decoded_url in self.base64_encoded_urls):
                     # This is suspicious, flag it!
@@ -4713,13 +4713,7 @@ class JsJaws(ServiceBase):
         :param soup: The BeautifulSoup object
         :return: None
         """
-        # First get all of the inputs
-        inputs = [inp for inp in soup.findAll("input")]
-
-        if not inputs:
-            return
-
-        for inp in inputs:
+        for inp in soup.find_all("input"):
             inp_hits = []
             # Now look through the attributes to find any pertaining to sensitive user data
             for key, value in inp.attrs.items():
@@ -4743,7 +4737,7 @@ class JsJaws(ServiceBase):
         """
         # First get all of the inputs
         # Note that it is not as simple as just looking for all inputs with the type="password"
-        inputs = [inp for inp in soup.findAll("input")]
+        inputs = list(soup.findAll("input"))
 
         if not inputs:
             return
@@ -4841,7 +4835,7 @@ class JsJaws(ServiceBase):
             if meta.has_attr("http-equiv"):
                 if meta.get("http-equiv").lower() == "refresh":
                     url_data = meta.get("content", "unknown")
-                    urls = list(set([url.value.decode() for url in find_urls(url_data.encode())]))
+                    urls = list({url.value.decode() for url in find_urls(url_data.encode())})
                     if urls:
                         self._handle_location_redirection(urls[0], request)
 
