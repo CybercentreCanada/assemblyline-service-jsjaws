@@ -609,9 +609,9 @@ PHISHING_TITLE_TERMS_REGEX = r"\b(" + "|".join(PHISHING_TITLE_TERMS) + r")\b"
 
 
 def is_vb_script(script: Tag) -> bool:
-    type = script.get("type")
-    if isinstance(type, str):
-        return type.lower() == "text/vbscript"
+    type_ = script.get("type")
+    if isinstance(type_, str):
+        return type_.lower() == "text/vbscript"
     language = script.get("language")
     if isinstance(language, str):
         return language.lower() == "vbscript"
@@ -620,9 +620,9 @@ def is_vb_script(script: Tag) -> bool:
 
 def is_js_script(script: Tag) -> bool:
     """Checks if script is javascript or jscript"""
-    type = script.get("type")
-    if isinstance(type, str):
-        return type.lower() in ("", "text/javascript", "text/jscript")
+    type_ = script.get("type")
+    if isinstance(type_, str):
+        return type_.lower() in ("", "text/javascript", "text/jscript")
     language = script.get("language")
     if isinstance(language, str):
         return language.lower() in ("", "javascript", "jscript")
@@ -881,14 +881,13 @@ class JsJaws(ServiceBase):
                     self.log.debug("Removed garbage from the file...")
                     self.sample_type = script_we_want_info["type"]
                     return script_we_want_path, script_we_want
-                else:
-                    # If there is more than one HTML comment, recursively remove
-                    html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
-                    if html_comment:
-                        try:
-                            return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
-                        except RecursionError as e:
-                            self.log.debug(f"Exiting _remove_leading_garbage_from_html due to '{e}'")
+                # If there is more than one HTML comment, recursively remove
+                html_comment = re.search(FULL_HTML_COMMENT_IN_JS, script_we_want)
+                if html_comment:
+                    try:
+                        return self._remove_leading_garbage_from_html(request, script_we_want_path, script_we_want)
+                    except RecursionError as e:
+                        self.log.debug(f"Exiting _remove_leading_garbage_from_html due to '{e}'")
 
         return file_path, file_content
 
@@ -1351,7 +1350,7 @@ class JsJaws(ServiceBase):
             if "==> Executing malware file(s). =========================================" in line:
                 start_idx = idx
                 break
-            elif idx > 1000:
+            if idx > 1000:
                 # There's no way MalwareJail would output 1000 lines before executing the malware, right?!
                 break
 
@@ -1360,7 +1359,7 @@ class JsJaws(ServiceBase):
                 # We want to include the line above
                 end_idx = idx + 1
                 break
-            elif idx > 1000:
+            if idx > 1000:
                 # There's no way MalwareJail would output 1000 lines after cleaning up the sandbox, right?!
                 break
 
@@ -1422,9 +1421,7 @@ class JsJaws(ServiceBase):
             with open(boxjs_analysis_log, "r") as f:
                 for line in f:
                     # This creates clutter!
-                    if line.startswith("[verb] Code saved to"):
-                        continue
-                    else:
+                    if not line.startswith("[verb] Code saved to"):
                         boxjs_output.append(line)
 
         return boxjs_output
@@ -1441,8 +1438,7 @@ class JsJaws(ServiceBase):
             malware_jail_output = self._handle_tool_stdout_limit(
                 MALWARE_JAIL, malware_jail_output, malware_jail_args, responses
             )
-        malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
-        return malware_jail_output
+        return self._trim_malware_jail_output(malware_jail_output)
 
     @staticmethod
     def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
@@ -1658,9 +1654,7 @@ class JsJaws(ServiceBase):
                 file_for_malware_jail = None
                 for section in sections_of_script:
                     section_hash = sha256(section).hexdigest()
-                    if section_hash in section_hashes:
-                        continue
-                    else:
+                    if section_hash not in section_hashes:
                         section_hashes.add(section_hash)
                         script_for_malware_jail, file_for_malware_jail = self.append_content(
                             section.decode(), script_for_malware_jail, file_for_malware_jail
@@ -2132,34 +2126,24 @@ class JsJaws(ServiceBase):
         :param element: The BeautifulSoup element
         :return: A flag indicating if we should skip creating the element
         """
-        # We don't want these elements dynamically created
-        if element.name in ["head", "style", "body", "param"]:
-            return True
-
-        # If the file is code/wsf, skip the job and package elements
-        elif element.name in ["job", "package"] and self.sample_type == "code/wsf":
-            return True
-
-        # If the file is code/wsc, skip the component element
-        elif element.name in ["component"] and self.sample_type == "code/wsc":
-            return True
-
-        # If there is a script element that just points at a src, we want it!
-        elif element.name in ["script"] and element.string is not None and element.string.strip():
-            return True
-
-        elif self._skip_embed_element(element):
-            return True
-
-        # If we have a meta element that does not have http-equiv set to refresh and content attributes, skip it
-        elif element.name in ["meta"] and not (
-            element.attrs.get("http-equiv")
-            and element.attrs.get("http-equiv").lower() == "refresh"
-            and element.attrs.get("content")
-        ):
-            return True
-
-        return False
+        return bool(
+            # We don't want these elements dynamically created
+            element.name in ["head", "style", "body", "param"]
+            # If the file is code/wsf, skip the job and package elements
+            or (element.name in ["job", "package"] and self.sample_type == "code/wsf")
+            # If the file is code/wsc, skip the component element
+            or (element.name in ["component"] and self.sample_type == "code/wsc")
+            # If there is a script element that just points at a src, we want it!
+            or (element.name in ["script"] and element.string is not None and element.string.strip())
+            or self._skip_embed_element(element)
+            # If we have a meta element that does not have http-equiv set to refresh and content attributes, skip it
+            or element.name in ["meta"]
+            and not (
+                element.attrs.get("http-equiv")
+                and element.attrs.get("http-equiv", "").lower() == "refresh"
+                and element.attrs.get("content")
+            )
+        )
 
     def _remove_safelisted_element_attrs(self, element: Tag) -> Tag:
         """
@@ -2241,9 +2225,7 @@ class JsJaws(ServiceBase):
         if element_id == "":
             element_id = f"element{idx}"
 
-        element_id = JsJaws.create_unique_element_id(element_id, set_of_variable_names)
-
-        return element_id
+        return JsJaws.create_unique_element_id(element_id, set_of_variable_names)
 
     @staticmethod
     def _determine_element_varname(element: Tag, element_id: str, set_of_variable_names: set[str]) -> str:
@@ -2320,11 +2302,10 @@ class JsJaws(ServiceBase):
         if '"' in element_name:
             element_name = element_name.replace('"', "'")
         # NOTE: There is a regex ELEMENT_INDEX_REGEX that depends on this variable value
-        create_element_script = (
+        return (
             f'const {random_element_varname} = document.createElement("{element_name}");\n'
             f'{random_element_varname}.setAttribute("id", "{element_id}");\n'
         )
-        return create_element_script
 
     @staticmethod
     def _append_element_script(element: Tag, set_of_variable_names: set[str], random_element_varname: str) -> str:
@@ -3081,8 +3062,7 @@ class JsJaws(ServiceBase):
                 return False
             return True
 
-        visible_texts = list(filter(tag_visible, soup.find_all(string=True)))
-        return visible_texts
+        return list(filter(tag_visible, soup.find_all(string=True)))
 
     def _extract_visible_text_using_soup(self, dom_content) -> list[str]:
         """
@@ -3281,33 +3261,34 @@ class JsJaws(ServiceBase):
                 continue
             # These are not payloads
             # Direct paths
-            if extracted in [
-                self.malware_jail_urls_json_path,
-                self.extracted_wscript_batch_path,
-                self.extracted_wscript_ps1_path,
-                self.boxjs_batch_path,
-                self.boxjs_ps1_path,
-            ]:
-                continue
-            # Glob paths
-            elif any(
-                extracted in glob(glob_path)
-                for glob_path in [
-                    self.boxjs_iocs,
-                    self.boxjs_resources,
-                    self.boxjs_snippets,
-                    self.boxjs_analysis_log,
-                    self.boxjs_urls_json_path,
+            if (
+                extracted
+                in [
+                    self.malware_jail_urls_json_path,
+                    self.extracted_wscript_batch_path,
+                    self.extracted_wscript_ps1_path,
+                    self.boxjs_batch_path,
+                    self.boxjs_ps1_path,
                 ]
-            ):
-                continue
-            # If the snippets.json is not finished being written to, there is a race condition here,
-            # so let's confirm that the file to be extracted is a snippet but hasn't been written to
-            # the snippets.json yet
-            elif (
-                len(glob(self.boxjs_output_dir)) > 0
-                and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime))
-                and re.match(SNIPPET_FILE_NAME, file)
+                # Glob paths
+                or any(
+                    extracted in glob(glob_path)
+                    for glob_path in [
+                        self.boxjs_iocs,
+                        self.boxjs_resources,
+                        self.boxjs_snippets,
+                        self.boxjs_analysis_log,
+                        self.boxjs_urls_json_path,
+                    ]
+                )
+                # If the snippets.json is not finished being written to, there is a race condition here,
+                # so let's confirm that the file to be extracted is a snippet but hasn't been written to
+                # the snippets.json yet
+                or (
+                    len(glob(self.boxjs_output_dir)) > 0
+                    and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime))
+                    and re.match(SNIPPET_FILE_NAME, file)
+                )
             ):
                 continue
             extracted_sha = get_sha256_for_file(extracted)
@@ -3526,7 +3507,7 @@ class JsJaws(ServiceBase):
                     if ioc["type"] in ["UrlFetch", "XMLHttpRequest"] and "url" in value:
                         if any(value["url"] == url["url"] for url in urls_rows):
                             continue
-                        elif not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
+                        if not add_tag(urls_result_section, "network.dynamic.uri", value["url"], self.safelist):
                             continue
                         item = {
                             "url": value["url"],
@@ -4060,15 +4041,13 @@ class JsJaws(ServiceBase):
                     jsxray_iocs_result_section.add_tag("file.string.extracted", truncate(safe_str(val)))
             elif kind == "obfuscated-code":
                 jsxray_iocs_result_section.add_line(
-                    f"\t\tObfuscated code was found that was obfuscated by: " f"{safe_str(val)}"
+                    f"\t\tObfuscated code was found that was obfuscated by: {safe_str(val)}"
                 )
                 # https://github.com/NodeSecure/js-x-ray/blob/master/src/obfuscators/obfuscator-io.js
                 if safe_str(val) == OBFUSCATOR_IO:
                     run_synchrony = True
             elif kind == "shady-link":
-                if not is_url(val.encode()) and not is_domain(val.encode()):
-                    continue
-                else:
+                if is_url(val.encode()) or is_domain(val.encode()):
                     add_tag(jsxray_iocs_result_section, "network.static.uri", val, self.safelist)
             elif kind in ["suspicious-literal", "short-identifiers", "suspicious-file", "unsafe-regex"]:
                 # We don't care about these warnings
@@ -4185,8 +4164,7 @@ class JsJaws(ServiceBase):
                 exception_blurb = "\n".join(exception_lines)
                 if self.config.get("raise_malware_jail_exc", False):
                     raise Exception(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
-                else:
-                    self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
+                self.log.warning(f"Exception occurred in {MALWARE_JAIL}\n" + exception_blurb)
 
                 # Check if there is an unexpected end of input that we could remedy
                 match = re.match(INVALID_END_OF_INPUT_REGEX, exception_blurb.encode())
@@ -4220,7 +4198,7 @@ class JsJaws(ServiceBase):
                         url_sec = ResultTableSection("Possible script sources that are required for execution")
                         for script_src in self.initial_script_sources | self.subsequent_script_sources:
                             if add_tag(url_sec, "network.dynamic.uri", script_src, self.safelist):
-                                url_sec.add_row(TableRow(**{"url": script_src}))
+                                url_sec.add_row(TableRow(url=script_src))
 
                         if url_sec.body:
                             script_source_res.add_subsection(url_sec)
@@ -4268,7 +4246,7 @@ class JsJaws(ServiceBase):
                 if not location_href:
                     continue
                 # It is possible that window.location=window.location, so this href could be reference to itself.
-                elif isinstance(location_href, dict):
+                if isinstance(location_href, dict):
                     continue
 
                 self._handle_location_redirection(location_href, request)
@@ -4353,7 +4331,7 @@ class JsJaws(ServiceBase):
                     dynamic_script_source_res.heuristic.add_signature_id(
                         "programmatically_created_base64_decoded_url", 500
                     )
-                dynamic_script_source_res.add_row(TableRow(**{"url": script_src}))
+                dynamic_script_source_res.add_row(TableRow(url=script_src))
 
         if self.gauntlet_runs >= 5:
             # It is common-place to write scripts to the DOM for some reason, so we'll only score URLs after
@@ -4472,7 +4450,7 @@ class JsJaws(ServiceBase):
         diff = []
         # The dirty file contents should always have more lines than the clean file contents
         dirty_line_index = 0
-        for index, clean_line in enumerate(clean_lines):
+        for clean_line in clean_lines:
             # Python has difficulty with decoding .. and ..., so skip it!
             # (the malicious lines are not in the clean files anyways)
             if ".." not in clean_line:
@@ -4621,7 +4599,7 @@ class JsJaws(ServiceBase):
         :return: The URL section that may have been added to the vb_and_js_section
         """
         if not vb_and_js_section:
-            return
+            return None
 
         previous_url_sec = url_sec is not None
 
@@ -4641,8 +4619,7 @@ class JsJaws(ServiceBase):
                 url_sec.heuristic.add_signature_id("suspicious_url_found", 500)
             # Once we have url_sec that has tags, we always return it
             return url_sec
-        else:
-            return None
+        return None
 
     def _convert_vb_function_call(
         self,
@@ -4695,14 +4672,14 @@ class JsJaws(ServiceBase):
             titles.extend(potential_titles)
 
         for title in titles:
-            # Phishing titles are not long
-            if len(title) > 100:
-                continue
-            # Do not start with tags
-            elif title.startswith("<") and title.endswith(">"):
-                continue
-            # Are not CSS
-            elif title.startswith("/*") and title.endswith("*/") or title.startswith("."):
+            if (
+                # Phishing titles are not long
+                len(title) > 100
+                # Do not start with tags
+                or (title.startswith("<") and title.endswith(">"))
+                # Are not CSS
+                or (title.startswith("/*") and title.endswith("*/") or title.startswith("."))
+            ):
                 continue
 
             # Let's start the threshold with two or more phishing terms in the title
@@ -4795,30 +4772,29 @@ class JsJaws(ServiceBase):
                     break
 
                 # The form action can be overridden, so we need to look at a few more items
-                else:
-                    for form_child in form.children:
-                        if (
-                            form_child.name == "button"
-                            or form_child.name == "input"
-                            and form_child.attrs.get("type") in ["submit", "image"]
-                        ):
-                            # Potential
-                            for key, value in form.attrs.items():
-                                if not value:
-                                    continue
-                                # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
-                                if key == "formaction" and is_url(value.encode()):
-                                    form_has_action = True
-                                    if self.single_script_with_unescape:
-                                        # A form with an action was created from a single script that used an
-                                        # unescape AND the form contains a password input field
-                                        self.sus_form_actions.add(value)
-                                    elif self.html_phishing_title and self.phishing_inputs:
-                                        self.sus_form_actions.add(value)
-                                    break
-
-                            if form_has_action:
+                for form_child in form.children:
+                    if (
+                        form_child.name == "button"
+                        or form_child.name == "input"
+                        and form_child.attrs.get("type") in ["submit", "image"]
+                    ):
+                        # Potential
+                        for key, value in form.attrs.items():
+                            if not value:
+                                continue
+                            # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action
+                            if key == "formaction" and is_url(value.encode()):
+                                form_has_action = True
+                                if self.single_script_with_unescape:
+                                    # A form with an action was created from a single script that used an
+                                    # unescape AND the form contains a password input field
+                                    self.sus_form_actions.add(value)
+                                elif self.html_phishing_title and self.phishing_inputs:
+                                    self.sus_form_actions.add(value)
                                 break
+
+                        if form_has_action:
+                            break
 
                 if not form_has_action:
                     self.password_input_and_no_form_action = True
