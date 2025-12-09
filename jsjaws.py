@@ -2408,22 +2408,25 @@ class JsJaws(ServiceBase):
             command = None
             # We need to handle <param> tags accordingly
             for descendant in element.descendants:
-                if descendant and descendant.name == "param":
-                    if all(item in descendant.attrs for item in ["name", "value"]):
-                        name = descendant.attrs["name"].lower()
-                        value = descendant.attrs["value"]
-                        if name == "command" and value.lower() == "shortcut":
-                            is_shortcut = True
-                        elif name == "item1":
-                            command_args = value.split(",")
-                            if (
-                                len(command_args) >= 2
-                                and not command_args[0].strip()
-                                and command_args[1].strip() != "cmd.exe"
-                            ):
-                                # This is the default when loaded on Windows
-                                command_args[0] = "cmd.exe"
-                            command = " ".join([command_arg for command_arg in command_args if command_arg])
+                if (
+                    descendant
+                    and descendant.name == "param"
+                    and all(item in descendant.attrs for item in ["name", "value"])
+                ):
+                    name = descendant.attrs["name"].lower()
+                    value = descendant.attrs["value"]
+                    if name == "command" and value.lower() == "shortcut":
+                        is_shortcut = True
+                    elif name == "item1":
+                        command_args = value.split(",")
+                        if (
+                            len(command_args) >= 2
+                            and not command_args[0].strip()
+                            and command_args[1].strip() != "cmd.exe"
+                        ):
+                            # This is the default when loaded on Windows
+                            command_args[0] = "cmd.exe"
+                        command = " ".join([command_arg for command_arg in command_args if command_arg])
             if is_shortcut and command:
                 # JavaScript does not like when there are newlines when setting attributes
                 if isinstance(command, str) and "\n" in command:
@@ -3005,38 +3008,37 @@ class JsJaws(ServiceBase):
                 css_script_name = aggregated_css_script.name
 
                 # Look for suspicious CSS usage
-                for _, rules in style_json.items():
+                for rules in style_json.values():
                     for rule in rules:
                         declaration_blocks = rule.values()
                         for declaration_block in declaration_blocks:
                             for item in declaration_block.get("values", []):
-                                if isinstance(item, dict):
-                                    if item.get("url"):
-                                        # SUS
-                                        url_path = None
-                                        # If the content is base64 encoded, decode it before we extract it
-                                        matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
-                                        if matches and len(matches.regs) == 2:
-                                            item["url"] = b64decode(matches.group(1).encode())
-                                        else:
-                                            item["url"] = item["url"].encode()
-                                        with tempfile.NamedTemporaryFile(
-                                            dir=self.working_directory, delete=False, mode="wb"
-                                        ) as t:
-                                            t.write(item["url"])
-                                            url_path = t.name
-                                        artifact = {
-                                            "name": get_sha256_for_file(url_path),
-                                            "path": url_path,
-                                            "description": "URL value from CSS",
-                                            "to_be_extracted": True,
-                                        }
-                                        self.log.debug(f"Extracting URL value from CSS: {url_path}")
-                                        self.artifact_list.append(artifact)
-                                        heur = Heuristic(7)
-                                        _ = ResultTextSection(
-                                            heur.name, heuristic=heur, parent=request.result, body=heur.description
-                                        )
+                                if isinstance(item, dict) and item.get("url"):
+                                    # SUS
+                                    url_path = None
+                                    # If the content is base64 encoded, decode it before we extract it
+                                    matches = re.match(APPENDCHILD_BASE64_REGEX, item["url"])
+                                    if matches and len(matches.regs) == 2:
+                                        item["url"] = b64decode(matches.group(1).encode())
+                                    else:
+                                        item["url"] = item["url"].encode()
+                                    with tempfile.NamedTemporaryFile(
+                                        dir=self.working_directory, delete=False, mode="wb"
+                                    ) as t:
+                                        t.write(item["url"])
+                                        url_path = t.name
+                                    artifact = {
+                                        "name": get_sha256_for_file(url_path),
+                                        "path": url_path,
+                                        "description": "URL value from CSS",
+                                        "to_be_extracted": True,
+                                    }
+                                    self.log.debug(f"Extracting URL value from CSS: {url_path}")
+                                    self.artifact_list.append(artifact)
+                                    heur = Heuristic(7)
+                                    _ = ResultTextSection(
+                                        heur.name, heuristic=heur, parent=request.result, body=heur.description
+                                    )
             else:
                 css_script_name = None
         except Exception as e:
@@ -3058,9 +3060,7 @@ class JsJaws(ServiceBase):
         def tag_visible(element):
             if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
                 return False
-            if isinstance(element, Comment):
-                return False
-            return True
+            return not isinstance(element, Comment)
 
         return list(filter(tag_visible, soup.find_all(string=True)))
 
@@ -3523,9 +3523,9 @@ class JsJaws(ServiceBase):
                             boxjs_posts_seen.append(value["url"])
                             params = {"method": "POST", "headers": item.get("headers", {})}
                             if isinstance(item.get("request_body"), dict):
-                                params["json"] = item.get("request_body", None)
+                                params["json"] = item.get("request_body")
                             else:
-                                params["data"] = item.get("request_body", None)
+                                params["data"] = item.get("request_body")
                             if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
                                 self.log.debug(f"Extracting URI file for '{item['url']}'")
                                 request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
@@ -4136,11 +4136,7 @@ class JsJaws(ServiceBase):
         malware_jail_res_sec = ResultTableSection(f"{MALWARE_JAIL} extracted the following IOCs")
 
         for line in self._parse_malwarejail_output(output):
-            split_line = line.split("] ", 1)
-            if len(split_line) == 2:
-                log_line = split_line[1]
-            else:
-                log_line = line
+            log_line = line.split("] ", 1)[-1]
             if len(log_line) > 5000 and not request.deep_scan:
                 log_line = truncate(log_line, 5000)
 
@@ -4220,8 +4216,7 @@ class JsJaws(ServiceBase):
                             location_pointer = location_pointer["$ref"]
                             # Let's clean this up so that we can access the correct reference
                             # Could look like this "$[\"ret\"][\"contentDocument\"][\"_parentNode\"][\"_location\"]"
-                            if location_pointer.startswith("$"):
-                                location_pointer = location_pointer[1:]
+                            location_pointer = location_pointer.removeprefix("$")
 
                             if location_pointer.startswith('["') and location_pointer.endswith('"]'):
                                 location_pointer = location_pointer[2:-2]
@@ -4472,11 +4467,8 @@ class JsJaws(ServiceBase):
         :param line_2: The second line to compare
         :return: A boolean representing that the lines are equivalent
         """
-        if line_1.startswith("//"):
-            line_1 = line_1[2:]
-
-        if line_2.startswith("//"):
-            line_2 = line_2[2:]
+        line_1 = line_1.removeprefix("//")
+        line_2 = line_2.removeprefix("//")
 
         line_1 = line_1.strip()
         line_2 = line_2.strip()
@@ -4813,12 +4805,11 @@ class JsJaws(ServiceBase):
         for meta in metas:
             # Metadata equivalent to http headers
             # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#http-equiv
-            if meta.has_attr("http-equiv"):
-                if meta.get("http-equiv").lower() == "refresh":
-                    url_data = meta.get("content", "unknown")
-                    urls = list({url.value.decode() for url in find_urls(url_data.encode())})
-                    if urls:
-                        self._handle_location_redirection(urls[0], request)
+            if meta.has_attr("http-equiv") and meta.get("http-equiv").lower() == "refresh":
+                url_data = meta.get("content", "unknown")
+                urls = list({url.value.decode() for url in find_urls(url_data.encode())})
+                if urls:
+                    self._handle_location_redirection(urls[0], request)
 
     def _hunt_for_suspicious_images(self, soup: BeautifulSoup) -> None:
         """
@@ -4853,10 +4844,15 @@ class JsJaws(ServiceBase):
                                 d["width"] = d["width"].encode("utf-8")
                         except Exception:
                             pass
-                if "height" in d and "width" in d:
-                    if isinstance(d["height"], int) and isinstance(d["width"], int):
-                        if d["height"] <= 1 and d["width"] <= 1:
-                            self.num_of_web_bugs += 1
+                if (
+                    "height" in d
+                    and "width" in d
+                    and isinstance(d["height"], int)
+                    and isinstance(d["width"], int)
+                    and ["height"] <= 1
+                    and d["width"] <= 1
+                ):
+                    self.num_of_web_bugs += 1
             except Exception:
                 # We don't care that much
                 pass
