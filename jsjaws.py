@@ -4849,7 +4849,7 @@ class JsJaws(ServiceBase):
                     and "width" in d
                     and isinstance(d["height"], int)
                     and isinstance(d["width"], int)
-                    and ["height"] <= 1
+                    and d["height"] <= 1
                     and d["width"] <= 1
                 ):
                     self.num_of_web_bugs += 1
