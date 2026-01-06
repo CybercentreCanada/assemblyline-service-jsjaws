@@ -4350,10 +4350,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         # We are on a second attempt here
-        if resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]:
-            do_not_terminate = True
-        else:
-            do_not_terminate = False
+        do_not_terminate = resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]
 
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
@@ -4363,7 +4360,8 @@ class JsJaws(ServiceBase):
             with Popen(
                 args=args,
                 stdout=PIPE,
-                stderr=PIPE if self.config.get("send_tool_stderr_to_pipe", False) else None,
+                # discard to prevent blocking, we don't use stdout
+                stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
                 bufsize=1,
                 universal_newlines=True,
             ) as p:
