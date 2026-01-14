@@ -141,7 +141,6 @@ MALWARE_JAIL = "MalwareJail"
 JS_X_RAY = "JS-X-Ray"
 BOX_JS = "Box.js"
 SYNCHRONY = "Synchrony"
-EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
 GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
 
@@ -1370,40 +1369,6 @@ class JsJaws(ServiceBase):
 
         return malware_jail_output
 
-    def _handle_tool_stdout_limit(
-        self, tool: str, tool_output: list[str], tool_args: list[str], responses: dict[str, list[str]]
-    ) -> list[str]:
-        """
-        This method handles if the tool exits early due to the stdout limit being surpassed
-        :param tool: The enumerator used for the tool name
-        :param tool_output: A list of strings that make up the stdout output from the tool
-        :param tool_args: A list of arguments used for running the tool
-        :param responses: A dictionary used to contain the stdout from a tool
-        :return: A list of strings that make up the stdout output from the tool
-        """
-        if len(tool_output) > 2 and tool_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses[tool] = [EXITED_DUE_TO_STDOUT_LIMIT]
-            tool_timeout = tool_output[-1] + 5
-
-            if tool == MALWARE_JAIL:
-                timeout_arg_index = tool_args.index("-t")
-                tool_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            elif tool == BOX_JS:
-                # Box.js requires some more time to shut down
-                tool_timeout += 10
-                timeout_arg_index = tool_args.index(
-                    next((arg for arg in tool_args if arg.startswith("--timeout=")), None)
-                )
-                tool_args[timeout_arg_index] = f"--timeout={tool_timeout}"
-
-            self.log.debug(f"Running {tool} again with a timeout of {tool_timeout}s")
-            tool_thr = Thread(target=self._run_tool, args=(tool, tool_args, tool_timeout,  responses), daemon=True)
-            tool_thr.start()
-            tool_thr.join(timeout=tool_timeout)
-            tool_output = responses.get(tool, [])
-
-        return tool_output
-
     def _handle_boxjs_output(self, responses: dict[str, list[str]], boxjs_args: list[str]) -> list[str]:
         """
         This method handles retrieving the Box.js output
@@ -1411,10 +1376,6 @@ class JsJaws(ServiceBase):
         :param boxjs_args: A list of arguments used for running Box.js
         :return: The a list of strings that make up the analysis log from Box.js
         """
-        temp_boxjs_output = responses.get(BOX_JS, [])
-        if not self.ignore_stdout_limit:
-            temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
-
         boxjs_output: list[str] = []
         if len(glob(self.boxjs_analysis_log)) > 0:
             boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
@@ -1434,10 +1395,6 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        if not self.ignore_stdout_limit:
-            malware_jail_output = self._handle_tool_stdout_limit(
-                MALWARE_JAIL, malware_jail_output, malware_jail_args, responses
-            )
         return self._trim_malware_jail_output(malware_jail_output)
 
     @staticmethod
@@ -4365,14 +4322,11 @@ class JsJaws(ServiceBase):
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
         except TimeoutExpired as e:
             # Get partial output off the exception
-            timeout_time = round(time() - start_time)
-            self.log.warning(f"{tool_name} timed out after {round(timeout_time)}s, continuing with partial output")
+            self.log.warning(f"{tool_name} timed out after {round(time()-start_time)}s, continuing with partial output")
             if e.stdout:
                 output = e.stdout.decode().split("\n")
                 # If we are keeping to the stdout limit, then do so
                 resp[tool_name] = output if self.ignore_stdout_limit else output[:self.stdout_limit]
-            resp[tool_name].append(EXITED_DUE_TO_STDOUT_LIMIT)
-            resp[tool_name].append(timeout_time)
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
 
