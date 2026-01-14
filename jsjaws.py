@@ -4307,7 +4307,8 @@ class JsJaws(ServiceBase):
                 text=True,
                 timeout=tool_timeout,
             )
-            resp[tool_name] = completed_process.stdout.split("\n")
+            output = completed_process.stdout.split("\n")
+            resp[tool_name] = output if self.ignore_stdout_limit else output[:self.stdout_limit]
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
         except TimeoutExpired as e:
             # Get partial output off the exception
