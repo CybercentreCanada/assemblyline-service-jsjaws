@@ -296,7 +296,7 @@ class TestJsJaws:
         service_request.task.service_config["enable_synchrony"] = True
         service_request.task.service_config["static_analysis_only"] = True
         service_request.task.service_config["file_always_exists"] = True
-        mocker.patch("jsjaws.Popen", side_effect=TimeoutExpired("blah", 1))
+        mocker.patch("subprocess.run", side_effect=TimeoutExpired("blah", 1))
         jsjaws_class_instance.execute(service_request)
 
     @staticmethod
@@ -434,7 +434,7 @@ class TestJsJaws:
             multiple_gauntlet_output, dummy_request_class_instance, dummy_request_class_instance.file_contents
         )
         expected_doc_write_1 = b'<html><script>var b64_encoded = "PGh0bWw+CnBhc3N3b3JkOiB5YWJhZGFiYWRvbwo8L2h0bWw+";\n    var b64_decoded = atob(b64_encoded);\n    document.write(b64_decoded);</script></html>'
-        expected_doc_write_2 = b"<html>\n\npassword: yabadabadoo\n\n</html>"
+        expected_doc_write_2 = b"<html>\npassword: yabadabadoo\n</html>"
         assert jsjaws_class_instance.doc_write_hashes == {
             sha256(expected_doc_write_1).hexdigest(),
             sha256(expected_doc_write_2).hexdigest(),

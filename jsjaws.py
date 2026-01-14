@@ -14,7 +14,7 @@ from ipaddress import IPv4Address
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
-from subprocess import PIPE, Popen, TimeoutExpired
+from subprocess import PIPE, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import sleep, time
@@ -1397,7 +1397,7 @@ class JsJaws(ServiceBase):
                 tool_args[timeout_arg_index] = f"--timeout={tool_timeout}"
 
             self.log.debug(f"Running {tool} again with a timeout of {tool_timeout}s")
-            tool_thr = Thread(target=self._run_tool, args=(tool, tool_args, responses), daemon=True)
+            tool_thr = Thread(target=self._run_tool, args=(tool, tool_args, tool_timeout,  responses), daemon=True)
             tool_thr.start()
             tool_thr.join(timeout=tool_timeout)
             tool_output = responses.get(tool, [])
@@ -1701,16 +1701,16 @@ class JsJaws(ServiceBase):
         responses: dict[str, list[str]] = {}
         if not request.get_param("static_analysis_only"):
             tool_threads.append(
-                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
+                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, tool_timeout, responses), daemon=True))
             )
             tool_threads.append(
                 (
                     MALWARE_JAIL,
-                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True),
+                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, tool_timeout, responses), daemon=True),
                 )
             )
         tool_threads.append(
-            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, tool_timeout, responses), daemon=True))
         )
 
         # Detect Obfuscator.io
@@ -1731,7 +1731,7 @@ class JsJaws(ServiceBase):
         # 2. If it is enabled in the submission parameter
         if obfuscator_io or request.get_param("enable_synchrony"):
             tool_threads.append(
-                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True))
             )
             has_synchrony_run = True
 
@@ -1809,7 +1809,7 @@ class JsJaws(ServiceBase):
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         obfuscator_io = obfuscator_io or run_synchrony
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
+            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True)
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
@@ -4340,6 +4340,7 @@ class JsJaws(ServiceBase):
         self,
         tool_name: str,
         args: list[str],
+        tool_timeout: int,
         resp: dict[str, Any],
     ) -> None:
         """
@@ -4349,41 +4350,31 @@ class JsJaws(ServiceBase):
         :param resp: A dictionary used to contain the stdout from a tool
         :return: None
         """
-        # We are on a second attempt here
-        do_not_terminate = resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]
-
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
-        resp[tool_name] = []
         try:
-            # Stream stdout to resp rather than waiting for process to finish
-            with Popen(
-                args=args,
-                stdout=PIPE,
-                # discard to prevent blocking, we don't use stdout
-                stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
+            completed_process = subprocess.run(
+                args,
                 bufsize=1,
-                universal_newlines=True,
-            ) as p:
-                for line in p.stdout:
-                    resp[tool_name].append(line)
-                    # If we are keeping to the stdout limit, then do so
-                    if not self.ignore_stdout_limit and len(resp[tool_name]) > self.stdout_limit:
-                        stdout_limit_reached_time = round(time() - start_time)
-                        self.log.warning(
-                            f"{tool_name} generated more than {self.stdout_limit} lines of output. \
-                            Time elapsed: {stdout_limit_reached_time}s"
-                        )
-                        if not do_not_terminate:
-                            p.terminate()
-                            resp[tool_name].append(EXITED_DUE_TO_STDOUT_LIMIT)
-                            resp[tool_name].append(stdout_limit_reached_time)
-                        return
-        except TimeoutExpired:
-            pass
+                stdout=PIPE,
+                stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
+                text=True,
+                timeout=tool_timeout,
+            )
+            resp[tool_name] = completed_process.stdout.split("\n")
+            self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
+        except TimeoutExpired as e:
+            # Get partial output off the exception
+            timeout_time = round(time() - start_time)
+            self.log.warning(f"{tool_name} timed out after {round(timeout_time)}s, continuing with partial output")
+            if e.stdout:
+                output = e.stdout.decode().split("\n")
+                # If we are keeping to the stdout limit, then do so
+                resp[tool_name] = output if self.ignore_stdout_limit else output[:self.stdout_limit]
+            resp[tool_name].append(EXITED_DUE_TO_STDOUT_LIMIT)
+            resp[tool_name].append(timeout_time)
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
-        self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> tuple[str | None, bytes | None, str | None]:
         file_string = file_contents.decode().replace("\r", "")
