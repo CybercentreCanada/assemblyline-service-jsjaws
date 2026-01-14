@@ -629,7 +629,6 @@ def is_js_script(script: Tag) -> bool:
 
 
 class JsJaws(ServiceBase):
-
     def __init__(self, config: dict | None = None) -> None:
         super(JsJaws, self).__init__(config)
         self.artifact_list: list[dict[str, str]] | None = None
@@ -968,7 +967,7 @@ class JsJaws(ServiceBase):
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
         # Handle UTF-16 Encoding with BOM
-        if file_content[:2] in (b"\xFF\xFE", b"\xFE\xFF"):
+        if file_content[:2] in (b"\xff\xfe", b"\xfe\xff"):
             file_content = file_content.decode("utf-16").encode("utf-8")
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 f.write(file_content)
@@ -1663,11 +1662,18 @@ class JsJaws(ServiceBase):
             tool_threads.append(
                 (
                     MALWARE_JAIL,
-                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, tool_timeout, responses), daemon=True),
+                    Thread(
+                        target=self._run_tool,
+                        args=(MALWARE_JAIL, malware_jail_args, tool_timeout, responses),
+                        daemon=True,
+                    ),
                 )
             )
         tool_threads.append(
-            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, tool_timeout, responses), daemon=True))
+            (
+                JS_X_RAY,
+                Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, tool_timeout, responses), daemon=True),
+            )
         )
 
         # Detect Obfuscator.io
@@ -1688,7 +1694,12 @@ class JsJaws(ServiceBase):
         # 2. If it is enabled in the submission parameter
         if obfuscator_io or request.get_param("enable_synchrony"):
             tool_threads.append(
-                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True))
+                (
+                    SYNCHRONY,
+                    Thread(
+                        target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True
+                    ),
+                )
             )
             has_synchrony_run = True
 
@@ -1755,7 +1766,9 @@ class JsJaws(ServiceBase):
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         obfuscator_io = obfuscator_io or run_synchrony
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True)
+            synchrony_thr = Thread(
+                target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True
+            )
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
@@ -4308,15 +4321,17 @@ class JsJaws(ServiceBase):
                 timeout=tool_timeout,
             )
             output = completed_process.stdout.split("\n")
-            resp[tool_name] = output if self.ignore_stdout_limit else output[:self.stdout_limit]
+            resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
         except TimeoutExpired as e:
             # Get partial output off the exception
-            self.log.warning(f"{tool_name} timed out after {round(time()-start_time)}s, continuing with partial output")
+            self.log.warning(
+                f"{tool_name} timed out after {round(time() - start_time)}s, continuing with partial output"
+            )
             if e.stdout:
                 output = e.stdout.decode().split("\n")
                 # If we are keeping to the stdout limit, then do so
-                resp[tool_name] = output if self.ignore_stdout_limit else output[:self.stdout_limit]
+                resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
 
