@@ -1369,7 +1369,7 @@ class JsJaws(ServiceBase):
 
         return malware_jail_output
 
-    def _handle_boxjs_output(self, responses: dict[str, list[str]], boxjs_args: list[str]) -> list[str]:
+    def _handle_boxjs_output(self) -> list[str]:
         """
         This method handles retrieving the Box.js output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1385,9 +1385,9 @@ class JsJaws(ServiceBase):
                     if not line.startswith("[verb] Code saved to"):
                         boxjs_output.append(line)
 
-        return boxjs_output
+        return boxjs_output if self.ignore_stdout_limit else boxjs_output[: self.stdout_limit]
 
-    def _handle_malware_jail_output(self, responses: dict[str, list[str]], malware_jail_args: list[str]) -> list[str]:
+    def _handle_malware_jail_output(self, responses: dict[str, list[str]]) -> list[str]:
         """
         This method handles the Malware Jail output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1706,8 +1706,8 @@ class JsJaws(ServiceBase):
                 sleep(3)
 
         # Handle each tools' output
-        boxjs_output = self._handle_boxjs_output(responses, boxjs_args)
-        malware_jail_output = self._handle_malware_jail_output(responses, malware_jail_args)
+        boxjs_output = self._handle_boxjs_output()
+        malware_jail_output = self._handle_malware_jail_output(responses)
         jsxray_output = self._handle_jsxray_output(responses)
 
         # ==================================================================
@@ -1717,24 +1717,13 @@ class JsJaws(ServiceBase):
         # We are running signatures based on the output observed from dynamic execution
         # (boxjs_output and malware_jail_output)
         # as well as the file contents themselves (static analysis)
+        total_output = boxjs_output + malware_jail_output
         if request.get_param("static_signatures"):
-            static_file_lines = []
             for line in safe_str(file_content).split("\n"):
                 if ";" in line:
-                    static_file_lines.extend(line.split(";"))
+                    total_output.extend(line.split(";"))
                 else:
-                    static_file_lines.append(line)
-            if not self.ignore_stdout_limit:
-                total_output = (
-                    boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit] + static_file_lines
-                )
-            else:
-                total_output = boxjs_output + malware_jail_output + static_file_lines
-        else:
-            if not self.ignore_stdout_limit:
-                total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
-            else:
-                total_output = boxjs_output + malware_jail_output
+                    total_output.append(line)
 
         if not self.ignore_stdout_limit:
             total_output = total_output[: self.stdout_limit]
