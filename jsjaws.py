@@ -105,6 +105,11 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
 STDOUT_LIMIT = 10000
 
+# Additional time to make sure the tool times out before the subprocess
+SUBPROCESS_TIMEOUT_BUFFER = 3
+# Additional time to make sure the subprocess times out before the thread
+THREAD_TIMEOUT_BUFFER = SUBPROCESS_TIMEOUT_BUFFER + 3
+
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
@@ -1708,7 +1713,7 @@ class JsJaws(ServiceBase):
 
         synchrony_timedout = False
         for name, thr in tool_threads:
-            thr.join(timeout=tool_timeout)
+            thr.join(timeout=tool_timeout+THREAD_TIMEOUT_BUFFER)
             if thr.is_alive():
                 if name == SYNCHRONY:
                     synchrony_timedout = True
@@ -4311,7 +4316,8 @@ class JsJaws(ServiceBase):
                 stdout=PIPE,
                 stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
                 text=True,
-                timeout=tool_timeout,
+                # Make sure the tool has enough time to interrupt itself if behaving correctly
+                timeout=tool_timeout+SUBPROCESS_TIMEOUT_BUFFER,
             )
             output = completed_process.stdout.split("\n")
             resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
