@@ -14,7 +14,7 @@ from ipaddress import IPv4Address
 from json import JSONDecodeError, dumps, load, loads
 from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
-from subprocess import PIPE, Popen, TimeoutExpired
+from subprocess import PIPE, TimeoutExpired
 from sys import modules
 from threading import Thread
 from time import sleep, time
@@ -105,6 +105,11 @@ TRANSLATED_SCORE = {
 # Default cap of 10k lines of stdout from tools, usually only applied to MalwareJail
 STDOUT_LIMIT = 10000
 
+# Additional time to make sure the tool times out before the subprocess
+SUBPROCESS_TIMEOUT_BUFFER = 3
+# Additional time to make sure the subprocess times out before the thread
+THREAD_TIMEOUT_BUFFER = SUBPROCESS_TIMEOUT_BUFFER + 3
+
 # Strings indicative of a PE
 PE_INDICATORS = [b"MZ", b"This program cannot be run in DOS mode"]
 
@@ -141,7 +146,6 @@ MALWARE_JAIL = "MalwareJail"
 JS_X_RAY = "JS-X-Ray"
 BOX_JS = "Box.js"
 SYNCHRONY = "Synchrony"
-EXITED_DUE_TO_STDOUT_LIMIT = "EXITED_DUE_TO_STDOUT_LIMIT"
 TEMP_JS_FILENAME = "temp_javascript.js"
 GOOTLOADERAUTOJSDECODER = "GootLoaderAutoJsDecode"
 
@@ -630,7 +634,6 @@ def is_js_script(script: Tag) -> bool:
 
 
 class JsJaws(ServiceBase):
-
     def __init__(self, config: dict | None = None) -> None:
         super(JsJaws, self).__init__(config)
         self.artifact_list: list[dict[str, str]] | None = None
@@ -969,7 +972,7 @@ class JsJaws(ServiceBase):
         self.ignore_stdout_limit = request.get_param("ignore_stdout_limit")
 
         # Handle UTF-16 Encoding with BOM
-        if file_content[:2] in (b"\xFF\xFE", b"\xFE\xFF"):
+        if file_content[:2] in (b"\xff\xfe", b"\xfe\xff"):
             file_content = file_content.decode("utf-16").encode("utf-8")
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False, mode="wb") as f:
                 f.write(file_content)
@@ -1370,51 +1373,13 @@ class JsJaws(ServiceBase):
 
         return malware_jail_output
 
-    def _handle_tool_stdout_limit(
-        self, tool: str, tool_output: list[str], tool_args: list[str], responses: dict[str, list[str]]
-    ) -> list[str]:
-        """
-        This method handles if the tool exits early due to the stdout limit being surpassed
-        :param tool: The enumerator used for the tool name
-        :param tool_output: A list of strings that make up the stdout output from the tool
-        :param tool_args: A list of arguments used for running the tool
-        :param responses: A dictionary used to contain the stdout from a tool
-        :return: A list of strings that make up the stdout output from the tool
-        """
-        if len(tool_output) > 2 and tool_output[-2] == EXITED_DUE_TO_STDOUT_LIMIT:
-            responses[tool] = [EXITED_DUE_TO_STDOUT_LIMIT]
-            tool_timeout = tool_output[-1] + 5
-
-            if tool == MALWARE_JAIL:
-                timeout_arg_index = tool_args.index("-t")
-                tool_args[timeout_arg_index + 1] = f"{tool_timeout * 1000}"
-            elif tool == BOX_JS:
-                # Box.js requires some more time to shut down
-                tool_timeout += 10
-                timeout_arg_index = tool_args.index(
-                    next((arg for arg in tool_args if arg.startswith("--timeout=")), None)
-                )
-                tool_args[timeout_arg_index] = f"--timeout={tool_timeout}"
-
-            self.log.debug(f"Running {tool} again with a timeout of {tool_timeout}s")
-            tool_thr = Thread(target=self._run_tool, args=(tool, tool_args, responses), daemon=True)
-            tool_thr.start()
-            tool_thr.join(timeout=tool_timeout)
-            tool_output = responses.get(tool, [])
-
-        return tool_output
-
-    def _handle_boxjs_output(self, responses: dict[str, list[str]], boxjs_args: list[str]) -> list[str]:
+    def _handle_boxjs_output(self) -> list[str]:
         """
         This method handles retrieving the Box.js output
         :param responses: A dictionary used to contain the stdout from a tool
         :param boxjs_args: A list of arguments used for running Box.js
         :return: The a list of strings that make up the analysis log from Box.js
         """
-        temp_boxjs_output = responses.get(BOX_JS, [])
-        if not self.ignore_stdout_limit:
-            temp_boxjs_output = self._handle_tool_stdout_limit(BOX_JS, temp_boxjs_output, boxjs_args, responses)
-
         boxjs_output: list[str] = []
         if len(glob(self.boxjs_analysis_log)) > 0:
             boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
@@ -1424,9 +1389,9 @@ class JsJaws(ServiceBase):
                     if not line.startswith("[verb] Code saved to"):
                         boxjs_output.append(line)
 
-        return boxjs_output
+        return boxjs_output if self.ignore_stdout_limit else boxjs_output[: self.stdout_limit]
 
-    def _handle_malware_jail_output(self, responses: dict[str, list[str]], malware_jail_args: list[str]) -> list[str]:
+    def _handle_malware_jail_output(self, responses: dict[str, list[str]]) -> list[str]:
         """
         This method handles the Malware Jail output
         :param responses: A dictionary used to contain the stdout from a tool
@@ -1434,10 +1399,6 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        if not self.ignore_stdout_limit:
-            malware_jail_output = self._handle_tool_stdout_limit(
-                MALWARE_JAIL, malware_jail_output, malware_jail_args, responses
-            )
         return self._trim_malware_jail_output(malware_jail_output)
 
     @staticmethod
@@ -1701,16 +1662,23 @@ class JsJaws(ServiceBase):
         responses: dict[str, list[str]] = {}
         if not request.get_param("static_analysis_only"):
             tool_threads.append(
-                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, responses), daemon=True))
+                (BOX_JS, Thread(target=self._run_tool, args=(BOX_JS, boxjs_args, tool_timeout, responses), daemon=True))
             )
             tool_threads.append(
                 (
                     MALWARE_JAIL,
-                    Thread(target=self._run_tool, args=(MALWARE_JAIL, malware_jail_args, responses), daemon=True),
+                    Thread(
+                        target=self._run_tool,
+                        args=(MALWARE_JAIL, malware_jail_args, tool_timeout, responses),
+                        daemon=True,
+                    ),
                 )
             )
         tool_threads.append(
-            (JS_X_RAY, Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, responses), daemon=True))
+            (
+                JS_X_RAY,
+                Thread(target=self._run_tool, args=(JS_X_RAY, jsxray_args, tool_timeout, responses), daemon=True),
+            )
         )
 
         # Detect Obfuscator.io
@@ -1731,7 +1699,12 @@ class JsJaws(ServiceBase):
         # 2. If it is enabled in the submission parameter
         if obfuscator_io or request.get_param("enable_synchrony"):
             tool_threads.append(
-                (SYNCHRONY, Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True))
+                (
+                    SYNCHRONY,
+                    Thread(
+                        target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True
+                    ),
+                )
             )
             has_synchrony_run = True
 
@@ -1740,7 +1713,7 @@ class JsJaws(ServiceBase):
 
         synchrony_timedout = False
         for name, thr in tool_threads:
-            thr.join(timeout=tool_timeout)
+            thr.join(timeout=tool_timeout+THREAD_TIMEOUT_BUFFER)
             if thr.is_alive():
                 if name == SYNCHRONY:
                     synchrony_timedout = True
@@ -1749,8 +1722,8 @@ class JsJaws(ServiceBase):
                 sleep(3)
 
         # Handle each tools' output
-        boxjs_output = self._handle_boxjs_output(responses, boxjs_args)
-        malware_jail_output = self._handle_malware_jail_output(responses, malware_jail_args)
+        boxjs_output = self._handle_boxjs_output()
+        malware_jail_output = self._handle_malware_jail_output(responses)
         jsxray_output = self._handle_jsxray_output(responses)
 
         # ==================================================================
@@ -1760,24 +1733,13 @@ class JsJaws(ServiceBase):
         # We are running signatures based on the output observed from dynamic execution
         # (boxjs_output and malware_jail_output)
         # as well as the file contents themselves (static analysis)
+        total_output = boxjs_output + malware_jail_output
         if request.get_param("static_signatures"):
-            static_file_lines = []
             for line in safe_str(file_content).split("\n"):
                 if ";" in line:
-                    static_file_lines.extend(line.split(";"))
+                    total_output.extend(line.split(";"))
                 else:
-                    static_file_lines.append(line)
-            if not self.ignore_stdout_limit:
-                total_output = (
-                    boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit] + static_file_lines
-                )
-            else:
-                total_output = boxjs_output + malware_jail_output + static_file_lines
-        else:
-            if not self.ignore_stdout_limit:
-                total_output = boxjs_output[: self.stdout_limit] + malware_jail_output[: self.stdout_limit]
-            else:
-                total_output = boxjs_output + malware_jail_output
+                    total_output.append(line)
 
         if not self.ignore_stdout_limit:
             total_output = total_output[: self.stdout_limit]
@@ -1792,11 +1754,7 @@ class JsJaws(ServiceBase):
             )
 
         self._extract_boxjs_iocs(request.result)
-        if not self.ignore_stdout_limit:
-            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request, original_contents)
-        else:
-            self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
-
+        self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
@@ -1809,7 +1767,9 @@ class JsJaws(ServiceBase):
         run_synchrony = self._flag_jsxray_iocs(jsxray_output, request)
         obfuscator_io = obfuscator_io or run_synchrony
         if not has_synchrony_run and run_synchrony:
-            synchrony_thr = Thread(target=self._run_tool, args=(SYNCHRONY, synchrony_args, responses), daemon=True)
+            synchrony_thr = Thread(
+                target=self._run_tool, args=(SYNCHRONY, synchrony_args, tool_timeout, responses), daemon=True
+            )
             synchrony_thr.start()
             synchrony_thr.join(timeout=tool_timeout)
 
@@ -1819,10 +1779,7 @@ class JsJaws(ServiceBase):
         self._extract_synchrony(request, synchrony_timedout, obfuscator_io)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
-        if not self.ignore_stdout_limit:
-            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request, original_contents)
-        else:
-            self._extract_doc_writes(malware_jail_output, request, original_contents)
+        self._extract_doc_writes(malware_jail_output, request, original_contents)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
@@ -4340,6 +4297,7 @@ class JsJaws(ServiceBase):
         self,
         tool_name: str,
         args: list[str],
+        tool_timeout: int,
         resp: dict[str, Any],
     ) -> None:
         """
@@ -4349,43 +4307,32 @@ class JsJaws(ServiceBase):
         :param resp: A dictionary used to contain the stdout from a tool
         :return: None
         """
-        # We are on a second attempt here
-        if resp.get(tool_name, []) == [EXITED_DUE_TO_STDOUT_LIMIT]:
-            do_not_terminate = True
-        else:
-            do_not_terminate = False
-
         self.log.debug(f"Running {tool_name}...")
         start_time = time()
-        resp[tool_name] = []
         try:
-            # Stream stdout to resp rather than waiting for process to finish
-            with Popen(
-                args=args,
-                stdout=PIPE,
-                stderr=PIPE if self.config.get("send_tool_stderr_to_pipe", False) else None,
+            completed_process = subprocess.run(
+                args,
                 bufsize=1,
-                universal_newlines=True,
-            ) as p:
-                for line in p.stdout:
-                    resp[tool_name].append(line)
-                    # If we are keeping to the stdout limit, then do so
-                    if not self.ignore_stdout_limit and len(resp[tool_name]) > self.stdout_limit:
-                        stdout_limit_reached_time = round(time() - start_time)
-                        self.log.warning(
-                            f"{tool_name} generated more than {self.stdout_limit} lines of output. \
-                            Time elapsed: {stdout_limit_reached_time}s"
-                        )
-                        if not do_not_terminate:
-                            p.terminate()
-                            resp[tool_name].append(EXITED_DUE_TO_STDOUT_LIMIT)
-                            resp[tool_name].append(stdout_limit_reached_time)
-                        return
-        except TimeoutExpired:
-            pass
+                stdout=PIPE,
+                stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
+                text=True,
+                # Make sure the tool has enough time to interrupt itself if behaving correctly
+                timeout=tool_timeout+SUBPROCESS_TIMEOUT_BUFFER,
+            )
+            output = completed_process.stdout.split("\n")
+            resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
+            self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
+        except TimeoutExpired as e:
+            # Get partial output off the exception
+            self.log.warning(
+                f"{tool_name} timed out after {round(time() - start_time)}s, continuing with partial output"
+            )
+            if e.stdout:
+                output = e.stdout.decode().split("\n")
+                # If we are keeping to the stdout limit, then do so
+                resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
-        self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
 
     def _extract_filtered_code(self, file_contents: bytes) -> tuple[str | None, bytes | None, str | None]:
         file_string = file_contents.decode().replace("\r", "")
