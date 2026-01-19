@@ -1749,11 +1749,7 @@ class JsJaws(ServiceBase):
             )
 
         self._extract_boxjs_iocs(request.result)
-        if not self.ignore_stdout_limit:
-            self._extract_malware_jail_iocs(malware_jail_output[: self.stdout_limit], request, original_contents)
-        else:
-            self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
-
+        self._extract_malware_jail_iocs(malware_jail_output, request, original_contents)
         self._handle_subsequent_scripts(request.result)
         self._extract_wscript(total_output, request.result)
         self._extract_payloads(request.sha256, request.deep_scan)
@@ -1778,10 +1774,7 @@ class JsJaws(ServiceBase):
         self._extract_synchrony(request, synchrony_timedout, obfuscator_io)
 
         # This has to be the second last thing that we do, since it will run on a "superset" of the initial file...
-        if not self.ignore_stdout_limit:
-            self._extract_doc_writes(malware_jail_output[: self.stdout_limit], request, original_contents)
-        else:
-            self._extract_doc_writes(malware_jail_output, request, original_contents)
+        self._extract_doc_writes(malware_jail_output, request, original_contents)
 
         # Adding sandbox artifacts using the OntologyResults helper class
         _ = OntologyResults.handle_artifacts(sorted(self.artifact_list, key=lambda x: x["name"]), request)
