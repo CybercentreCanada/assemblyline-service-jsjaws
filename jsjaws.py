@@ -654,7 +654,7 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets: str | None = None
         self.cleaned_with_synchrony: str | None = None
         self.cleaned_with_synchrony_path: str | None = None
-        self.stdout_limit: int | None = None
+        self.stdout_limit: int = self.config.get("total_stdout_limit", STDOUT_LIMIT)
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: dict[str, dict[str, list[str]]] = {}
         self.doc_write_hashes: set[str] = set()
@@ -722,8 +722,6 @@ class JsJaws(ServiceBase):
         if not self.safelist:
             with open(SAFELIST_PATH, "r") as f:
                 self.safelist = yaml_safe_load(f)
-
-        self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
 
     def _reset_execution_variables(self) -> None:
         """
@@ -1400,7 +1398,7 @@ class JsJaws(ServiceBase):
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
         malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
-        return malware_jail_output if self.ignore_stdout_limit else malware_jail_output[-self.stdout_limit:]
+        return malware_jail_output if self.ignore_stdout_limit else malware_jail_output[-self.stdout_limit :]
 
     @staticmethod
     def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
