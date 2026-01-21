@@ -138,7 +138,7 @@ HTMLIFRAMEELEMENT = "HTMLIFrameElement"
 HTMLELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
 
 # These characters are cannot be included in a variable name
-INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";"]
+INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";", "/"]
 
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
@@ -1713,7 +1713,7 @@ class JsJaws(ServiceBase):
 
         synchrony_timedout = False
         for name, thr in tool_threads:
-            thr.join(timeout=tool_timeout+THREAD_TIMEOUT_BUFFER)
+            thr.join(timeout=tool_timeout + THREAD_TIMEOUT_BUFFER)
             if thr.is_alive():
                 if name == SYNCHRONY:
                     synchrony_timedout = True
@@ -4317,7 +4317,7 @@ class JsJaws(ServiceBase):
                 stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
                 text=True,
                 # Make sure the tool has enough time to interrupt itself if behaving correctly
-                timeout=tool_timeout+SUBPROCESS_TIMEOUT_BUFFER,
+                timeout=tool_timeout + SUBPROCESS_TIMEOUT_BUFFER,
             )
             output = completed_process.stdout.split("\n")
             resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
