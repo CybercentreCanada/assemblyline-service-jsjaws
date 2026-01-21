@@ -1399,7 +1399,8 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        return self._trim_malware_jail_output(malware_jail_output)
+        malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
+        return malware_jail_output if self.ignore_stdout_limit else malware_jail_output[-self.stdout_limit:]
 
     @staticmethod
     def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
@@ -4319,8 +4320,7 @@ class JsJaws(ServiceBase):
                 # Make sure the tool has enough time to interrupt itself if behaving correctly
                 timeout=tool_timeout + SUBPROCESS_TIMEOUT_BUFFER,
             )
-            output = completed_process.stdout.split("\n")
-            resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
+            resp[tool_name] = completed_process.stdout.split("\n")
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
         except TimeoutExpired as e:
             # Get partial output off the exception
@@ -4328,9 +4328,7 @@ class JsJaws(ServiceBase):
                 f"{tool_name} timed out after {round(time() - start_time)}s, continuing with partial output"
             )
             if e.stdout:
-                output = e.stdout.decode().split("\n")
-                # If we are keeping to the stdout limit, then do so
-                resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
+                resp[tool_name] = e.stdout.decode().split("\n")
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
 
