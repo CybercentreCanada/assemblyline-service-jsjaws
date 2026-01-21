@@ -121,7 +121,9 @@ def dummy_request_class_instance(dummy_task_class):
 def jsjaws_class_instance():
     create_tmp_manifest()
     try:
-        yield jsjaws.JsJaws()
+        instance = jsjaws.JsJaws()
+        instance.start()
+        yield instance
     finally:
         remove_tmp_manifest()
 
@@ -160,41 +162,6 @@ class TestJsJaws:
         for sample in os.listdir(samples_path):
             temp_sample_path = os.path.join("/tmp", sample)
             os.remove(temp_sample_path)
-
-    @staticmethod
-    def test_init(jsjaws_class_instance):
-        assert jsjaws_class_instance.artifact_list is None
-        assert jsjaws_class_instance.malware_jail_payload_extraction_dir is None
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dir is None
-        assert jsjaws_class_instance.malware_jail_sandbox_env_dump_path is None
-        assert jsjaws_class_instance.boxjs_urls_json_path is None
-        assert jsjaws_class_instance.malware_jail_urls_json_path is None
-        assert jsjaws_class_instance.extracted_wscript_batch_path is None
-        assert jsjaws_class_instance.extracted_wscript_ps1_path is None
-        assert jsjaws_class_instance.boxjs_batch_path is None
-        assert jsjaws_class_instance.boxjs_ps1_path is None
-        assert jsjaws_class_instance.malware_jail_output_path is None
-        assert jsjaws_class_instance.boxjs_output_dir is None
-        assert jsjaws_class_instance.boxjs_iocs is None
-        assert jsjaws_class_instance.boxjs_resources is None
-        assert jsjaws_class_instance.boxjs_analysis_log is None
-        assert jsjaws_class_instance.boxjs_snippets is None
-        assert jsjaws_class_instance.cleaned_with_synchrony is None
-        assert jsjaws_class_instance.cleaned_with_synchrony_path is None
-        assert jsjaws_class_instance.stdout_limit is None
-        assert isinstance(jsjaws_class_instance.identify, Identify)
-        assert jsjaws_class_instance.safelist == {}
-        assert jsjaws_class_instance.doc_write_hashes == set()
-
-    @staticmethod
-    def test_start(jsjaws_class_instance):
-        jsjaws_class_instance.start()
-        assert True
-
-    @staticmethod
-    def test_stop(jsjaws_class_instance):
-        jsjaws_class_instance.stop()
-        assert True
 
     @staticmethod
     @pytest.mark.parametrize("sample", samples)

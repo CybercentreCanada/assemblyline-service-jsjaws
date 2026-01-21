@@ -138,7 +138,7 @@ HTMLIFRAMEELEMENT = "HTMLIFrameElement"
 HTMLELEMENT_SRC_SET_TO_URI = ".src was set to a URI:"
 
 # These characters are cannot be included in a variable name
-INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";"]
+INVALID_VARNAME_CHARS = ["-", " ", ":", ",", ";", "/"]
 
 # Enumerations
 OBFUSCATOR_IO = "obfuscator.io"
@@ -654,7 +654,7 @@ class JsJaws(ServiceBase):
         self.boxjs_snippets: str | None = None
         self.cleaned_with_synchrony: str | None = None
         self.cleaned_with_synchrony_path: str | None = None
-        self.stdout_limit: int | None = None
+        self.stdout_limit: int = self.config.get("total_stdout_limit", STDOUT_LIMIT)
         self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: dict[str, dict[str, list[str]]] = {}
         self.doc_write_hashes: set[str] = set()
@@ -722,8 +722,6 @@ class JsJaws(ServiceBase):
         if not self.safelist:
             with open(SAFELIST_PATH, "r") as f:
                 self.safelist = yaml_safe_load(f)
-
-        self.stdout_limit = self.config.get("total_stdout_limit", STDOUT_LIMIT)
 
     def _reset_execution_variables(self) -> None:
         """
@@ -1399,7 +1397,8 @@ class JsJaws(ServiceBase):
         :return: A list of strings that make up the stdout output from Malware Jail
         """
         malware_jail_output = responses.get(MALWARE_JAIL, [])
-        return self._trim_malware_jail_output(malware_jail_output)
+        malware_jail_output = self._trim_malware_jail_output(malware_jail_output)
+        return malware_jail_output if self.ignore_stdout_limit else malware_jail_output[-self.stdout_limit :]
 
     @staticmethod
     def _handle_jsxray_output(responses: dict) -> dict[str, Any]:
@@ -1713,7 +1712,7 @@ class JsJaws(ServiceBase):
 
         synchrony_timedout = False
         for name, thr in tool_threads:
-            thr.join(timeout=tool_timeout+THREAD_TIMEOUT_BUFFER)
+            thr.join(timeout=tool_timeout + THREAD_TIMEOUT_BUFFER)
             if thr.is_alive():
                 if name == SYNCHRONY:
                     synchrony_timedout = True
@@ -4317,10 +4316,9 @@ class JsJaws(ServiceBase):
                 stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
                 text=True,
                 # Make sure the tool has enough time to interrupt itself if behaving correctly
-                timeout=tool_timeout+SUBPROCESS_TIMEOUT_BUFFER,
+                timeout=tool_timeout + SUBPROCESS_TIMEOUT_BUFFER,
             )
-            output = completed_process.stdout.split("\n")
-            resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
+            resp[tool_name] = completed_process.stdout.split("\n")
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
         except TimeoutExpired as e:
             # Get partial output off the exception
@@ -4328,9 +4326,7 @@ class JsJaws(ServiceBase):
                 f"{tool_name} timed out after {round(time() - start_time)}s, continuing with partial output"
             )
             if e.stdout:
-                output = e.stdout.decode().split("\n")
-                # If we are keeping to the stdout limit, then do so
-                resp[tool_name] = output if self.ignore_stdout_limit else output[: self.stdout_limit]
+                resp[tool_name] = e.stdout.decode().split("\n")
         except Exception as e:
             self.log.warning(f"{tool_name} crashed due to {repr(e)}")
 
