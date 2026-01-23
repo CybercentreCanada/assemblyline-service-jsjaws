@@ -1,21 +1,17 @@
+import binascii
 import hashlib
 import json
 import os
 import re
 import subprocess
+import sys
 import tempfile
 from base64 import b64decode
-from binascii import Error as BinasciiError
 from glob import glob
-from hashlib import sha256
 from inspect import getmembers, isclass
 from io import BytesIO
 from ipaddress import IPv4Address
-from json import JSONDecodeError, dumps, load, loads
-from os import environ, listdir, mkdir, path
 from pkgutil import iter_modules
-from subprocess import PIPE, TimeoutExpired
-from sys import modules
 from threading import Thread
 from time import sleep, time
 from typing import IO, Any
@@ -156,14 +152,14 @@ EXTRACTED_WSCRIPT_PS1 = "extracted_wscript.ps1"
 MALWARE_JAIL_OUTPUT = "output.txt"
 MALWARE_JAIL_SANDBOX_ENV_DUMP = "sandbox_dump.json"
 
-ROOT_DIR = path.dirname(path.abspath(__file__))
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 ASAR_PATH = os.path.join(ROOT_DIR, "tools/node_modules/@electron/asar/bin/asar.js")
-PATH_TO_JAILME_JS = path.join(ROOT_DIR, "tools/malwarejail/jailme.js")
-PATH_TO_BOXJS = path.join(ROOT_DIR, "tools/node_modules/box-js/run.js")
-PATH_TO_BOXJS_BOILERPLATE = path.join(ROOT_DIR, "tools/node_modules/box-js/boilerplate.js")
-PATH_TO_JSXRAY = path.join(ROOT_DIR, "tools/js-x-ray-run.js")
-PATH_TO_SYNCHRONY = path.join(ROOT_DIR, "tools/node_modules/.bin/synchrony")
-WSCRIPT_ONLY_CONFIG = path.join(ROOT_DIR, "tools/malwarejail/config/config_wscript_only.json")
+PATH_TO_JAILME_JS = os.path.join(ROOT_DIR, "tools/malwarejail/jailme.js")
+PATH_TO_BOXJS = os.path.join(ROOT_DIR, "tools/node_modules/box-js/run.js")
+PATH_TO_BOXJS_BOILERPLATE = os.path.join(ROOT_DIR, "tools/node_modules/box-js/boilerplate.js")
+PATH_TO_JSXRAY = os.path.join(ROOT_DIR, "tools/js-x-ray-run.js")
+PATH_TO_SYNCHRONY = os.path.join(ROOT_DIR, "tools/node_modules/.bin/synchrony")
+WSCRIPT_ONLY_CONFIG = os.path.join(ROOT_DIR, "tools/malwarejail/config/config_wscript_only.json")
 
 # Default value for the maximum number of times the gauntlet should be run
 # This usually gets exceeded when a script writes randomly generated content to the DOM
@@ -655,7 +651,7 @@ class JsJaws(ServiceBase):
         self.cleaned_with_synchrony: str | None = None
         self.cleaned_with_synchrony_path: str | None = None
         self.stdout_limit: int = self.config.get("total_stdout_limit", STDOUT_LIMIT)
-        self.identify = forge.get_identify(use_cache=environ.get("PRIVILEGED", "false").lower() == "true")
+        self.identify = forge.get_identify(use_cache=os.environ.get("PRIVILEGED", "false").lower() == "true")
         self.safelist: dict[str, dict[str, list[str]]] = {}
         self.doc_write_hashes: set[str] = set()
         self.gauntlet_runs = 0
@@ -781,8 +777,8 @@ class JsJaws(ServiceBase):
             file_path,
             unsafe_uris=True,
             # The only reason we pass these variables is so that task cleanup is done
-            payload_path=path.join(self.working_directory, "DecodedJsPayload.js_"),
-            stage2_path=path.join(self.working_directory, "GootLoader3Stage2.js_"),
+            payload_path=os.path.join(self.working_directory, "DecodedJsPayload.js_"),
+            stage2_path=os.path.join(self.working_directory, "GootLoader3Stage2.js_"),
             log=self.log.debug,
         )
 
@@ -1044,38 +1040,40 @@ class JsJaws(ServiceBase):
             file_path, file_content = self._handle_vbscript_env_variables(file_path, file_content)
 
         # File constants
-        self.malware_jail_payload_extraction_dir = path.join(self.working_directory, "payload/")
-        self.malware_jail_sandbox_env_dir = path.join(self.working_directory, "sandbox_env")
-        self.malware_jail_sandbox_env_dump_path = path.join(
+        self.malware_jail_payload_extraction_dir = os.path.join(self.working_directory, "payload/")
+        self.malware_jail_sandbox_env_dir = os.path.join(self.working_directory, "sandbox_env")
+        self.malware_jail_sandbox_env_dump_path = os.path.join(
             self.malware_jail_sandbox_env_dir, MALWARE_JAIL_SANDBOX_ENV_DUMP
         )
-        self.malware_jail_urls_json_path = path.join(self.malware_jail_payload_extraction_dir, "urls.json")
-        self.extracted_wscript_batch_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_BATCH)
-        self.extracted_wscript_ps1_path = path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_PS1)
-        self.boxjs_batch_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_BATCH)
-        self.boxjs_ps1_path = path.join(self.malware_jail_payload_extraction_dir, BOXJS_PS1)
-        self.malware_jail_output_path = path.join(self.working_directory, MALWARE_JAIL_OUTPUT)
+        self.malware_jail_urls_json_path = os.path.join(self.malware_jail_payload_extraction_dir, "urls.json")
+        self.extracted_wscript_batch_path = os.path.join(
+            self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_BATCH
+        )
+        self.extracted_wscript_ps1_path = os.path.join(self.malware_jail_payload_extraction_dir, EXTRACTED_WSCRIPT_PS1)
+        self.boxjs_batch_path = os.path.join(self.malware_jail_payload_extraction_dir, BOXJS_BATCH)
+        self.boxjs_ps1_path = os.path.join(self.malware_jail_payload_extraction_dir, BOXJS_PS1)
+        self.malware_jail_output_path = os.path.join(self.working_directory, MALWARE_JAIL_OUTPUT)
         # Box.js creates an output directory in the working level directory with the name <file_name>.results
         # We must use globs to find the specific file paths
-        self.boxjs_output_dir = path.join(self.working_directory, "*.results")
-        self.boxjs_urls_json_path = path.join(self.boxjs_output_dir, "urls.json")
-        self.boxjs_iocs = path.join(self.boxjs_output_dir, "IOC.json")
-        self.boxjs_resources = path.join(self.boxjs_output_dir, "resources.json")
-        self.boxjs_analysis_log = path.join(self.boxjs_output_dir, "analysis.log")
-        self.boxjs_snippets = path.join(self.boxjs_output_dir, "snippets.json")
+        self.boxjs_output_dir = os.path.join(self.working_directory, "*.results")
+        self.boxjs_urls_json_path = os.path.join(self.boxjs_output_dir, "urls.json")
+        self.boxjs_iocs = os.path.join(self.boxjs_output_dir, "IOC.json")
+        self.boxjs_resources = os.path.join(self.boxjs_output_dir, "resources.json")
+        self.boxjs_analysis_log = os.path.join(self.boxjs_output_dir, "analysis.log")
+        self.boxjs_snippets = os.path.join(self.boxjs_output_dir, "snippets.json")
         self.cleaned_with_synchrony = f"{request.sha256}.cleaned"
-        self.cleaned_with_synchrony_path = path.join(self.working_directory, self.cleaned_with_synchrony)
+        self.cleaned_with_synchrony_path = os.path.join(self.working_directory, self.cleaned_with_synchrony)
 
         # Setup directory structure
-        if not path.exists(self.malware_jail_payload_extraction_dir):
-            mkdir(self.malware_jail_payload_extraction_dir)
+        if not os.path.exists(self.malware_jail_payload_extraction_dir):
+            os.mkdir(self.malware_jail_payload_extraction_dir)
 
-        if not path.exists(self.malware_jail_sandbox_env_dir):
-            mkdir(self.malware_jail_sandbox_env_dir)
+        if not os.path.exists(self.malware_jail_sandbox_env_dir):
+            os.mkdir(self.malware_jail_sandbox_env_dir)
 
         self._run_the_gauntlet(request, file_path, file_content, original_contents)
 
-        if path.exists(self.cleaned_with_synchrony_path):
+        if os.path.exists(self.cleaned_with_synchrony_path):
             # Set this to avoid a loop of Synchrony extractions
             request.temp_submission_data["cleaned_by_synchrony"] = True
 
@@ -1179,7 +1177,7 @@ class JsJaws(ServiceBase):
             # Fake file name to use for the sample being analyzed. Can be a full path or just
             # the file name to use. If you have '\' in the path escape them as '\\' in this
             # command line argument value (ex. --fake-sample-name=C:\\foo\\bar.js).
-            # f"--fake-sample-name={path.basename(request.task.file_name)}",
+            # f"--fake-sample-name={os.path.basename(request.task.file_name)}",
             # Fake that HTTP requests work and have them return a fake payload
             "--fake-download",
         ]
@@ -1229,7 +1227,7 @@ class JsJaws(ServiceBase):
         ]
 
         # Pass the file name to MalwareJail
-        filename = path.basename(request.task.file_name)
+        filename = os.path.basename(request.task.file_name)
         malware_jail_args.extend(["-f", filename])
 
         # If a CSS file path was extracted from the HTML/HTA, pass it to MalwareJail
@@ -1380,7 +1378,7 @@ class JsJaws(ServiceBase):
         """
         boxjs_output: list[str] = []
         if len(glob(self.boxjs_analysis_log)) > 0:
-            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
+            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=os.path.getctime)
             with open(boxjs_analysis_log, "r") as f:
                 for line in f:
                     # This creates clutter!
@@ -1410,8 +1408,8 @@ class JsJaws(ServiceBase):
         jsxray_output: dict[str, Any] = {}
         try:
             if len(responses.get(JS_X_RAY, [])) > 0:
-                jsxray_output = loads(responses[JS_X_RAY][0])
-        except JSONDecodeError:
+                jsxray_output = json.loads(responses[JS_X_RAY][0])
+        except json.JSONDecodeError:
             pass
         return jsxray_output
 
@@ -1613,7 +1611,7 @@ class JsJaws(ServiceBase):
                 script_for_malware_jail = b""
                 file_for_malware_jail = None
                 for section in sections_of_script:
-                    section_hash = sha256(section).hexdigest()
+                    section_hash = hashlib.sha256(section).hexdigest()
                     if section_hash not in section_hashes:
                         section_hashes.add(section_hash)
                         script_for_malware_jail, file_for_malware_jail = self.append_content(
@@ -1682,8 +1680,8 @@ class JsJaws(ServiceBase):
 
         # Detect Obfuscator.io
         obfuscator_io = False
-        for yara_rule in listdir("./yara"):
-            rules = yara_compile(filepath=path.join("./yara", yara_rule))
+        for yara_rule in os.listdir("./yara"):
+            rules = yara_compile(filepath=os.path.join("./yara", yara_rule))
             try:
                 matches = rules.match(file_path)
             except YARAError as e:
@@ -1987,7 +1985,7 @@ class JsJaws(ServiceBase):
             if matches and len(matches.regs) == 2:
                 try:
                     embedded_file_content = b64decode(matches.group(1).encode())
-                except BinasciiError as e:
+                except binascii.Error as e:
                     self.log.debug(
                         f"Could not base64-decode an element src/href value '{matches.group(1)}' due to '{e}'"
                     )
@@ -2500,7 +2498,7 @@ class JsJaws(ServiceBase):
                     try:
                         _ = b64decode(matches.group(1).encode())
                         source_added = True
-                    except BinasciiError as e:
+                    except binascii.Error as e:
                         self.log.debug(
                             f"Could not base64-decode an script src/href value '{matches.group(1)}' due to '{e}'"
                         )
@@ -2824,7 +2822,7 @@ class JsJaws(ServiceBase):
                     if matches and len(matches.regs) == 2:
                         try:
                             body = b64decode(matches.group(1).encode()).decode()
-                        except BinasciiError as e:
+                        except binascii.Error as e:
                             self.log.debug(
                                 f"Could not base64-decode an script src/href value '{matches.group(1)}' due to '{e}'"
                             )
@@ -3103,7 +3101,7 @@ class JsJaws(ServiceBase):
                 # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
                 try:
                     matches = find_powershell_strings(cmd.encode())
-                except BinasciiError as e:
+                except binascii.Error as e:
                     self.log.debug(f"Could not base64-decode encoded command value '{cmd}' due to '{e}'")
                     matches = []
 
@@ -3185,35 +3183,35 @@ class JsJaws(ServiceBase):
         extracted_count = 0
 
         malware_jail_payloads = [
-            (file, path.join(self.malware_jail_payload_extraction_dir, file))
-            for file in sorted(listdir(self.malware_jail_payload_extraction_dir))
+            (file, os.path.join(self.malware_jail_payload_extraction_dir, file))
+            for file in sorted(os.listdir(self.malware_jail_payload_extraction_dir))
         ]
 
         # These are dumped files from Box.js of js that was run successfully
         snippet_keys: list[str] = []
         if len(glob(self.boxjs_snippets)) > 0:
-            boxjs_snippets = max(glob(self.boxjs_snippets), key=path.getctime)
+            boxjs_snippets = max(glob(self.boxjs_snippets), key=os.path.getctime)
             with open(boxjs_snippets, "r") as f:
                 try:
-                    snippet_keys = list(loads(f.read()).keys())
-                except JSONDecodeError as e:
+                    snippet_keys = list(json.loads(f.read()).keys())
+                except json.JSONDecodeError as e:
                     self.log.debug(f"Could not read {boxjs_snippets} due to {e}.")
                     snippet_keys = []
 
         box_js_payloads = []
         if len(glob(self.boxjs_output_dir)) > 0:
-            boxjs_output_dir = max(glob(self.boxjs_output_dir), key=path.getctime)
+            boxjs_output_dir = max(glob(self.boxjs_output_dir), key=os.path.getctime)
 
             box_js_payloads = []
-            for file in sorted(listdir(boxjs_output_dir)):
+            for file in sorted(os.listdir(boxjs_output_dir)):
                 if file not in snippet_keys:
-                    box_js_payloads.append((file, path.join(boxjs_output_dir, file)))
+                    box_js_payloads.append((file, os.path.join(boxjs_output_dir, file)))
 
         all_payloads = malware_jail_payloads + box_js_payloads
 
         for file, extracted in all_payloads:
             # No empty files
-            if path.getsize(extracted) == 0:
+            if os.path.getsize(extracted) == 0:
                 continue
             # These are not payloads
             # Direct paths
@@ -3242,7 +3240,7 @@ class JsJaws(ServiceBase):
                 # the snippets.json yet
                 or (
                     len(glob(self.boxjs_output_dir)) > 0
-                    and file in listdir(max(glob(self.boxjs_output_dir), key=path.getctime))
+                    and file in os.listdir(max(glob(self.boxjs_output_dir), key=os.path.getctime))
                     and re.match(SNIPPET_FILE_NAME, file)
                 )
             ):
@@ -3328,7 +3326,7 @@ class JsJaws(ServiceBase):
         # Do not join by newline because that is not how a browser interprets multiple document.write calls
         # document.writeln calls will end with a newline in document.js
         content_to_write = "".join(content_to_write_list).encode()
-        doc_write_hash = sha256(content_to_write).hexdigest()
+        doc_write_hash = hashlib.sha256(content_to_write).hexdigest()
 
         if doc_write_hash in self.doc_write_hashes:
             # To avoid recursive gauntlet runs, perform this check
@@ -3377,9 +3375,9 @@ class JsJaws(ServiceBase):
             if new_passwords:
                 self.log.debug(f"Found password(s) in the HTML doc: {new_passwords}")
                 passwords_extracted_file = "passwords_extracted_from_html.json"
-                password_extracted_path = path.join(self.working_directory, passwords_extracted_file)
+                password_extracted_path = os.path.join(self.working_directory, passwords_extracted_file)
                 with open(password_extracted_path, "w") as f:
-                    f.write(dumps(sorted(new_passwords)))
+                    f.write(json.dumps(sorted(new_passwords)))
                 request.add_supplementary(
                     password_extracted_path, passwords_extracted_file, "Passwords extracted from HTML file"
                 )
@@ -3416,7 +3414,7 @@ class JsJaws(ServiceBase):
         :return: None
         """
         self.log.debug("Extracting URLs...")
-        if not path.exists(self.malware_jail_urls_json_path) and not glob(self.boxjs_iocs):
+        if not os.path.exists(self.malware_jail_urls_json_path) and not glob(self.boxjs_iocs):
             return
 
         urls_result_section = ResultTableSection("URLs")
@@ -3426,10 +3424,10 @@ class JsJaws(ServiceBase):
         mj_posts_seen: list[str] = []
         boxjs_posts_seen: list[str] = []
 
-        if path.exists(self.malware_jail_urls_json_path):
+        if os.path.exists(self.malware_jail_urls_json_path):
             with open(self.malware_jail_urls_json_path, "r") as f:
                 file_contents = f.read()
-                urls_json = loads(file_contents)
+                urls_json = json.loads(file_contents)
                 for item in urls_json:
                     if len(item["url"]) > 500:
                         item["url"] = truncate(item["url"], 500)
@@ -3445,18 +3443,18 @@ class JsJaws(ServiceBase):
                         if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
                             self.log.debug(f"Extracting URI file for '{item['url']}'")
                             request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
-                    if dumps(item) not in items_seen:
-                        items_seen.add(dumps(item))
+                    if json.dumps(item) not in items_seen:
+                        items_seen.add(json.dumps(item))
                         urls_rows.append(TableRow(**item))
 
         if len(glob(self.boxjs_iocs)) > 0:
-            boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
+            boxjs_iocs = max(glob(self.boxjs_iocs), key=os.path.getctime)
             with open(boxjs_iocs, "r") as f:
                 file_contents = f.read()
                 ioc_json: list[dict[str, Any]] = []
                 try:
-                    ioc_json = loads(file_contents)
-                except JSONDecodeError as e:
+                    ioc_json = json.loads(file_contents)
+                except json.JSONDecodeError as e:
                     self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
                 for ioc in ioc_json:
                     value = ioc.get("value", {})
@@ -3485,8 +3483,8 @@ class JsJaws(ServiceBase):
                             if urlparse(item["url"]).netloc not in COMMON_FP_DOMAINS:
                                 self.log.debug(f"Extracting URI file for '{item['url']}'")
                                 request.add_extracted_uri("URI accessed via POST", uri=item["url"], params=params)
-                        if dumps(item) not in items_seen:
-                            items_seen.add(dumps(item))
+                        if json.dumps(item) not in items_seen:
+                            items_seen.add(json.dumps(item))
                             urls_rows.append(TableRow(**item))
                         else:
                             continue
@@ -3543,7 +3541,7 @@ class JsJaws(ServiceBase):
         :param output: A list of strings where each string is a line of stdout from the MalwareJail tool
         :return: None
         """
-        if path.exists(self.malware_jail_sandbox_env_dump_path):
+        if os.path.exists(self.malware_jail_sandbox_env_dump_path):
             # Get the sandbox env json that is dumped. This should always exist.
             malware_jail_sandbox_env_dump = {
                 "name": MALWARE_JAIL_SANDBOX_ENV_DUMP,
@@ -3568,7 +3566,7 @@ class JsJaws(ServiceBase):
             self.artifact_list.append(mlwr_jail_out)
 
         if len(glob(self.boxjs_analysis_log)) > 0:
-            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=path.getctime)
+            boxjs_analysis_log = max(glob(self.boxjs_analysis_log), key=os.path.getctime)
             boxjs_analysis_log = {
                 "name": "boxjs_analysis_log.log",
                 "path": boxjs_analysis_log,
@@ -3596,7 +3594,7 @@ class JsJaws(ServiceBase):
             if modname == abstracts:
                 continue
             __import__(modname)
-            clsmembers = getmembers(modules[modname], isclass)
+            clsmembers = getmembers(sys.modules[modname], isclass)
             for cls in clsmembers:
                 name, obj = cls
                 if name == signature_class:
@@ -3709,15 +3707,15 @@ class JsJaws(ServiceBase):
         if len(glob(self.boxjs_iocs)) == 0:
             return
 
-        boxjs_iocs = max(glob(self.boxjs_iocs), key=path.getctime)
+        boxjs_iocs = max(glob(self.boxjs_iocs), key=os.path.getctime)
         ioc_result_section = ResultSection(f"IOCs extracted by {BOX_JS}")
         with open(boxjs_iocs, "r") as f:
             file_contents = f.read()
 
         ioc_json: list[dict[str, Any]] = []
         try:
-            ioc_json = loads(file_contents)
-        except JSONDecodeError as e:
+            ioc_json = json.loads(file_contents)
+        except json.JSONDecodeError as e:
             self.log.warning(f"Failed to json.load() {BOX_JS}'s IOC JSON due to {e}")
 
         batch_cmd_spotted = False
@@ -3755,7 +3753,7 @@ class JsJaws(ServiceBase):
                 # We want to extract powershell commands to a powershell file, which can be confirmed using multidecoder
                 try:
                     matches = find_powershell_strings(command.encode())
-                except BinasciiError as e:
+                except binascii.Error as e:
                     self.log.debug(f"Could not base64-decode encoded command value '{command}' due to '{e}'")
                     matches = []
 
@@ -3790,7 +3788,7 @@ class JsJaws(ServiceBase):
             elif ioc_type == "NewResource":
                 if not value.get("latestUrl"):
                     continue
-                new_resources_associated_with_url.add(dumps({"path": value["path"], "url": value["latestUrl"]}))
+                new_resources_associated_with_url.add(json.dumps({"path": value["path"], "url": value["latestUrl"]}))
 
             # Sample Name, DOM Writes, PayloadExec, Environ, ADODBStream are not interesting
             # UrlFetch, XMLHttpRequest are handled somewhere else in the code
@@ -3923,7 +3921,7 @@ class JsJaws(ServiceBase):
             )
 
             for new_resource in sorted(new_resources_associated_with_url):
-                nr = loads(new_resource)
+                nr = json.loads(new_resource)
                 new_resources_associated_with_url_result_section.add_tag("dynamic.process.file_name", nr["path"])
                 add_tag(new_resources_associated_with_url_result_section, "network.dynamic.uri", nr["url"])
                 new_resources_associated_with_url_result_section.add_section_part(KVSectionBody(**nr))
@@ -3976,13 +3974,13 @@ class JsJaws(ServiceBase):
                             if len(encoded_val) % 2 == 1:
                                 encoded_val = b"0" + encoded_val
                             decoded_hex = hexload(encoded_val)
-                        except BinasciiError:
+                        except binascii.Error:
                             decoded_hex = b""
 
                         if any(PE_indicator in decoded_hex for PE_indicator in PE_INDICATORS):
                             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                                 out.write(decoded_hex)
-                            file_name = sha256(decoded_hex).hexdigest()
+                            file_name = hashlib.sha256(decoded_hex).hexdigest()
                             self.log.debug(f"Adding extracted PE {file_name} that was found in decoded HEX string.")
                             self.artifact_list.append(
                                 {
@@ -4029,7 +4027,7 @@ class JsJaws(ServiceBase):
         if request.temp_submission_data.get("cleaned_by_synchrony") and request.task.file_name.endswith(".cleaned"):
             return
 
-        if not path.exists(self.cleaned_with_synchrony_path):
+        if not os.path.exists(self.cleaned_with_synchrony_path):
             if timed_out:
                 time_out_synchrony_res = ResultTextSection(f"{SYNCHRONY} timed out deobfuscating the file")
                 time_out_synchrony_res.set_heuristic(8)
@@ -4159,14 +4157,14 @@ class JsJaws(ServiceBase):
                 # If the sandbox_dump.json file was not created for some reason, pull the location.href out
                 # (it may be truncated, but desperate times call for desperate measures)
                 location_href = ""
-                if not path.exists(self.malware_jail_sandbox_env_dump_path):
+                if not os.path.exists(self.malware_jail_sandbox_env_dump_path):
                     matches = list({url.value.decode() for url in find_urls(log_line.encode())})
                     if matches and len(matches) == 2:
                         location_href = matches[1]
                 else:
                     # We need to recover the non-truncated content from the sandbox_dump.json file
                     with open(self.malware_jail_sandbox_env_dump_path, "r") as f:
-                        data = load(f)
+                        data = json.load(f)
                         location_pointer = data["Location"]
                         if "$ref" in location_pointer:
                             location_pointer = location_pointer["$ref"]
@@ -4243,7 +4241,7 @@ class JsJaws(ServiceBase):
             with tempfile.NamedTemporaryFile(dir=self.working_directory, delete=False) as out:
                 out.write(encoded_content)
             artifact = {
-                "name": sha256(encoded_content).hexdigest(),
+                "name": hashlib.sha256(encoded_content).hexdigest(),
                 "path": out.name,
                 "description": "Redirection location",
                 "to_be_extracted": True,
@@ -4312,7 +4310,7 @@ class JsJaws(ServiceBase):
             completed_process = subprocess.run(
                 args,
                 bufsize=1,
-                stdout=PIPE,
+                stdout=subprocess.PIPE,
                 stderr=subprocess.DEVNULL if self.config.get("send_tool_stderr_to_pipe", False) else None,
                 text=True,
                 # Make sure the tool has enough time to interrupt itself if behaving correctly
@@ -4320,7 +4318,7 @@ class JsJaws(ServiceBase):
             )
             resp[tool_name] = completed_process.stdout.split("\n")
             self.log.debug(f"Completed running {tool_name}! Time elapsed: {round(time() - start_time)}s")
-        except TimeoutExpired as e:
+        except subprocess.TimeoutExpired as e:
             # Get partial output off the exception
             self.log.warning(
                 f"{tool_name} timed out after {round(time() - start_time)}s, continuing with partial output"
@@ -4371,7 +4369,7 @@ class JsJaws(ServiceBase):
             if len(match.regs) > 1:
                 lib_path = lib_path % match.group(1)
 
-            if path.exists(lib_path):
+            if os.path.exists(lib_path):
                 lib_contents = open(lib_path, "r").read()
                 if lib_contents:
                     return lib_path, lib_contents
@@ -4810,7 +4808,7 @@ class JsJaws(ServiceBase):
         for svg in soup.find_all("svg"):
             data = svg.encode()
             file_name = hashlib.sha256(data).hexdigest()[:8] + ".svg"
-            file_path = path.join(self.working_directory, file_name)
+            file_path = os.path.join(self.working_directory, file_name)
             with open(file_path, "wb") as f:
                 f.write(data)
             request.add_extracted(file_path, file_name, "Embedded SVG image")
