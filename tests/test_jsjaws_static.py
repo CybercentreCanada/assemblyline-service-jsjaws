@@ -1,5 +1,7 @@
 """Tests for JsJaws regexes, helper functions, etc."""
 
+from __future__ import annotations
+
 import re
 
 import pytest
@@ -16,6 +18,7 @@ from jsjaws import JQUERY_VERSION_REGEX, is_js_script, is_vb_script
         ("/*!\n * jQuery JavaScript Library v3.7.1\n", "3.7.1"),
         ("/*!\n * jQuery JavaScript Library v3.0.0-alpha1\n", "3.0.0-alpha1"),
         ("/*!\n * jQuery JavaScript Library v4.0.0-beta.2\n", "4.0.0-beta.2"),
+        ("/*!\n * jQuery Compat JavaScript Library v3.0.0-alpha1\n", "compat-3.0.0-alpha1"),
     ],
 )
 def test_JQUERY_VERSION_REGEX(header: str, version: str | None):
@@ -23,7 +26,10 @@ def test_JQUERY_VERSION_REGEX(header: str, version: str | None):
     if match is None:
         assert version is None
     else:
-        assert match.group(1) == version
+        v = match.group(2)
+        if match.group(1):
+            v = "compat-" + v
+        assert v == version
 
 
 @pytest.mark.parametrize(

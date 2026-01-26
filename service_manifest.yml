@@ -3,7 +3,7 @@ version: $SERVICE_TAG
 description: >
   Provides sandboxing for JavaScript.
 
-accepts: code/javascript|code/html|code/hta|code/jscript|code/wsf|code/wsc|image/svg
+accepts: code/javascript|code/html|code/hta|code/jscript|code/wsf|code/wsc|image/svg|archive/asar
 rejects: empty|metadata/.*
 
 stage: CORE
@@ -287,6 +287,12 @@ heuristics:
     score: 0
     filetype: 'code/html'
     description: Form action is suspicious because form was created in suspicious way
+
+  - heur_id: 28
+    name: Script in SVG
+    score: 0
+    filetype: '.*'
+    description: SVG image contains a script
 
 docker_config:
   allow_internet_access: true

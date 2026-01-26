@@ -218,11 +218,11 @@
         "auto_collapse": false,
         "body": [
           {
-            "ioc": "2fseeklogo.com",
+            "ioc": "mail1.ccistack.com",
             "ioc_type": "domain"
           },
           {
-            "ioc": "mail1.ccistack.com",
+            "ioc": "seeklogo.com",
             "ioc_type": "domain"
           },
           {
@@ -284,8 +284,8 @@
           "network": {
             "static": {
               "domain": [
-                "2fseeklogo.com",
                 "mail1.ccistack.com",
+                "seeklogo.com",
                 "www.adobe.com"
               ],
               "uri": [
@@ -429,17 +429,17 @@
         {
           "heur_id": 2,
           "signatures": [],
-          "value": "2fseeklogo.com"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
           "value": "mail1.ccistack.com"
         },
         {
           "heur_id": 1,
           "signatures": [],
           "value": "mail1.ccistack.com"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "seeklogo.com"
         },
         {
           "heur_id": 2,

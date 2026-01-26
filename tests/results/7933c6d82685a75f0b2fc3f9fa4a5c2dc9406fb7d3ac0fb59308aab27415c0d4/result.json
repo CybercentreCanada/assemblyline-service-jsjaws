@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 0,
+    "score": 1,
     "sections": [
       {
         "auto_collapse": true,
@@ -46,6 +46,51 @@
         "tags": {},
         "title_text": "Script: /**\n\tstairs, in great fear lest she should meet th...",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": [
+          [
+            "KEY_VALUE",
+            {
+              "description": "The script queried the DOM for selectors '#wviUC5Qa' .",
+              "type": "Document.querySelector()",
+              "value": {
+                "selectors": "#wviUC5Qa"
+              }
+            },
+            {}
+          ]
+        ],
+        "body_config": {},
+        "body_format": "MULTI",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {},
+        "title_text": "The script did the following other interesting things",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -72,7 +117,13 @@
     ]
   },
   "results": {
-    "heuristics": [],
+    "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      }
+    ],
     "tags": {},
     "temp_submission_data": {}
   }

