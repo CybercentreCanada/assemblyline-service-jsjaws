@@ -2753,18 +2753,15 @@ class JsJaws(ServiceBase):
         # and there is a chance that an HTML file has no JavaScript to be run.
         is_script_body = False
 
+        # Check for empty page
+        bodies = soup.find_all("body")
+        self.low_body_elements = self.low_body_elements or all(
+            not any(descendant.name and descendant.name != "script" for descendant in body.descendants)
+            for body in bodies
+        )
+
         # Create most HTML elements with JavaScript
         elements = soup.find_all()
-        bodies = soup.find_all("body")
-        body_children: list[str] = []
-        for body in bodies:
-            body_children.extend(
-                [child.name for child in body.children if child.name]
-                + [descendant.name for descendant in body.descendants if descendant.name]
-            )
-        if not body_children and not self.low_body_elements:
-            self.low_body_elements = True
-
         # This will hold all variable names, to ensure we avoid variable name collision
         set_of_variable_names: set[str] = set()
         for index, element in enumerate(elements):
