@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get install -y libfuzzy-dev libfuzzy2 curl
 
 # Pinning to this version of Node
-ENV NODE_VERSION=19.7.0
+ENV NODE_VERSION=20.17.0
 WORKDIR /usr/local
 
 # Download and install node
