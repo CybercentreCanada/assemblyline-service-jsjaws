@@ -87,7 +87,7 @@ have a signature written for it, then please make a Pull Request or share the sa
 There have been samples that embed malicious code within standard jQuery libraries. If the service Docker container has
 access to the Internet, then we can fetch the actual jQuery library and compare the two files, determining the
 difference between them and then extracting the difference (aka malicious code). If the service Docker container
-does not have Internet access, then please set the `docker_config` value of `allow_internet_access` to `False` in the
+does have Internet access, then please set the `docker_config` value of `allow_internet_access` to `true` in the
 `service_manifest.yml`.
 
 ### Assemblyline System Safelist
@@ -211,7 +211,7 @@ avoir une signature écrite pour lui, alors faites une Pull Request ou partagez 
 Il existe des échantillons qui intègrent un code malveillant dans les bibliothèques jQuery standard. Si le conteneur Docker de service a
 accès à Internet, nous pouvons récupérer la bibliothèque jQuery actuelle et comparer les deux fichiers, en déterminant la différence entre eux et en extrayant le code malveillant.
 la différence entre eux, puis extraire la différence (alias le code malveillant). Si le conteneur Docker de service
-n'a pas d'accès à Internet, alors mettez la valeur `docker_config` de `allow_internet_access` à `False` dans le fichier
+a d'accès à Internet, alors mettez la valeur `docker_config` de `allow_internet_access` à `true` dans le fichier
 `service_manifest.yml`.
 
 ### Liste de sécurité du système Assemblyline
