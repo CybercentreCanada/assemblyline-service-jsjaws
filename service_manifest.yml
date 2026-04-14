@@ -158,7 +158,7 @@ heuristics:
 
   - heur_id: 6
     name: Automatic location redirection
-    score: 10
+    score: 150
     filetype: '.*'
     description: Automatic redirection to another resource
 
