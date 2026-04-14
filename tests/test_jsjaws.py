@@ -701,7 +701,12 @@ class TestJsJaws:
         mocker.patch("jsjaws.get", return_value=dummy_get_response_class(fake_response_text))
         file_contents = f"/*!\n * jQuery JavaScript Library v1.11.3\n * http://jquery.com/\n *\n * Includes Sizzle.js\n * http://sizzlejs.com/\n *\n * Copyright 2005, 2014 jQuery Foundation, Inc. and other contributors\n * Released under the MIT license\n{evil_string*11} * http://jquery.org/license\n *\n * Date: 2015-04-28T16:19Z\n */".encode()
         jsjaws_class_instance.artifact_list = []
-        file_path, new_file_contents, lib_path = jsjaws_class_instance._extract_filtered_code(file_contents)
+        try:
+            allow_internet_access = jsjaws_class_instance.service_attributes.docker_config.allow_internet_access
+            jsjaws_class_instance.service_attributes.docker_config.allow_internet_access = True
+            file_path, new_file_contents, lib_path = jsjaws_class_instance._extract_filtered_code(file_contents)
+        finally:
+            jsjaws_class_instance.service_attributes.docker_config.allow_internet_access = allow_internet_access
 
         assert path.exists(file_path)
         assert new_file_contents == evil_string.encode() * 11
