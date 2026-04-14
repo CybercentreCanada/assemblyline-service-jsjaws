@@ -4226,7 +4226,7 @@ class JsJaws(ServiceBase):
         split = urlsplit(location_href)
         if not split.scheme and not split.netloc:
             # Local url
-            title = "Local Automatic Location Redirection"
+            title = "Local automatic location redirection"
             local_redirection_sec: ResultTextSection | None = next(
                 (res for res in request.result.sections if res.title_text == title),
                 None,
@@ -4236,6 +4236,20 @@ class JsJaws(ServiceBase):
             if not local_redirection_sec.body or redirection_text not in local_redirection_sec:
                 add_tag(local_redirection_sec, "network.static.uri_path", location_href, self.safelist)
                 local_redirection_sec.add_line(redirection_text)
+            return
+        if split.hostname and is_tag_safelisted(
+            split.hostname, ["network.static.domain", "network.static.ip"], self.safelist
+        ):
+            title = "Safelisted automatic location redirection"
+            safe_redirection_sec: ResultTextSection | None = next(
+                (res for res in request.result.sections if res.title_text == title),
+                None,
+            )
+            if not safe_redirection_sec:
+                safe_redirection_sec = ResultTextSection(title, parent=request.result)
+            if not safe_redirection_sec.body or redirection_text not in safe_redirection_sec:
+                add_tag(safe_redirection_sec, "network.static.uri", location_href, self.safelist)
+                safe_redirection_sec.add_line(redirection_text)
             return
 
         redirection_res_sec: ResultTextSection | None = next(
