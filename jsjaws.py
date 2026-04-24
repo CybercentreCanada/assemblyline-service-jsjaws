@@ -4222,6 +4222,36 @@ class JsJaws(ServiceBase):
         :param location_href: The URI that the page is being redirected to
         :param request: The ServiceRequest object
         """
+        redirection_text = f"Redirection to:\n{location_href}"
+        split = urlsplit(location_href)
+        if not split.scheme and not split.netloc:
+            # Local url
+            title = "Local automatic location redirection"
+            local_redirection_sec: ResultTextSection | None = next(
+                (res for res in request.result.sections if res.title_text == title),
+                None,
+            )
+            if not local_redirection_sec:
+                local_redirection_sec = ResultTextSection(title, parent=request.result)
+            if not local_redirection_sec.body or redirection_text not in local_redirection_sec:
+                add_tag(local_redirection_sec, "network.static.uri_path", location_href, self.safelist)
+                local_redirection_sec.add_line(redirection_text)
+            return
+        if split.hostname and is_tag_safelisted(
+            split.hostname, ["network.static.domain", "network.static.ip"], self.safelist
+        ):
+            title = "Safelisted automatic location redirection"
+            safe_redirection_sec: ResultTextSection | None = next(
+                (res for res in request.result.sections if res.title_text == title),
+                None,
+            )
+            if not safe_redirection_sec:
+                safe_redirection_sec = ResultTextSection(title, parent=request.result)
+            if not safe_redirection_sec.body or redirection_text not in safe_redirection_sec:
+                add_tag(safe_redirection_sec, "network.static.uri", location_href, self.safelist)
+                safe_redirection_sec.add_line(redirection_text)
+            return
+
         redirection_res_sec: ResultTextSection | None = next(
             (res for res in request.result.sections if res.heuristic and res.heuristic.heur_id == 6), None
         )
@@ -4251,11 +4281,9 @@ class JsJaws(ServiceBase):
             heur = Heuristic(6)
             redirection_res_sec = ResultTextSection(heur.name, heuristic=heur, parent=request.result)
 
-        if not redirection_res_sec.body or (
-            redirection_res_sec.body and f"Redirection to:\n{location_href}" not in redirection_res_sec.body
-        ):
+        if not redirection_res_sec.body or redirection_text not in redirection_res_sec.body:
             if add_tag(redirection_res_sec, "network.static.uri", location_href, self.safelist):
-                redirection_res_sec.add_line(f"Redirection to:\n{location_href}")
+                redirection_res_sec.add_line(redirection_text)
 
                 if any(urlparse(decoded_url).netloc in location_href for decoded_url in self.base64_encoded_urls):
                     redirection_res_sec.heuristic.add_signature_id("redirection_to_base64_decoded_url", 500)
