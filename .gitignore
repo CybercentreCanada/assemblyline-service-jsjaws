@@ -214,3 +214,6 @@ tags
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode
+
+node_modules
+package-lock.json
