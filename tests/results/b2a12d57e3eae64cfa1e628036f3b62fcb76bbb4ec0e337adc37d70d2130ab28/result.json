@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 540,
+    "score": 541,
     "sections": [
       {
         "auto_collapse": false,
@@ -135,6 +135,39 @@
         "tags": {},
         "title_text": "Signature: Unescape",
         "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "\t\tprototype-pollution:d.__proto__\n\t\tprototype-pollution:__proto__\n\t\tmonkey-patch:WeakMap.prototype\n\t\tmonkey-patch:WeakMap.prototype\n\t\tmonkey-patch:WeakMap.prototype\n\t\tmonkey-patch:WeakMap.prototype\n\t\tmonkey-patch:WeakMap.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:Symbol.prototype\n\t\tmonkey-patch:DataView.prototype\n\t\tmonkey-patch:DataView.prototype\n\t\tmonkey-patch:DataView.prototype",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 2,
+          "score": 1,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {
+          "network": {
+            "static": {
+              "uri": [
+                "http://www.w3.org/2000/xmlns/",
+                "http://www.w3.org/XML/1998/namespace"
+              ],
+              "uri_path": [
+                "/2000/xmlns/",
+                "/XML/1998/namespace"
+              ]
+            }
+          }
+        },
+        "title_text": "JS-X-Ray IOCs Detected",
+        "zeroize_on_tag_safe": false
       }
     ]
   },
@@ -144,6 +177,11 @@
   },
   "results": {
     "heuristics": [
+      {
+        "attack_ids": [],
+        "heur_id": 2,
+        "signatures": []
+      },
       {
         "attack_ids": [],
         "heur_id": 3,
@@ -180,7 +218,32 @@
         ]
       }
     ],
-    "tags": {},
+    "tags": {
+      "network.static.uri": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.w3.org/2000/xmlns/"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "http://www.w3.org/XML/1998/namespace"
+        }
+      ],
+      "network.static.uri_path": [
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/2000/xmlns/"
+        },
+        {
+          "heur_id": 2,
+          "signatures": [],
+          "value": "/XML/1998/namespace"
+        }
+      ]
+    },
     "temp_submission_data": {}
   }
 }

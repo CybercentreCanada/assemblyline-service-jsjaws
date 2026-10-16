@@ -377,7 +377,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[41].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\")\n\t\tXMLHttpRequest[41].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\") finished",
+        "body": "JavaScript makes network request via POST with password data.\n\t\tXMLHttpRequest[36].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\")\n\t\tXMLHttpRequest[36].send(\"usrn=careersindia%40securview.com&psrd=JsJ%40w%24%3D%3DC00l!\") finished",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -449,7 +449,7 @@
       },
       {
         "auto_collapse": false,
-        "body": "JavaScript prepares a network request\n\t\tconst _0x4b1197=_0x5dbe75;function _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31b...\n\t\tXMLHttpRequest[41].setRequestHeader(Content-Type)\n\t\t}if(_0x3599b8<=0x4){if(_0x49cbf2('0xed','0xfe')!==_0x4deabc(-'0x7d',-'0x78')){const _0x267ffe=new XM...",
+        "body": "JavaScript prepares a network request\n\t\tconst _0x4b1197=_0x5dbe75;function _0x303a0c(){function _0x53811e(_0x38f68c,_0x2d883e){return _0x31b...\n\t\tXMLHttpRequest[36].setRequestHeader(Content-Type)\n\t\t}if(_0x3599b8<=0x4){if(_0x49cbf2('0xed','0xfe')!==_0x4deabc(-'0x7d',-'0x78')){const _0x267ffe=new XM...",
         "body_config": {},
         "body_format": "TEXT",
         "classification": "TLP:C",
@@ -575,10 +575,6 @@
         "auto_collapse": false,
         "body": [
           {
-            "ioc": "40securview.com",
-            "ioc_type": "domain"
-          },
-          {
             "ioc": "cdnjs.cloudflare.com",
             "ioc_type": "domain"
           },
@@ -669,7 +665,6 @@
           "network": {
             "static": {
               "domain": [
-                "40securview.com",
                 "cdnjs.cloudflare.com",
                 "couponhagen.churchontheranch.uk",
                 "kasumbo.com",
@@ -838,16 +833,16 @@
     ],
     "supplementary": [
       {
+        "name": "passwords_extracted_from_html.json",
+        "sha256": "b7536052eaef16d5fad17897af6786f1dc163846beb81ba9c8c1a589c5761b1e"
+      },
+      {
         "name": "temp_javascript.js",
-        "sha256": "2236c9d3f90218194b1e227508caad87afaf8734705ba44cdb36f985494f80d4"
+        "sha256": "d48baed1c86e1e1769eb665d0ee90bf52bc7f1c45168cb1a28fe76b60aca7c7c"
       },
       {
         "name": "temp_css.css",
-        "sha256": "58d605d21fd8fe8fd83d07befafad7fe0f8ba6fcf3ae91296e0d000b9302b0cf"
-      },
-      {
-        "name": "passwords_extracted_from_html.json",
-        "sha256": "b7536052eaef16d5fad17897af6786f1dc163846beb81ba9c8c1a589c5761b1e"
+        "sha256": "e12bf819463134f43380f764186883ec6183f357bb86bea5e45ffd9839948cad"
       }
     ]
   },
@@ -982,11 +977,6 @@
     ],
     "tags": {
       "network.static.domain": [
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "40securview.com"
-        },
         {
           "heur_id": 2,
           "signatures": [],

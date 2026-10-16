@@ -103,8 +103,8 @@
               8
             ],
             "values": [
-              4.71761,
-              4.61865
+              4.73249,
+              4.68687
             ]
           },
           "type": "colormap"
@@ -116,7 +116,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: function signOn() {\n\n\n\n\t\tu = document.index2.Email...",
+        "title_text": "Script: function signOn() {\n\n\t\tu = document.index2.Email;\n...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -128,15 +128,14 @@
               8
             ],
             "values": [
-              4.75112,
-              4.48768,
-              3.44702,
-              3.96258,
-              4.54583,
-              4.64345,
-              4.37685,
-              4.33751,
-              3.8286
+              4.76095,
+              4.41692,
+              3.54386,
+              4.1095,
+              4.75037,
+              4.5598,
+              4.25186,
+              3.93782
             ]
           },
           "type": "colormap"
@@ -148,7 +147,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: (function(){\n\n  var splitByFirstChar = function(to...",
+        "title_text": "Script: (function(){\n  var splitByFirstChar = function(toB...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -160,7 +159,7 @@
               8
             ],
             "values": [
-              4.41334
+              4.40445
             ]
           },
           "type": "colormap"
@@ -184,30 +183,29 @@
               8
             ],
             "values": [
-              5.0052,
-              4.89169,
-              5.01687,
-              5.315,
-              4.9661,
-              4.96111,
-              4.99606,
-              5.11972,
-              5.18745,
-              4.93294,
-              5.43237,
-              5.27869,
-              5.10168,
-              5.19208,
-              4.98126,
-              4.93558,
-              5.0449,
-              4.93531,
-              5.28272,
-              5.10492,
-              5.10355,
-              5.34789,
-              5.37403,
-              4.99769
+              5.00449,
+              4.87839,
+              4.98978,
+              5.33208,
+              5.059,
+              4.91528,
+              4.94616,
+              5.09839,
+              5.06685,
+              5.03883,
+              5.34351,
+              5.11862,
+              5.10976,
+              5.12962,
+              4.8999,
+              5.21055,
+              4.98632,
+              5.26842,
+              5.1187,
+              4.84497,
+              5.2331,
+              5.41595,
+              4.99594
             ]
           },
           "type": "colormap"
@@ -231,8 +229,8 @@
               8
             ],
             "values": [
-              5.44342,
-              4.78132
+              5.42292,
+              4.82237
             ]
           },
           "type": "colormap"
@@ -244,7 +242,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: window.__CHECK_CONNECTION_CONFIG = {\n\n  newResultE...",
+        "title_text": "Script: window.__CHECK_CONNECTION_CONFIG = {\n  newResultEl...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -256,44 +254,44 @@
               8
             ],
             "values": [
-              5.44477,
-              5.09002,
-              4.88603,
-              4.74004,
-              4.88671,
-              5.3075,
-              4.71047,
-              4.85558,
-              4.96822,
-              5.10027,
-              5.11527,
-              4.9965,
-              5.00199,
-              5.04948,
-              4.52884,
-              5.06606,
-              4.88759,
-              4.99206,
-              5.19183,
-              5.06517,
-              4.81913,
-              5.10889,
-              5.13386,
-              4.81419,
-              4.47133,
-              4.32041,
-              4.25004,
-              4.08653,
-              4.51404,
-              3.9805,
-              4.80549,
-              4.77456,
-              4.96126,
-              4.56435,
-              4.6276,
-              4.58608,
-              5.17113,
-              4.9381
+              5.44507,
+              5.08028,
+              4.87723,
+              4.74124,
+              4.86751,
+              5.30953,
+              4.70093,
+              4.84613,
+              4.93525,
+              5.11529,
+              5.11833,
+              4.98647,
+              4.98664,
+              5.0195,
+              4.52969,
+              5.05256,
+              4.90365,
+              4.96794,
+              5.17509,
+              5.0462,
+              4.78926,
+              5.08873,
+              5.14632,
+              4.83044,
+              4.4935,
+              4.30311,
+              4.18592,
+              4.11094,
+              4.45442,
+              3.9944,
+              4.72679,
+              4.75029,
+              4.96501,
+              4.53088,
+              4.61308,
+              4.54901,
+              5.17129,
+              4.91833
             ]
           },
           "type": "colormap"
@@ -317,40 +315,39 @@
               8
             ],
             "values": [
-              5.86347,
-              5.84915,
-              5.82683,
-              5.737,
-              5.87224,
-              5.65604,
-              5.83549,
-              5.78978,
-              5.79778,
-              5.82636,
-              5.85531,
-              5.85881,
-              5.85732,
-              5.79611,
-              5.75854,
-              5.90162,
-              5.73876,
-              5.81778,
-              5.8149,
-              5.77035,
-              5.86746,
-              5.8189,
-              5.74622,
-              5.73298,
-              5.73626,
-              5.79574,
-              5.82106,
-              5.81595,
-              5.84007,
-              5.77928,
-              5.89247,
-              5.74127,
-              5.77355,
-              5.84294
+              5.89773,
+              5.84567,
+              5.865,
+              5.71854,
+              5.85528,
+              5.78441,
+              5.8089,
+              5.81144,
+              5.78762,
+              5.8891,
+              5.92766,
+              5.87444,
+              5.82465,
+              5.8151,
+              5.84487,
+              5.82948,
+              5.86574,
+              5.85488,
+              5.83135,
+              5.86381,
+              5.83023,
+              5.80171,
+              5.73978,
+              5.79649,
+              5.85467,
+              5.84595,
+              5.84476,
+              5.83676,
+              5.79149,
+              5.92183,
+              5.77603,
+              5.81984,
+              5.85288
             ]
           },
           "type": "colormap"
@@ -374,10 +371,10 @@
               8
             ],
             "values": [
-              4.63769,
-              4.49549,
-              4.40288,
-              4.28717
+              4.64748,
+              4.52014,
+              4.40494,
+              4.31616
             ]
           },
           "type": "colormap"
@@ -389,7 +386,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: function gaia_parseFragment() {\n\n  var hash = loca...",
+        "title_text": "Script: function gaia_parseFragment() {\n  var hash = locat...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -401,13 +398,13 @@
               8
             ],
             "values": [
-              4.59179,
-              4.58322,
-              4.40306,
-              4.66294,
-              4.36681,
-              3.67656,
-              4.0854
+              4.59692,
+              4.59259,
+              4.42448,
+              4.69035,
+              4.35311,
+              3.65097,
+              4.11394
             ]
           },
           "type": "colormap"
@@ -419,7 +416,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: function gaia_setFocus() {\n\n  var form = null;\n\n  ...",
+        "title_text": "Script: function gaia_setFocus() {\n  var form = null;\n  va...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -431,8 +428,8 @@
               8
             ],
             "values": [
-              4.41835,
-              4.56085
+              4.42112,
+              4.56186
             ]
           },
           "type": "colormap"
@@ -444,7 +441,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: var gaia_scrollToElement = function(element) {\n\n  ...",
+        "title_text": "Script: var gaia_scrollToElement = function(element) {\n  v...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -456,11 +453,11 @@
               8
             ],
             "values": [
-              4.91215,
-              4.72496,
-              4.85901,
-              4.76053,
-              4.84516
+              4.91098,
+              4.73669,
+              4.85568,
+              4.76524,
+              4.85742
             ]
           },
           "type": "colormap"
@@ -472,7 +469,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: (function() {\n\n  var $ = function(id) { return doc...",
+        "title_text": "Script: (function() {\n  var $ = function(id) { return docu...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -484,9 +481,9 @@
               8
             ],
             "values": [
-              4.64905,
-              4.63069,
-              4.74271
+              4.64951,
+              4.65922,
+              4.73194
             ]
           },
           "type": "colormap"
@@ -498,7 +495,7 @@
         "heuristic": null,
         "promote_to": null,
         "tags": {},
-        "title_text": "Script: (function(){\n\n  var signinInput = document.getElem...",
+        "title_text": "Script: (function(){\n  var signinInput = document.getEleme...",
         "zeroize_on_tag_safe": false
       },
       {
@@ -510,12 +507,12 @@
               8
             ],
             "values": [
-              5.03112,
-              4.92947,
-              5.16703,
-              5.14122,
-              5.12439,
-              4.91109
+              5.02179,
+              4.92432,
+              5.1766,
+              5.13275,
+              5.12308,
+              4.88395
             ]
           },
           "type": "colormap"
@@ -878,7 +875,7 @@
     "supplementary": [
       {
         "name": "temp_javascript.js",
-        "sha256": "541aece803df3ecffce95878233fe68e521b3fbbed5569cf6e5da61047cfa6a8"
+        "sha256": "72a08774077d71dadb4eb276514ee51f22458731731014a322221a1ca2cf94fe"
       },
       {
         "name": "passwords_extracted_from_html.json",

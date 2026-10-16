@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 841,
+    "score": 941,
     "sections": [
       {
         "auto_collapse": false,
@@ -171,6 +171,26 @@
         "promote_to": null,
         "tags": {},
         "title_text": "Script: try {\n\tvar str  = FNTJKI_LKIOUTS('V1NjcmlwdC5TaGVs...",
+        "zeroize_on_tag_safe": false
+      },
+      {
+        "auto_collapse": false,
+        "body": "Low number of body elements.",
+        "body_config": {},
+        "body_format": "TEXT",
+        "classification": "TLP:C",
+        "depth": 0,
+        "heuristic": {
+          "attack_ids": [],
+          "frequency": 1,
+          "heur_id": 22,
+          "score": 100,
+          "score_map": {},
+          "signatures": {}
+        },
+        "promote_to": null,
+        "tags": {},
+        "title_text": "Detected JavaScript Redirector / Loader",
         "zeroize_on_tag_safe": false
       },
       {
@@ -560,6 +580,11 @@
       {
         "attack_ids": [],
         "heur_id": 12,
+        "signatures": []
+      },
+      {
+        "attack_ids": [],
+        "heur_id": 22,
         "signatures": []
       }
     ],

