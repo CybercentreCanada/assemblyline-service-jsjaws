@@ -5,16 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "RunServiceOnce",
-            "type": "python",
+            "name": "RunServiceOnce Jsjaws",
+            "type": "debugpy",
             "request": "launch",
             "module": "assemblyline_v4_service.dev.run_service_once",
             "cwd": "${workspaceFolder}",
             "args": [
                 "-d",
-                "jsjaws.jsjaws.Jsjaws",
+                "jsjaws.Jsjaws",
                 "${file}"
             ],
+            "justMyCode": false,
+        },
+        {
+            "name": "[Service] Jsjaws - Privileged",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "assemblyline_v4_service.run_privileged_service",
+            "env": {
+                "SERVICE_MANIFEST_PATH": "service_manifest.yml",
+                "PRIVILEGED": "true",
+                "SERVICE_PATH": "jsjaws.Jsjaws",
+                "TASKING_DIR": "/tmp/Jsjaws"
+            },
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+        },
+        {
+            "name": "Generate Sample Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.gentests",
+            "cwd": "${workspaceFolder}",
             "justMyCode": false,
         },
     ]
