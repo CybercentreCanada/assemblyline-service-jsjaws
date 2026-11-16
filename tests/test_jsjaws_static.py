@@ -7,7 +7,7 @@ import re
 import pytest
 from bs4 import Tag
 
-from jsjaws import JQUERY_VERSION_REGEX, is_js_script, is_vb_script
+import jsjaws
 
 
 @pytest.mark.parametrize(
@@ -22,7 +22,7 @@ from jsjaws import JQUERY_VERSION_REGEX, is_js_script, is_vb_script
     ],
 )
 def test_JQUERY_VERSION_REGEX(header: str, version: str | None):
-    match = re.match(JQUERY_VERSION_REGEX, header)
+    match = re.match(jsjaws.JQUERY_VERSION_REGEX, header)
     if match is None:
         assert version is None
     else:
@@ -47,7 +47,7 @@ def test_JQUERY_VERSION_REGEX(header: str, version: str | None):
     ],
 )
 def test_is_js_script(script, value):
-    assert is_js_script(script) == value
+    assert jsjaws.is_js_script(script) == value
 
 
 @pytest.mark.parametrize(
@@ -62,4 +62,16 @@ def test_is_js_script(script, value):
     ],
 )
 def test_is_vb_script(script, value):
-    assert is_vb_script(script) == value
+    assert jsjaws.is_vb_script(script) == value
+
+
+@pytest.mark.parametrize(
+    ("attr_id", "value", "random", "output"),
+    [
+        ("", "", "", ""),
+        ("a", "\"", "element", 'element.setAttribute("a", "\\"");\n'),
+        ("a", "\\", "element", 'element.setAttribute("a", "\\\\");\n'),
+    ],
+)
+def test__set_element_attribute_script(attr_id, value, random, output):
+    assert jsjaws.JsJaws._set_element_attribute_script(attr_id, value, random) == output
