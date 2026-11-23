@@ -2337,12 +2337,12 @@ class JsJaws(ServiceBase):
         elif isinstance(attr_val, list):
             attr_val = " ".join(attr_val)
 
+        if "\\" in attr_val and "url(" not in attr_val:
+            attr_val = attr_val.replace("\\", "\\\\")
+
         # Escape double quotes since we are wrapping the value in double quotes
         if '"' in attr_val:
             attr_val = attr_val.replace('"', '\\"')
-
-        if "\\" in attr_val and "url(" not in attr_val:
-            attr_val = attr_val.replace("\\", "\\\\")
 
         return f'{random_element_varname}.setAttribute("{attr_id}", "{attr_val}");\n'
 
